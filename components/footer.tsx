@@ -1,14 +1,19 @@
-import Link from "next/link"
+import { getTranslations } from "next-intl/server"
 import { Instagram, Youtube } from "lucide-react"
+import { Link } from "@/i18n/navigation"
 import { cityContacts, headquarters } from "@/lib/contact-info"
 import { CookieSettingsButton } from "@/components/cookie-settings-button"
 
-export function Footer() {
+export async function Footer() {
+  const t = await getTranslations("footer")
+  const tn = await getTranslations("nav")
+  const tc = await getTranslations("common")
+
   const navLinks = [
-    { href: "#o-firmie", label: "O firmie" },
-    { href: "#w-sprzedazy", label: "Inwestycje" },
-    { href: "#proces", label: "Dlaczego my" },
-    { href: "#kontakt", label: "Kontakt" },
+    { href: "#o-firmie", label: tn("about") },
+    { href: "#w-sprzedazy", label: t("navInvestments") },
+    { href: "#proces", label: t("navWhyUs") },
+    { href: "#kontakt", label: tn("contact") },
   ]
 
   const socialLinks = [
@@ -24,12 +29,11 @@ export function Footer() {
           <div className="lg:col-span-2">
             <Link href="/" className="inline-block mb-4">
               <span className="font-serif text-2xl font-semibold text-primary-foreground">
-                Jednopiętrowa Warszawa
+                {tc("companyName")}
               </span>
             </Link>
             <p className="text-primary-foreground/70 max-w-md leading-relaxed mb-6">
-              Firma deweloperska z ponad 10-letnim doświadczeniem. Budujemy domy jednorodzinne, 
-              bliźniaki oraz szeregówki w charakterystycznym stylu Wiązania Bawarskiego.
+              {t("description")}
             </p>
             <div className="flex gap-4">
               {socialLinks.map((social) => (
@@ -49,7 +53,7 @@ export function Footer() {
 
           {/* Navigation */}
           <div>
-            <h4 className="font-semibold text-primary-foreground mb-4">Nawigacja</h4>
+            <h4 className="font-semibold text-primary-foreground mb-4">{t("navHeading")}</h4>
             <ul className="space-y-3">
               {navLinks.map((link) => (
                 <li key={link.href}>
@@ -66,7 +70,7 @@ export function Footer() {
 
           {/* Contact */}
           <div>
-            <h4 className="font-semibold text-primary-foreground mb-4">Kontakt</h4>
+            <h4 className="font-semibold text-primary-foreground mb-4">{t("contactHeading")}</h4>
             <div className="space-y-5">
               {cityContacts.map((c) => (
                 <div key={c.city}>
@@ -85,9 +89,9 @@ export function Footer() {
                   </ul>
                 </div>
               ))}
-              {/* Siedziba */}
+              {/* Registered office */}
               <div className="pt-1 border-t border-primary-foreground/10">
-                <p className="text-xs font-semibold uppercase tracking-widest text-primary-foreground/40 mb-2">Siedziba spółki</p>
+                <p className="text-xs font-semibold uppercase tracking-widest text-primary-foreground/40 mb-2">{t("hqLabel")}</p>
                 <p className="text-primary-foreground/70 text-sm leading-relaxed">
                   {headquarters.addressLines.map((line, i) => (
                     <span key={i}>
@@ -104,14 +108,14 @@ export function Footer() {
         {/* Bottom */}
         <div className="pt-8 border-t border-primary-foreground/10 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-primary-foreground/50 text-sm">
-            © {new Date().getFullYear()} Jednopiętrowa Warszawa. Wszelkie prawa zastrzeżone.
+            © {new Date().getFullYear()} {tc("companyName")}. {t("rights")}
           </p>
           <div className="flex flex-wrap gap-6 text-sm">
             <Link href="/polityka-prywatnosci" className="text-primary-foreground/50 hover:text-primary-foreground transition-colors">
-              Polityka prywatności
+              {t("privacy")}
             </Link>
             <Link href="/regulamin" className="text-primary-foreground/50 hover:text-primary-foreground transition-colors">
-              Regulamin
+              {t("terms")}
             </Link>
             <CookieSettingsButton className="text-primary-foreground/50 hover:text-primary-foreground transition-colors" />
           </div>

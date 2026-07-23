@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -14,6 +15,7 @@ import { PhoneField } from "@/components/forms/phone-field"
 import { DEFAULT_COUNTRY, type Country } from "@/lib/contact/countries"
 
 export function Contact() {
+  const t = useTranslations("contact")
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [country, setCountry] = useState<Country>(DEFAULT_COUNTRY)
   const [phoneNumber, setPhoneNumber] = useState("")
@@ -48,15 +50,15 @@ export function Contact() {
         trackFormSubmit("contact_section")
         // Google Ads conversion event — fires only after the server confirms success.
         pushToDataLayer({ event: "form_submit_success", form_location: "kontakt" })
-        alert("Dziękujemy! Wkrótce się z Tobą skontaktujemy.")
+        alert(t("successAlert"))
         form.reset()
         setPhoneNumber("")
         setCountry(DEFAULT_COUNTRY)
       } else {
-        alert("Wystąpił błąd. Spróbuj ponownie lub skontaktuj się telefonicznie.")
+        alert(t("errorAlert"))
       }
     } catch {
-      alert("Wystąpił błąd. Spróbuj ponownie lub skontaktuj się telefonicznie.")
+      alert(t("errorAlert"))
     } finally {
       setIsSubmitting(false)
     }
@@ -65,20 +67,20 @@ export function Contact() {
   const contactInfo = [
     {
       icon: Mail,
-      label: "Email",
+      label: t("email"),
       value: primaryContact.email,
       href: `mailto:${primaryContact.email}`,
     },
     // One phone entry per city — same numbers as the top-bar dropdown.
     ...cityContacts.map((c) => ({
       icon: Phone,
-      label: `Telefon — ${c.city}`,
+      label: `${t("phone")} — ${c.city}`,
       value: c.phone,
       href: c.phoneHref,
     })),
     {
       icon: MapPin,
-      label: "Adres",
+      label: t("addressLabel"),
       value: headquarters.addressOneLine,
       href: headquarters.mapHref,
     },
@@ -89,13 +91,13 @@ export function Contact() {
       <div className="container mx-auto px-4 lg:px-8">
         <div className="text-center mb-16">
           <p className="text-primary text-sm font-medium tracking-widest uppercase mb-4">
-            Kontakt
+            {t("eyebrow")}
           </p>
           <h2 className="font-serif text-3xl lg:text-5xl font-semibold text-foreground mb-6">
-            Skontaktuj się i bądź bliżej swojego marzenia!
+            {t("heading")}
           </h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Masz pytania? Chętnie na nie odpowiemy. Wypełnij formularz lub skontaktuj się z nami bezpośrednio.
+            {t("subtitle")}
           </p>
         </div>
 
@@ -105,20 +107,20 @@ export function Contact() {
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
                 <label htmlFor="name" className="block text-sm font-medium text-foreground mb-2">
-                  Imię i nazwisko *
+                  {t("name")} *
                 </label>
                 <Input
                   id="name"
                   name="name"
                   type="text"
                   required
-                  placeholder="Jan Kowalski"
+                  placeholder={t("namePlaceholder")}
                   className="bg-background border-border"
                 />
               </div>
               <div>
                 <label htmlFor="phone" className="block text-sm font-medium text-foreground mb-2">
-                  Telefon *
+                  {t("phone")} *
                 </label>
                 <PhoneField
                   inputId="phone"
@@ -135,14 +137,14 @@ export function Contact() {
               </div>
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-foreground mb-2">
-                  Adres e-mail *
+                  {t("email")} *
                 </label>
                 <Input
                   id="email"
                   name="email"
                   type="email"
                   required
-                  placeholder="jan@example.com"
+                  placeholder={t("emailPlaceholder")}
                   className="bg-background border-border"
                   aria-invalid={!!emailError}
                   aria-describedby={emailError ? "email-error" : undefined}
@@ -156,20 +158,20 @@ export function Contact() {
               </div>
               <div>
                 <label htmlFor="message" className="block text-sm font-medium text-foreground mb-2">
-                  Treść wiadomości
+                  {t("message")}
                 </label>
                 <Textarea
                   id="message"
                   name="message"
                   rows={4}
-                  placeholder="Napisz do nas..."
+                  placeholder={t("messagePlaceholder")}
                   className="bg-background border-border resize-none"
                 />
               </div>
               <div className="flex items-start gap-3">
                 <Checkbox id="privacy" required className="mt-1" />
                 <label htmlFor="privacy" className="text-sm text-muted-foreground">
-                  Zapoznałem się z informacjami na temat przetwarzania danych osobowych, które znajdują się w Polityce prywatności.
+                  {t("privacyConsent")}
                 </label>
               </div>
               <Button
@@ -179,10 +181,10 @@ export function Contact() {
                 className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-medium"
               >
                 {isSubmitting ? (
-                  "Wysyłanie..."
+                  t("submitting")
                 ) : (
                   <>
-                    Wyślij wiadomość
+                    {t("submit")}
                     <Send className="ml-2 h-5 w-5" />
                   </>
                 )}
@@ -195,7 +197,7 @@ export function Contact() {
             {/* Contact Details */}
             <div className="bg-card p-8 lg:p-10 rounded-3xl border border-border shadow-lg">
               <h3 className="font-serif text-2xl font-semibold text-foreground mb-6">
-                Dane kontaktowe
+                {t("detailsHeading")}
               </h3>
               <div className="space-y-6">
                 {contactInfo.map((info, index) => (
@@ -229,7 +231,7 @@ export function Contact() {
                 className="absolute top-4 right-4 z-10 bg-white px-4 py-2 rounded-lg shadow-md hover:shadow-lg transition-shadow flex items-center gap-2 text-sm font-medium text-foreground"
               >
                 <MapPin className="h-4 w-4 text-primary" />
-                Otwórz w Google Maps
+                {t("openInMaps")}
               </a>
               <iframe
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2444.5659682936557!2d20.99834!3d52.18056!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x471ecc8c92692e57%3A0x1db66f6007dab0b6!2sPost%C4%99pu%2012C%2C%2002-676%20Warszawa!5e0!3m2!1spl!2spl!4v1710355200000!5m2!1spl!2spl"

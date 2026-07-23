@@ -59,7 +59,7 @@ export function Header({ cities = [] }: { cities?: { name: string; slug: string 
             <div className="hidden lg:flex flex-col items-center justify-center">
               <Image
                 src="/images/logo-blocks.png"
-                alt="Jednopiętrowa Warszawa logo"
+                alt={`${tc("companyName")} logo`}
                 width={175}
                 height={40}
                 style={{ width: 175, height: 'auto' }}
@@ -70,14 +70,14 @@ export function Header({ cities = [] }: { cities?: { name: string; slug: string 
                 className="text-[12px] font-medium whitespace-nowrap w-full text-center mt-0.5"
                 style={{ color: 'rgba(74, 42, 42, 0.7)', letterSpacing: '0.08em' }}
               >
-                Jednopiętrowa Warszawa
+                {tc("companyName")}
               </span>
             </div>
             {/* Mobile: Compact version */}
             <div className="flex lg:hidden flex-col items-center">
               <Image
                 src="/images/logo-blocks.png"
-                alt="Jednopiętrowa Warszawa logo"
+                alt={`${tc("companyName")} logo`}
                 width={120}
                 height={28}
                 style={{ width: 120, height: 'auto' }}
@@ -88,7 +88,7 @@ export function Header({ cities = [] }: { cities?: { name: string; slug: string 
                 className="text-[9px] font-medium whitespace-nowrap mt-0.5 w-full text-center"
                 style={{ color: 'rgba(74, 42, 42, 0.7)', letterSpacing: '0.04em' }}
               >
-                Jednopiętrowa Warszawa
+                {tc("companyName")}
               </span>
             </div>
           </Link>

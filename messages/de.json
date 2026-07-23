@@ -1,4 +1,21 @@
 {
+  "common": {
+    "openMenu": "Menü öffnen",
+    "closeMenu": "Menü schließen",
+    "email": "E-Mail",
+    "phone": "Telefon",
+    "language": "Sprache",
+    "germanLabel": "Deutsch",
+    "englishLabel": "English",
+    "close": "Schließen",
+    "previousImage": "Vorheriges Bild",
+    "nextImage": "Nächstes Bild",
+    "scrollLeft": "Nach links scrollen",
+    "scrollRight": "Nach rechts scrollen",
+    "contact": "Kontakt",
+    "companyName": "Muster Immobilien GmbH",
+    "companyTagline": "Immobilienentwickler"
+  },
   "home": {
     "mapHeading": "Standorte unserer Projekte",
     "mapSubtitle": "Finden Sie unsere Projekte auf der Karte in der gewünschten Stadt"
@@ -13,19 +30,35 @@
     "news": "Aktuelles",
     "contact": "Kontakt"
   },
-  "common": {
-    "openMenu": "Menü öffnen",
-    "closeMenu": "Menü schließen",
-    "email": "E-Mail",
+  "contact": {
+    "eyebrow": "Kontakt",
+    "heading": "Kontaktieren Sie uns",
+    "subtitle": "Haben Sie Fragen? Wir beantworten sie gerne. Füllen Sie das Formular aus oder kontaktieren Sie uns direkt.",
+    "name": "Name",
+    "namePlaceholder": "Max Mustermann",
     "phone": "Telefon",
-    "language": "Sprache",
-    "germanLabel": "Deutsch",
-    "englishLabel": "English",
-    "close": "Schließen",
-    "previousImage": "Vorheriges Bild",
-    "nextImage": "Nächstes Bild",
-    "scrollLeft": "Nach links scrollen",
-    "scrollRight": "Nach rechts scrollen",
-    "contact": "Kontakt"
+    "email": "E-Mail-Adresse",
+    "emailPlaceholder": "max@beispiel.de",
+    "message": "Nachricht",
+    "messagePlaceholder": "Schreiben Sie uns …",
+    "privacyConsent": "Ich habe die Informationen zur Verarbeitung personenbezogener Daten in der Datenschutzerklärung zur Kenntnis genommen.",
+    "submit": "Nachricht senden",
+    "submitting": "Wird gesendet …",
+    "successAlert": "Vielen Dank! Wir melden uns in Kürze bei Ihnen.",
+    "errorAlert": "Es ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut oder kontaktieren Sie uns telefonisch.",
+    "detailsHeading": "Kontaktdaten",
+    "addressLabel": "Adresse",
+    "openInMaps": "In Google Maps öffnen"
+  },
+  "footer": {
+    "navHeading": "Navigation",
+    "contactHeading": "Kontakt",
+    "navInvestments": "Projekte",
+    "navWhyUs": "Warum wir",
+    "description": "[Platzhalter] Immobilienentwickler mit Fokus auf hochwertige Wohnhäuser. Bearbeiten Sie diesen Text im Admin-Bereich.",
+    "hqLabel": "Firmensitz",
+    "rights": "Alle Rechte vorbehalten.",
+    "privacy": "Datenschutz",
+    "terms": "AGB"
   }
 }

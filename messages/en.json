@@ -1,4 +1,21 @@
 {
+  "common": {
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "email": "Email",
+    "phone": "Phone",
+    "language": "Language",
+    "germanLabel": "Deutsch",
+    "englishLabel": "English",
+    "close": "Close",
+    "previousImage": "Previous image",
+    "nextImage": "Next image",
+    "scrollLeft": "Scroll left",
+    "scrollRight": "Scroll right",
+    "contact": "Contact",
+    "companyName": "Muster Immobilien GmbH",
+    "companyTagline": "Property developer"
+  },
   "home": {
     "mapHeading": "Where our projects are",
     "mapSubtitle": "Find our projects on the map in your chosen city"
@@ -13,19 +30,35 @@
     "news": "News",
     "contact": "Contact"
   },
-  "common": {
-    "openMenu": "Open menu",
-    "closeMenu": "Close menu",
-    "email": "Email",
+  "contact": {
+    "eyebrow": "Contact",
+    "heading": "Get in touch",
+    "subtitle": "Have questions? We're happy to answer them. Fill in the form or contact us directly.",
+    "name": "Full name",
+    "namePlaceholder": "John Doe",
     "phone": "Phone",
-    "language": "Language",
-    "germanLabel": "Deutsch",
-    "englishLabel": "English",
-    "close": "Close",
-    "previousImage": "Previous image",
-    "nextImage": "Next image",
-    "scrollLeft": "Scroll left",
-    "scrollRight": "Scroll right",
-    "contact": "Contact"
+    "email": "Email address",
+    "emailPlaceholder": "john@example.com",
+    "message": "Message",
+    "messagePlaceholder": "Write to us …",
+    "privacyConsent": "I have read the information on the processing of personal data in the privacy policy.",
+    "submit": "Send message",
+    "submitting": "Sending …",
+    "successAlert": "Thank you! We'll be in touch shortly.",
+    "errorAlert": "Something went wrong. Please try again or contact us by phone.",
+    "detailsHeading": "Contact details",
+    "addressLabel": "Address",
+    "openInMaps": "Open in Google Maps"
+  },
+  "footer": {
+    "navHeading": "Navigation",
+    "contactHeading": "Contact",
+    "navInvestments": "Projects",
+    "navWhyUs": "Why us",
+    "description": "[Placeholder] Property developer focused on high-quality homes. Edit this text in the admin panel.",
+    "hqLabel": "Registered office",
+    "rights": "All rights reserved.",
+    "privacy": "Privacy policy",
+    "terms": "Terms"
   }
 }
