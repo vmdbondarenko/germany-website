@@ -57,6 +57,10 @@ export default async function AdminLayout({ children }: { children: React.ReactN
                     <MapPinned className="h-4 w-4" />
                     Lokalizacje
                   </Link>
+                  <Link href="/admin/home" className="flex items-center gap-1.5 text-sm text-gray-600 hover:text-gray-900">
+                    <HomeIcon className="h-4 w-4" />
+                    Startseite
+                  </Link>
                   <Link href="/admin/about" className="flex items-center gap-1.5 text-sm text-gray-600 hover:text-gray-900">
                     <MapPin className="h-4 w-4" />
                     O firmie
