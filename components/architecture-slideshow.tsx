@@ -61,6 +61,10 @@ export function ArchitectureSlideshow({ dbSlides = [] }: { dbSlides?: SlideData[
 
   const current = slides[currentSlide]
 
+  // No published projects yet (fresh site / empty DB) — render nothing instead
+  // of crashing on an undefined slide.
+  if (!current) return null
+
   const cardInner = (
     <>
       <div className="flex items-center gap-2 mb-2 flex-wrap">

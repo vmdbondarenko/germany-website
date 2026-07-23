@@ -1,14 +1,18 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import Link from "next/link"
+import { useTranslations } from "next-intl"
 import Image from "next/image"
 import { Menu, X, Mail, Phone, Youtube, Instagram, ChevronDown } from "lucide-react"
+import { Link } from "@/i18n/navigation"
 import { Button } from "@/components/ui/button"
 import { ContactModal } from "@/components/contact-modal"
+import { LanguageSwitcher } from "@/components/language-switcher"
 import { cityContacts } from "@/lib/contact-info"
 
 export function Header({ cities = [] }: { cities?: { name: string; slug: string }[] }) {
+  const t = useTranslations("nav")
+  const tc = useTranslations("common")
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
   const [showPhonePopup, setShowPhonePopup] = useState(false)
@@ -36,14 +40,14 @@ export function Header({ cities = [] }: { cities?: { name: string; slug: string 
   }, [])
 
   const navLinks = [
-    { href: "/#o-firmie", label: "O firmie" },
-    { href: "/lokalizacja", label: "Lokalizacja" },
-    { href: "/#w-sprzedazy", label: "W sprzedaży" },
-    { href: "/#zakonczone", label: "Zakończone" },
-    { href: "/#zespol", label: "O nas" },
-    { href: "/#jak-pomagamy", label: "Jak pomagamy" },
-    { href: "/#aktualnosci", label: "Aktualności" },
-    { href: "/#kontakt", label: "Kontakt" },
+    { href: "/#o-firmie", label: t("about") },
+    { href: "/lokalizacja", label: t("locations") },
+    { href: "/#w-sprzedazy", label: t("forSale") },
+    { href: "/#zakonczone", label: t("completed") },
+    { href: "/#zespol", label: t("team") },
+    { href: "/#jak-pomagamy", label: t("howWeHelp") },
+    { href: "/#aktualnosci", label: t("news") },
+    { href: "/#kontakt", label: t("contact") },
   ]
 
   return (
@@ -193,7 +197,7 @@ export function Header({ cities = [] }: { cities?: { name: string; slug: string 
               <button
                 onClick={() => setShowContactModal(true)}
                 className="p-2 rounded-full bg-foreground/5 hover:bg-foreground/10 backdrop-blur-sm transition-all duration-200"
-                aria-label="Email"
+                aria-label={tc("email")}
               >
                 <Mail className="h-4 w-4" style={{ color: 'rgba(74, 42, 42, 0.7)' }} />
               </button>
@@ -206,7 +210,7 @@ export function Header({ cities = [] }: { cities?: { name: string; slug: string 
                 <button
                   onClick={() => setShowPhonePopup(v => !v)}
                   className="p-2 rounded-full bg-foreground/5 hover:bg-foreground/10 backdrop-blur-sm transition-all duration-200"
-                  aria-label="Telefon"
+                  aria-label={tc("phone")}
                   aria-expanded={showPhonePopup}
                 >
                   <Phone className="h-4 w-4" style={{ color: 'rgba(74, 42, 42, 0.7)' }} />
@@ -260,13 +264,19 @@ export function Header({ cities = [] }: { cities?: { name: string; slug: string 
                 <Instagram className="h-4 w-4" style={{ color: 'rgba(74, 42, 42, 0.7)' }} />
               </a>
             </div>
+
+            {/* Vertical Divider */}
+            <div className="h-6 w-px bg-foreground/20" />
+
+            {/* Language switcher */}
+            <LanguageSwitcher />
           </div>
 
           {/* Mobile Menu Toggle */}
           <button
             className="lg:hidden p-2 text-foreground"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-label={isMenuOpen ? "Zamknij menu" : "Otwórz menu"}
+            aria-label={isMenuOpen ? tc("closeMenu") : tc("openMenu")}
           >
             {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </button>
@@ -328,6 +338,17 @@ export function Header({ cities = [] }: { cities?: { name: string; slug: string 
                   </a>
                 </div>
               ))}
+            </div>
+
+            {/* Language switcher (mobile) */}
+            <div className="mt-4 pt-4 border-t border-border/50 flex items-center justify-between">
+              <span
+                className="text-xs font-semibold uppercase tracking-widest"
+                style={{ color: 'rgba(74, 42, 42, 0.45)' }}
+              >
+                {tc("language")}
+              </span>
+              <LanguageSwitcher />
             </div>
         </nav>
       </div>

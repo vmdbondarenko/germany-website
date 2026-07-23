@@ -1,6 +1,11 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
+import createIntlMiddleware from 'next-intl/middleware'
 import { getSessionRole, SESSION_COOKIE_NAME, type Role } from '@/lib/auth'
+import { routing } from '@/i18n/routing'
+
+// Handles locale detection + prefixing for the public site (de default, /en).
+const intlMiddleware = createIntlMiddleware(routing)
 
 // Paths under /admin or /api/admin that must remain reachable without a valid
 // session — otherwise the user could never log in or out.
@@ -55,7 +60,7 @@ function denyForRole(request: NextRequest, role: Role | null) {
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
 
-  // ── Admin gate ──────────────────────────────────────────────────────────
+  // ── Admin gate (never localized) ──────────────────────────────────────────
   if (PUBLIC_ADMIN_PATHS.has(pathname)) return NextResponse.next()
 
   if (pathname.startsWith('/admin') || pathname.startsWith('/api/admin')) {
@@ -74,11 +79,16 @@ export async function proxy(request: NextRequest) {
     return NextResponse.next()
   }
 
-  return NextResponse.next()
+  // ── Other API routes: not localized ──────────────────────────────────────
+  if (pathname.startsWith('/api')) return NextResponse.next()
+
+  // ── Public site: locale detection + prefixing ─────────────────────────────
+  return intlMiddleware(request)
 }
 
 export const config = {
-  // Run on every request except Next internals/static assets. The admin gate
-  // inside proxy() only acts on /admin and /api/admin paths.
-  matcher: ['/((?!_next/static|_next/image|favicon.ico).*)'],
+  // Run on everything except Next internals and files with an extension
+  // (sitemap.xml, robots.txt, images, favicon). /api is included so the admin
+  // gate can act on /api/admin; non-admin /api is passed through above.
+  matcher: ['/((?!_next|_vercel|.*\\..*).*)'],
 }

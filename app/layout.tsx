@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Script from 'next/script'
+import { getLocale } from 'next-intl/server'
 import { Playfair_Display, Inter } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import { GoogleTagManager } from '@next/third-parties/google'
@@ -22,35 +23,25 @@ const inter = Inter({
   display: 'swap',
 });
 
+// NOTE: Locale-specific titles/descriptions and the production metadataBase are
+// set per-page and finalized in the SEO localization phase. This is a neutral
+// default so nothing ships hardcoded Polish copy.
 export const metadata: Metadata = {
-  metadataBase: new URL('https://www.jednopietrowawarszawa.pl'),
-  title: 'Jednopiętrowa Warszawa | Deweloper Nieruchomości',
-  description: 'Firma deweloperska, która na rynku nieruchomości z sukcesami działa od ponad 10 lat. Specjalizujemy się w budowie domów w stylu Wiązania Bawarskiego.',
-  openGraph: {
-    title: 'Firma z 10 letnim doświadczeniem! | Jednopiętrowa Warszawa',
-    description: 'Firma deweloperska, która na rynku nieruchomości z sukcesami działa od ponad 10 lat. Specjalizujemy się w budowie domów w stylu Wiązania Bawarskiego.',
-    images: [{ url: '/images/hero-main.jpg', width: 1200, height: 630, alt: 'Jednopiętrowa Warszawa - zdjęcie główne' }],
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Firma z 10 letnim doświadczeniem! | Jednopiętrowa Warszawa',
-    description: 'Firma deweloperska, która na rynku nieruchomości z sukcesami działa od ponad 10 lat. Specjalizujemy się w budowie domów w stylu Wiązania Bawarskiego.',
-    images: [{ url: '/images/hero-main.jpg', alt: 'Jednopiętrowa Warszawa - zdjęcie główne' }],
-  },
+  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'),
   icons: {
     icon: '/images/logo-blocks.png',
     apple: '/images/logo-blocks.png',
   },
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const locale = await getLocale()
   return (
-    <html lang="pl" className={`${playfair.variable} ${inter.variable}`}>
+    <html lang={locale} className={`${playfair.variable} ${inter.variable}`}>
       {/* Google Consent Mode v2 — defaults to denied BEFORE GTM loads.
           Runs ahead of the GTM container (afterInteractive) so no analytics/
           marketing tags fire until the user grants consent. */}

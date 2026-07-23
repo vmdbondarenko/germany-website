@@ -157,7 +157,8 @@ export function About({ upcomingInvestments, newCities, aboutSection }: { upcomi
           <div ref={expansionRef} className="mb-16 lg:mb-20">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
               {/* First Card - Large */}
-              <div 
+              {upcomingInvestments[0] && (
+              <div
                 className={`lg:col-span-7 group relative bg-card rounded-3xl p-8 lg:p-10 border border-border/40 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-500 ${
                   expansionVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
                 }`}
@@ -198,11 +199,12 @@ export function About({ upcomingInvestments, newCities, aboutSection }: { upcomi
                 <p className="text-muted-foreground text-base lg:text-lg leading-relaxed whitespace-pre-line">
                   {upcomingInvestments[0].description}
                 </p>
-                <div 
+                <div
                   className="absolute bottom-0 right-0 w-20 h-20 rounded-tl-3xl rounded-br-3xl opacity-5"
                   style={{ backgroundColor: '#6E2E2A' }}
                 />
               </div>
+              )}
 
               {/* Second and Third Cards */}
               <div className="lg:col-span-5 flex flex-col gap-6 lg:gap-8">

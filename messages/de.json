@@ -1,0 +1,21 @@
+{
+  "nav": {
+    "about": "Über uns",
+    "locations": "Standorte",
+    "forSale": "Im Verkauf",
+    "completed": "Abgeschlossen",
+    "team": "Team",
+    "howWeHelp": "Wie wir helfen",
+    "news": "Aktuelles",
+    "contact": "Kontakt"
+  },
+  "common": {
+    "openMenu": "Menü öffnen",
+    "closeMenu": "Menü schließen",
+    "email": "E-Mail",
+    "phone": "Telefon",
+    "language": "Sprache",
+    "germanLabel": "Deutsch",
+    "englishLabel": "English"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "nav": {
+    "about": "About",
+    "locations": "Locations",
+    "forSale": "For sale",
+    "completed": "Completed",
+    "team": "Team",
+    "howWeHelp": "How we help",
+    "news": "News",
+    "contact": "Contact"
+  },
+  "common": {
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "email": "Email",
+    "phone": "Phone",
+    "language": "Language",
+    "germanLabel": "Deutsch",
+    "englishLabel": "English"
+  }
+}
