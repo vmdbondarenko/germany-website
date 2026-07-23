@@ -16,6 +16,9 @@ import { Contact } from "@/components/contact"
 import { Footer } from "@/components/footer"
 import { NewsScroll } from "@/components/news-scroll"
 import { prisma } from "@/lib/prisma"
+import { getLocale, getTranslations } from "next-intl/server"
+import { getHomeContent } from "@/lib/home-content"
+import type { Locale } from "@/i18n/routing"
 import { HOME_COPY } from "@/lib/seo/landing-copy"
 import type { Metadata } from "next"
 
@@ -39,6 +42,11 @@ export const metadata: Metadata = {
 }
 
 export default async function HomePage() {
+  const locale = (await getLocale()) as Locale
+  const home = await getHomeContent(locale)
+  const th = await getTranslations("home")
+  const mapCopy = { heading: th("mapHeading"), subtitle: th("mapSubtitle") }
+
   const STATUS_LABELS: Record<string, string> = {
     active: "W sprzedaży",
     planned: "Wkrótce",
@@ -133,7 +141,7 @@ export default async function HomePage() {
     <>
       <HeaderServer />
       <main>
-        <Hero />
+        <Hero content={home.hero} />
         <ArchitectureSlideshow dbSlides={slideshowSlides} />
         <About upcomingInvestments={upcomingInvestments} newCities={newCities} aboutSection={aboutSection} />
         <Investments projects={activeProjects} />
@@ -145,10 +153,10 @@ export default async function HomePage() {
                   className="font-serif text-3xl lg:text-4xl font-semibold mb-4"
                   style={{ color: "#3E1718" }}
                 >
-                  Lokalizacje inwestycji
+                  {mapCopy.heading}
                 </h2>
                 <p className="text-muted-foreground text-base lg:text-lg max-w-2xl mx-auto">
-                  Znajdź nasze inwestycje na mapie w wybranym mieście
+                  {mapCopy.subtitle}
                 </p>
               </div>
               <CityMap apiKey={mapsApiKey} mapId={mapsMapId} cities={lokalizacjaData.cities} points={lokalizacjaData.points} />
@@ -156,12 +164,12 @@ export default async function HomePage() {
           </section>
         )}
         <CompletedInvestments projects={completedProjects} />
-        <Process />
-        <Distinguishes />
+        <Process content={home.process} />
+        <Distinguishes content={home.distinguishes} />
         <Team members={teamMembers} />
-        <Services />
-        <InteriorShowcase />
-        <BuyingProcess />
+        <Services content={home.services} />
+        <InteriorShowcase content={home.interior} />
+        <BuyingProcess content={home.buying} />
         <NewsScroll posts={newsPosts.map((p) => ({ ...p, publishedAt: p.publishedAt?.toISOString() ?? null, createdAt: p.createdAt.toISOString() }))} />
         <Contact />
       </main>

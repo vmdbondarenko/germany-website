@@ -15,6 +15,9 @@ import { Contact } from '@/components/contact'
 import { JsonLd, breadcrumbSchema, residenceSchema } from '@/lib/seo/json-ld'
 import { resolveAlt, galleryAlt } from '@/lib/seo/image-alt'
 import { PROJECT_COPY } from '@/lib/seo/landing-copy'
+import { getLocale } from 'next-intl/server'
+import { getHomeContent } from '@/lib/home-content'
+import type { Locale } from '@/i18n/routing'
 
 /**
  * Full investment page body. Rendered by both /inwestycje/[slug] (legacy, only
@@ -32,6 +35,8 @@ export async function ProjectDetail({
   canonicalPath: string
   cities: { name: string; slug: string }[]
 }) {
+  const locale = (await getLocale()) as Locale
+  const buyingContent = (await getHomeContent(locale)).buying
   const project = await prisma.project.findUnique({
     where: { slug },
     include: {
@@ -289,7 +294,7 @@ export async function ProjectDetail({
       )}
 
       {/* Jak kupić */}
-      {jakKupic && <BuyingProcess />}
+      {jakKupic && <BuyingProcess content={buyingContent} />}
 
       {/* Jak jeszcze możemy pomóc? */}
       {jakPomoc && (

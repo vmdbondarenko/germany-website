@@ -1,4 +1,8 @@
 {
+  "home": {
+    "mapHeading": "Standorte unserer Projekte",
+    "mapSubtitle": "Finden Sie unsere Projekte auf der Karte in der gewünschten Stadt"
+  },
   "nav": {
     "about": "Über uns",
     "locations": "Standorte",
@@ -16,6 +20,12 @@
     "phone": "Telefon",
     "language": "Sprache",
     "germanLabel": "Deutsch",
-    "englishLabel": "English"
+    "englishLabel": "English",
+    "close": "Schließen",
+    "previousImage": "Vorheriges Bild",
+    "nextImage": "Nächstes Bild",
+    "scrollLeft": "Nach links scrollen",
+    "scrollRight": "Nach rechts scrollen",
+    "contact": "Kontakt"
   }
 }

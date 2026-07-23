@@ -1,8 +1,10 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
+import { useTranslations } from "next-intl"
 import Image from "next/image"
 import { numberedSectionAlt } from "@/lib/seo/image-alt"
+import type { InteriorContent } from "@/lib/home-content"
 
 const interiorImages = [
   {
@@ -79,7 +81,8 @@ const interiorImages = [
   },
 ]
 
-export function InteriorShowcase() {
+export function InteriorShowcase({ content }: { content: InteriorContent }) {
+  const tc = useTranslations("common")
   const [lightboxOpen, setLightboxOpen] = useState(false)
   const [currentIndex, setCurrentIndex] = useState(0)
 
@@ -152,12 +155,12 @@ export function InteriorShowcase() {
             style={{ color: '#3E1718' }}
           >
             <span className="relative inline-block">
-              Wnętrza pod klucz
+              {content.heading}
               <div className="absolute -bottom-2 left-0 right-0 h-1 rounded-full opacity-25" style={{ backgroundColor: '#6E2E2A' }} />
             </span>
           </h2>
           <p className="text-muted-foreground text-base lg:text-lg max-w-3xl mx-auto leading-relaxed">
-            Tworzymy wnętrza gotowe do zamieszkania — funkcjonalne, estetyczne i dopracowane w każdym detalu.
+            {content.description}
           </p>
         </div>
       </div>
@@ -174,7 +177,7 @@ export function InteriorShowcase() {
             >
               <Image
                 src={image.src}
-                alt={numberedSectionAlt("Wnętrza pod klucz", "Jednopiętrowa Warszawa", index % interiorImages.length)}
+                alt={numberedSectionAlt(content.heading, "",index % interiorImages.length)}
                 width={400}
                 height={280}
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
@@ -193,7 +196,7 @@ export function InteriorShowcase() {
             >
               <Image
                 src={image.src}
-                alt={numberedSectionAlt("Wnętrza pod klucz", "Jednopiętrowa Warszawa", (duplicatedImages.length - 1 - index) % interiorImages.length)}
+                alt={numberedSectionAlt(content.heading, "",(duplicatedImages.length - 1 - index) % interiorImages.length)}
                 width={400}
                 height={280}
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
@@ -217,7 +220,7 @@ export function InteriorShowcase() {
           <button
             onClick={closeLightbox}
             className="absolute top-4 right-4 lg:top-8 lg:right-8 w-12 h-12 flex items-center justify-center rounded-full bg-[#3E1718]/10 hover:bg-[#3E1718]/20 transition-colors duration-300 z-50 border border-[#6E2E2A]/20"
-            aria-label="Zamknij"
+            aria-label={tc("close")}
           >
             <svg className="w-6 h-6 text-[#3E1718]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -236,7 +239,7 @@ export function InteriorShowcase() {
               goToPrevious()
             }}
             className="absolute left-4 lg:left-8 top-1/2 -translate-y-1/2 w-14 h-14 lg:w-16 lg:h-16 flex items-center justify-center rounded-full bg-white/90 hover:bg-white shadow-lg hover:shadow-xl transition-all duration-300 z-50 border border-[#6E2E2A]/20"
-            aria-label="Poprzednie zdjęcie"
+            aria-label={tc("previousImage")}
           >
             <svg className="w-7 h-7 lg:w-8 lg:h-8 text-[#3E1718]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
@@ -250,7 +253,7 @@ export function InteriorShowcase() {
               goToNext()
             }}
             className="absolute right-4 lg:right-8 top-1/2 -translate-y-1/2 w-14 h-14 lg:w-16 lg:h-16 flex items-center justify-center rounded-full bg-white/90 hover:bg-white shadow-lg hover:shadow-xl transition-all duration-300 z-50 border border-[#6E2E2A]/20"
-            aria-label="Następne zdjęcie"
+            aria-label={tc("nextImage")}
           >
             <svg className="w-7 h-7 lg:w-8 lg:h-8 text-[#3E1718]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
@@ -264,7 +267,7 @@ export function InteriorShowcase() {
           >
             <Image
               src={interiorImages[currentIndex].src}
-              alt={numberedSectionAlt("Wnętrza pod klucz", "Jednopiętrowa Warszawa", currentIndex)}
+              alt={numberedSectionAlt(content.heading, "",currentIndex)}
               width={1600}
               height={1100}
               className="max-w-full max-h-full object-contain rounded-2xl shadow-2xl"

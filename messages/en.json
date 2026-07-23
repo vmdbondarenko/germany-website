@@ -1,4 +1,8 @@
 {
+  "home": {
+    "mapHeading": "Where our projects are",
+    "mapSubtitle": "Find our projects on the map in your chosen city"
+  },
   "nav": {
     "about": "About",
     "locations": "Locations",
@@ -16,6 +20,12 @@
     "phone": "Phone",
     "language": "Language",
     "germanLabel": "Deutsch",
-    "englishLabel": "English"
+    "englishLabel": "English",
+    "close": "Close",
+    "previousImage": "Previous image",
+    "nextImage": "Next image",
+    "scrollLeft": "Scroll left",
+    "scrollRight": "Scroll right",
+    "contact": "Contact"
   }
 }

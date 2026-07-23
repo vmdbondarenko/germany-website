@@ -422,6 +422,52 @@ model AboutSection {
   updatedAt   DateTime @updatedAt
 }
 
+// Admin-managed, per-locale content for the homepage's otherwise-hardcoded
+// sections (hero, process, distinguishes, services, buying, interior, investor,
+// contact). `id` is the stable section key. All text fields have a DE + EN
+// variant; when a field is null the code default in lib/home-content.ts is used.
+model HomeSection {
+  id      String  @id // stable key: "hero" | "process" | "distinguishes" | ...
+  enabled Boolean @default(true)
+  order   Int     @default(0)
+
+  eyebrowDe     String?
+  eyebrowEn     String?
+  headingDe     String?
+  headingEn     String?
+  descriptionDe String? @db.Text
+  descriptionEn String? @db.Text
+
+  imageUrl  String?
+  imageUrl2 String?
+
+  primaryCtaLabelDe   String?
+  primaryCtaLabelEn   String?
+  primaryCtaHref      String?
+  secondaryCtaLabelDe String?
+  secondaryCtaLabelEn String?
+  secondaryCtaHref    String?
+
+  items     HomeSectionItem[]
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+}
+
+model HomeSectionItem {
+  id            String      @id @default(cuid())
+  sectionId     String
+  section       HomeSection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  icon          String? // lucide-react icon name
+  titleDe       String?
+  titleEn       String?
+  descriptionDe String?     @db.Text
+  descriptionEn String?     @db.Text
+  order         Int         @default(0)
+  createdAt     DateTime    @default(now())
+
+  @@index([sectionId])
+}
+
 // Audit log + rate-limit source for /api/admin/auth/login. Failed attempts in
 // the last 15 min from the same IP are counted to throttle brute force.
 model LoginAttempt {

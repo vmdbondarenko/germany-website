@@ -1,16 +1,17 @@
 import Image from "next/image"
-import Link from "next/link"
+import { Link } from "@/i18n/navigation"
 import { Button } from "@/components/ui/button"
 import { ArrowRight } from "lucide-react"
+import type { HeroContent } from "@/lib/home-content"
 
-export function Hero() {
+export function Hero({ content }: { content: HeroContent }) {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background Image */}
       <div className="absolute inset-0">
         <Image
           src="/images/hero-main.jpg"
-          alt="Jednopiętrowa Warszawa - zdjęcie główne"
+          alt={content.title}
           fill
           className="object-cover"
           priority
@@ -23,13 +24,13 @@ export function Hero() {
       <div className="relative z-10 container mx-auto px-4 lg:px-8 pt-20">
         <div className="max-w-3xl">
           <p className="text-primary-foreground/80 text-sm lg:text-base font-medium tracking-widest uppercase mb-4">
-            Deweloper Nieruchomości
+            {content.eyebrow}
           </p>
           <h1 className="font-serif text-4xl md:text-5xl lg:text-7xl font-semibold text-primary-foreground leading-tight mb-6 text-balance">
-            Nowe domy na sprzedaż od dewelopera
+            {content.title}
           </h1>
           <p className="text-primary-foreground/90 text-lg lg:text-xl leading-relaxed mb-8 max-w-2xl">
-            Od ponad 10 lat budujemy wyjątkowe nieruchomości w charakterystycznym stylu Wiązania Bawarskiego z cegły ręcznie formowanej.
+            {content.subtitle}
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
             <Button
@@ -37,8 +38,8 @@ export function Hero() {
               size="lg"
               className="bg-primary-foreground text-foreground hover:bg-primary-foreground/90 font-medium text-base px-8"
             >
-              <Link href="#w-sprzedazy">
-                Zobacz inwestycje
+              <Link href={content.primaryCta.href}>
+                {content.primaryCta.label}
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>
@@ -48,7 +49,7 @@ export function Hero() {
               variant="outline"
               className="border-primary-foreground/50 text-primary-foreground bg-transparent hover:bg-primary-foreground/10 font-medium text-base px-8"
             >
-              <Link href="#o-firmie">Poznaj nas</Link>
+              <Link href={content.secondaryCta.href}>{content.secondaryCta.label}</Link>
             </Button>
           </div>
         </div>
