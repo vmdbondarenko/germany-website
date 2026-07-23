@@ -1,0 +1,694 @@
+"use client"
+// Bawarska Przestrzeń investment detail page
+import { useState } from "react"
+import Image from "next/image"
+import Link from "next/link"
+import {
+  MapPin,
+  Clock,
+  Car,
+  Plane,
+  Train,
+  ShoppingBag,
+  School,
+  TreePine,
+  ChevronLeft,
+  ChevronRight,
+  X,
+  ArrowLeft,
+  Home,
+  Check,
+  Download,
+  FileText,
+  Zap,
+  Info,
+} from "lucide-react"
+import { Header } from "@/components/header"
+import { Footer as SiteFooter } from "@/components/footer"
+import { BuyingProcess } from "@/components/buying-process"
+import { Contact } from "@/components/contact"
+import { BawarskaLokalizacjaMap } from "@/components/bawarska-lokalizacja-map"
+import { BawarskaKomunikacjaMap } from "@/components/bawarska-komunikacja-map"
+import { ProjectNavigator } from "@/components/project-navigator"
+
+const galleryImages = [
+  { src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Bawarska%20Przestrzen%CC%81%207%20_500kb-yJxQmcAOG8vsVGsX9aYqVzAVBZnF9d.jpg", alt: "Bawarska Przestrzeń - widok frontowy wieczór" },
+  { src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Bawarska%20Przestrzen%CC%81%208%20_500kb-WvIn4n4dnuT2PtKBzrsIR0xSQZ7HUa.jpg", alt: "Bawarska Przestrzeń - widok z ulicy" },
+  { src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Bawarska%20Przestrzen%CC%81%205%20_500kb-H2qeLw1gPKDXMTCL3W42POENw60dV3.jpg", alt: "Bawarska Przestrzeń - ogród nocą" },
+  { src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Bawarska%20Przestrzen%CC%81%206%20_500kb-MjCdoWpacOtCd5QAKopJD47YZOpwkn.jpg", alt: "Bawarska Przestrzeń - widok słoneczny" },
+  { src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Bawarska%20Przestrzen%CC%81%2010-BAFB97J5dhYaZRJ5DHJ1kpUw92fjXx.png", alt: "Bawarska Przestrzeń - ogród z leżakami" },
+]
+
+
+
+export default function BawarskaPage() {
+  const [selectedImage, setSelectedImage] = useState(-1)
+
+  const handlePrevImage = () => {
+    setSelectedImage((prev) => (prev === 0 ? galleryImages.length - 1 : prev - 1))
+  }
+  const handleNextImage = () => {
+    setSelectedImage((prev) => (prev === galleryImages.length - 1 ? 0 : prev + 1))
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      <Header />
+
+      {/* Hero Section */}
+      <section className="relative">
+        <div className="relative min-h-screen overflow-hidden">
+          <Image
+            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Bawarska%20Przestrzen%CC%81%208-UhAwmRquANInw29kyJjf2sZXwfVUX0.jpg"
+            alt="Bawarska Przestrzeń"
+            fill
+            className="object-cover"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/10 to-transparent" />
+
+          {/* Back Button */}
+          <Link
+            href="/#inwestycje"
+            className="absolute top-20 left-6 lg:top-20 lg:left-8 flex items-center gap-2 text-white/90 hover:text-white transition-colors bg-black/20 backdrop-blur-sm px-4 py-2 rounded-full z-10"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            <span className="text-sm font-medium">Powrót</span>
+          </Link>
+
+          {/* Hero Content */}
+          <div className="absolute bottom-0 left-0 right-0 p-8 lg:p-16">
+            <div className="container mx-auto">
+              <span
+                className="inline-block text-xs font-medium px-3 py-1.5 rounded-full mb-4"
+                style={{ backgroundColor: "#6E2E2A", color: "rgba(255,255,255,0.95)" }}
+              >
+                W sprzedaży
+              </span>
+              <h1 className="font-serif text-4xl lg:text-6xl font-semibold text-white mb-4">
+                Bawarska Przestrzeń
+              </h1>
+              <p className="text-xl lg:text-2xl text-white/90 max-w-2xl">
+                Wybierz komfortowy dom z ogrodem i garażem nieopodal Wrocławia
+              </p>
+              <div className="flex items-center gap-2 mt-4 text-white/80">
+                <MapPin className="w-5 h-5" />
+                <span>Dobrzykowice, ul. Jarzębinowa</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Schema Viewer Section */}
+      <section className="py-16 lg:py-24 relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #FAF8F5 0%, #F5F0EB 50%, #EDE6DF 100%)' }}>
+        <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%236E2E2A\' fill-opacity=\'1\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")' }} />
+        <div className="container mx-auto px-4 lg:px-8 relative">
+          <div className="text-center mb-12">
+            <span
+              className="inline-block px-4 py-1.5 rounded-full text-xs font-medium tracking-wide uppercase mb-4"
+              style={{ backgroundColor: 'rgba(110, 46, 42, 0.1)', color: '#6E2E2A' }}
+            >
+              Plan Osiedla
+            </span>
+            <h2 className="font-serif text-3xl lg:text-4xl font-semibold text-[#3E1718] mb-4">
+              Schemat inwestycji
+            </h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Wybierz nieruchomość na mapie lub skorzystaj z filtrów, aby znaleźć swój wymarzony dom
+            </p>
+          </div>
+          <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-[#6E2E2A]/10 p-6 lg:p-8">
+            <ProjectNavigator slug="bawarska-przestrzen" />
+          </div>
+        </div>
+      </section>
+
+      {/* Key Features Strip */}
+      <section className="py-8 border-b border-border/50" style={{ backgroundColor: "#FAF8F5" }}>
+        <div className="container mx-auto px-4 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+            <div className="flex items-start gap-4">
+              <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: "rgba(110,46,42,0.1)" }}>
+                <MapPin className="w-5 h-5" style={{ color: "#6E2E2A" }} />
+              </div>
+              <div>
+                <h3 className="font-medium text-sm" style={{ color: "#3E1718" }}>Doskonała lokalizacja</h3>
+                <p className="text-sm text-muted-foreground">25 minut od centrum Wrocławia</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-4">
+              <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: "rgba(110,46,42,0.1)" }}>
+                <Home className="w-5 h-5" style={{ color: "#6E2E2A" }} />
+              </div>
+              <div>
+                <h3 className="font-medium text-sm" style={{ color: "#3E1718" }}>Przestronne domy</h3>
+                <p className="text-sm text-muted-foreground">Od 112 do 114 m² powierzchni</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-4">
+              <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: "rgba(110,46,42,0.1)" }}>
+                <Car className="w-5 h-5" style={{ color: "#6E2E2A" }} />
+              </div>
+              <div>
+                <h3 className="font-medium text-sm" style={{ color: "#3E1718" }}>Garaż i ogród z tarasem</h3>
+                <p className="text-sm text-muted-foreground">w cenie każdego domu</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Location Section 1: Komunikacja */}
+      <section className="py-16 lg:py-24 bg-background">
+        <div className="container mx-auto px-4 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+            <div>
+              <span
+                className="inline-block px-4 py-1.5 rounded-full text-xs font-medium tracking-wide uppercase mb-4"
+                style={{ backgroundColor: "rgba(110,46,42,0.1)", color: "#6E2E2A" }}
+              >
+                Lokalizacja
+              </span>
+              <h2 className="font-serif text-3xl lg:text-4xl font-semibold mb-6" style={{ color: "#3E1718" }}>
+                Doskonałe skomunikowanie z Wrocławiem
+              </h2>
+              <p className="text-muted-foreground mb-6 leading-relaxed">
+                Bawarska Przestrzeń znajduje się w Dobrzykowicach przy ul. Jarzębinowej. Mieszkając tutaj, zyskujesz spokój przedmieścia, a jednocześnie szybki dostęp do serca Wrocławia. Bliskość głównych tras dojazdowych oraz stacji PKP sprawia, że do centrum dotrzesz w 25 minut, bez tracenia czasu w korkach. W zasięgu kilku kilometrów masz także całą przydatną infrastrukturę: strefy handlowe, punkty usługowe, lokale gastronomiczne, szkoły i przedszkola.
+              </p>
+              <div className="mb-8">
+                <a
+                  href="https://maps.google.com/?q=Dobrzykowice+ul.+Jarzębinowa"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg font-medium text-sm transition-all duration-300 hover:opacity-90 shadow-md hover:shadow-lg"
+                  style={{ backgroundColor: "#6E2E2A", color: "rgba(255,255,255,0.95)" }}
+                >
+                  <MapPin className="w-4 h-4" />
+                  Zobacz w Google Maps
+                </a>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="flex items-start gap-3 p-4 rounded-xl bg-card border border-border/50">
+                  <Clock className="w-5 h-5 mt-0.5" style={{ color: "#6E2E2A" }} />
+                  <div>
+                    <p className="font-medium text-sm" style={{ color: "#3E1718" }}>Centrum Wrocławia</p>
+                    <p className="text-xs text-muted-foreground">12,5 km – 25 min samochodem</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3 p-4 rounded-xl bg-card border border-border/50">
+                  <Train className="w-5 h-5 mt-0.5" style={{ color: "#6E2E2A" }} />
+                  <div>
+                    <p className="font-medium text-sm" style={{ color: "#3E1718" }}>Stacja PKP Dobrzykowice</p>
+                    <p className="text-xs text-muted-foreground">1,9 km – 20 min spacerem</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3 p-4 rounded-xl bg-card border border-border/50">
+                  <Plane className="w-5 h-5 mt-0.5" style={{ color: "#6E2E2A" }} />
+                  <div>
+                    <p className="font-medium text-sm" style={{ color: "#3E1718" }}>Port Lotniczy Wrocław</p>
+                    <p className="text-xs text-muted-foreground">37 km – 35 min samochodem</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3 p-4 rounded-xl bg-card border border-border/50">
+                  <Car className="w-5 h-5 mt-0.5" style={{ color: "#6E2E2A" }} />
+                  <div>
+                    <p className="font-medium text-sm" style={{ color: "#3E1718" }}>Wschodnia Obwodnica Wrocławia</p>
+                    <p className="text-xs text-muted-foreground">2,5 km – 4 min samochodem</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="relative">
+              <BawarskaKomunikacjaMap />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Neighborhood Section */}
+      <section className="py-16 lg:py-24" style={{ backgroundColor: "#FAF8F5" }}>
+        <div className="container mx-auto px-4 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+            <div className="order-2 lg:order-1">
+              <BawarskaLokalizacjaMap />
+            </div>
+            <div className="order-1 lg:order-2">
+              <span
+                className="inline-block px-4 py-1.5 rounded-full text-xs font-medium tracking-wide uppercase mb-4"
+                style={{ backgroundColor: "rgba(110,46,42,0.1)", color: "#6E2E2A" }}
+              >
+                Otoczenie
+              </span>
+              <h2 className="font-serif text-3xl lg:text-4xl font-semibold mb-6" style={{ color: "#3E1718" }}>
+                Zielone otoczenie i przyjazne sąsiedztwo
+              </h2>
+              <p className="text-muted-foreground mb-8 leading-relaxed">
+                Twoje nowe miejsce do życia to sprawdzone połączenie natury i miejskich udogodnień. W sąsiedztwie znajdziesz nowe domy jednorodzinne oraz liczne tereny rekreacyjne, dzięki którym każdego dnia możesz złapać oddech od codziennego pędu. Kameralna zabudowa i spokojne ulice sprzyjają relaksowi. Niedaleko również do rozległych lasów, idealnych na rodzinne wycieczki rowerowe, długie spacery czy jesienne grzybobranie. To lokalizacja, w której poczujesz balans – bliskość przyrody i codzienny komfort.
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="flex items-start gap-3 p-4 rounded-xl bg-white border border-border/50">
+                  <TreePine className="w-5 h-5 mt-0.5" style={{ color: "#6E2E2A" }} />
+                  <div>
+                    <p className="font-medium text-sm" style={{ color: "#3E1718" }}>Plac zabaw i teren spacerowy</p>
+                    <p className="text-xs text-muted-foreground">1 km – 14 min spacerem</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3 p-4 rounded-xl bg-white border border-border/50">
+                  <ShoppingBag className="w-5 h-5 mt-0.5" style={{ color: "#6E2E2A" }} />
+                  <div>
+                    <p className="font-medium text-sm" style={{ color: "#3E1718" }}>Biedronka, Action, Sinsay, Pepco</p>
+                    <p className="text-xs text-muted-foreground">1,4 km – 3 min samochodem</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3 p-4 rounded-xl bg-white border border-border/50">
+                  <School className="w-5 h-5 mt-0.5" style={{ color: "#6E2E2A" }} />
+                  <div>
+                    <p className="font-medium text-sm" style={{ color: "#3E1718" }}>Nowoczesna szkoła podstawowa</p>
+                    <p className="text-xs text-muted-foreground">1,5 km – 3 min samochodem</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3 p-4 rounded-xl bg-white border border-border/50">
+                  <TreePine className="w-5 h-5 mt-0.5" style={{ color: "#6E2E2A" }} />
+                  <div>
+                    <p className="font-medium text-sm" style={{ color: "#3E1718" }}>Las Strachociński</p>
+                    <p className="text-xs text-muted-foreground">3 km – 15 min rowerem</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* About Investment Section */}
+      <section className="py-16 lg:py-24 bg-background">
+        <div className="container mx-auto px-4 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+            <div>
+              <span
+                className="inline-block px-4 py-1.5 rounded-full text-xs font-medium tracking-wide uppercase mb-4"
+                style={{ backgroundColor: "rgba(110,46,42,0.1)", color: "#6E2E2A" }}
+              >
+                O Inwestycji
+              </span>
+              <h2 className="font-serif text-3xl lg:text-4xl font-semibold mb-6" style={{ color: "#3E1718" }}>
+                Ponadczasowy design w wyjątkowej formie
+              </h2>
+              <p className="text-muted-foreground mb-4 leading-relaxed">
+                Bawarska Przestrzeń to inwestycja stworzona dla tych, którzy marzą o nowoczesnym domu w spokojnym otoczeniu. Kameralne budynki w eleganckiej formie łączą w sobie prostą, ponadczasową architekturę z funkcjonalnym układem przestrzeni. Na elewacjach zastosowano cegłę ręcznie formowaną, która dodaje im wyjątkowego charakteru i przywołuje klimat solidnego, europejskiego rzemiosła.
+              </p>
+              <p className="text-muted-foreground leading-relaxed">
+                Otoczenie jest starannie zaplanowane – znajdziesz tu balans między prywatnością, zielenią a codzienną wygodą.
+              </p>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="relative aspect-[4/5] rounded-xl overflow-hidden">
+                <Image
+                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Bawarska%20Przestrzen%CC%81%206-g6QqCp8LqVEZGu27PtDxGUEx9Ev3B3.png"
+                  alt="Bawarska Przestrzeń - widok frontowy z podjazdami"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+              <div className="relative aspect-[4/5] rounded-xl overflow-hidden mt-8">
+                <Image
+                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Bawarska%20Przestrzen%CC%81%208-J7oaxoFCwueOtBbWcYx8hmytpy3p6r.jpg"
+                  alt="Bawarska Przestrzeń - widok z ulicy"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Garden & Garage Section */}
+      <section className="py-16 lg:py-24" style={{ backgroundColor: "#FAF8F5" }}>
+        <div className="container mx-auto px-4 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+            <div className="order-2 lg:order-1 relative aspect-[4/3] rounded-xl overflow-hidden">
+              <Image
+                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Bawarska%20Przestrzen%CC%81%205-H1rj8dFQ5uURg4DdMWbuEboFMtdkiW.png"
+                alt="Bawarska Przestrzeń - ogród nocą z oświetleniem"
+                fill
+                className="object-cover"
+              />
+            </div>
+            <div className="order-1 lg:order-2">
+              <span
+                className="inline-block px-4 py-1.5 rounded-full text-xs font-medium tracking-wide uppercase mb-4"
+                style={{ backgroundColor: "rgba(110,46,42,0.1)", color: "#6E2E2A" }}
+              >
+                Udogodnienia
+              </span>
+              <h2 className="font-serif text-3xl lg:text-4xl font-semibold mb-6" style={{ color: "#3E1718" }}>
+                Twój ogród, Twoje miejsce odpoczynku
+              </h2>
+              <p className="text-muted-foreground leading-relaxed mb-6">
+                Każdy dom w Bawarskiej Przestrzeni ma prywatny ogród z gotowym tarasem, który już od pierwszego dnia staje się Twoją strefą relaksu. To idealna przestrzeń na poranną kawę, rodzinne obiady na świeżym powietrzu czy wieczorne spotkania z przyjaciółmi. Do tego garaż i dodatkowe miejsce postojowe na podjeździe zapewniają pełną wygodę – zapomnisz o problemach z parkowaniem.
+              </p>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="p-4 rounded-xl bg-white border border-border/50">
+                  <Car className="w-6 h-6 mb-2" style={{ color: "#6E2E2A" }} />
+                  <h3 className="font-medium text-sm" style={{ color: "#3E1718" }}>Garaż + miejsce postojowe</h3>
+                  <p className="text-xs text-muted-foreground mt-1">W cenie każdego lokalu</p>
+                </div>
+                <div className="p-4 rounded-xl bg-white border border-border/50">
+                  <TreePine className="w-6 h-6 mb-2" style={{ color: "#6E2E2A" }} />
+                  <h3 className="font-medium text-sm" style={{ color: "#3E1718" }}>Prywatny ogród z tarasem</h3>
+                  <p className="text-xs text-muted-foreground mt-1">Gotowy od pierwszego dnia</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Dodatki Section */}
+      <section className="py-16 lg:py-24 bg-background">
+        <div className="container mx-auto px-4 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+            <div>
+              <span
+                className="inline-block px-4 py-1.5 rounded-full text-xs font-medium tracking-wide uppercase mb-4"
+                style={{ backgroundColor: "rgba(110,46,42,0.1)", color: "#6E2E2A" }}
+              >
+                Dodatki
+              </span>
+              <h2 className="font-serif text-3xl lg:text-4xl font-semibold mb-6" style={{ color: "#3E1718" }}>
+                Dodatki, które robią różnicę
+              </h2>
+              <p className="text-muted-foreground leading-relaxed mb-6">
+                W Bawarskiej Przestrzeni każdy szczegół ma znaczenie. Duże trzyszybowe okna wypełniają wnętrza naturalnym światłem, a ogrzewanie podłogowe ułatwia aranżację wnętrz oraz zapewnia ciepło i wygodę w chłodniejsze dni. Zastosowanie nowoczesnych pomp ciepła sprawia, że Twój dom jest nie tylko komfortowy, ale też energooszczędny. Dzięki przemyślanym rozwiązaniom technicznym codzienne życie staje się prostsze, a rachunki niższe.
+              </p>
+              <a
+                href="#kontakt"
+                className="inline-flex items-center justify-center px-6 py-3 rounded-lg font-medium transition-colors"
+                style={{ backgroundColor: "#6E2E2A", color: "white" }}
+              >
+                Napisz do nas
+              </a>
+            </div>
+            <div className="relative aspect-[4/3] rounded-xl overflow-hidden">
+              <Image
+                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Bawarska%20Przestrzen%CC%81%2010-RB7HKqKEQLCHM0TyhjTkSLjMoqW6oO.png"
+                alt="Bawarska Przestrzeń - ogród z leżakami"
+                fill
+                className="object-cover"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Dom który daje Ci wolność Section */}
+      <section className="py-16 lg:py-24 bg-background">
+        <div className="container mx-auto px-4 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+            <div className="relative aspect-[4/3] rounded-xl overflow-hidden order-2 lg:order-1">
+              <Image
+                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Bawarska%20Przestrzen%CC%81%2011%20-PomOgqj4o6sYRVvBHxkqyen2VsxNaV.png"
+                alt="Bawarska Przestrzeń - wizualizacja 3D wnętrza"
+                fill
+                className="object-cover"
+              />
+            </div>
+            <div className="order-1 lg:order-2">
+              <span
+                className="inline-block px-4 py-1.5 rounded-full text-xs font-medium tracking-wide uppercase mb-4"
+                style={{ backgroundColor: "rgba(110,46,42,0.1)", color: "#6E2E2A" }}
+              >
+                Dom
+              </span>
+              <h2 className="font-serif text-3xl lg:text-4xl font-semibold mb-6" style={{ color: "#3E1718" }}>
+                Dom, który daje Ci wolność
+              </h2>
+              <p className="text-muted-foreground leading-relaxed">
+                Wnętrza domów w Bawarskiej Przestrzeni to funkcjonalne układy o powierzchni od 112 m² do 114 m², które możesz zaaranżować tak, jak chcesz. Wysokie pomieszczenia dodają aranżacji lekkości, a dodatkowe pokoje – takie jak gabinet czy garderoba – sprawiają, że znajdziesz miejsce na wszystko, co ważne. Masz też możliwość przesunięcia ścian działowych już na etapie budowy, aby stworzyć układ idealnie dopasowany do Twojego stylu życia. To dom, który zmienia się razem z Tobą i Twoją rodziną.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* High Standard Section */}
+      <section className="py-20 lg:py-32 bg-background">
+        <div className="container mx-auto px-4 lg:px-8">
+          <div className="text-center mb-16">
+            <span
+              className="inline-block px-4 py-1.5 rounded-full text-xs font-medium tracking-wide uppercase mb-4"
+              style={{ backgroundColor: "rgba(110,46,42,0.1)", color: "#6E2E2A" }}
+            >
+              Standard
+            </span>
+            <h2 className="font-serif text-3xl lg:text-5xl font-semibold mb-6" style={{ color: "#3E1718" }}>
+              Wysoki standard wykończenia
+            </h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto text-lg leading-relaxed">
+              Każdy dom na Osiedlu Szlacheckim został zaprojektowany z myślą o komforcie i oszczędności energii
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              {
+                text: "Belgijska klinkierowa ręcznie formowana cegła na elewacji",
+                icon: (
+                  <svg className="w-7 h-7" style={{ color: "#6E2E2A" }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008z" />
+                  </svg>
+                ),
+              },
+              {
+                text: "Ogrzewanie podłogowe na parterze i poddaszu",
+                icon: (
+                  <svg className="w-7 h-7" style={{ color: "#6E2E2A" }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.362 5.214A8.252 8.252 0 0112 21 8.25 8.25 0 016.038 7.048 8.287 8.287 0 009 9.6a8.983 8.983 0 013.361-6.867 8.21 8.21 0 003 2.48z" />
+                  </svg>
+                ),
+              },
+              {
+                text: "Energooszczędne duże 3-szybowe okna",
+                icon: (
+                  <svg className="w-7 h-7" style={{ color: "#6E2E2A" }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
+                  </svg>
+                ),
+              },
+              {
+                text: "Ogrodzony teren inwestycji",
+                icon: (
+                  <svg className="w-7 h-7" style={{ color: "#6E2E2A" }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+                  </svg>
+                ),
+              },
+              {
+                text: "Możliwość instalacji ładowarek samochodowych",
+                icon: <Zap className="w-7 h-7" style={{ color: "#6E2E2A" }} />,
+              },
+              {
+                text: "Nowoczesne pompy ciepła",
+                icon: (
+                  <svg className="w-7 h-7" style={{ color: "#6E2E2A" }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+                  </svg>
+                ),
+              },
+            ].map((feature, i) => (
+              <div key={i} className="group relative bg-white rounded-2xl p-8 shadow-sm border border-border/30 hover:shadow-lg hover:border-[#6E2E2A]/20 transition-all duration-300">
+                <div className="flex items-start gap-4 mb-4">
+                  <div className="w-14 h-14 rounded-xl flex items-center justify-center flex-shrink-0" style={{ backgroundColor: "rgba(110,46,42,0.08)" }}>
+                    {feature.icon}
+                  </div>
+                  <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: "#6E2E2A" }}>
+                    <Check className="w-4 h-4 text-white" />
+                  </div>
+                </div>
+                <p className="text-muted-foreground leading-relaxed">{feature.text}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Gallery Section */}
+      <section className="py-16 lg:py-24" style={{ backgroundColor: "#FAF8F5" }}>
+        <div className="container mx-auto px-4 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="font-serif text-3xl lg:text-4xl font-semibold mb-4" style={{ color: "#3E1718" }}>
+              Galeria
+            </h2>
+          </div>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4">
+            {/* Featured large */}
+            <div
+              onClick={() => setSelectedImage(0)}
+              className="relative col-span-2 row-span-2 aspect-[4/3] rounded-xl overflow-hidden cursor-pointer group"
+            >
+              <Image src={galleryImages[0].src} alt={galleryImages[0].alt} fill className="object-cover transition-transform duration-500 group-hover:scale-105" />
+              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors" />
+            </div>
+            {galleryImages.slice(1).map((image, index) => (
+              <div
+                key={index + 1}
+                onClick={() => setSelectedImage(index + 1)}
+                className="relative aspect-[4/3] rounded-xl overflow-hidden cursor-pointer group"
+              >
+                <Image src={image.src} alt={image.alt} fill className="object-cover transition-transform duration-500 group-hover:scale-105" />
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors" />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+
+
+      {/* Informacje dodatkowe Section */}
+      <section className="py-16 lg:py-24 bg-[#faf9f7]">
+        <div className="container mx-auto px-4 lg:px-8">
+          {/* Section Header */}
+          <div className="text-center mb-12">
+            <span
+              className="inline-block px-4 py-1.5 rounded-full text-xs font-medium tracking-wide uppercase mb-4"
+              style={{ backgroundColor: 'rgba(110, 46, 42, 0.1)', color: '#6E2E2A' }}
+            >
+              Dokumenty i cennik
+            </span>
+            <h2 className="font-serif text-3xl lg:text-4xl font-semibold mb-4" style={{ color: '#3E1718' }}>
+              Informacje dodatkowe
+            </h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Pobierz prospekty informacyjne oraz zapoznaj się ze szczegółowym cennikiem dodatkowych udogodnień
+            </p>
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
+            {/* Download Prospectuses Card */}
+            <div className="bg-white rounded-2xl p-8 shadow-sm border border-border/50">
+              <div className="flex items-center gap-3 mb-6">
+                <div 
+                  className="w-12 h-12 rounded-full flex items-center justify-center"
+                  style={{ backgroundColor: 'rgba(110, 46, 42, 0.1)' }}
+                >
+                  <FileText className="w-5 h-5" style={{ color: '#6E2E2A' }} />
+                </div>
+                <div>
+                  <h3 className="font-serif text-xl font-semibold" style={{ color: '#3E1718' }}>
+                    Prospekt informacyjny
+                  </h3>
+                  <p className="text-sm text-muted-foreground">Dokument do pobrania w formacie PDF</p>
+                </div>
+              </div>
+
+              <a
+                href="/prospekt-informacyjny-bawarska-przestrzen.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex items-center gap-3 px-4 py-3 rounded-xl border border-border/50 bg-[#faf9f7] hover:bg-white transition-all hover:shadow-md"
+              >
+                <div className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0 transition-colors bg-[#3E1718] group-hover:bg-[#6E2E2A]">
+                  <Download className="w-4 h-4 text-white" />
+                </div>
+                <span className="text-sm font-medium text-foreground">
+                  Pobierz prospekt informacyjny
+                </span>
+              </a>
+            </div>
+
+            {/* Pricing Info Card */}
+            <div className="bg-white rounded-2xl p-8 shadow-sm border border-border/50">
+              <div className="flex items-center gap-3 mb-6">
+                <div 
+                  className="w-12 h-12 rounded-full flex items-center justify-center"
+                  style={{ backgroundColor: 'rgba(110, 46, 42, 0.1)' }}
+                >
+                  <Info className="w-5 h-5" style={{ color: '#6E2E2A' }} />
+                </div>
+                <div>
+                  <h3 className="font-serif text-xl font-semibold" style={{ color: '#3E1718' }}>
+                    Cennik dodatkowych udogodnień
+                  </h3>
+                  <p className="text-sm text-muted-foreground">Szczegółowe informacje o cenach</p>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                {/* Regular pricing table */}
+                <div className="rounded-xl border border-border/50 overflow-hidden">
+                  <div className="px-4 py-3 font-medium text-sm text-white" style={{ backgroundColor: '#3E1718' }}>
+                    Brak kosztów dodatkowych
+                  </div>
+                  <div className="p-6 bg-[#faf9f7] text-center">
+                    <p className="text-muted-foreground">
+                      Miejsca postojowe uwzględnione w cenie lokalu
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Buying Process */}
+      <BuyingProcess />
+
+      {/* Contact */}
+      <Contact />
+
+      <SiteFooter />
+
+      {/* Gallery Lightbox */}
+      {selectedImage >= 0 && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-white/50 backdrop-blur-sm"
+          onClick={() => setSelectedImage(-1)}
+        >
+          <button
+            onClick={() => setSelectedImage(-1)}
+            className="absolute top-4 right-4 lg:top-8 lg:right-8 w-12 h-12 flex items-center justify-center rounded-full bg-[#3E1718]/10 hover:bg-[#3E1718]/20 transition-colors z-50 border border-[#6E2E2A]/20"
+            aria-label="Zamknij"
+          >
+            <X className="w-6 h-6 text-[#3E1718]" />
+          </button>
+          <div className="absolute top-4 left-4 lg:top-8 lg:left-8 px-4 py-2 rounded-full bg-[#3E1718]/10 text-[#3E1718] text-sm font-medium border border-[#6E2E2A]/20">
+            {selectedImage + 1} / {galleryImages.length}
+          </div>
+          <button
+            onClick={(e) => { e.stopPropagation(); handlePrevImage(); }}
+            className="absolute left-4 lg:left-8 top-1/2 -translate-y-1/2 w-14 h-14 lg:w-16 lg:h-16 flex items-center justify-center rounded-full bg-white/90 hover:bg-white shadow-lg hover:shadow-xl transition-all z-50 border border-[#6E2E2A]/20"
+            aria-label="Poprzednie zdjęcie"
+          >
+            <ChevronLeft className="w-7 h-7 lg:w-8 lg:h-8 text-[#3E1718]" />
+          </button>
+          <button
+            onClick={(e) => { e.stopPropagation(); handleNextImage(); }}
+            className="absolute right-4 lg:right-8 top-1/2 -translate-y-1/2 w-14 h-14 lg:w-16 lg:h-16 flex items-center justify-center rounded-full bg-white/90 hover:bg-white shadow-lg hover:shadow-xl transition-all z-50 border border-[#6E2E2A]/20"
+            aria-label="Następne zdjęcie"
+          >
+            <ChevronRight className="w-7 h-7 lg:w-8 lg:h-8 text-[#3E1718]" />
+          </button>
+          <div
+            className="relative w-[95vw] h-[90vh] lg:w-[90vw] lg:h-[90vh] flex items-center justify-center"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <Image
+              src={galleryImages[selectedImage].src}
+              alt={galleryImages[selectedImage].alt}
+              width={1600}
+              height={1100}
+              className="max-w-full max-h-full object-contain rounded-2xl shadow-2xl"
+              priority
+            />
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}

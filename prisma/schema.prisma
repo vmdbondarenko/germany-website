@@ -1,0 +1,435 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL")
+  directUrl = env("POSTGRES_URL_NON_POOLING")
+}
+
+model Company {
+  id        String  @id @default(cuid())
+  name      String // Full legal name e.g. "Bawaria Development sp. z o. o."
+  slug      String  @unique
+  legalForm String? // e.g. "SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ"
+  nip       String // Polish tax ID (10 digits)
+  krs       String? // Court registry number
+  ceidg     String? // CEiDG number (for sole proprietors)
+  regon     String // Statistical number
+
+  // Registered address
+  addrVoivodeship  String?
+  addrCounty       String? // powiat
+  addrMunicipality String? // gmina
+  addrCity         String?
+  addrStreet       String?
+  addrBuildingNr   String?
+  addrUnitNr       String?
+  addrPostalCode   String?
+
+  // Sales office address
+  salesVoivodeship  String?
+  salesCounty       String?
+  salesMunicipality String?
+  salesCity         String?
+  salesStreet       String?
+  salesBuildingNr   String?
+  salesUnitNr       String?
+  salesPostalCode   String?
+  salesAdditional   String? // Additional sales locations
+  salesContact      String? // Contact method for buyers
+
+  contactEmail  String?
+  contactPhone  String?
+  contactFax    String?
+  contactPerson String?
+  websiteUrl    String?
+
+  projects  Project[]
+  units     Unit[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Project {
+  id           String  @id @default(cuid())
+  name         String
+  slug         String  @unique
+  location     String
+  description  String? @db.Text
+  svgContent   String? @db.Text
+  imageUrl     String?
+  planImageUrl String?
+  status       String  @default("active")
+  published    Boolean @default(false)
+  northAngle   Int? // Compass rotation in degrees (0-359, null = no compass shown) for main plan
+
+  // Hero
+  heroSubtitle String?
+
+  // Contact
+  contactPhone   String?
+  contactEmail   String?
+  contactAddress String?
+
+  // Company relation
+  companyId String?
+  company   Company? @relation(fields: [companyId], references: [id], onDelete: SetNull)
+
+  // City landing-page relation (admin-managed Location). Drives the project's
+  // canonical URL /{location.slug}/{project.slug} and its grouping on the
+  // /lokalizacja + city landing pages. Null = not assigned yet (still served at
+  // /inwestycje/{slug}).
+  cityLocationId String?
+  cityLocation   Location? @relation(fields: [cityLocationId], references: [id], onDelete: SetNull)
+
+  // Investment location details (for CSV reporting)
+  investVoivodeship  String?
+  investCounty       String?
+  investMunicipality String?
+  investCity         String?
+  investStreet       String?
+  investBuildingNr   String?
+  investPostalCode   String?
+  propertyType       String? @default("Mieszkanie") // Mieszkanie / Dom jednorodzinny
+  prospektUrl        String? // URL to prospekt informacyjny
+  additionalInfo     String? @db.Text // Extra info shown in "Informacje dodatkowe" section
+  latitude           Float? // Geocoded from investment address, used on /lokalizacja map
+  longitude          Float?
+
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+  units         Unit[]
+  houseTypes    HouseType[]
+  planViews     PlanView[]
+  stages        Stage[]
+  sections      ProjectSection[]
+  galleryImages GalleryImage[]
+  documents     ProjectDocument[]
+  dotOverrides  UnitDotOverride[]
+  slugAliases   ProjectSlugAlias[]
+}
+
+// Historical slugs for a project. Whenever a project's slug changes in admin,
+// its old slug is recorded here so old URLs (/inwestycje/{old} and
+// /{city}/{old}) keep working via a 308 redirect to the current canonical.
+model ProjectSlugAlias {
+  id        String   @id @default(cuid())
+  slug      String   @unique
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+}
+
+model ProjectDocument {
+  id        String   @id @default(cuid())
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  label     String
+  fileUrl   String
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+
+  @@index([projectId])
+}
+
+model PlanView {
+  id           String            @id @default(cuid())
+  projectId    String
+  project      Project           @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  name         String
+  imageUrl     String?
+  svgContent   String?           @db.Text
+  order        Int               @default(0)
+  northAngle   Int? // Compass rotation in degrees (0-359, null = no compass shown)
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+  dotOverrides UnitDotOverride[]
+}
+
+model Unit {
+  id            String     @id @default(cuid())
+  projectId     String
+  project       Project    @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  companyId     String?
+  company       Company?   @relation(fields: [companyId], references: [id], onDelete: SetNull)
+  houseTypeId   String?
+  houseType     HouseType? @relation(fields: [houseTypeId], references: [id], onDelete: SetNull)
+  svgElementId  String
+  label         String
+  status        String     @default("available")
+  stage         String?
+  area          Float?
+  gardenArea    Float?
+  floor         String?
+  rooms         Int?
+  floors        Int?
+  buildingLabel String?
+  price         Int?
+  description   String?    @db.Text
+  updatedAt     DateTime   @updatedAt
+
+  // CSV reporting extras — dane.gov.pl columns
+  parkingPrice Int? // Price for parking spot
+  storagePrice Int? // Price for storage room (komórka lokatorska)
+  fullPrice    Int? // Full price incl. art. 19a components (col 43)
+  partsType    String? // Części nieruchomości — type, e.g. "Parking", "Garaż" (col 45)
+  partsLabel   String? // Części — label assigned by developer (col 46)
+  roomsType    String? // Pomieszczenia przynależne — type, e.g. "Komórka lokatorska" (col 49)
+  roomsLabel   String? // Pomieszczenia — label assigned by developer (col 50)
+  rightsDesc   String? // Rights needed to use the unit (col 53)
+  rightsPrice  Int? // Rights price (col 54)
+  otherDesc    String? // Other monetary obligations (col 56)
+  otherPrice   Int? // Other obligations price (col 57)
+
+  priceHistory PriceHistory[]
+  dotOverrides UnitDotOverride[]
+
+  @@unique([projectId, svgElementId])
+  @@index([companyId])
+}
+
+// Manual dot-position override per (unit, map). Exactly one of projectId,
+// planViewId, stageViewId is non-null (= which map these coords belong to).
+model UnitDotOverride {
+  id          String     @id @default(cuid())
+  unitId      String
+  unit        Unit       @relation(fields: [unitId], references: [id], onDelete: Cascade)
+  projectId   String?
+  project     Project?   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  planViewId  String?
+  planView    PlanView?  @relation(fields: [planViewId], references: [id], onDelete: Cascade)
+  stageViewId String?
+  stageView   StageView? @relation(fields: [stageViewId], references: [id], onDelete: Cascade)
+  dotX        Float
+  dotY        Float
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  @@unique([unitId, projectId])
+  @@unique([unitId, planViewId])
+  @@unique([unitId, stageViewId])
+  @@index([projectId])
+  @@index([planViewId])
+  @@index([stageViewId])
+  @@index([unitId])
+}
+
+model PriceHistory {
+  id           String   @id @default(cuid())
+  unitId       String
+  unit         Unit     @relation(fields: [unitId], references: [id], onDelete: Cascade)
+  pricePerSqm  Float? // Gross price per m² (PLN)
+  totalPrice   Int? // Gross total price (PLN) — col 41
+  fullPrice    Int? // Full price incl. art. 19a — col 43
+  parkingPrice Int? // Parking spot price — col 47
+  storagePrice Int? // Storage room price — col 51
+  rightsPrice  Int? // Rights price — col 54
+  otherPrice   Int? // Other obligations price — col 57
+  date         DateTime @default(now()) // Date of this price
+  createdAt    DateTime @default(now())
+
+  @@index([unitId, date])
+}
+
+model HouseType {
+  id         String      @id @default(cuid())
+  projectId  String
+  project    Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  name       String
+  totalArea  Float?
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  floorPlans FloorPlan[]
+  units      Unit[]
+}
+
+model FloorPlan {
+  id          String    @id @default(cuid())
+  houseTypeId String
+  houseType   HouseType @relation(fields: [houseTypeId], references: [id], onDelete: Cascade)
+  name        String
+  area        Float?
+  image3dUrl  String?
+  image2dUrl  String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  rooms       Room[]
+}
+
+model Room {
+  id          String    @id @default(cuid())
+  floorPlanId String
+  floorPlan   FloorPlan @relation(fields: [floorPlanId], references: [id], onDelete: Cascade)
+  number      Int?
+  name        String
+  area        Float?
+  createdAt   DateTime  @default(now())
+}
+
+model Stage {
+  id           String      @id @default(cuid())
+  projectId    String
+  project      Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  svgElementId String
+  name         String
+  order        Int         @default(0)
+  // Hidden from the public site until an admin flips this on. New etapy are
+  // created hidden so polygons can be drawn privately; existing etapy were
+  // backfilled to true in the migration. The public /stages route filters on
+  // this, which also gates the etap's units (see project-navigator displayUnits).
+  published    Boolean     @default(false)
+  stageViews   StageView[]
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  @@unique([projectId, svgElementId])
+}
+
+model StageView {
+  id           String            @id @default(cuid())
+  stageId      String
+  stage        Stage             @relation(fields: [stageId], references: [id], onDelete: Cascade)
+  name         String
+  imageUrl     String?
+  svgContent   String?           @db.Text
+  order        Int               @default(0)
+  northAngle   Int? // Compass rotation in degrees (0-359, null = no compass shown)
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+  dotOverrides UnitDotOverride[]
+}
+
+model ProjectSection {
+  id          String        @id @default(cuid())
+  projectId   String
+  project     Project       @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  type        String // key_features, lokalizacja, otoczenie, o_inwestycji, udogodnienia, dodatki, dom, standard, jak_kupic, jak_pomoc, o_inwestorze
+  label       String?
+  heading     String?
+  description String?       @db.Text
+  imageUrl    String?
+  imageUrl2   String?
+  mapUrl      String?
+  enabled     Boolean       @default(true)
+  order       Int           @default(0)
+  items       SectionItem[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  @@unique([projectId, type])
+}
+
+model SectionItem {
+  id          String         @id @default(cuid())
+  sectionId   String
+  section     ProjectSection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  icon        String?
+  title       String
+  subtitle    String?
+  description String?
+  mapUrl      String? // Google Maps URL (or "lat,lng") — shown as an extra pin on the project location map
+  order       Int            @default(0)
+  createdAt   DateTime       @default(now())
+}
+
+model GalleryImage {
+  id        String   @id @default(cuid())
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  src       String
+  alt       String   @default("")
+  label     String   @default("")
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+}
+
+model NewsPost {
+  id            String      @id @default(cuid())
+  slug          String      @unique
+  title         String
+  description   String?     @db.Text
+  coverImageUrl String?
+  published     Boolean     @default(false)
+  publishedAt   DateTime?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  blocks        NewsBlock[]
+}
+
+model NewsBlock {
+  id         String   @id @default(cuid())
+  newsPostId String
+  newsPost   NewsPost @relation(fields: [newsPostId], references: [id], onDelete: Cascade)
+  type       String // "paragraph" | "image"
+  content    String?  @db.Text // paragraph text OR image caption
+  imageUrl   String? // for image blocks
+  order      Int      @default(0)
+  createdAt  DateTime @default(now())
+
+  @@index([newsPostId])
+}
+
+model UpcomingInvestment {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  status      String
+  statusColor String   @default("#6E2E2A")
+  icon        String   @default("Clock")
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+}
+
+// Admin-managed city / area. Each gets an SEO landing page at /{slug}
+// (e.g. /domy-pod-warszawa) and groups its assigned projects on the map.
+model Location {
+  id        String    @id @default(cuid())
+  name      String // "Domy pod Warszawą" — drives H1 / <title> / <meta>
+  slug      String    @unique // "domy-pod-warszawa"
+  order     Int       @default(0)
+  centerLat Float? // optional map-center override; else averaged from projects
+  centerLng Float?
+  zoom      Int? // optional map zoom override
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  projects  Project[]
+}
+
+model NewCity {
+  id        String   @id @default(cuid())
+  city      String
+  date      String
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+}
+
+model TeamMember {
+  id        String   @id @default(cuid())
+  name      String
+  role      String
+  image     String?
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+}
+
+model AboutSection {
+  id          String   @id @default("main")
+  companyName String   @default("Jednopiętrowa Warszawa")
+  description String   @db.Text
+  photos      Json     @default("[]")
+  updatedAt   DateTime @updatedAt
+}
+
+// Audit log + rate-limit source for /api/admin/auth/login. Failed attempts in
+// the last 15 min from the same IP are counted to throttle brute force.
+model LoginAttempt {
+  id        String   @id @default(cuid())
+  ipAddress String
+  userAgent String?
+  success   Boolean
+  createdAt DateTime @default(now())
+
+  @@index([ipAddress, createdAt])
+}
