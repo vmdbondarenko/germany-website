@@ -36,9 +36,9 @@ function LoginForm() {
     } else {
       const data = await res.json().catch(() => ({}))
       if (res.status === 429) {
-        setError(data?.error || 'Zbyt wiele prób. Spróbuj ponownie za 15 minut.')
+        setError(data?.error || 'Too many attempts. Please try again in 15 minutes.')
       } else {
-        setError('Nieprawidłowe hasło')
+        setError('Incorrect password')
       }
       setLoading(false)
     }
@@ -53,20 +53,20 @@ function LoginForm() {
               <Building2 className="h-8 w-8" style={{ color: '#6E2E2A' }} />
             </div>
           </div>
-          <CardTitle className="text-2xl font-serif">Panel Administracyjny</CardTitle>
-          <CardDescription>Jednopiętrowa Warszawa — Zarządzanie inwestycjami</CardDescription>
+          <CardTitle className="text-2xl font-serif">Admin Panel</CardTitle>
+          <CardDescription>Admin — content management</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="password">Hasło</Label>
+              <Label htmlFor="password">Password</Label>
               <div className="relative">
                 <Input
                   id="password"
                   type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Wprowadź hasło"
+                  placeholder="Enter password"
                   required
                   autoFocus
                 />
@@ -88,7 +88,7 @@ function LoginForm() {
               disabled={loading}
               style={{ backgroundColor: '#6E2E2A' }}
             >
-              {loading ? 'Logowanie...' : 'Zaloguj się'}
+              {loading ? 'Signing in...' : 'Sign in'}
             </Button>
           </form>
         </CardContent>

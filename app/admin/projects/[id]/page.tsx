@@ -193,8 +193,8 @@ const SECTION_TYPES: Array<{
   { type: 'dodatki', label: 'Dodatki', defaultLabel: 'Dodatki', hasImage: true, defaultOrder: 6 },
   { type: 'dom', label: 'Dom', defaultLabel: 'Dom', hasImage: true, defaultOrder: 7 },
   { type: 'standard', label: 'Standard', defaultLabel: 'Standard', hasItems: true, defaultOrder: 8 },
-  { type: 'jak_kupic', label: 'Jak kupić', defaultLabel: 'Jak kupić wymarzoną nieruchomość?', hasDescription: false, hasImage: false, defaultOrder: 10 },
-  { type: 'jak_pomoc', label: 'Jak jeszcze możemy pomóc?', defaultLabel: 'Jak jeszcze możemy pomóc?', hasItems: true, defaultOrder: 11 },
+  { type: 'jak_kupic', label: 'How to buy', defaultLabel: 'How to buy your dream home?', hasDescription: false, hasImage: false, defaultOrder: 10 },
+  { type: 'jak_pomoc', label: 'How else can we help?', defaultLabel: 'How else can we help?', hasItems: true, defaultOrder: 11 },
   { type: 'o_inwestorze', label: 'O inwestorze', defaultLabel: 'O inwestorze', hasImage: true, defaultOrder: 12 },
 ]
 
@@ -246,7 +246,7 @@ function ImageUploadField({ label: fieldLabel, value, onChange, uploadName }: {
         <Input
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          placeholder="URL zdjęcia lub prześlij plik"
+          placeholder="Image URL or upload a file"
           className="flex-1"
         />
         <label className="cursor-pointer">
@@ -315,7 +315,7 @@ function SectionItemEditor({ item, onUpdate, onDelete, showIcon = true, showMapU
           </div>
         )}
         <div className="space-y-1">
-          <Label className="text-xs">Kolejność</Label>
+          <Label className="text-xs">Order</Label>
           <Input type="number" value={item.order} className="h-8" onChange={(e) => onUpdate({ order: parseInt(e.target.value) || 0 })} />
         </div>
       </div>
@@ -359,7 +359,7 @@ function SectionItemEditor({ item, onUpdate, onDelete, showIcon = true, showMapU
             placeholder="https://www.google.com/maps/.../@52.2297,21.0122,17z"
           />
           <p className="text-[10px] text-muted-foreground">
-            Wklej link z Google Maps lub wpisz „szerokość,długość" (np. 52.2297,21.0122). Pinezka pojawi się na mapie lokalizacji.
+            Paste a Google Maps link or enter “lat,lng” (e.g. 52.2297,21.0122). A pin will appear on the location map.
           </p>
         </div>
       )}
@@ -398,7 +398,7 @@ function SectionEditor({ section, projectId, projectSlug, onUpdate, onRefresh }:
       body: JSON.stringify({
         sectionId: s.id,
         icon: 'MapPin',
-        title: 'Nowy element',
+        title: 'New item',
         order: s.items.length,
       }),
     })
@@ -415,7 +415,7 @@ function SectionEditor({ section, projectId, projectSlug, onUpdate, onRefresh }:
   }
 
   const deleteItem = async (itemId: string) => {
-    if (!confirm('Usuń ten element?')) return
+    if (!confirm('Delete ten element?')) return
     await fetch(`/api/admin/section-items/${itemId}`, { method: 'DELETE' })
     onRefresh()
   }
@@ -432,7 +432,7 @@ function SectionEditor({ section, projectId, projectSlug, onUpdate, onRefresh }:
           >
             <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${s.enabled ? 'translate-x-6' : 'translate-x-1'}`} />
           </button>
-          <span className="text-sm text-muted-foreground">{s.enabled ? 'Włączona' : 'Wyłączona'}</span>
+          <span className="text-sm text-muted-foreground">{s.enabled ? 'Enabled' : 'Disabled'}</span>
         </div>
         {saving && <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />}
       </div>
@@ -479,7 +479,7 @@ function SectionEditor({ section, projectId, projectSlug, onUpdate, onRefresh }:
 
       {typeConfig.hasImage && (
         <ImageUploadField
-          label="Zdjęcie"
+          label="Image"
           value={s.imageUrl || ''}
           onChange={(v) => { onUpdate({ ...s, imageUrl: v }); saveSection({ imageUrl: v }) }}
           uploadName={projectSlug && s.type ? `${projectSlug}-${s.type}-01` : undefined}
@@ -488,7 +488,7 @@ function SectionEditor({ section, projectId, projectSlug, onUpdate, onRefresh }:
 
       {typeConfig.hasImage2 && (
         <ImageUploadField
-          label="Zdjęcie 2"
+          label="Image 2"
           value={s.imageUrl2 || ''}
           onChange={(v) => { onUpdate({ ...s, imageUrl2: v }); saveSection({ imageUrl2: v }) }}
           uploadName={projectSlug && s.type ? `${projectSlug}-${s.type}-02` : undefined}
@@ -507,7 +507,7 @@ function SectionEditor({ section, projectId, projectSlug, onUpdate, onRefresh }:
           <div className="flex items-center justify-between">
             <Label>Elementy ({s.items.length})</Label>
             <Button size="sm" variant="outline" onClick={addItem}>
-              <Plus className="h-3.5 w-3.5 mr-1" />Dodaj
+              <Plus className="h-3.5 w-3.5 mr-1" />Add
             </Button>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -550,7 +550,7 @@ function GalleryEditor({ images, projectId, projectSlug, onRefresh }: {
   }
 
   const deleteImage = async (id: string) => {
-    if (!confirm('Usuń to zdjęcie?')) return
+    if (!confirm('Delete this image?')) return
     await fetch(`/api/admin/gallery-images/${id}`, { method: 'DELETE' })
     onRefresh()
   }
@@ -558,9 +558,9 @@ function GalleryEditor({ images, projectId, projectSlug, onRefresh }: {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <Label>Zdjęcia galerii ({images.length})</Label>
+        <Label>Images galerii ({images.length})</Label>
         <Button size="sm" variant="outline" onClick={addImage}>
-          <Plus className="h-3.5 w-3.5 mr-1" />Dodaj zdjęcie
+          <Plus className="h-3.5 w-3.5 mr-1" />Add image
         </Button>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -582,7 +582,7 @@ function GalleryEditor({ images, projectId, projectSlug, onRefresh }: {
               </div>
             )}
             <ImageUploadField
-              label="URL zdjęcia"
+              label="Image URL"
               value={img.src}
               onChange={(v) => updateImage(img.id, { src: v })}
               uploadName={projectSlug ? `${projectSlug}-galeria-${String(img.order + 1).padStart(2, '0')}` : undefined}
@@ -630,7 +630,7 @@ function FileUploadField({ label: fieldLabel, value, onChange }: {
         <Input
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          placeholder="URL pliku lub prześlij"
+          placeholder="File URL or upload"
           className="flex-1"
         />
         <label className="cursor-pointer">
@@ -667,7 +667,7 @@ function ProjectDocumentsEditor({ documents, projectId, onRefresh }: {
     await fetch('/api/admin/project-documents', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ projectId, label: 'Pobierz plik', fileUrl: '', order: documents.length }),
+      body: JSON.stringify({ projectId, label: 'Download plik', fileUrl: '', order: documents.length }),
     })
     onRefresh()
   }
@@ -682,7 +682,7 @@ function ProjectDocumentsEditor({ documents, projectId, onRefresh }: {
   }
 
   const deleteDocument = async (id: string) => {
-    if (!confirm('Usuń ten plik?')) return
+    if (!confirm('Delete ten plik?')) return
     await fetch(`/api/admin/project-documents/${id}`, { method: 'DELETE' })
     onRefresh()
   }
@@ -692,7 +692,7 @@ function ProjectDocumentsEditor({ documents, projectId, onRefresh }: {
       <div className="flex items-center justify-between">
         <Label>Pliki do pobrania ({documents.length})</Label>
         <Button size="sm" variant="outline" onClick={addDocument}>
-          <Plus className="h-3.5 w-3.5 mr-1" />Dodaj plik
+          <Plus className="h-3.5 w-3.5 mr-1" />Add plik
         </Button>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -705,7 +705,7 @@ function ProjectDocumentsEditor({ documents, projectId, onRefresh }: {
               </Button>
             </div>
             <div className="space-y-1">
-              <Label className="text-xs">Nazwa przycisku</Label>
+              <Label className="text-xs">Name przycisku</Label>
               <Input
                 value={doc.label}
                 className="h-8"
@@ -719,7 +719,7 @@ function ProjectDocumentsEditor({ documents, projectId, onRefresh }: {
               onChange={(v) => updateDocument(doc.id, { fileUrl: v })}
             />
             <div className="space-y-1">
-              <Label className="text-xs">Kolejność</Label>
+              <Label className="text-xs">Order</Label>
               <Input
                 type="number"
                 value={doc.order}
@@ -824,17 +824,17 @@ export default function EditProjectPage() {
       }),
     })
     if (res.ok) {
-      setSuccess('Zapisano!')
+      setSuccess('Saved!')
       setTimeout(() => setSuccess(''), 3000)
     } else {
-      setError('Błąd zapisu')
+      setError('Save error')
     }
     setSaving(false)
   }
 
   const handleDeleteProject = async () => {
-    if (!confirm(`Usuń projekt "${project?.name}"? Tej operacji nie można cofnąć.`)) return
-    if (!confirm(`Potwierdź ponownie: trwale usuń projekt "${project?.name}" wraz ze wszystkimi działkami i danymi?`)) return
+    if (!confirm(`Delete projekt "${project?.name}"? This action cannot be undone.`)) return
+    if (!confirm(`Confirm again: permanently delete project "${project?.name}" with all plots and data?`)) return
     await fetch(`/api/admin/projects/${id}`, { method: 'DELETE' })
     router.push('/admin')
   }
@@ -848,7 +848,7 @@ export default function EditProjectPage() {
 
   const getSectionByType = (type: string) => project?.sections.find(s => s.type === type) || null
 
-  if (loading) return <div className="flex items-center justify-center py-20 text-gray-400">Ładowanie...</div>
+  if (loading) return <div className="flex items-center justify-center py-20 text-gray-400">Loading...</div>
   if (!project) return <div className="text-center py-20 text-gray-400">Nie znaleziono projektu</div>
 
   return (
@@ -858,14 +858,14 @@ export default function EditProjectPage() {
         <Link href="/admin">
           <Button variant="ghost" size="sm">
             <ArrowLeft className="h-4 w-4 mr-1.5" />
-            Powrót
+            Back
           </Button>
         </Link>
         <h1 className="text-3xl font-serif font-bold text-gray-900">{project.name}</h1>
         <Link href={`/inwestycje/${project.slug}`} target="_blank">
           <Button variant="outline" size="sm">
             <ExternalLink className="h-3.5 w-3.5 mr-1.5" />
-            Podgląd publiczny
+            Preview publiczny
           </Button>
         </Link>
         <Button
@@ -875,7 +875,7 @@ export default function EditProjectPage() {
           onClick={handleDeleteProject}
         >
           <Trash2 className="h-3.5 w-3.5 mr-1.5" />
-          Usuń projekt
+          Delete projekt
         </Button>
       </div>
 
@@ -894,11 +894,11 @@ export default function EditProjectPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
         <div className="lg:col-span-2 space-y-6">
           <Card>
-            <CardHeader><CardTitle>Informacje podstawowe</CardTitle></CardHeader>
+            <CardHeader><CardTitle>Basic information</CardTitle></CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label>Nazwa</Label>
+                  <Label>Name</Label>
                   <Input value={project.name} onChange={(e) => setProject(p => p ? { ...p, name: e.target.value } : p)} />
                 </div>
                 <div className="space-y-2">
@@ -917,7 +917,7 @@ export default function EditProjectPage() {
                 </div>
               </div>
               <ImageUploadField
-                label="Zdjęcie główne (hero)"
+                label="Main image (hero)"
                 value={project.imageUrl || ''}
                 onChange={(v) => setProject(p => p ? { ...p, imageUrl: v } : p)}
                 uploadName={project.slug ? `${project.slug}-zdjecie-glowne` : undefined}
@@ -971,7 +971,7 @@ export default function EditProjectPage() {
                 </div>
                 <div className="text-left">
                   <p className="text-sm font-medium">{project.published ? 'Opublikowano' : 'Opublikuj na stronie'}</p>
-                  <p className="text-xs opacity-70">{project.published ? 'Widoczne w Nasze inwestycje' : 'Dodaj do listy Nasze inwestycje'}</p>
+                  <p className="text-xs opacity-70">{project.published ? 'Widoczne w Nasze inwestycje' : 'Add do listy Nasze inwestycje'}</p>
                 </div>
               </button>
             </CardContent>
@@ -984,20 +984,20 @@ export default function EditProjectPage() {
               <Select value={project.status} onValueChange={(v) => setProject(p => p ? { ...p, status: v } : p)}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="active">Aktywna (W sprzedaży)</SelectItem>
-                  <SelectItem value="planned">Planowana (Wkrótce)</SelectItem>
-                  <SelectItem value="completed">Zakończona</SelectItem>
+                  <SelectItem value="active">Active (for sale)</SelectItem>
+                  <SelectItem value="planned">Planned (coming soon)</SelectItem>
+                  <SelectItem value="completed">Completed</SelectItem>
                 </SelectContent>
               </Select>
               <p className="text-xs text-muted-foreground mt-2">
-                Aktywna → Dostępne inwestycje • Zakończona → Inwestycje zakończone
+                Active → available projects • Completed → finished projects
               </p>
             </CardContent>
           </Card>
 
           {/* City location (landing page) */}
           <Card>
-            <CardHeader><CardTitle>Miasto (strona lokalizacji)</CardTitle></CardHeader>
+            <CardHeader><CardTitle>City (strona lokalizacji)</CardTitle></CardHeader>
             <CardContent>
               <Select
                 value={project.cityLocationId ?? '__none__'}
@@ -1013,8 +1013,8 @@ export default function EditProjectPage() {
               </Select>
               <p className="text-xs text-muted-foreground mt-2">
                 {project.cityLocationId
-                  ? <>Adres: <code>/{locations.find(l => l.id === project.cityLocationId)?.slug}/{project.slug}</code>. Stary adres <code>/inwestycje/{project.slug}</code> przekierowuje (308).</>
-                  : <>Bez miasta inwestycja jest serwowana pod <code>/inwestycje/{project.slug}</code>. Lokalizacje dodajesz w zakładce „Lokalizacje".</>}
+                  ? <>Address: <code>/{locations.find(l => l.id === project.cityLocationId)?.slug}/{project.slug}</code>. Old address <code>/inwestycje/{project.slug}</code> redirects (308).</>
+                  : <>Bez miasta inwestycja jest serwowana pod <code>/inwestycje/{project.slug}</code>. Add locations in the “Locations” tab.</>}
               </p>
             </CardContent>
           </Card>
@@ -1025,15 +1025,15 @@ export default function EditProjectPage() {
               <div className="grid grid-cols-3 gap-3 text-center">
                 <div>
                   <div className="text-2xl font-bold text-green-600">{project.units.filter(u => u.status === 'available').length}</div>
-                  <div className="text-xs text-gray-500">Dostępne</div>
+                  <div className="text-xs text-gray-500">Available</div>
                 </div>
                 <div>
                   <div className="text-2xl font-bold text-yellow-600">{project.units.filter(u => u.status === 'reserved').length}</div>
-                  <div className="text-xs text-gray-500">Rezerwacja</div>
+                  <div className="text-xs text-gray-500">Reserved</div>
                 </div>
                 <div>
                   <div className="text-2xl font-bold text-red-600">{project.units.filter(u => u.status === 'sold').length}</div>
-                  <div className="text-xs text-gray-500">Sprzedane</div>
+                  <div className="text-xs text-gray-500">Sold</div>
                 </div>
               </div>
             </CardContent>
@@ -1041,7 +1041,7 @@ export default function EditProjectPage() {
 
           <Button onClick={handleSaveDetails} className="w-full" disabled={saving} style={{ backgroundColor: '#6E2E2A' }}>
             <Save className="h-4 w-4 mr-2" />
-            {saving ? 'Zapisywanie...' : 'Zapisz zmiany'}
+            {saving ? 'Saving...' : 'Save changes'}
           </Button>
         </div>
       </div>
@@ -1059,23 +1059,23 @@ export default function EditProjectPage() {
               <Input value={project.contactEmail || ''} onChange={(e) => setProject(p => p ? { ...p, contactEmail: e.target.value } : p)} placeholder="kontakt@vmd.pl" />
             </div>
             <div className="space-y-2">
-              <Label>Adres biura</Label>
-              <Input value={project.contactAddress || ''} onChange={(e) => setProject(p => p ? { ...p, contactAddress: e.target.value } : p)} placeholder="ul. Patriotów 110, Warszawa" />
+              <Label>Office address</Label>
+              <Input value={project.contactAddress || ''} onChange={(e) => setProject(p => p ? { ...p, contactAddress: e.target.value } : p)} placeholder="Musterstraße 110, München" />
             </div>
           </div>
-          <p className="text-xs text-muted-foreground mt-3">Zapisz zmiany przyciskiem powyżej aby zaktualizować dane kontaktowe.</p>
+          <p className="text-xs text-muted-foreground mt-3">Save changes with the button above to update contact details.</p>
         </CollapsibleCard>
       </div>
 
       {/* Company & Investment Location */}
       <div className="mb-6">
-        <CollapsibleCard title="Firma i lokalizacja inwestycji">
+        <CollapsibleCard title="Company & project location">
           <div className="space-y-4">
             <div>
               <p className="text-xs font-medium text-gray-500 mb-3">Lokalizacja inwestycji (kolumny CSV 30-37)</p>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
                 <div className="space-y-1">
-                  <Label className="text-xs">Województwo</Label>
+                  <Label className="text-xs">Region</Label>
                   <Input value={project.investVoivodeship || ''} onChange={(e) => setProject(p => p ? { ...p, investVoivodeship: e.target.value } : p)} />
                 </div>
                 <div className="space-y-1">
@@ -1087,7 +1087,7 @@ export default function EditProjectPage() {
                   <Input value={project.investMunicipality || ''} onChange={(e) => setProject(p => p ? { ...p, investMunicipality: e.target.value } : p)} />
                 </div>
                 <div className="space-y-1">
-                  <Label className="text-xs">Miejscowość</Label>
+                  <Label className="text-xs">City</Label>
                   <Input value={project.investCity || ''} onChange={(e) => setProject(p => p ? { ...p, investCity: e.target.value } : p)} />
                 </div>
                 <div className="space-y-1">
@@ -1103,13 +1103,13 @@ export default function EditProjectPage() {
                   <Input value={project.investPostalCode || ''} onChange={(e) => setProject(p => p ? { ...p, investPostalCode: e.target.value } : p)} />
                 </div>
                 <div className="space-y-1">
-                  <Label className="text-xs">Rodzaj nieruchomości</Label>
+                  <Label className="text-xs">Property type</Label>
                   <select
                     className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-                    value={project.propertyType || 'Mieszkanie'}
+                    value={project.propertyType || 'Apartment'}
                     onChange={(e) => setProject(p => p ? { ...p, propertyType: e.target.value } : p)}
                   >
-                    <option value="Mieszkanie">Mieszkanie</option>
+                    <option value="Apartment">Apartment</option>
                     <option value="Dom jednorodzinny">Dom jednorodzinny</option>
                   </select>
                 </div>
@@ -1120,14 +1120,14 @@ export default function EditProjectPage() {
               </div>
             </div>
           </div>
-          <p className="text-xs text-muted-foreground mt-3">Zapisz zmiany przyciskiem powyżej aby zaktualizować.</p>
+          <p className="text-xs text-muted-foreground mt-3">Save changes with the button above to update.</p>
         </CollapsibleCard>
       </div>
 
       {/* All Section Editors */}
       <div className="space-y-4 mb-6">
         <h2 className="text-xl font-serif font-bold text-gray-900">Sekcje strony projektu</h2>
-        <p className="text-sm text-muted-foreground">Włącz lub wyłącz sekcje przełącznikiem. Każda sekcja jest w pełni konfigurowalna.</p>
+        <p className="text-sm text-muted-foreground">Enable or disable sections with the toggle. Each section is fully configurable.</p>
 
         {SECTION_TYPES.map((typeConfig) => {
           const section = getSectionByType(typeConfig.type)
@@ -1138,7 +1138,7 @@ export default function EditProjectPage() {
               badge={
                 section ? (
                   <span className={`text-xs px-2 py-0.5 rounded-full ${section.enabled ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}`}>
-                    {section.enabled ? 'Włączona' : 'Wyłączona'}
+                    {section.enabled ? 'Enabled' : 'Disabled'}
                   </span>
                 ) : null
               }
@@ -1153,7 +1153,7 @@ export default function EditProjectPage() {
                   onRefresh={fetchProject}
                 />
               ) : (
-                <p className="text-sm text-muted-foreground">Ładowanie sekcji...</p>
+                <p className="text-sm text-muted-foreground">Loading sekcji...</p>
               )}
             </CollapsibleCard>
           )
@@ -1162,7 +1162,7 @@ export default function EditProjectPage() {
 
       {/* Gallery */}
       <div className="mb-6">
-        <CollapsibleCard title="Galeria">
+        <CollapsibleCard title="Gallery">
           <GalleryEditor images={project.galleryImages} projectId={project.id} projectSlug={project.slug} onRefresh={fetchProject} />
         </CollapsibleCard>
       </div>
@@ -1221,7 +1221,7 @@ export default function EditProjectPage() {
           style={{ color: '#6E2E2A' }}
         >
           <MapPin className="h-4 w-4" />
-          Pozycje punktów i kompas
+          Point positions and compass
         </Link>
       </div>
 

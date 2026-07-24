@@ -198,7 +198,7 @@ function ViewCanvas({
   const handleDeletePoly = useCallback((polyId: string) => {
     setViewPolygons(prev => { const next = prev.filter(p => p.id !== polyId); autoSaveSvg(next); return next })
     setSelectedPolyId(null)
-    toast('Usunięto obszar')
+    toast('Area deleted')
   }, [autoSaveSvg])
 
   // ── Confirm pick (unit or stage) ──
@@ -240,8 +240,8 @@ function ViewCanvas({
       })
       setImgSize(null)
       onViewUpdated({ imageUrl: url })
-      toast.success('Zdjęcie wgrane')
-    } catch { toast.error('Błąd wgrywania') }
+      toast.success('Image wgrane')
+    } catch { toast.error('Upload error') }
     setUploadingImg(false); e.target.value = ''
   }
 
@@ -330,11 +330,11 @@ function ViewCanvas({
     return (
       <div className="border-2 border-dashed border-gray-200 rounded-xl p-8 text-center">
         <Upload className="h-10 w-10 mx-auto mb-3 text-gray-300" />
-        <p className="text-sm text-gray-500 mb-4">Wgraj zdjęcie dla tego widoku</p>
+        <p className="text-sm text-gray-500 mb-4">Upload an image for this view</p>
         <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={onImgUpload} />
         <Button size="sm" variant="outline" onClick={() => fileRef.current?.click()} disabled={uploadingImg}>
           {uploadingImg ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Upload className="h-4 w-4 mr-2" />}
-          Wgraj zdjęcie
+          Upload image
         </Button>
       </div>
     )
@@ -369,7 +369,7 @@ function ViewCanvas({
         <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={onImgUpload} />
         <Button size="sm" variant="outline" className="h-7" onClick={() => fileRef.current?.click()} disabled={uploadingImg}>
           {uploadingImg ? <Loader2 className="h-3 w-3 animate-spin mr-1" /> : <Upload className="h-3 w-3 mr-1" />}
-          Zmień
+          Change
         </Button>
       </div>
 
@@ -444,16 +444,16 @@ function ViewCanvas({
 
           {/* Hint */}
           {tool === 'draw' && !imgSize && (
-            <div className="absolute inset-0 flex items-center justify-center text-gray-400 text-sm">Wgraj zdjęcie</div>
+            <div className="absolute inset-0 flex items-center justify-center text-gray-400 text-sm">Upload image</div>
           )}
           {tool === 'draw' && imgSize && currentPts.length === 0 && (
             <div className="absolute bottom-3 left-1/2 -translate-x-1/2 bg-black/60 text-white text-xs px-3 py-1 rounded-full pointer-events-none">
-              Kliknij, aby zacząć rysować obszar
+              Click to start drawing an area
             </div>
           )}
           {tool === 'draw' && nearFirst && (
             <div className="absolute bottom-3 left-1/2 -translate-x-1/2 bg-green-700/80 text-white text-xs px-3 py-1 rounded-full pointer-events-none">
-              Kliknij, aby zamknąć obszar
+              Click to close the area
             </div>
           )}
         </div>
@@ -477,7 +477,7 @@ function ViewCanvas({
           </div>
         )}
         {viewPolygons.length === 0 && (
-          <p className="text-xs text-gray-400 text-center py-2">Brak obszarów. Narysuj obszar i wybierz obiekt.</p>
+          <p className="text-xs text-gray-400 text-center py-2">No areas. Draw an area and select an object.</p>
         )}
       </div>
 
@@ -485,7 +485,7 @@ function ViewCanvas({
       <Dialog open={pickerOpen} onOpenChange={(o) => { if (!o) { setPickerOpen(false); setPendingPts(null); syncCurrentPts([]) } }}>
         <DialogContent className="max-w-sm">
           <DialogHeader>
-            <DialogTitle>{stageMode ? 'Wybierz etap' : 'Wybierz obiekt z głównego planu'}</DialogTitle>
+            <DialogTitle>{stageMode ? 'Select stage' : 'Select an object from the main plan'}</DialogTitle>
           </DialogHeader>
           <Input
             placeholder="Szukaj..."
@@ -495,7 +495,7 @@ function ViewCanvas({
           />
           <div className="max-h-64 overflow-y-auto space-y-1">
             {filteredItems.length === 0 && (
-              <p className="text-sm text-gray-400 text-center py-4">Brak wyników</p>
+              <p className="text-sm text-gray-400 text-center py-4">No results</p>
             )}
             {filteredItems.map(it => (
               <button
@@ -504,13 +504,13 @@ function ViewCanvas({
                 onClick={() => confirmPick(stageMode ? 'stage' : 'unit', it.id, it.label)}
               >
                 <span className="font-medium">{it.label}</span>
-                {mappedRefIds.has(it.id) && <span className="text-xs text-gray-400 ml-2">już dodany</span>}
+                {mappedRefIds.has(it.id) && <span className="text-xs text-gray-400 ml-2">already added</span>}
               </button>
             ))}
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => { setPickerOpen(false); setPendingPts(null); syncCurrentPts([]) }}>
-              Anuluj
+              Cancel
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -559,16 +559,16 @@ export function AdminPlanViewEditor({ projectId, mainPlanUnits, stages }: AdminP
       setShowAddDialog(false)
       setNewViewName('')
       toast.success('Widok dodany')
-    } catch { toast.error('Błąd') }
+    } catch { toast.error('Error') }
     setAdding(false)
   }
 
   const handleDeleteView = async (viewId: string) => {
-    if (!confirm('Usuń ten widok?')) return
+    if (!confirm('Delete this view?')) return
     await fetch(`/api/admin/projects/${projectId}/plan-views/${viewId}`, { method: 'DELETE' })
     setViews(prev => prev.filter(v => v.id !== viewId))
     if (activeViewId === viewId) setActiveViewId(null)
-    toast('Widok usunięty')
+    toast('View deleted')
   }
 
   const activeView = views.find(v => v.id === activeViewId) ?? null
@@ -579,18 +579,18 @@ export function AdminPlanViewEditor({ projectId, mainPlanUnits, stages }: AdminP
         <h3 className="text-lg font-semibold text-gray-900">Dodatkowe widoki planu</h3>
         <Button size="sm" onClick={() => setShowAddDialog(true)} style={{ backgroundColor: '#6E2E2A' }}>
           <Plus className="h-4 w-4 mr-1.5" />
-          Nowy widok
+          New view
         </Button>
       </div>
 
       {loading ? (
         <div className="flex items-center justify-center h-24 text-gray-400">
-          <Loader2 className="h-5 w-5 animate-spin mr-2" /> Ładowanie...
+          <Loader2 className="h-5 w-5 animate-spin mr-2" /> Loading...
         </div>
       ) : views.length === 0 ? (
         <div className="text-center py-10 text-gray-400 border-2 border-dashed border-gray-200 rounded-xl">
-          <p className="text-sm">Brak dodatkowych widoków.</p>
-          <p className="text-xs mt-1">Dodaj widok, wgraj zdjęcie i zaznacz obszary połączone z obiektami głównego planu.</p>
+          <p className="text-sm">No additional views.</p>
+          <p className="text-xs mt-1">Add a view, upload an image and mark areas linked to main-plan objects.</p>
         </div>
       ) : (
         <div>
@@ -631,10 +631,10 @@ export function AdminPlanViewEditor({ projectId, mainPlanUnits, stages }: AdminP
       {/* Add view dialog */}
       <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
         <DialogContent className="max-w-xs">
-          <DialogHeader><DialogTitle>Nowy widok</DialogTitle></DialogHeader>
+          <DialogHeader><DialogTitle>New view</DialogTitle></DialogHeader>
           <div className="space-y-3 py-2">
             <div className="space-y-1.5">
-              <Label>Nazwa widoku</Label>
+              <Label>Name widoku</Label>
               <Input
                 placeholder="np. Segment A, Parter, Elewacja"
                 value={newViewName}
@@ -645,9 +645,9 @@ export function AdminPlanViewEditor({ projectId, mainPlanUnits, stages }: AdminP
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowAddDialog(false)}>Anuluj</Button>
+            <Button variant="outline" onClick={() => setShowAddDialog(false)}>Cancel</Button>
             <Button onClick={handleAddView} disabled={adding || !newViewName.trim()} style={{ backgroundColor: '#6E2E2A' }}>
-              {adding ? 'Dodawanie...' : 'Dodaj'}
+              {adding ? 'Dodawanie...' : 'Add'}
             </Button>
           </DialogFooter>
         </DialogContent>

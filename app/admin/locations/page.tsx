@@ -54,24 +54,24 @@ export default function LocationsAdminPage() {
   }
 
   const remove = async (id: string) => {
-    if (!confirm('Usunąć tę lokalizację? Przypisane inwestycje wrócą do adresu /inwestycje/{slug}.')) return
+    if (!confirm('Delete this location? Assigned projects will revert to /inwestycje/{slug}.')) return
     await fetch(`/api/admin/locations/${id}`, { method: 'DELETE' })
     setItems(prev => prev.filter(l => l.id !== id))
   }
 
-  if (loading) return <div className="p-8 text-sm text-muted-foreground">Ładowanie...</div>
+  if (loading) return <div className="p-8 text-sm text-muted-foreground">Loading...</div>
 
   return (
     <div className="p-6 max-w-4xl mx-auto space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-semibold">Lokalizacje (strony miast)</h1>
+          <h1 className="text-2xl font-semibold">Locations (city pages)</h1>
           <p className="text-xs text-muted-foreground mt-1">
-            Każda lokalizacja tworzy stronę <code>/{'{slug}'}</code> (np. <code>/domy-pod-warszawa</code>).
-            Inwestycje przypisuje się w edytorze inwestycji.
+            Each location creates a page <code>/{'{slug}'}</code> (np. <code>/domy-pod-warszawa</code>).
+            Projects are assigned in the project editor.
           </p>
         </div>
-        <Button onClick={add}><Plus className="h-4 w-4 mr-1" />Dodaj lokalizację</Button>
+        <Button onClick={add}><Plus className="h-4 w-4 mr-1" />Add location</Button>
       </div>
 
       <div className="space-y-4">
@@ -102,7 +102,7 @@ export default function LocationsAdminPage() {
                 />
               </div>
               <div className="space-y-1">
-                <Label className="text-xs">Slug (adres URL)</Label>
+                <Label className="text-xs">Slug (URL)</Label>
                 <Input
                   value={loc.slug}
                   className="h-8 text-sm"
@@ -115,7 +115,7 @@ export default function LocationsAdminPage() {
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               <div className="space-y-1">
-                <Label className="text-xs">Kolejność</Label>
+                <Label className="text-xs">Order</Label>
                 <Input
                   type="number"
                   value={loc.order}
@@ -125,7 +125,7 @@ export default function LocationsAdminPage() {
                 />
               </div>
               <div className="space-y-1">
-                <Label className="text-xs">Środek mapy — szer.</Label>
+                <Label className="text-xs">Map center — lat</Label>
                 <Input
                   value={loc.centerLat ?? ''}
                   className="h-8 text-sm"
@@ -135,7 +135,7 @@ export default function LocationsAdminPage() {
                 />
               </div>
               <div className="space-y-1">
-                <Label className="text-xs">Środek mapy — dł.</Label>
+                <Label className="text-xs">Map center — lng</Label>
                 <Input
                   value={loc.centerLng ?? ''}
                   className="h-8 text-sm"
@@ -145,7 +145,7 @@ export default function LocationsAdminPage() {
                 />
               </div>
               <div className="space-y-1">
-                <Label className="text-xs">Zoom mapy</Label>
+                <Label className="text-xs">Map zoom</Label>
                 <Input
                   value={loc.zoom ?? ''}
                   className="h-8 text-sm"
@@ -158,7 +158,7 @@ export default function LocationsAdminPage() {
 
             <div className="flex items-center justify-between pt-1">
               <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                <span>{loc._count?.projects ?? 0} inwestycji</span>
+                <span>{loc._count?.projects ?? 0} projects</span>
                 {loc.slug && (
                   <a
                     href={`/${loc.slug}`}
@@ -172,7 +172,7 @@ export default function LocationsAdminPage() {
               </div>
               <div className="flex items-center gap-2">
                 <Button size="sm" variant="outline" onClick={() => save(loc)} disabled={saving === loc.id}>
-                  {saving === loc.id ? <Loader2 className="h-3 w-3 animate-spin" /> : 'Zapisz'}
+                  {saving === loc.id ? <Loader2 className="h-3 w-3 animate-spin" /> : 'Save'}
                 </Button>
                 <Button size="sm" variant="destructive" onClick={() => remove(loc.id)}>
                   <Trash2 className="h-3 w-3" />
@@ -183,7 +183,7 @@ export default function LocationsAdminPage() {
         ))}
         {items.length === 0 && (
           <p className="text-sm text-muted-foreground text-center py-8">
-            Brak lokalizacji. Kliknij „Dodaj lokalizację".
+            No locations yet. Click “Add location”.
           </p>
         )}
       </div>

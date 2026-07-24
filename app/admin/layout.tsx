@@ -24,7 +24,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             <div className="flex items-center gap-6">
               <Link href={isManager ? '/admin/units' : '/admin'} className="flex items-center gap-2 font-semibold text-gray-900">
                 <Building2 className="h-5 w-5" style={{ color: '#6E2E2A' }} />
-                Panel Administracyjny
+                Admin Panel
                 {isManager && (
                   <span className="text-xs font-normal text-gray-500 ml-1">(manager)</span>
                 )}
@@ -32,26 +32,26 @@ export default async function AdminLayout({ children }: { children: React.ReactN
               {isAuthenticated && !isManager && (
                 <Link href="/admin" className="flex items-center gap-1.5 text-sm text-gray-600 hover:text-gray-900">
                   <LayoutDashboard className="h-4 w-4" />
-                  Inwestycje
+                  Projects
                 </Link>
               )}
               {isAuthenticated && isManager && (
                 <Link href="/admin/units" className="flex items-center gap-1.5 text-sm text-gray-600 hover:text-gray-900">
                   <HomeIcon className="h-4 w-4" />
-                  Działki
+                  Units
                 </Link>
               )}
               {isAuthenticated && (
                 <Link href="/admin/companies" className="flex items-center gap-1.5 text-sm text-gray-600 hover:text-gray-900">
                   <Building className="h-4 w-4" />
-                  Firmy
+                  Companies
                 </Link>
               )}
               {isAuthenticated && !isManager && (
                 <>
                   <Link href="/admin/news" className="flex items-center gap-1.5 text-sm text-gray-600 hover:text-gray-900">
                     <Newspaper className="h-4 w-4" />
-                    Aktualności
+                    News
                   </Link>
                   <Link href="/admin/locations" className="flex items-center gap-1.5 text-sm text-gray-600 hover:text-gray-900">
                     <MapPinned className="h-4 w-4" />
@@ -67,14 +67,14 @@ export default async function AdminLayout({ children }: { children: React.ReactN
                   </Link>
                   <Link href="/admin/team" className="flex items-center gap-1.5 text-sm text-gray-600 hover:text-gray-900">
                     <Users className="h-4 w-4" />
-                    Zespół
+                    Team
                   </Link>
                 </>
               )}
             </div>
             <div className="flex items-center gap-4">
               <Link href="/" className="text-sm text-gray-500 hover:text-gray-700">
-                ← Strona główna
+                ← Website
               </Link>
               {isAuthenticated && <AdminLogoutButton />}
             </div>

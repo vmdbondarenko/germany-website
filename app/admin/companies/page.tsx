@@ -26,14 +26,14 @@ export default async function CompaniesPage() {
     <div>
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-serif font-bold text-gray-900">Firmy deweloperskie</h1>
-          <p className="text-gray-500 mt-1">Zarządzaj firmami deweloperskimi</p>
+          <h1 className="text-3xl font-serif font-bold text-gray-900">Developer companies</h1>
+          <p className="text-gray-500 mt-1">Manage developer companies</p>
         </div>
         {!isManager && (
           <Link href="/admin/companies/new">
             <Button style={{ backgroundColor: '#6E2E2A' }}>
               <Plus className="h-4 w-4 mr-2" />
-              Dodaj firmę
+              Add company
             </Button>
           </Link>
         )}
@@ -42,7 +42,7 @@ export default async function CompaniesPage() {
       {companies.length === 0 ? (
         <div className="text-center py-20 text-gray-400">
           <Building className="h-12 w-12 mx-auto mb-4 opacity-50" />
-          <p className="text-lg">Brak firm. Dodaj pierwszą!</p>
+          <p className="text-lg">No companies yet. Add the first one!</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -62,7 +62,7 @@ export default async function CompaniesPage() {
                 <CardContent>
                   <div className="mb-4">
                     <p className="text-xs text-gray-500 mb-2">
-                      Inwestycje ({projectNames.length}) &middot; Działki ({company._count.units})
+                      Projects ({projectNames.length}) &middot; Units ({company._count.units})
                     </p>
                     <div className="flex gap-1 flex-wrap">
                       {projectNames.map(name => (
@@ -77,14 +77,14 @@ export default async function CompaniesPage() {
                     <Link href={`/admin/companies/${company.id}/view`} className="flex-1">
                       <Button variant="outline" size="sm" className="w-full">
                         <Eye className="h-3.5 w-3.5 mr-1.5" />
-                        Podgląd
+                        View
                       </Button>
                     </Link>
                     {!isManager && (
                       <Link href={`/admin/companies/${company.id}`} className="flex-1">
                         <Button variant="outline" size="sm" className="w-full">
                           <Pencil className="h-3.5 w-3.5 mr-1.5" />
-                          Edytuj
+                          Edit
                         </Button>
                       </Link>
                     )}

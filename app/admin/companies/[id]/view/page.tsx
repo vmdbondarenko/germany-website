@@ -26,9 +26,9 @@ function StatusBadge({ status }: { status: string }) {
     sold: 'bg-red-100 text-red-700',
   }
   const labels: Record<string, string> = {
-    available: 'Dostępny',
-    reserved: 'Rezerwacja',
-    sold: 'Sprzedany',
+    available: 'Available',
+    reserved: 'Reserved',
+    sold: 'Sold',
   }
   return (
     <span className={`text-[10px] px-1.5 py-0.5 rounded-full ${colors[status] || 'bg-gray-100 text-gray-600'}`}>
@@ -84,7 +84,7 @@ export default async function CompanyViewPage({ params }: { params: Promise<{ id
           <Link href="/admin/companies">
             <Button variant="ghost" size="sm">
               <ArrowLeft className="h-4 w-4 mr-1" />
-              Powrót
+              Back
             </Button>
           </Link>
           <div>
@@ -96,7 +96,7 @@ export default async function CompanyViewPage({ params }: { params: Promise<{ id
           <Link href={`/admin/companies/${id}`}>
             <Button variant="outline" size="sm">
               <Pencil className="h-4 w-4 mr-1.5" />
-              Edytuj
+              Edit
             </Button>
           </Link>
         )}
@@ -107,11 +107,11 @@ export default async function CompanyViewPage({ params }: { params: Promise<{ id
         <div className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle className="text-base">Dane firmy</CardTitle>
+              <CardTitle className="text-base">Company details</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               <dl className="grid grid-cols-2 gap-3">
-                <InfoRow label="Forma prawna" value={company.legalForm} />
+                <InfoRow label="Legal form" value={company.legalForm} />
                 <InfoRow label="KRS" value={company.krs} />
                 <InfoRow label="CEiDG" value={company.ceidg} />
                 <InfoRow label="REGON" value={company.regon} />
@@ -122,7 +122,7 @@ export default async function CompanyViewPage({ params }: { params: Promise<{ id
 
           <Card>
             <CardHeader>
-              <CardTitle className="text-base">Adres siedziby</CardTitle>
+              <CardTitle className="text-base">Registered address</CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-sm text-gray-900">
@@ -147,10 +147,10 @@ export default async function CompanyViewPage({ params }: { params: Promise<{ id
                 <InfoRow label="Telefon" value={company.contactPhone} />
                 <InfoRow label="E-mail" value={company.contactEmail} />
                 <InfoRow label="Faks" value={company.contactFax} />
-                <InfoRow label="Osoba kontaktowa" value={company.contactPerson} />
+                <InfoRow label="Contact person" value={company.contactPerson} />
                 {company.websiteUrl && (
                   <div>
-                    <dt className="text-xs text-gray-500">Strona WWW</dt>
+                    <dt className="text-xs text-gray-500">Website</dt>
                     <dd className="text-sm">
                       <a href={company.websiteUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline flex items-center gap-1">
                         {company.websiteUrl} <ExternalLink className="h-3 w-3" />
@@ -171,25 +171,25 @@ export default async function CompanyViewPage({ params }: { params: Promise<{ id
             <Card>
               <CardContent className="pt-6 text-center">
                 <div className="text-2xl font-bold text-gray-900">{totalUnits}</div>
-                <div className="text-xs text-gray-500">Łącznie</div>
+                <div className="text-xs text-gray-500">Total</div>
               </CardContent>
             </Card>
             <Card>
               <CardContent className="pt-6 text-center">
                 <div className="text-2xl font-bold text-green-600">{availableUnits}</div>
-                <div className="text-xs text-gray-500">Dostępne</div>
+                <div className="text-xs text-gray-500">Available</div>
               </CardContent>
             </Card>
             <Card>
               <CardContent className="pt-6 text-center">
                 <div className="text-2xl font-bold text-yellow-600">{reservedUnits}</div>
-                <div className="text-xs text-gray-500">Rezerwacja</div>
+                <div className="text-xs text-gray-500">Reserved</div>
               </CardContent>
             </Card>
             <Card>
               <CardContent className="pt-6 text-center">
                 <div className="text-2xl font-bold text-red-600">{soldUnits}</div>
-                <div className="text-xs text-gray-500">Sprzedane</div>
+                <div className="text-xs text-gray-500">Sold</div>
               </CardContent>
             </Card>
           </div>
@@ -198,7 +198,7 @@ export default async function CompanyViewPage({ params }: { params: Promise<{ id
           {byProject.size === 0 ? (
             <Card>
               <CardContent className="py-12 text-center text-gray-400">
-                Brak przypisanych działek. Przejdź do edycji aby przypisać.
+                No units assigned. Edit the company to assign some.
               </CardContent>
             </Card>
           ) : (
@@ -209,27 +209,27 @@ export default async function CompanyViewPage({ params }: { params: Promise<{ id
                     <div>
                       <CardTitle className="text-base">{project.name}</CardTitle>
                       <p className="text-xs text-gray-500 mt-0.5">
-                        {[project.investStreet, project.investCity].filter(Boolean).join(', ') || 'Brak lokalizacji'}
+                        {[project.investStreet, project.investCity].filter(Boolean).join(', ') || 'No location'}
                       </p>
                     </div>
                     <Badge variant="secondary">
-                      {[...buildings.values()].reduce((s, u) => s + u.length, 0)} działek
+                      {[...buildings.values()].reduce((s, u) => s + u.length, 0)} units
                     </Badge>
                   </div>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   {[...buildings.entries()].map(([bldg, units]) => (
                     <div key={bldg}>
-                      <div className="text-xs font-medium text-gray-500 mb-2">Budynek: {bldg}</div>
+                      <div className="text-xs font-medium text-gray-500 mb-2">Building: {bldg}</div>
                       <div className="overflow-x-auto">
                         <table className="w-full text-sm">
                           <thead>
                             <tr className="text-xs text-gray-500 border-b">
-                              <th className="text-left py-1 pr-3">Nr</th>
+                              <th className="text-left py-1 pr-3">No.</th>
                               <th className="text-left py-1 pr-3">Status</th>
-                              <th className="text-right py-1 pr-3">Pow. m²</th>
-                              <th className="text-right py-1 pr-3">Cena</th>
-                              <th className="text-right py-1">Cena/m²</th>
+                              <th className="text-right py-1 pr-3">Area m²</th>
+                              <th className="text-right py-1 pr-3">Price</th>
+                              <th className="text-right py-1">Price/m²</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -239,10 +239,10 @@ export default async function CompanyViewPage({ params }: { params: Promise<{ id
                                 <td className="py-1.5 pr-3"><StatusBadge status={u.status} /></td>
                                 <td className="py-1.5 pr-3 text-right text-gray-600">{u.area?.toFixed(1) || '—'}</td>
                                 <td className="py-1.5 pr-3 text-right text-gray-600">
-                                  {u.price ? `${(u.price).toLocaleString('pl-PL')} zł` : '—'}
+                                  {u.price ? `${(u.price).toLocaleString('de-DE')} €` : '—'}
                                 </td>
                                 <td className="py-1.5 text-right text-gray-600">
-                                  {u.price && u.area ? `${(u.price / u.area).toFixed(0)} zł` : '—'}
+                                  {u.price && u.area ? `${(u.price / u.area).toFixed(0)} €` : '—'}
                                 </td>
                               </tr>
                             ))}

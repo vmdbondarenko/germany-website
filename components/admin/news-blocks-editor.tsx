@@ -71,17 +71,17 @@ export function NewsBlocksEditor({
       <div className="flex gap-2">
         <Button type="button" variant="outline" size="sm" onClick={addParagraph}>
           <Type className="h-4 w-4 mr-1.5" />
-          Dodaj paragraf
+          Add paragraph
         </Button>
         <Button type="button" variant="outline" size="sm" onClick={addImage}>
           <ImageIcon className="h-4 w-4 mr-1.5" />
-          Dodaj zdjęcie
+          Add image
         </Button>
       </div>
 
       {blocks.length === 0 && (
         <p className="text-sm text-gray-400 italic">
-          Brak bloków. Dodaj paragraf lub zdjęcie, aby rozpocząć.
+          No blocks. Add a paragraph or image to start.
         </p>
       )}
 
@@ -98,7 +98,7 @@ export function NewsBlocksEditor({
                 ) : (
                   <>
                     <ImageIcon className="h-3.5 w-3.5" />
-                    Zdjęcie #{idx + 1}
+                    Image #{idx + 1}
                   </>
                 )}
               </div>
@@ -169,7 +169,7 @@ export function NewsBlocksEditor({
                   <Upload className="h-4 w-4 text-gray-400 flex-shrink-0" />
                 </div>
                 <div className="space-y-1.5">
-                  <Label className="text-xs">lub URL zdjęcia</Label>
+                  <Label className="text-xs">or image URL</Label>
                   <Input
                     value={block.imageUrl}
                     onChange={(e) => update(idx, { imageUrl: e.target.value })}

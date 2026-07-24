@@ -56,7 +56,7 @@ export default function TeamAdminPage() {
   }
 
   const remove = async (id: string) => {
-    if (!confirm('Usunąć tego członka zespołu?')) return
+    if (!confirm('Delete this team member?')) return
     await fetch(`/api/admin/team-members/${id}`, { method: 'DELETE' })
     setMembers(prev => prev.filter(m => m.id !== id))
   }
@@ -73,16 +73,16 @@ export default function TeamAdminPage() {
     setUploading(null)
   }
 
-  if (loading) return <div className="p-8 text-sm text-muted-foreground">Ładowanie...</div>
+  if (loading) return <div className="p-8 text-sm text-muted-foreground">Loading...</div>
 
   return (
     <div className="p-6 max-w-4xl mx-auto space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-semibold">Zespół — Kim jesteśmy?</h1>
-          <p className="text-xs text-muted-foreground mt-1">Kolejność wyświetlania ustalana polem „Kolejność".</p>
+          <h1 className="text-2xl font-semibold">Team</h1>
+          <p className="text-xs text-muted-foreground mt-1">Display order is controlled by the “Order” field.</p>
         </div>
-        <Button onClick={add}><Plus className="h-4 w-4 mr-1" />Dodaj osobę</Button>
+        <Button onClick={add}><Plus className="h-4 w-4 mr-1" />Add person</Button>
       </div>
 
       <div className="space-y-4">
@@ -113,13 +113,13 @@ export default function TeamAdminPage() {
                     onChange={e => { const f = e.target.files?.[0]; if (f) handlePhoto(member, f); e.target.value = '' }}
                   />
                 </label>
-                <p className="text-[10px] text-muted-foreground text-center mt-1">Kliknij aby zmienić</p>
+                <p className="text-[10px] text-muted-foreground text-center mt-1">Click to change</p>
               </div>
 
               {/* Fields */}
               <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="space-y-1">
-                  <Label className="text-xs">Imię i nazwisko</Label>
+                  <Label className="text-xs">Full name</Label>
                   <Input
                     value={member.name}
                     className="h-8 text-sm"
@@ -146,7 +146,7 @@ export default function TeamAdminPage() {
                   />
                 </div>
                 <div className="space-y-1">
-                  <Label className="text-xs">Kolejność</Label>
+                  <Label className="text-xs">Order</Label>
                   <Input
                     type="number"
                     value={member.order}
@@ -156,7 +156,7 @@ export default function TeamAdminPage() {
                   />
                 </div>
                 <div className="space-y-1">
-                  <Label className="text-xs">URL zdjęcia (lub prześlij powyżej)</Label>
+                  <Label className="text-xs">Image URL (or upload above)</Label>
                   <Input
                     value={member.image ?? ''}
                     className="h-8 text-sm"
@@ -170,7 +170,7 @@ export default function TeamAdminPage() {
               {/* Actions */}
               <div className="flex flex-col gap-2 shrink-0">
                 <Button size="sm" variant="outline" onClick={() => save(member)} disabled={saving === member.id}>
-                  {saving === member.id ? <Loader2 className="h-3 w-3 animate-spin" /> : 'Zapisz'}
+                  {saving === member.id ? <Loader2 className="h-3 w-3 animate-spin" /> : 'Save'}
                 </Button>
                 <Button size="sm" variant="destructive" onClick={() => remove(member.id)}>
                   <Trash2 className="h-3 w-3" />
@@ -180,7 +180,7 @@ export default function TeamAdminPage() {
           </div>
         ))}
         {members.length === 0 && (
-          <p className="text-sm text-muted-foreground text-center py-8">Brak członków zespołu. Kliknij „Dodaj osobę".</p>
+          <p className="text-sm text-muted-foreground text-center py-8">No team members yet. Click “Add person”.</p>
         )}
       </div>
     </div>

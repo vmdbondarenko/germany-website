@@ -27,9 +27,9 @@ const statusColors: Record<string, string> = {
 }
 
 const statusLabels: Record<string, string> = {
-  active: 'Aktywna',
-  completed: 'Zakończona',
-  planned: 'Planowana',
+  active: 'Active',
+  completed: 'Completed',
+  planned: 'Planned',
 }
 
 type SortKey = 'name' | 'location' | 'status' | 'total' | 'available' | 'reserved' | 'sold' | 'createdAt'
@@ -80,33 +80,33 @@ export function AdminProjectsTable({ rows }: { rows: Row[] }) {
     <div>
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-serif font-bold text-gray-900">Inwestycje</h1>
-          <p className="text-gray-500 mt-1">Zarządzaj projektami deweloperskimi</p>
+          <h1 className="text-3xl font-serif font-bold text-gray-900">Projects</h1>
+          <p className="text-gray-500 mt-1">Manage development projects</p>
         </div>
         <Link href="/admin/projects/new">
           <Button style={{ backgroundColor: '#6E2E2A' }}>
             <Plus className="h-4 w-4 mr-2" />
-            Dodaj inwestycję
+            Add project
           </Button>
         </Link>
       </div>
 
       {rows.length === 0 ? (
         <div className="text-center py-20 text-gray-400">
-          <p className="text-lg">Brak inwestycji. Dodaj pierwszą!</p>
+          <p className="text-lg">No projects yet. Add the first one!</p>
         </div>
       ) : (
         <div className="border rounded-xl overflow-hidden shadow-sm bg-white">
           <table className="w-full">
             <thead className="bg-gray-50 border-b">
               <tr>
-                <Th col="name">Nazwa</Th>
+                <Th col="name">Name</Th>
                 <Th col="location">Lokalizacja</Th>
                 <Th col="status">Status</Th>
-                <Th col="total">Działki</Th>
-                <Th col="available">Dostępne</Th>
-                <Th col="reserved">Zarezerwowane</Th>
-                <Th col="sold">Sprzedane</Th>
+                <Th col="total">Units</Th>
+                <Th col="available">Available</Th>
+                <Th col="reserved">Reserved</Th>
+                <Th col="sold">Sold</Th>
                 <Th col="createdAt">Data</Th>
                 <th className="px-4 py-3 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">Akcje</th>
               </tr>
@@ -117,7 +117,7 @@ export function AdminProjectsTable({ rows }: { rows: Row[] }) {
                   <td className="px-4 py-3">
                     <div className="font-medium text-gray-900">{row.name}</div>
                     {row.published && (
-                      <span className="text-xs text-green-600 font-medium">● Opublikowana</span>
+                      <span className="text-xs text-green-600 font-medium">● Published</span>
                     )}
                   </td>
                   <td className="px-4 py-3 text-sm text-gray-600">
@@ -149,7 +149,7 @@ export function AdminProjectsTable({ rows }: { rows: Row[] }) {
                       <Link href={`/admin/projects/${row.id}`}>
                         <Button variant="outline" size="sm">
                           <Edit className="h-3.5 w-3.5 mr-1.5" />
-                          Edytuj
+                          Edit
                         </Button>
                       </Link>
                       <Link href={`/inwestycje/${row.slug}`} target="_blank">

@@ -47,9 +47,9 @@ type Unit = {
 }
 
 const STATUS_LABELS: Record<string, string> = {
-  available: 'Dostępny',
-  reserved: 'Rezerwacja',
-  sold: 'Sprzedany',
+  available: 'Available',
+  reserved: 'Reserved',
+  sold: 'Sold',
 }
 
 const STATUS_COLORS: Record<string, string> = {
@@ -60,7 +60,7 @@ const STATUS_COLORS: Record<string, string> = {
 
 function formatPrice(n: number | null): string {
   if (n == null) return '—'
-  return new Intl.NumberFormat('pl-PL').format(n) + ' zł'
+  return new Intl.NumberFormat('de-DE').format(n) + ' €'
 }
 
 export function UnitsManager({ initialUnits }: { initialUnits: Unit[] }) {
@@ -115,8 +115,8 @@ export function UnitsManager({ initialUnits }: { initialUnits: Unit[] }) {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-3xl font-serif font-bold text-gray-900">Działki</h1>
-        <p className="text-gray-500 mt-1">Edytuj parametry działek — powierzchnia, cena, status</p>
+        <h1 className="text-3xl font-serif font-bold text-gray-900">Plots</h1>
+        <p className="text-gray-500 mt-1">Edit plot parameters — area, price, status</p>
       </div>
 
       <div className="bg-white border rounded-xl shadow-sm p-4 mb-4 grid grid-cols-1 md:grid-cols-5 gap-3">
@@ -137,7 +137,7 @@ export function UnitsManager({ initialUnits }: { initialUnits: Unit[] }) {
           </SelectContent>
         </Select>
         <Select value={companyFilter} onValueChange={setCompanyFilter}>
-          <SelectTrigger><SelectValue placeholder="Firma" /></SelectTrigger>
+          <SelectTrigger><SelectValue placeholder="Company" /></SelectTrigger>
           <SelectContent>
             <SelectItem value="all">Wszystkie firmy</SelectItem>
             <SelectItem value="none">Bez firmy</SelectItem>
@@ -148,18 +148,18 @@ export function UnitsManager({ initialUnits }: { initialUnits: Unit[] }) {
           <SelectTrigger><SelectValue placeholder="Status" /></SelectTrigger>
           <SelectContent>
             <SelectItem value="all">Wszystkie statusy</SelectItem>
-            <SelectItem value="available">Dostępne</SelectItem>
-            <SelectItem value="reserved">Zarezerwowane</SelectItem>
-            <SelectItem value="sold">Sprzedane</SelectItem>
+            <SelectItem value="available">Available</SelectItem>
+            <SelectItem value="reserved">Reserved</SelectItem>
+            <SelectItem value="sold">Sold</SelectItem>
           </SelectContent>
         </Select>
       </div>
 
       <div className="flex gap-2 mb-4 text-sm">
         <Badge variant="secondary">Razem: {stats.total}</Badge>
-        <Badge className="bg-green-100 text-green-800 hover:bg-green-100">Dostępne: {stats.available}</Badge>
-        <Badge className="bg-yellow-100 text-yellow-800 hover:bg-yellow-100">Rezerwacja: {stats.reserved}</Badge>
-        <Badge className="bg-red-100 text-red-800 hover:bg-red-100">Sprzedane: {stats.sold}</Badge>
+        <Badge className="bg-green-100 text-green-800 hover:bg-green-100">Available: {stats.available}</Badge>
+        <Badge className="bg-yellow-100 text-yellow-800 hover:bg-yellow-100">Reserved: {stats.reserved}</Badge>
+        <Badge className="bg-red-100 text-red-800 hover:bg-red-100">Sold: {stats.sold}</Badge>
       </div>
 
       <div className="border rounded-xl overflow-hidden shadow-sm bg-white">
@@ -168,13 +168,13 @@ export function UnitsManager({ initialUnits }: { initialUnits: Unit[] }) {
             <tr className="text-left">
               <th className="px-3 py-2.5 font-semibold text-gray-600 uppercase tracking-wider text-xs">Inwestycja</th>
               <th className="px-3 py-2.5 font-semibold text-gray-600 uppercase tracking-wider text-xs">Firma</th>
-              <th className="px-3 py-2.5 font-semibold text-gray-600 uppercase tracking-wider text-xs">Budynek</th>
-              <th className="px-3 py-2.5 font-semibold text-gray-600 uppercase tracking-wider text-xs">Działka</th>
+              <th className="px-3 py-2.5 font-semibold text-gray-600 uppercase tracking-wider text-xs">Building</th>
+              <th className="px-3 py-2.5 font-semibold text-gray-600 uppercase tracking-wider text-xs">Plot</th>
               <th className="px-3 py-2.5 font-semibold text-gray-600 uppercase tracking-wider text-xs text-right">Pow. (m²)</th>
-              <th className="px-3 py-2.5 font-semibold text-gray-600 uppercase tracking-wider text-xs text-right">Pokoje</th>
-              <th className="px-3 py-2.5 font-semibold text-gray-600 uppercase tracking-wider text-xs">Piętro</th>
+              <th className="px-3 py-2.5 font-semibold text-gray-600 uppercase tracking-wider text-xs text-right">Rooms</th>
+              <th className="px-3 py-2.5 font-semibold text-gray-600 uppercase tracking-wider text-xs">Floor</th>
               <th className="px-3 py-2.5 font-semibold text-gray-600 uppercase tracking-wider text-xs">Status</th>
-              <th className="px-3 py-2.5 font-semibold text-gray-600 uppercase tracking-wider text-xs text-right">Cena</th>
+              <th className="px-3 py-2.5 font-semibold text-gray-600 uppercase tracking-wider text-xs text-right">Price</th>
               <th className="px-3 py-2.5 font-semibold text-gray-600 uppercase tracking-wider text-xs text-right">Akcje</th>
             </tr>
           </thead>
@@ -182,7 +182,7 @@ export function UnitsManager({ initialUnits }: { initialUnits: Unit[] }) {
             {filtered.length === 0 ? (
               <tr>
                 <td colSpan={10} className="px-4 py-12 text-center text-gray-400">
-                  Brak działek pasujących do filtrów.
+                  No plots match the filters.
                 </td>
               </tr>
             ) : filtered.map(u => (
@@ -203,7 +203,7 @@ export function UnitsManager({ initialUnits }: { initialUnits: Unit[] }) {
                 <td className="px-3 py-2 text-right">
                   <Button variant="outline" size="sm" onClick={() => setEditing(u)}>
                     <Pencil className="h-3.5 w-3.5 mr-1.5" />
-                    Edytuj
+                    Edit
                   </Button>
                 </td>
               </tr>
@@ -293,12 +293,12 @@ function UnitEditDialog({
       })
       if (!res.ok) {
         const data = await res.json().catch(() => ({}))
-        throw new Error(data?.error || `Zapis nie powiódł się (${res.status})`)
+        throw new Error(data?.error || `Save failed (${res.status})`)
       }
       const saved = await res.json()
       onSaved({ ...unit, ...saved })
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Nieznany błąd')
+      setError(e instanceof Error ? e.message : 'Unknown error')
     } finally {
       setSaving(false)
     }
@@ -308,7 +308,7 @@ function UnitEditDialog({
     <Dialog open={unit !== null} onOpenChange={open => !open && onClose()}>
       <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Edytuj działkę: {unit.label}</DialogTitle>
+          <DialogTitle>Edit plot: {unit.label}</DialogTitle>
           <DialogDescription>
             {unit.project.name}
             {unit.company ? ` · ${unit.company.name}` : ''}
@@ -317,11 +317,11 @@ function UnitEditDialog({
 
         <div className="grid grid-cols-2 gap-4 py-2">
           <div>
-            <Label htmlFor="label">Etykieta</Label>
+            <Label htmlFor="label">Label</Label>
             <Input id="label" value={form.label ?? ''} onChange={e => set('label', e.target.value)} />
           </div>
           <div>
-            <Label htmlFor="buildingLabel">Budynek</Label>
+            <Label htmlFor="buildingLabel">Building</Label>
             <Input id="buildingLabel" value={form.buildingLabel ?? ''} onChange={e => set('buildingLabel', e.target.value || null)} />
           </div>
 
@@ -330,19 +330,19 @@ function UnitEditDialog({
             <Select value={form.status ?? 'available'} onValueChange={v => set('status', v)}>
               <SelectTrigger id="status"><SelectValue /></SelectTrigger>
               <SelectContent>
-                <SelectItem value="available">Dostępny</SelectItem>
-                <SelectItem value="reserved">Rezerwacja</SelectItem>
-                <SelectItem value="sold">Sprzedany</SelectItem>
+                <SelectItem value="available">Available</SelectItem>
+                <SelectItem value="reserved">Reserved</SelectItem>
+                <SelectItem value="sold">Sold</SelectItem>
               </SelectContent>
             </Select>
           </div>
           <div>
-            <Label htmlFor="stage">Etap</Label>
+            <Label htmlFor="stage">Stage</Label>
             <Input id="stage" value={form.stage ?? ''} onChange={e => set('stage', e.target.value || null)} />
           </div>
 
           <div>
-            <Label htmlFor="area">Powierzchnia (m²)</Label>
+            <Label htmlFor="area">Area (m²)</Label>
             <Input
               id="area"
               type="number"
@@ -350,35 +350,35 @@ function UnitEditDialog({
               value={form.area ?? ''}
               readOnly
               disabled
-              title="Wyliczana automatycznie z sumy pomieszczeń typu domu"
+              title="Calculated automatically from the house type’s room sum"
             />
-            <p className="text-xs text-gray-400 mt-1">Wyliczana z pomieszczeń typu domu</p>
+            <p className="text-xs text-gray-400 mt-1">Calculated from the house type’s rooms</p>
           </div>
           <div>
-            <Label htmlFor="gardenArea">Ogród (m²)</Label>
+            <Label htmlFor="gardenArea">Garden (m²)</Label>
             <Input id="gardenArea" type="number" step="0.01" value={form.gardenArea ?? ''} onChange={e => set('gardenArea', numOrNull(e.target.value))} />
           </div>
 
           <div>
-            <Label htmlFor="floor">Piętro</Label>
+            <Label htmlFor="floor">Floor</Label>
             <Input id="floor" value={form.floor ?? ''} onChange={e => set('floor', e.target.value || null)} />
           </div>
           <div>
-            <Label htmlFor="rooms">Pokoje</Label>
+            <Label htmlFor="rooms">Rooms</Label>
             <Input id="rooms" type="number" value={form.rooms ?? ''} onChange={e => set('rooms', intOrNull(e.target.value))} />
           </div>
 
           <div>
-            <Label htmlFor="floors">Liczba pięter</Label>
+            <Label htmlFor="floors">Number of floors</Label>
             <Input id="floors" type="number" value={form.floors ?? ''} onChange={e => set('floors', intOrNull(e.target.value))} />
           </div>
           <div />
 
           <div className="col-span-2 border-t pt-4 mt-2">
-            <h3 className="text-sm font-semibold text-gray-700 mb-3">Ceny (zł)</h3>
+            <h3 className="text-sm font-semibold text-gray-700 mb-3">Prices (€)</h3>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label htmlFor="price">Cena podstawowa</Label>
+                <Label htmlFor="price">Price podstawowa</Label>
                 <Input id="price" type="number" value={form.price ?? ''} onChange={e => set('price', intOrNull(e.target.value))} />
               </div>
               <div>
@@ -386,7 +386,7 @@ function UnitEditDialog({
                 <Input id="parkingPrice" type="number" value={form.parkingPrice ?? ''} onChange={e => set('parkingPrice', intOrNull(e.target.value))} />
               </div>
               <div>
-                <Label htmlFor="storagePrice">Komórka</Label>
+                <Label htmlFor="storagePrice">Storage</Label>
                 <Input id="storagePrice" type="number" value={form.storagePrice ?? ''} onChange={e => set('storagePrice', intOrNull(e.target.value))} />
               </div>
               <div>
@@ -401,14 +401,14 @@ function UnitEditDialog({
           </div>
 
           <div className="col-span-2 border-t pt-4 mt-2">
-            <h3 className="text-sm font-semibold text-gray-700 mb-3">Opisy dodatkowe</h3>
+            <h3 className="text-sm font-semibold text-gray-700 mb-3">Descriptiony dodatkowe</h3>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label htmlFor="partsType">Części — typ</Label>
+                <Label htmlFor="partsType">Parts — type</Label>
                 <Input id="partsType" value={form.partsType ?? ''} onChange={e => set('partsType', e.target.value || null)} />
               </div>
               <div>
-                <Label htmlFor="partsLabel">Części — etykieta</Label>
+                <Label htmlFor="partsLabel">Parts — label</Label>
                 <Input id="partsLabel" value={form.partsLabel ?? ''} onChange={e => set('partsLabel', e.target.value || null)} />
               </div>
               <div>
@@ -420,18 +420,18 @@ function UnitEditDialog({
                 <Input id="roomsLabel" value={form.roomsLabel ?? ''} onChange={e => set('roomsLabel', e.target.value || null)} />
               </div>
               <div className="col-span-2">
-                <Label htmlFor="rightsDesc">Opis praw</Label>
+                <Label htmlFor="rightsDesc">Description praw</Label>
                 <Textarea id="rightsDesc" rows={2} value={form.rightsDesc ?? ''} onChange={e => set('rightsDesc', e.target.value || null)} />
               </div>
               <div className="col-span-2">
-                <Label htmlFor="otherDesc">Inne zobowiązania</Label>
+                <Label htmlFor="otherDesc">Other obligations</Label>
                 <Textarea id="otherDesc" rows={2} value={form.otherDesc ?? ''} onChange={e => set('otherDesc', e.target.value || null)} />
               </div>
             </div>
           </div>
 
           <div className="col-span-2 border-t pt-4 mt-2">
-            <Label htmlFor="description">Opis działki</Label>
+            <Label htmlFor="description">Plot description</Label>
             <Textarea id="description" rows={3} value={form.description ?? ''} onChange={e => set('description', e.target.value || null)} />
           </div>
         </div>
@@ -443,9 +443,9 @@ function UnitEditDialog({
         )}
 
         <DialogFooter>
-          <Button variant="outline" onClick={onClose} disabled={saving}>Anuluj</Button>
+          <Button variant="outline" onClick={onClose} disabled={saving}>Cancel</Button>
           <Button onClick={handleSave} disabled={saving} style={{ backgroundColor: '#6E2E2A' }}>
-            {saving ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Zapisywanie…</> : 'Zapisz'}
+            {saving ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Saving…</> : 'Save'}
           </Button>
         </DialogFooter>
       </DialogContent>

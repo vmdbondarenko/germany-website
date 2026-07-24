@@ -116,8 +116,8 @@ column often only needs the admin input to send it (a few routes whitelist field
 `projects/[id]`, `about-section`, `locations`, `sections` create, `news` — update those
 explicitly).
 
-> **Known follow-up:** the admin back-office UI still has many **Polish field labels**
-> (the public site is fully DE/EN). Plan is to make the whole admin **English**.
+The admin back-office UI is **English** (single language — no i18n; the public site
+is the bilingual part). Prices in admin format with `de-DE` / `€`.
 
 ## What was removed vs the source
 

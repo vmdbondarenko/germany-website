@@ -168,7 +168,7 @@ function StageViewPlanEditor({ view, units, onSvgSave }: {
       const clicked = polygons.find(p => pointInPolygon(pt, p.points))
       if (clicked) {
         // Delete polygon
-        if (confirm(`Usuń polygon dla "${clicked.unitLabel}"?`)) {
+        if (confirm(`Delete polygon for "${clicked.unitLabel}"?`)) {
           const next = polygons.filter(p => p.id !== clicked.id)
           setPolygons(next)
           autoSave(next)
@@ -220,7 +220,7 @@ function StageViewPlanEditor({ view, units, onSvgSave }: {
   }
 
   if (!view.imageUrl) {
-    return <p className="text-sm text-muted-foreground py-4">Najpierw dodaj zdjęcie do tego widoku.</p>
+    return <p className="text-sm text-muted-foreground py-4">First add an image to this view.</p>
   }
 
   const dispW = containerRef.current?.clientWidth || 800
@@ -249,7 +249,7 @@ function StageViewPlanEditor({ view, units, onSvgSave }: {
       </div>
 
       <p className="text-xs text-muted-foreground">
-        Polygony: {polygons.length} · Kliknij aby rysować polygon, zamknij klikając pierwszy punkt, następnie wybierz działkę
+        Polygons: {polygons.length} · Click to draw a polygon, close it by clicking the first point, then select a plot
       </p>
 
       {/* Canvas */}
@@ -325,7 +325,7 @@ function StageViewPlanEditor({ view, units, onSvgSave }: {
       {/* Unit picker dialog */}
       {pickingUnit && pendingPts && (
         <div className="border rounded-lg p-4 bg-amber-50 border-amber-200 space-y-3">
-          <p className="text-sm font-medium text-amber-900">Wybierz działkę dla tego polygonu:</p>
+          <p className="text-sm font-medium text-amber-900">Select a plot for this polygon:</p>
           <div className="grid grid-cols-4 sm:grid-cols-6 gap-2 max-h-48 overflow-y-auto">
             {units.map(u => (
               <Button key={u.id} size="sm" variant="outline" className="text-xs"
@@ -336,7 +336,7 @@ function StageViewPlanEditor({ view, units, onSvgSave }: {
             ))}
           </div>
           <Button size="sm" variant="ghost" onClick={() => { setPendingPts(null); setPickingUnit(false) }}>
-            <X className="h-3.5 w-3.5 mr-1" />Anuluj
+            <X className="h-3.5 w-3.5 mr-1" />Cancel
           </Button>
         </div>
       )}
@@ -390,7 +390,7 @@ export default function AdminStageEditor({ projectId, stages: initialStages, uni
   }
 
   const deleteStage = async (id: string) => {
-    if (!confirm('Usuń ten etap i wszystkie jego widoki?')) return
+    if (!confirm('Delete this stage and all its views?')) return
     await fetch(`/api/admin/stages/${id}`, { method: 'DELETE' })
     await fetchStages()
   }
@@ -415,7 +415,7 @@ export default function AdminStageEditor({ projectId, stages: initialStages, uni
   }
 
   const deleteView = async (viewId: string) => {
-    if (!confirm('Usuń ten widok?')) return
+    if (!confirm('Delete this view?')) return
     await fetch(`/api/admin/stage-views/${viewId}`, { method: 'DELETE' })
     await fetchStages()
   }
@@ -444,7 +444,7 @@ export default function AdminStageEditor({ projectId, stages: initialStages, uni
     })
     setReorderingViewId(null)
     if (!res.ok) {
-      alert('Nie udało się zmienić kolejności widoków')
+      alert('Failed to reorder views')
       return
     }
     setStages(prev =>
@@ -471,22 +471,22 @@ export default function AdminStageEditor({ projectId, stages: initialStages, uni
           <span>Etapy inwestycji ({stages.length})</span>
         </CardTitle>
         <p className="text-sm text-muted-foreground">
-          Narysuj polygony etapów na głównym planie (powyżej), potem dodaj tu etapy z pasującymi ID elementów SVG. Każdy etap ma własne widoki z polygonami działek.
+          Draw stage polygons on the main plan (above), then add stages here with matching SVG element IDs. Each stage has its own views with plot polygons.
         </p>
       </CardHeader>
       <CardContent className="space-y-4">
         {/* Add stage */}
         <div className="flex items-end gap-3 p-4 border rounded-lg bg-gray-50/50">
           <div className="space-y-1 flex-1">
-            <Label className="text-xs">Nazwa etapu</Label>
-            <Input value={newStageName} onChange={e => setNewStageName(e.target.value)} placeholder="np. Etap 1" className="h-8" />
+            <Label className="text-xs">Name etapu</Label>
+            <Input value={newStageName} onChange={e => setNewStageName(e.target.value)} placeholder="np. Stage 1" className="h-8" />
           </div>
           <div className="space-y-1 flex-1">
-            <Label className="text-xs">ID elementu SVG (z głównego planu)</Label>
+            <Label className="text-xs">SVG element ID (from the main plan)</Label>
             <Input value={newStageSvgId} onChange={e => setNewStageSvgId(e.target.value)} placeholder="np. etap-1" className="h-8" />
           </div>
           <Button size="sm" onClick={createStage} disabled={creating || !newStageName || !newStageSvgId}>
-            <Plus className="h-3.5 w-3.5 mr-1" />{creating ? 'Dodawanie...' : 'Dodaj etap'}
+            <Plus className="h-3.5 w-3.5 mr-1" />{creating ? 'Dodawanie...' : 'Add etap'}
           </Button>
         </div>
 
@@ -508,7 +508,7 @@ export default function AdminStageEditor({ projectId, stages: initialStages, uni
                     <span className="text-xs font-medium text-amber-700 bg-amber-100 px-1.5 py-0.5 rounded ml-2">Ukryty</span>
                   )}
                   <span className="text-xs text-muted-foreground ml-2">SVG ID: <code className="bg-gray-100 px-1 rounded">{stage.svgElementId}</code></span>
-                  <span className="text-xs text-muted-foreground ml-2">· {stage.stageViews.length} widoków</span>
+                  <span className="text-xs text-muted-foreground ml-2">· {stage.stageViews.length} views</span>
                 </div>
               </div>
               <div className="flex items-center gap-2" onClick={e => e.stopPropagation()}>
@@ -516,14 +516,14 @@ export default function AdminStageEditor({ projectId, stages: initialStages, uni
                   size="sm"
                   variant={stage.published ? 'outline' : 'default'}
                   onClick={() => updateStage(stage.id, { published: !stage.published })}
-                  title={stage.published ? 'Ukryj etap na stronie publicznej' : 'Pokaż etap na stronie publicznej'}
+                  title={stage.published ? 'Hide stage on the public site' : 'Show stage on the public site'}
                 >
                   {stage.published
                     ? <><EyeOff className="h-3.5 w-3.5 mr-1" />Ukryj</>
                     : <><Eye className="h-3.5 w-3.5 mr-1" />Opublikuj</>}
                 </Button>
                 <Button size="sm" variant="outline" onClick={() => addView(stage.id)}>
-                  <Plus className="h-3.5 w-3.5 mr-1" />Dodaj widok
+                  <Plus className="h-3.5 w-3.5 mr-1" />Add widok
                 </Button>
                 <Button size="sm" variant="ghost" className="text-red-500 hover:text-red-700" onClick={() => deleteStage(stage.id)}>
                   <Trash2 className="h-3.5 w-3.5" />
@@ -535,7 +535,7 @@ export default function AdminStageEditor({ projectId, stages: initialStages, uni
             {expandedStage === stage.id && (
               <div className="border-t bg-gray-50/30 p-4 space-y-4">
                 {stage.stageViews.length === 0 ? (
-                  <p className="text-sm text-muted-foreground text-center py-4">Brak widoków. Dodaj widok aby rysować polygony działek.</p>
+                  <p className="text-sm text-muted-foreground text-center py-4">No views. Add a view to draw plot polygons.</p>
                 ) : (
                   stage.stageViews.map((view, viewIdx) => (
                     <StageViewCard
@@ -561,7 +561,7 @@ export default function AdminStageEditor({ projectId, stages: initialStages, uni
 
         {stages.length === 0 && (
           <p className="text-center text-sm text-muted-foreground py-6">
-            Brak etapów. Narysuj polygony etapów na głównym planie, potem dodaj etapy tutaj.
+            No stages. Draw stage polygons on the main plan, then add stages here.
           </p>
         )}
       </CardContent>
@@ -595,7 +595,7 @@ function StageViewCard({
         <div className="flex items-center gap-3">
           {expanded ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
           <span className="text-sm font-medium">{view.name}</span>
-          {view.imageUrl && <span className="text-xs text-green-600">● zdjęcie</span>}
+          {view.imageUrl && <span className="text-xs text-green-600">● image</span>}
           {view.svgContent && <span className="text-xs text-blue-600">● polygony</span>}
         </div>
         <div className="flex items-center gap-0.5" onClick={e => e.stopPropagation()}>
@@ -605,7 +605,7 @@ function StageViewCard({
             className="h-7 w-7 p-0 text-gray-400 hover:text-gray-700 disabled:opacity-30"
             disabled={isFirst || reordering}
             onClick={() => onMove('up')}
-            title="Przesuń widok w górę"
+            title="Move view up"
           >
             <ArrowUp className="h-3.5 w-3.5" />
           </Button>
@@ -615,7 +615,7 @@ function StageViewCard({
             className="h-7 w-7 p-0 text-gray-400 hover:text-gray-700 disabled:opacity-30"
             disabled={isLast || reordering}
             onClick={() => onMove('down')}
-            title="Przesuń widok w dół"
+            title="Move view down"
           >
             <ArrowDown className="h-3.5 w-3.5" />
           </Button>
@@ -630,7 +630,7 @@ function StageViewCard({
           {/* Name */}
           <div className="flex items-end gap-2">
             <div className="space-y-1 flex-1">
-              <Label className="text-xs">Nazwa widoku</Label>
+              <Label className="text-xs">Name widoku</Label>
               <Input value={editName} onChange={e => setEditName(e.target.value)} className="h-8"
                 onBlur={() => { if (editName !== view.name) onUpdate({ name: editName }) }}
               />
@@ -639,12 +639,12 @@ function StageViewCard({
 
           {/* Image upload */}
           <div className="space-y-2">
-            <Label className="text-xs">Zdjęcie widoku (tło planu)</Label>
+            <Label className="text-xs">View image (plan background)</Label>
             <div className="flex gap-2 items-center">
               <Input
                 value={view.imageUrl || ''}
                 onChange={e => onUpdate({ imageUrl: e.target.value })}
-                placeholder="URL zdjęcia"
+                placeholder="Image URL"
                 className="h-8 flex-1"
               />
               <label className="cursor-pointer">
@@ -672,7 +672,7 @@ function StageViewCard({
 
           {/* Plan editor */}
           <div>
-            <Label className="text-xs mb-2 block">Edytor polygonów działek</Label>
+            <Label className="text-xs mb-2 block">Plot polygon editor</Label>
             <StageViewPlanEditor view={view} units={units} onSvgSave={onSvgSave} />
           </div>
         </div>

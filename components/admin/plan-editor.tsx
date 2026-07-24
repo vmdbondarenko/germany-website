@@ -32,9 +32,9 @@ const STATUS_COLOR: Record<Status, string> = {
 }
 
 const STATUS_LABEL: Record<Status, string> = {
-  available: 'Dostępne',
-  reserved:  'Zarezerwowane',
-  sold:      'Sprzedane',
+  available: 'Available',
+  reserved:  'Reserved',
+  sold:      'Sold',
 }
 
 const SNAP_PX     = 10
@@ -322,7 +322,7 @@ export default function PlanEditor() {
     setPolygons(ps => [...ps, poly])
     setPendingPts(null)
     setNewLabel('')
-    toast.success(`Dodano: ${poly.label}`)
+    toast.success(`Added: ${poly.label}`)
   }, [pendingPts, newLabel])
 
   // ─── Image upload ───────────────────────────────────────────────────────────
@@ -371,7 +371,7 @@ export default function PlanEditor() {
   const handleCopySvg = () => { navigator.clipboard.writeText(svgString); toast.success('SVG skopiowany do schowka') }
   const handleSave    = () => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify({ polygons, imgW: imgSize?.w, imgH: imgSize?.h }))
-    toast.success('Zapisano w przeglądarce')
+    toast.success('Saved in browser')
   }
   const handleDownloadSvg = () => {
     const blob = new Blob([svgString], { type: 'image/svg+xml' })
@@ -404,12 +404,12 @@ export default function PlanEditor() {
         if (points.length >= 3 && label) imported.push({ id: crypto.randomUUID(), label, status, points })
       })
 
-      if (!imported.length) { toast.error('Nie znaleziono polygonów w SVG'); return }
+      if (!imported.length) { toast.error('No polygons found in SVG'); return }
       setPolygons(ps => [...ps, ...imported])
       setShowLoad(false)
       setLoadText('')
-      toast.success(`Wczytano ${imported.length} polygon(ów)`)
-    } catch { toast.error('Błąd parsowania SVG') }
+      toast.success(`Loaded ${imported.length} polygon(s)`)
+    } catch { toast.error('SVG parsing error') }
   }
 
   // ─── Derived ────────────────────────────────────────────────────────────────
@@ -463,7 +463,7 @@ export default function PlanEditor() {
 
         {!showClearConfirm ? (
           <Button variant="outline" size="sm" className="h-8" onClick={() => setShowClearConfirm(true)}>
-            <Trash2 className="h-3.5 w-3.5 mr-1" /> Wyczyść
+            <Trash2 className="h-3.5 w-3.5 mr-1" /> Clear
           </Button>
         ) : (
           <div className="flex items-center gap-1.5 rounded-md border px-2 py-1">
@@ -508,7 +508,7 @@ export default function PlanEditor() {
             <Copy className="h-3.5 w-3.5 mr-1" /> Kopiuj SVG
           </Button>
           <Button size="sm" className="h-8" onClick={handleSave} style={{ backgroundColor: '#6E2E2A', color: 'white' }}>
-            <Save className="h-3.5 w-3.5 mr-1" /> Zapisz
+            <Save className="h-3.5 w-3.5 mr-1" /> Save
           </Button>
         </div>
       </div>
@@ -678,8 +678,8 @@ export default function PlanEditor() {
                 <Upload className="h-10 w-10 text-gray-300" />
                 <div className="text-center">
                   <p className="font-semibold text-gray-600">Wgraj plan sytuacyjny</p>
-                  <p className="text-sm mt-1">Kliknij tutaj lub użyj przycisku „Wgraj plan" na pasku</p>
-                  <p className="text-xs mt-1 text-gray-400">JPG, PNG — obsługa planów 4000×3000 px i większych</p>
+                  <p className="text-sm mt-1">Click here or use the “Upload plan” button na pasku</p>
+                  <p className="text-xs mt-1 text-gray-400">JPG, PNG — supports plans 4000×3000 px and larger</p>
                 </div>
               </div>
             )}
@@ -697,7 +697,7 @@ export default function PlanEditor() {
               className="bg-white rounded-xl shadow-2xl border border-gray-200 p-4 w-56"
               onClick={e => e.stopPropagation()}
             >
-              <p className="text-xs font-semibold text-gray-700 mb-2 uppercase tracking-wide">Etykieta działki</p>
+              <p className="text-xs font-semibold text-gray-700 mb-2 uppercase tracking-wide">Plot label</p>
               <Input
                 ref={labelRef}
                 value={newLabel}
@@ -731,10 +731,10 @@ export default function PlanEditor() {
           {tool === 'draw' && imgSrc && !pendingPts && (
             <div className="absolute bottom-2 left-1/2 -translate-x-1/2 bg-black/50 text-white text-xs px-3 py-1 rounded-full pointer-events-none whitespace-nowrap">
               {currentPts.length === 0
-                ? 'Kliknij, aby rozpocząć rysowanie · Scroll = zoom · Środkowy przycisk / Spacja+LPM = przesuń'
+                ? 'Click to start drawing · Scroll = zoom · Middle button / Space+LMB = pan'
                 : currentPts.length < 3
-                  ? `Kliknij, aby dodać punkt (${currentPts.length}/3 min) · Esc = anuluj`
-                  : 'Kliknij na pierwszy punkt lub dwukliknij, aby zamknąć · Esc = anuluj'
+                  ? `Click to add a point (${currentPts.length}/3 min) · Esc = cancel`
+                  : 'Click the first point or double-click to close · Esc = cancel'
               }
             </div>
           )}
@@ -743,7 +743,7 @@ export default function PlanEditor() {
         {/* ── Right sidebar ── */}
         <div className="w-72 bg-white border-l flex flex-col overflow-hidden flex-shrink-0">
           <div className="px-4 py-2.5 border-b flex items-center justify-between">
-            <h3 className="font-semibold text-sm text-gray-800">Działki</h3>
+            <h3 className="font-semibold text-sm text-gray-800">Plots</h3>
             <span className="text-xs text-gray-400 tabular-nums">{polygons.length}</span>
           </div>
 
@@ -757,7 +757,7 @@ export default function PlanEditor() {
                 onBlur={() => updateLabel(selectedPoly.id, editLabel)}
                 onKeyDown={e => { if (e.key === 'Enter') updateLabel(selectedPoly.id, editLabel) }}
                 className="h-7 text-sm mb-2"
-                placeholder="Etykieta"
+                placeholder="Label"
               />
               <Select value={selectedPoly.status} onValueChange={v => updateStatus(selectedPoly.id, v as Status)}>
                 <SelectTrigger className="h-7 text-sm">
@@ -773,7 +773,7 @@ export default function PlanEditor() {
                 variant="destructive" size="sm" className="w-full mt-2 h-7 text-xs"
                 onClick={() => deletePolygon(selectedPoly.id)}
               >
-                <Trash2 className="h-3.5 w-3.5 mr-1" /> Usuń polygon
+                <Trash2 className="h-3.5 w-3.5 mr-1" /> Delete polygon
               </Button>
             </div>
           )}
@@ -782,7 +782,7 @@ export default function PlanEditor() {
           <div className="flex-1 overflow-y-auto">
             {polygons.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-32 text-gray-400 text-sm gap-1">
-                <p>Brak działek</p>
+                <p>No plots</p>
                 <p className="text-xs">Narysuj polygony na planie</p>
               </div>
             ) : (
@@ -835,7 +835,7 @@ export default function PlanEditor() {
           <div className="flex items-center gap-2 px-4 py-2 border-b">
             <span className="text-sm font-semibold">Eksport SVG</span>
             <span className="text-xs text-gray-400 ml-1">
-              {polygons.length} polygon{polygons.length !== 1 ? 'ów' : ''} · viewBox {imgSize ? `${imgSize.w}×${imgSize.h}` : '—'}
+              {polygons.length} polygon{polygons.length !== 1 ? 's' : ''} · viewBox {imgSize ? `${imgSize.w}×${imgSize.h}` : '—'}
             </span>
             <Button variant="ghost" size="sm" className="ml-auto h-7 w-7 p-0" onClick={() => setShowSvg(false)}>
               <X className="h-4 w-4" />
@@ -853,7 +853,7 @@ export default function PlanEditor() {
                 <Copy className="h-3.5 w-3.5 mr-1" /> Kopiuj SVG
               </Button>
               <Button size="sm" variant="outline" className="h-8" onClick={handleDownloadSvg}>
-                <FileDown className="h-3.5 w-3.5 mr-1" /> Pobierz .svg
+                <FileDown className="h-3.5 w-3.5 mr-1" /> Download .svg
               </Button>
             </div>
           </div>
@@ -877,7 +877,7 @@ export default function PlanEditor() {
               </Button>
             </div>
             <p className="text-sm text-gray-500 mb-4">
-              Wklej kod SVG (z Figmy, Inkscape itp.) z elementami <code className="bg-gray-100 px-1 rounded text-xs">&lt;polygon&gt;</code> posiadającymi atrybuty <code className="bg-gray-100 px-1 rounded text-xs">data-label</code> i <code className="bg-gray-100 px-1 rounded text-xs">data-status</code>.
+              Wklej kod SVG (z Figmy, Inkscape itp.) z elementami <code className="bg-gray-100 px-1 rounded text-xs">&lt;polygon&gt;</code> with attributes <code className="bg-gray-100 px-1 rounded text-xs">data-label</code> i <code className="bg-gray-100 px-1 rounded text-xs">data-status</code>.
             </p>
             <Textarea
               value={loadText}
@@ -890,7 +890,7 @@ export default function PlanEditor() {
               <Button onClick={handleImportSvg} style={{ backgroundColor: '#6E2E2A', color: 'white' }}>
                 <FileUp className="h-4 w-4 mr-1.5" /> Importuj
               </Button>
-              <Button variant="outline" onClick={() => { setShowLoad(false); setLoadText('') }}>Anuluj</Button>
+              <Button variant="outline" onClick={() => { setShowLoad(false); setLoadText('') }}>Cancel</Button>
             </div>
           </div>
         </div>

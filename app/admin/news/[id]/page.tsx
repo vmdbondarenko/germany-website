@@ -121,7 +121,7 @@ export default function EditNewsPage({ params }: { params: Promise<{ id: string 
     })
     if (!res.ok) {
       const data = await res.json()
-      setError(data.error || 'Wystąpił błąd')
+      setError(data.error || 'An error occurred')
     } else {
       const post: ApiPost = await res.json()
       setForm((p) => ({ ...p, slug: post.slug }))
@@ -130,12 +130,12 @@ export default function EditNewsPage({ params }: { params: Promise<{ id: string 
   }
 
   const handleDelete = async () => {
-    if (!id || !confirm('Czy na pewno chcesz usunąć ten wpis?')) return
+    if (!id || !confirm('Are you sure you want to delete this post?')) return
     await fetch(`/api/admin/news/${id}`, { method: 'DELETE' })
     router.push('/admin/news')
   }
 
-  if (loading || !id) return <div className="py-20 text-center text-gray-400">Ładowanie...</div>
+  if (loading || !id) return <div className="py-20 text-center text-gray-400">Loading...</div>
 
   return (
     <div>
@@ -144,16 +144,16 @@ export default function EditNewsPage({ params }: { params: Promise<{ id: string 
           <Link href="/admin/news">
             <Button variant="ghost" size="sm">
               <ArrowLeft className="h-4 w-4 mr-1.5" />
-              Powrót
+              Back
             </Button>
           </Link>
-          <h1 className="text-3xl font-serif font-bold text-gray-900">Edytuj wpis</h1>
+          <h1 className="text-3xl font-serif font-bold text-gray-900">Edit post</h1>
         </div>
         {form.published && form.slug && (
           <Link href={`/aktualnosci/${form.slug}`} target="_blank">
             <Button variant="outline" size="sm">
               <ExternalLink className="h-4 w-4 mr-1.5" />
-              Zobacz
+              View
             </Button>
           </Link>
         )}
@@ -163,7 +163,7 @@ export default function EditNewsPage({ params }: { params: Promise<{ id: string 
         <div className="lg:col-span-2 space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Informacje podstawowe</CardTitle>
+              <CardTitle>Basic information</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -221,7 +221,7 @@ export default function EditNewsPage({ params }: { params: Promise<{ id: string 
 
           <Card>
             <CardHeader>
-              <CardTitle>Zdjęcie główne (cover)</CardTitle>
+              <CardTitle>Main image (cover)</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex items-center gap-3">
@@ -235,7 +235,7 @@ export default function EditNewsPage({ params }: { params: Promise<{ id: string 
                 <Upload className="h-4 w-4 text-gray-400 flex-shrink-0" />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="coverImageUrl">lub URL zdjęcia</Label>
+                <Label htmlFor="coverImageUrl">or image URL</Label>
                 <Input
                   id="coverImageUrl"
                   value={form.coverImageUrl}
@@ -246,7 +246,7 @@ export default function EditNewsPage({ params }: { params: Promise<{ id: string 
               {form.coverImageUrl && (
                 <img
                   src={form.coverImageUrl}
-                  alt="Podgląd"
+                  alt="Preview"
                   className="rounded-lg max-h-48 object-cover"
                 />
               )}
@@ -255,7 +255,7 @@ export default function EditNewsPage({ params }: { params: Promise<{ id: string 
 
           <Card>
             <CardHeader>
-              <CardTitle>Treść wpisu</CardTitle>
+              <CardTitle>Post content</CardTitle>
             </CardHeader>
             <CardContent>
               <NewsBlocksEditor blocks={blocks} onChange={setBlocks} postSlug={form.slug} />
@@ -278,7 +278,7 @@ export default function EditNewsPage({ params }: { params: Promise<{ id: string 
                   onChange={(e) => setForm((p) => ({ ...p, publishedAt: e.target.value }))}
                 />
                 <p className="text-xs text-gray-500">
-                  Przydatne przy migracji starszych wpisów.
+                  Useful when migrating older posts.
                 </p>
               </div>
               <div className="flex items-center gap-3">
@@ -289,7 +289,7 @@ export default function EditNewsPage({ params }: { params: Promise<{ id: string 
                   onChange={(e) => setForm((p) => ({ ...p, published: e.target.checked }))}
                   className="w-4 h-4 rounded"
                 />
-                <Label htmlFor="published">Opublikowany</Label>
+                <Label htmlFor="published">Published</Label>
               </div>
             </CardContent>
           </Card>
@@ -307,7 +307,7 @@ export default function EditNewsPage({ params }: { params: Promise<{ id: string 
             style={{ backgroundColor: '#6E2E2A' }}
           >
             <Save className="h-4 w-4 mr-2" />
-            {saving ? 'Zapisywanie...' : 'Zapisz zmiany'}
+            {saving ? 'Saving...' : 'Save changes'}
           </Button>
 
           <Button
@@ -316,7 +316,7 @@ export default function EditNewsPage({ params }: { params: Promise<{ id: string 
             className="w-full text-red-600 border-red-200 hover:bg-red-50"
           >
             <Trash2 className="h-4 w-4 mr-2" />
-            Usuń wpis
+            Delete wpis
           </Button>
         </div>
       </div>

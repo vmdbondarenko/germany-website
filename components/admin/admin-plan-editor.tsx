@@ -88,7 +88,7 @@ const STATUS_COLOR: Record<Status, string> = {
   available: '#86efac', reserved: '#fde047', sold: '#f87171',
 }
 const STATUS_LABEL: Record<Status, string> = {
-  available: 'Dostępne', reserved: 'Zarezerwowane', sold: 'Sprzedane',
+  available: 'Available', reserved: 'Reserved', sold: 'Sold',
 }
 const SNAP_PX = 10
 const EMPTY_FORM: EditForm = {
@@ -278,7 +278,7 @@ export default function AdminPlanEditor({
         description: null, houseTypeId: null,
       }))
       setDrawUnits(merged)
-      // Also init actual units list for the Działki tab
+      // Also init actual units list for the Plots tab
       const units: DrawUnit[] = initialUnits.map(u => ({
         id: u.id, svgElementId: u.svgElementId, label: u.label,
         status: (u.status as Status) || 'available',
@@ -422,8 +422,8 @@ export default function AdminPlanEditor({
       }
       setDrawUnits(prev => { const next = [...prev, nu]; autoSaveSvg(next); return next })
       setPendingPts(null); setNewLabel(''); setNewHouseTypeId('')
-      toast.success(`Dodano: ${nu.label}`)
-    } catch { toast.error('Błąd tworzenia działki') }
+      toast.success(`Added: ${nu.label}`)
+    } catch { toast.error('Error creating plot') }
     setCreating(false)
   }
 
@@ -460,7 +460,7 @@ export default function AdminPlanEditor({
       setDrawUnits(prev => { const next = [...prev.filter(u => u.id !== existing.id), nu]; autoSaveSvg(next); return next })
       setPendingPts(null); setAttachExistingId('')
       toast.success(`Przypisano polygon: ${existing.label}`)
-    } catch { toast.error('Błąd przypisywania') }
+    } catch { toast.error('Assignment error') }
     setCreating(false)
   }
 
@@ -470,7 +470,7 @@ export default function AdminPlanEditor({
     setSelectedId(null)
     setTool('draw')
     syncCurrentPts([])
-    toast('Narysuj nowy polygon, potem dwukliknij aby zamknąć')
+    toast('Draw a new polygon, then double-click to close')
   }
 
   // ── DB: assign polygon to stage (stage mode) ─────────────────────────────
@@ -509,7 +509,7 @@ export default function AdminPlanEditor({
       setPendingPts(null); setNewStageId('')
       onStagesChange?.()
       toast.success(`Przypisano: ${stage.name}`)
-    } catch { toast.error('Błąd przypisywania etapu') }
+    } catch { toast.error('Error assigning stage') }
     setCreating(false)
   }
 
@@ -521,7 +521,7 @@ export default function AdminPlanEditor({
       // In stage mode on the canvas, just remove polygon from SVG (don't delete the stage itself)
       setDrawUnits(prev => { const next = prev.filter(u => u.id !== dbId); autoSaveSvg(next); return next })
       setSelectedId(null)
-      toast('Usunięto polygon etapu')
+      toast('Stage polygon deleted')
       return
     }
     setDeleteIsUnit(false)
@@ -546,7 +546,7 @@ export default function AdminPlanEditor({
     }
     setDeleteConfirm(null)
     setDeleteIsUnit(false)
-    toast('Usunięto działkę')
+    toast('Plot deleted')
   }, [deleteConfirm, deleteIsUnit, autoSaveSvg, stageMode])
 
   // ── DB: save edit form ────────────────────────────────────────────────────
@@ -588,7 +588,7 @@ export default function AdminPlanEditor({
       setDrawUnits(prev => prev.map(u => u.id === editId ? { ...u, ...body } : u))
     }
     setSavingUnit(false)
-    toast.success('Zapisano')
+    toast.success('Saved')
   }
 
   // ── DB: add blank unit (no polygon) ───────────────────────────────────────
@@ -597,7 +597,7 @@ export default function AdminPlanEditor({
     setAddingUnit(true)
     const existingUnits = stageMode ? unitList : drawUnits
     const idx = existingUnits.length + 1
-    const label = `Działka ${idx}`
+    const label = `Plot ${idx}`
     const baseId = sanitizeId(label)
     const ids = [...drawUnits.map(u => u.svgElementId), ...unitList.map(u => u.svgElementId)]
     let svgId = baseId
@@ -632,8 +632,8 @@ export default function AdminPlanEditor({
         setEditForm(unitToForm(nu))
         setTool('select')
       }
-      toast.success(`Dodano: ${label} — uzupełnij dane i narysuj polygon później`)
-    } catch { toast.error('Błąd tworzenia działki') }
+      toast.success(`Added: ${label} — fill in the details and draw the polygon later`)
+    } catch { toast.error('Error creating plot') }
     setAddingUnit(false)
   }
 
@@ -673,7 +673,7 @@ export default function AdminPlanEditor({
       setImgSrc(url)
       onPlanImageChange?.(url)
       toast.success('Plan wgrany')
-    } catch { toast.error('Błąd wgrywania') }
+    } catch { toast.error('Upload error') }
     setUploadingImg(false); e.target.value = ''
   }
 
@@ -686,7 +686,7 @@ export default function AdminPlanEditor({
       if (vb?.length === 4 && vb[2] > 0) setImgSize({ w: vb[2], h: vb[3] })
 
       const polys   = parseSvgPolygons(importText)
-      if (!polys.length) { toast.error('Nie znaleziono polygonów'); return }
+      if (!polys.length) { toast.error('No polygons found'); return }
 
       const existing = new Set(drawUnits.map(u => u.svgElementId))
       const news     = polys.filter(p => !existing.has(p.id))
@@ -710,10 +710,10 @@ export default function AdminPlanEditor({
       }
       if (added.length) {
         setDrawUnits(prev => { const next = [...prev, ...added]; autoSaveSvg(next); return next })
-        toast.success(`Zaimportowano ${added.length} działek`)
+        toast.success(`Imported ${added.length} plots`)
       }
       setShowImport(false); setImportText('')
-    } catch { toast.error('Błąd importu') }
+    } catch { toast.error('Import error') }
   }
 
   // ── Viewport events ───────────────────────────────────────────────────────
@@ -843,7 +843,7 @@ export default function AdminPlanEditor({
 
         <Button variant="outline" size="sm" className="h-8" onClick={() => fileRef.current?.click()} disabled={uploadingImg}>
           {uploadingImg ? <Loader2 className="h-3.5 w-3.5 mr-1 animate-spin" /> : <Upload className="h-3.5 w-3.5 mr-1" />}
-          {imgSrc ? 'Zmień plan' : 'Wgraj plan'}
+          {imgSrc ? 'Change plan' : 'Upload plan'}
         </Button>
         <input ref={fileRef} type="file" accept="image/jpeg,image/png,image/webp" className="hidden" onChange={onImgUpload} />
 
@@ -861,10 +861,10 @@ export default function AdminPlanEditor({
         <div className="h-5 w-px bg-gray-200 mx-1" />
         <Button variant="outline" size="sm" className="h-8" onClick={addBlankUnit} disabled={addingUnit}>
           {addingUnit ? <Loader2 className="h-3.5 w-3.5 mr-1 animate-spin" /> : <Plus className="h-3.5 w-3.5 mr-1" />}
-          Dodaj Działkę
+          Add plot
         </Button>
 
-        <span className="ml-auto text-xs text-gray-400 tabular-nums">{stageMode ? `${unitList.length} działek · ${drawUnits.length} etapów` : `${drawUnits.length} działek`}</span>
+        <span className="ml-auto text-xs text-gray-400 tabular-nums">{stageMode ? `${unitList.length} plots · ${drawUnits.length} stages` : `${drawUnits.length} plots`}</span>
       </div>
 
       {/* ── Main ── */}
@@ -951,8 +951,8 @@ export default function AdminPlanEditor({
                 style={{ width: 600, height: 400 }} onClick={() => fileRef.current?.click()}>
                 <Upload className="h-10 w-10 text-gray-300" />
                 <div className="text-center">
-                  <p className="font-semibold text-gray-600">Wgraj plan sytuacyjny (JPG/PNG)</p>
-                  <p className="text-sm mt-1 text-gray-400">Kliknij tutaj lub użyj przycisku „Wgraj plan"</p>
+                  <p className="font-semibold text-gray-600">Upload plan sytuacyjny (JPG/PNG)</p>
+                  <p className="text-sm mt-1 text-gray-400">Click here or use the “Upload plan” button</p>
                 </div>
               </div>
             )}
@@ -970,13 +970,13 @@ export default function AdminPlanEditor({
                 <>
                   <p className="text-xs font-semibold text-gray-700 mb-2 uppercase tracking-wide">Przypisz do etapu</p>
                   <Select value={newStageId} onValueChange={setNewStageId}>
-                    <SelectTrigger className="h-8 text-xs"><SelectValue placeholder="Wybierz etap" /></SelectTrigger>
+                    <SelectTrigger className="h-8 text-xs"><SelectValue placeholder="Select stage" /></SelectTrigger>
                     <SelectContent>
                       {stages.filter(s => !drawUnits.some(u => u.id === s.id)).map(s => (
                         <SelectItem key={s.id} value={s.id} className="text-xs">{s.name}</SelectItem>
                       ))}
                       {stages.filter(s => drawUnits.some(u => u.id === s.id)).map(s => (
-                        <SelectItem key={s.id} value={s.id} className="text-xs text-gray-400">{s.name} (zastąp)</SelectItem>
+                        <SelectItem key={s.id} value={s.id} className="text-xs text-gray-400">{s.name} (replace)</SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
@@ -998,7 +998,7 @@ export default function AdminPlanEditor({
                   <div className="flex gap-2">
                     <Button size="sm" className="flex-1 h-7" onClick={confirmPolygon} disabled={creating}
                       style={{ backgroundColor: '#6E2E2A', color: 'white' }}>
-                      <Check className="h-3.5 w-3.5 mr-1" /> Zatwierdź
+                      <Check className="h-3.5 w-3.5 mr-1" /> Confirm
                     </Button>
                     <Button size="sm" variant="outline" className="h-7 px-2" onClick={() => { setPendingPts(null); setRedrawingUnitId(null) }}>
                       <X className="h-3.5 w-3.5" />
@@ -1013,9 +1013,9 @@ export default function AdminPlanEditor({
                     if (unassigned.length === 0) return null
                     return (
                       <div className="mb-3 pb-3 border-b">
-                        <p className="text-xs font-semibold text-gray-700 mb-2 uppercase tracking-wide">Przypisz istniejącą</p>
+                        <p className="text-xs font-semibold text-gray-700 mb-2 uppercase tracking-wide">Assign existing</p>
                         <Select value={attachExistingId} onValueChange={setAttachExistingId}>
-                          <SelectTrigger className="h-8 text-xs"><SelectValue placeholder="Wybierz działkę..." /></SelectTrigger>
+                          <SelectTrigger className="h-8 text-xs"><SelectValue placeholder="Select plot..." /></SelectTrigger>
                           <SelectContent>
                             {unassigned.map(u => (
                               <SelectItem key={u.id} value={u.id} className="text-xs">
@@ -1038,7 +1038,7 @@ export default function AdminPlanEditor({
                   })()}
 
                   {/* Or create new unit */}
-                  <p className="text-xs font-semibold text-gray-700 mb-2 uppercase tracking-wide">Lub utwórz nową</p>
+                  <p className="text-xs font-semibold text-gray-700 mb-2 uppercase tracking-wide">Or create a new one</p>
                   <Input ref={labelRef} value={newLabel} onChange={e => setNewLabel(e.target.value)}
                     placeholder="np. Dom 1" className="h-8 text-sm"
                     onKeyDown={e => { if (e.key === 'Enter') confirmPolygon(); if (e.key === 'Escape') { setPendingPts(null); setNewLabel(''); setNewHouseTypeId(''); setAttachExistingId('') } }} />
@@ -1046,7 +1046,7 @@ export default function AdminPlanEditor({
                     <div className="mt-2">
                       <p className="text-xs text-gray-500 mb-1">Typ domu</p>
                       <Select value={newHouseTypeId} onValueChange={setNewHouseTypeId}>
-                        <SelectTrigger className="h-8 text-xs"><SelectValue placeholder="Wybierz typ" /></SelectTrigger>
+                        <SelectTrigger className="h-8 text-xs"><SelectValue placeholder="Select typ" /></SelectTrigger>
                         <SelectContent>
                           {houseTypes.map(ht => (
                             <SelectItem key={ht.id} value={ht.id} className="text-xs">{ht.name}</SelectItem>
@@ -1080,9 +1080,9 @@ export default function AdminPlanEditor({
           {tool === 'draw' && imgSrc && !pendingPts && (
             <div className="absolute bottom-2 left-1/2 -translate-x-1/2 bg-black/50 text-white text-xs px-3 py-1 rounded-full pointer-events-none whitespace-nowrap">
               {currentPts.length === 0
-                ? (stageMode ? 'Rysuj obszar etapu · Scroll = zoom · Spacja+LPM = przesuń' : 'Kliknij, aby zacząć · Scroll = zoom · Spacja+LPM = przesuń')
-                : currentPts.length < 3 ? `Dodaj punkt (${currentPts.length}/3 min) · Esc = anuluj`
-                : 'Kliknij pierwszy punkt lub dwukliknij, aby zamknąć'}
+                ? (stageMode ? 'Draw the stage area · Scroll = zoom · Space+LMB = pan' : 'Click to start · Scroll = zoom · Space+LMB = pan')
+                : currentPts.length < 3 ? `Add punkt (${currentPts.length}/3 min) · Esc = cancel`
+                : 'Click the first point or double-click to close'}
             </div>
           )}
         </div>
@@ -1091,10 +1091,10 @@ export default function AdminPlanEditor({
         {activeEditUnit && (
           <div className="bg-white border-t flex-shrink-0">
             <div className="px-4 py-2 border-b flex items-center justify-between bg-blue-50">
-              <p className="text-xs font-bold text-blue-700 uppercase tracking-wide">Edytuj: {activeEditUnit.label}</p>
+              <p className="text-xs font-bold text-blue-700 uppercase tracking-wide">Edit: {activeEditUnit.label}</p>
               <div className="flex items-center gap-2">
                 <Button size="sm" className="h-7" onClick={saveEditForm} disabled={savingUnit} style={{ backgroundColor: '#6E2E2A', color: 'white' }}>
-                  {savingUnit ? <Loader2 className="h-3 w-3 animate-spin mr-1" /> : <Save className="h-3 w-3 mr-1" />} Zapisz
+                  {savingUnit ? <Loader2 className="h-3 w-3 animate-spin mr-1" /> : <Save className="h-3 w-3 mr-1" />} Save
                 </Button>
                 {!stageMode && (
                   <Button size="sm" variant="outline" className="h-7" onClick={() => startRedraw(activeEditUnit.id)} title="Przerysuj polygon">
@@ -1110,7 +1110,7 @@ export default function AdminPlanEditor({
             <div className="p-3">
               <div className="grid grid-cols-5 md:grid-cols-6 lg:grid-cols-7 xl:grid-cols-8 gap-2">
                 <div>
-                  <Label className="text-xs">Etykieta</Label>
+                  <Label className="text-xs">Label</Label>
                   <Input value={editForm.label} onChange={e => setEditForm(f => ({ ...f, label: e.target.value }))} className="h-7 text-xs mt-1" />
                 </div>
                 <div>
@@ -1125,14 +1125,14 @@ export default function AdminPlanEditor({
                   </Select>
                 </div>
                 <div>
-                  <Label className="text-xs">Budynek</Label>
+                  <Label className="text-xs">Building</Label>
                   <Input value={editForm.buildingLabel} onChange={e => setEditForm(f => ({ ...f, buildingLabel: e.target.value }))} className="h-7 text-xs mt-1" placeholder="G" />
                 </div>
                 {houseTypes.length > 0 && (
                   <div>
                     <Label className="text-xs">Typ domu</Label>
                     <Select value={editForm.houseTypeId || 'none'} onValueChange={v => setEditForm(f => ({ ...f, houseTypeId: v === 'none' ? '' : v }))}>
-                      <SelectTrigger className="h-7 text-xs mt-1"><SelectValue placeholder="Wybierz" /></SelectTrigger>
+                      <SelectTrigger className="h-7 text-xs mt-1"><SelectValue placeholder="Select" /></SelectTrigger>
                       <SelectContent>
                         <SelectItem value="none">— brak —</SelectItem>
                         {houseTypes.map(ht => (
@@ -1149,20 +1149,20 @@ export default function AdminPlanEditor({
                   <div className="h-7 text-xs mt-1 px-2 flex items-center rounded-md border bg-muted text-muted-foreground font-medium">
                     {(() => {
                       const ta = houseTypes.find(ht => ht.id === editForm.houseTypeId)?.totalArea
-                      return ta != null ? `${ta} m²` : (editForm.houseTypeId ? '—' : 'Wybierz typ domu')
+                      return ta != null ? `${ta} m²` : (editForm.houseTypeId ? '—' : 'Select typ domu')
                     })()}
                   </div>
                 </div>
                 {[
-                  ['gardenArea',   'Ogród m²',     'number', '200'],
-                  ['rooms',        'Pokoje',       'number', '4'  ],
-                  ['floors',       'Piętra',       'number', '2'  ],
-                  ['floor',        'Piętro',       'text',   'Parter'],
-                  ['price',        'Cena PLN',     'number', '1050000'],
+                  ['gardenArea',   'Garden m²',     'number', '200'],
+                  ['rooms',        'Rooms',       'number', '4'  ],
+                  ['floors',       'Floors',       'number', '2'  ],
+                  ['floor',        'Floor',       'text',   'Parter'],
+                  ['price',        'Price PLN',     'number', '1050000'],
                   ['parkingPrice', 'Parking PLN',  'number', '35000'],
-                  ['storagePrice', 'Komórka PLN',  'number', '15000'],
+                  ['storagePrice', 'Storage €',  'number', '15000'],
                   ['rightsPrice',  'Prawa PLN',    'number', '0'],
-                  ['otherPrice',   'Ogródek PLN',  'number', '0'],
+                  ['otherPrice',   'Gardenek PLN',  'number', '0'],
                 ].map(([key, lbl, type, ph]) => (
                   <div key={key}>
                     <Label className="text-xs">{lbl}</Label>
@@ -1172,17 +1172,17 @@ export default function AdminPlanEditor({
                   </div>
                 ))}
                 <div>
-                  <Label className="text-xs text-muted-foreground">Cena pełna</Label>
+                  <Label className="text-xs text-muted-foreground">Full price</Label>
                   <div className="h-7 text-xs mt-1 px-2 flex items-center rounded-md border bg-muted text-muted-foreground font-medium">
                     {editForm.price
-                      ? ((parseInt(editForm.price) || 0) + (parseInt(editForm.parkingPrice) || 0) + (parseInt(editForm.storagePrice) || 0) + (parseInt(editForm.rightsPrice) || 0) + (parseInt(editForm.otherPrice) || 0)).toLocaleString('pl-PL') + ' PLN'
+                      ? ((parseInt(editForm.price) || 0) + (parseInt(editForm.parkingPrice) || 0) + (parseInt(editForm.storagePrice) || 0) + (parseInt(editForm.rightsPrice) || 0) + (parseInt(editForm.otherPrice) || 0)).toLocaleString('de-DE') + ' PLN'
                       : '—'}
                   </div>
                 </div>
                 {[
-                  ['partsType',  'Części - typ',    'Parking'],
-                  ['partsLabel', 'Części - ozn.',   'P1'],
-                  ['roomsType',  'Pomieszcz. - typ','Komórka lokatorska'],
+                  ['partsType',  'Parts - type',    'Parking'],
+                  ['partsLabel', 'Parts - label',   'P1'],
+                  ['roomsType',  'Pomieszcz. - typ','Storage room'],
                   ['roomsLabel', 'Pomieszcz. - ozn.','K1'],
                   ['rightsDesc', 'Prawa - opis',    ''],
                   ['otherDesc',  'Inne - opis',     ''],
@@ -1211,7 +1211,7 @@ export default function AdminPlanEditor({
                     onClick={() => setBottomTab('units')}
                     className={`px-3 py-1 rounded text-sm font-medium transition-colors ${bottomTab === 'units' ? 'bg-gray-900 text-white' : 'hover:bg-gray-100 text-gray-600'}`}
                   >
-                    Działki ({unitList.length})
+                    Plots ({unitList.length})
                   </button>
                   <button
                     onClick={() => setBottomTab('stages')}
@@ -1222,7 +1222,7 @@ export default function AdminPlanEditor({
                 </div>
               ) : (
                 <h3 className="font-semibold text-sm text-gray-800">
-                  Działki ({drawUnits.length})
+                  Plots ({drawUnits.length})
                 </h3>
               )}
             </div>
@@ -1232,7 +1232,7 @@ export default function AdminPlanEditor({
               {stageMode && bottomTab === 'stages' && (
                 drawUnits.length === 0 ? (
                   <div className="flex flex-col items-center justify-center h-full text-gray-400 text-sm gap-1">
-                    <p>Brak przypisanych etapów</p>
+                    <p>No stages assigned</p>
                     <p className="text-xs">Narysuj polygony na planie</p>
                   </div>
                 ) : (
@@ -1257,8 +1257,8 @@ export default function AdminPlanEditor({
               {stageMode && bottomTab === 'units' && (
                 unitList.length === 0 ? (
                   <div className="flex flex-col items-center justify-center h-full text-gray-400 text-sm gap-1">
-                    <p>Brak działek</p>
-                    <p className="text-xs">Użyj „Dodaj Działkę" aby dodać</p>
+                    <p>No plots</p>
+                    <p className="text-xs">Use “Add plot” to add</p>
                   </div>
                 ) : (
                   <div className="divide-y">
@@ -1293,7 +1293,7 @@ export default function AdminPlanEditor({
               {!stageMode && (
                 drawUnits.length === 0 ? (
                   <div className="flex flex-col items-center justify-center h-full text-gray-400 text-sm gap-1">
-                    <p>Brak działek</p>
+                    <p>No plots</p>
                     <p className="text-xs">Narysuj polygony na planie</p>
                   </div>
                 ) : (
@@ -1346,7 +1346,7 @@ export default function AdminPlanEditor({
               <Button onClick={handleImportSvg} style={{ backgroundColor: '#6E2E2A', color: 'white' }}>
                 <FileUp className="h-4 w-4 mr-1.5" /> Importuj
               </Button>
-              <Button variant="outline" onClick={() => { setShowImport(false); setImportText('') }}>Anuluj</Button>
+              <Button variant="outline" onClick={() => { setShowImport(false); setImportText('') }}>Cancel</Button>
             </div>
           </div>
         </div>
@@ -1355,15 +1355,15 @@ export default function AdminPlanEditor({
       {deleteConfirm && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setDeleteConfirm(null)}>
           <div className="bg-white rounded-xl shadow-2xl w-[400px] p-6 mx-4" onClick={e => e.stopPropagation()}>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">Usunąć działkę?</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">Delete plot?</h3>
             <p className="text-sm text-gray-500 mb-1">
-              Działka <strong>{(drawUnits.find(u => u.id === deleteConfirm) || unitList.find(u => u.id === deleteConfirm))?.label}</strong> zostanie trwale usunięta wraz z historią cen.
+              Plot <strong>{(drawUnits.find(u => u.id === deleteConfirm) || unitList.find(u => u.id === deleteConfirm))?.label}</strong> will be permanently deleted along with its price history.
             </p>
-            <p className="text-sm text-red-600 mb-4">Tej operacji nie można cofnąć.</p>
+            <p className="text-sm text-red-600 mb-4">This action cannot be undone.</p>
             <div className="flex gap-2 justify-end">
-              <Button variant="outline" onClick={() => setDeleteConfirm(null)}>Anuluj</Button>
+              <Button variant="outline" onClick={() => setDeleteConfirm(null)}>Cancel</Button>
               <Button variant="destructive" onClick={confirmDeleteUnit}>
-                <Trash2 className="h-4 w-4 mr-1.5" /> Usuń działkę
+                <Trash2 className="h-4 w-4 mr-1.5" /> Delete plot
               </Button>
             </div>
           </div>

@@ -80,7 +80,7 @@ export function HouseTypesManager({ projectId, initialHouseTypes }: Props) {
   }
 
   const handleDeleteType = async (id: string) => {
-    if (!confirm('Usuń typ domu i wszystkie jego plany?')) return
+    if (!confirm('Delete typ domu i wszystkie jego plany?')) return
     await fetch(`/api/admin/house-types/${id}`, { method: 'DELETE' })
     setHouseTypes((prev) => prev.filter((t) => t.id !== id))
   }
@@ -112,7 +112,7 @@ export function HouseTypesManager({ projectId, initialHouseTypes }: Props) {
   }
 
   const handleDeleteFloor = async (houseTypeId: string, floorId: string) => {
-    if (!confirm('Usuń to piętro?')) return
+    if (!confirm('Delete this floor?')) return
     await fetch(`/api/admin/floor-plans/${floorId}`, { method: 'DELETE' })
     setHouseTypes((prev) =>
       prev.map((t) =>
@@ -151,7 +151,7 @@ export function HouseTypesManager({ projectId, initialHouseTypes }: Props) {
         )
       )
     } catch {
-      alert('Błąd uploadu')
+      alert('Upload error')
     }
     setUploading(null)
   }
@@ -329,7 +329,7 @@ export function HouseTypesManager({ projectId, initialHouseTypes }: Props) {
     })
     setReordering(null)
     if (!res.ok) {
-      alert('Nie udało się zmienić kolejności pomieszczeń')
+      alert('Failed to reorder rooms')
       return
     }
     // Reflect the swap locally: positions swap and the two numbers swap with them.
@@ -357,7 +357,7 @@ export function HouseTypesManager({ projectId, initialHouseTypes }: Props) {
     const ht = houseTypes.find(t => t.id === houseTypeId)
     const fp = ht?.floorPlans.find(f => f.id === floorPlanId)
     if (!fp || fp.rooms.length === 0) return
-    if (!confirm('Przenumerować pomieszczenia tej kondygnacji na 1…N według obecnej kolejności?')) return
+    if (!confirm('Renumber this floor’s rooms to 1…N by current order?')) return
     const orderedIds = fp.rooms.map(r => r.id)
     setReordering(floorPlanId)
     const res = await fetch('/api/admin/rooms/reorder', {
@@ -367,7 +367,7 @@ export function HouseTypesManager({ projectId, initialHouseTypes }: Props) {
     })
     setReordering(null)
     if (!res.ok) {
-      alert('Nie udało się przenumerować pomieszczeń')
+      alert('Failed to renumber rooms')
       return
     }
     setHouseTypes(prev =>
@@ -408,17 +408,17 @@ export function HouseTypesManager({ projectId, initialHouseTypes }: Props) {
     <Card>
       <CardHeader>
         <div className="flex items-center justify-between">
-          <CardTitle>Typy domów ({houseTypes.length})</CardTitle>
+          <CardTitle>House types ({houseTypes.length})</CardTitle>
           <Button size="sm" onClick={() => setShowAddType(true)} style={{ backgroundColor: '#6E2E2A' }}>
             <Plus className="h-4 w-4 mr-1.5" />
-            Dodaj typ
+            Add typ
           </Button>
         </div>
       </CardHeader>
       <CardContent>
         {houseTypes.length === 0 ? (
           <p className="text-center py-8 text-gray-400 text-sm">
-            Brak typów domów. Dodaj pierwszy typ.
+            No house types. Add the first type.
           </p>
         ) : (
           <div className="space-y-3">
@@ -438,9 +438,9 @@ export function HouseTypesManager({ projectId, initialHouseTypes }: Props) {
                     <span className="font-medium">{type.name}</span>
                     <span
                       className="text-sm text-gray-500"
-                      title="Suma powierzchni pomieszczeń (wyliczana automatycznie)"
+                      title="Sum of room areas (calculated automatically)"
                     >
-                      {type.totalArea != null ? `${type.totalArea} m² łącznie` : '— m²'}
+                      {type.totalArea != null ? `${type.totalArea} m² total` : '— m²'}
                     </span>
                     <span className="text-xs text-gray-400">
                       {type.floorPlans.length} {type.floorPlans.length === 1 ? 'kondygnacja' : 'kondygnacje'}
@@ -467,7 +467,7 @@ export function HouseTypesManager({ projectId, initialHouseTypes }: Props) {
                           <div className="flex items-center gap-2">
                             <span
                               className="text-xs text-gray-500"
-                              title="Suma powierzchni pomieszczeń tej kondygnacji (wyliczana automatycznie)"
+                              title="Sum of this floor’s room areas (calculated automatically)"
                             >
                               {floor.area != null ? `${floor.area} m²` : '— m²'}
                             </span>
@@ -516,7 +516,7 @@ export function HouseTypesManager({ projectId, initialHouseTypes }: Props) {
                                   ) : (
                                     <>
                                       <ImageIcon className="h-6 w-6 text-gray-300 mb-1" />
-                                      <span className="text-xs text-gray-400">Kliknij aby dodać</span>
+                                      <span className="text-xs text-gray-400">Click to add</span>
                                     </>
                                   )}
                                   <input
@@ -626,7 +626,7 @@ export function HouseTypesManager({ projectId, initialHouseTypes }: Props) {
                                         className="h-6 w-6 p-0 text-gray-400 hover:text-gray-700 disabled:opacity-30"
                                         disabled={roomIdx === 0 || reordering === room.id}
                                         onClick={() => handleMoveRoom(type.id, floor.id, room.id, 'up')}
-                                        title="Przesuń w górę"
+                                        title="Move up"
                                       >
                                         <ArrowUp className="h-3 w-3" />
                                       </Button>
@@ -636,7 +636,7 @@ export function HouseTypesManager({ projectId, initialHouseTypes }: Props) {
                                         className="h-6 w-6 p-0 text-gray-400 hover:text-gray-700 disabled:opacity-30"
                                         disabled={roomIdx === floor.rooms.length - 1 || reordering === room.id}
                                         onClick={() => handleMoveRoom(type.id, floor.id, room.id, 'down')}
-                                        title="Przesuń w dół"
+                                        title="Move down"
                                       >
                                         <ArrowDown className="h-3 w-3" />
                                       </Button>
@@ -663,7 +663,7 @@ export function HouseTypesManager({ projectId, initialHouseTypes }: Props) {
                             onClick={() => setShowAddRoom(floor.id)}
                           >
                             <Plus className="h-3 w-3 mr-1" />
-                            Dodaj pomieszczenie
+                            Add pomieszczenie
                           </Button>
                           {floor.rooms.length > 0 && (
                             <Button
@@ -672,7 +672,7 @@ export function HouseTypesManager({ projectId, initialHouseTypes }: Props) {
                               className="text-xs text-gray-500"
                               disabled={reordering === floor.id}
                               onClick={() => handleRenumberFloor(type.id, floor.id)}
-                              title="Ustaw numery 1…N według obecnej kolejności"
+                              title="Set numbers 1…N by current order"
                             >
                               Przenumeruj 1…N
                             </Button>
@@ -683,12 +683,12 @@ export function HouseTypesManager({ projectId, initialHouseTypes }: Props) {
                         <Dialog open={showAddRoom === floor.id} onOpenChange={(o) => !o && setShowAddRoom(null)}>
                           <DialogContent>
                             <DialogHeader>
-                              <DialogTitle>Dodaj pomieszczenie — {floor.name}</DialogTitle>
+                              <DialogTitle>Add pomieszczenie — {floor.name}</DialogTitle>
                             </DialogHeader>
                             <form onSubmit={(e) => handleAddRoom(e, floor.id, type.id)}>
                               <div className="grid grid-cols-2 gap-4 py-4">
                                 <div className="col-span-2 space-y-2">
-                                  <Label>Nazwa pomieszczenia *</Label>
+                                  <Label>Name pomieszczenia *</Label>
                                   <Input
                                     value={newRoom.name}
                                     onChange={(e) => setNewRoom((p) => ({ ...p, name: e.target.value }))}
@@ -697,7 +697,7 @@ export function HouseTypesManager({ projectId, initialHouseTypes }: Props) {
                                   />
                                 </div>
                                 <div className="space-y-2">
-                                  <Label>Powierzchnia m²</Label>
+                                  <Label>Area m²</Label>
                                   <Input
                                     type="number"
                                     step="0.01"
@@ -707,7 +707,7 @@ export function HouseTypesManager({ projectId, initialHouseTypes }: Props) {
                                   />
                                 </div>
                                 <div className="space-y-2">
-                                  <Label>Numer</Label>
+                                  <Label>Number</Label>
                                   <Input
                                     type="number"
                                     step="1"
@@ -720,10 +720,10 @@ export function HouseTypesManager({ projectId, initialHouseTypes }: Props) {
                               </div>
                               <DialogFooter>
                                 <Button type="button" variant="outline" onClick={() => setShowAddRoom(null)}>
-                                  Anuluj
+                                  Cancel
                                 </Button>
                                 <Button type="submit" style={{ backgroundColor: '#6E2E2A' }}>
-                                  Dodaj
+                                  Add
                                 </Button>
                               </DialogFooter>
                             </form>
@@ -740,36 +740,36 @@ export function HouseTypesManager({ projectId, initialHouseTypes }: Props) {
                       className="w-full"
                     >
                       <Plus className="h-4 w-4 mr-1.5" />
-                      Dodaj kondygnację
+                      Add floor
                     </Button>
 
                     {/* Add floor dialog */}
                     <Dialog open={showAddFloor === type.id} onOpenChange={(o) => !o && setShowAddFloor(null)}>
                       <DialogContent>
                         <DialogHeader>
-                          <DialogTitle>Dodaj kondygnację — {type.name}</DialogTitle>
+                          <DialogTitle>Add floor — {type.name}</DialogTitle>
                         </DialogHeader>
                         <form onSubmit={(e) => handleAddFloor(e, type.id)}>
                           <div className="grid grid-cols-2 gap-4 py-4">
                             <div className="col-span-2 space-y-2">
-                              <Label>Nazwa *</Label>
+                              <Label>Name *</Label>
                               <Input
                                 value={newFloor.name}
                                 onChange={(e) => setNewFloor((p) => ({ ...p, name: e.target.value }))}
-                                placeholder="np. Parter, Piętro"
+                                placeholder="np. Parter, Floor"
                                 required
                               />
                             </div>
                             <p className="col-span-2 text-xs text-gray-400">
-                              Powierzchnia kondygnacji wyliczy się automatycznie z sumy pomieszczeń.
+                              The floor area is calculated automatically from the sum of rooms.
                             </p>
                           </div>
                           <DialogFooter>
                             <Button type="button" variant="outline" onClick={() => setShowAddFloor(null)}>
-                              Anuluj
+                              Cancel
                             </Button>
                             <Button type="submit" style={{ backgroundColor: '#6E2E2A' }}>
-                              Dodaj
+                              Add
                             </Button>
                           </DialogFooter>
                         </form>
@@ -786,12 +786,12 @@ export function HouseTypesManager({ projectId, initialHouseTypes }: Props) {
         <Dialog open={showAddType} onOpenChange={setShowAddType}>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Dodaj typ domu</DialogTitle>
+              <DialogTitle>Add typ domu</DialogTitle>
             </DialogHeader>
             <form onSubmit={handleAddType}>
               <div className="grid grid-cols-2 gap-4 py-4">
                 <div className="col-span-2 space-y-2">
-                  <Label>Nazwa *</Label>
+                  <Label>Name *</Label>
                   <Input
                     value={newType.name}
                     onChange={(e) => setNewType((p) => ({ ...p, name: e.target.value }))}
@@ -800,15 +800,15 @@ export function HouseTypesManager({ projectId, initialHouseTypes }: Props) {
                   />
                 </div>
                 <p className="col-span-2 text-xs text-gray-400">
-                  Łączna powierzchnia wyliczy się automatycznie z sumy pomieszczeń po dodaniu kondygnacji i pokoi.
+                  The total area is calculated automatically from the sum of rooms once floors and rooms are added.
                 </p>
               </div>
               <DialogFooter>
                 <Button type="button" variant="outline" onClick={() => setShowAddType(false)}>
-                  Anuluj
+                  Cancel
                 </Button>
                 <Button type="submit" style={{ backgroundColor: '#6E2E2A' }}>
-                  Utwórz
+                  Create
                 </Button>
               </DialogFooter>
             </form>

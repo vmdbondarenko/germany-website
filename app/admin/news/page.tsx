@@ -24,13 +24,13 @@ export default async function NewsAdminPage() {
     <div>
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-serif font-bold text-gray-900">Aktualności</h1>
-          <p className="text-gray-500 mt-1">Zarządzaj wpisami na stronie aktualności</p>
+          <h1 className="text-3xl font-serif font-bold text-gray-900">News</h1>
+          <p className="text-gray-500 mt-1">Manage news posts</p>
         </div>
         <Link href="/admin/news/new">
           <Button style={{ backgroundColor: '#6E2E2A' }}>
             <Plus className="h-4 w-4 mr-2" />
-            Dodaj wpis
+            Add post
           </Button>
         </Link>
       </div>
@@ -38,7 +38,7 @@ export default async function NewsAdminPage() {
       {posts.length === 0 ? (
         <div className="text-center py-20 text-gray-400">
           <Newspaper className="h-12 w-12 mx-auto mb-4 opacity-50" />
-          <p className="text-lg">Brak wpisów. Dodaj pierwszy!</p>
+          <p className="text-lg">No posts yet. Add the first one!</p>
         </div>
       ) : (
         <div className="space-y-4">
@@ -60,7 +60,7 @@ export default async function NewsAdminPage() {
                     <div className="flex items-center gap-2 mb-1">
                       <span className="font-semibold text-gray-900 truncate">{post.title}</span>
                       <Badge variant={post.published ? 'default' : 'secondary'}>
-                        {post.published ? 'Opublikowany' : 'Szkic'}
+                        {post.published ? 'Published' : 'Draft'}
                       </Badge>
                     </div>
                     {post.description && (
@@ -84,7 +84,7 @@ export default async function NewsAdminPage() {
                     <Link href={`/admin/news/${post.id}`}>
                       <Button variant="outline" size="sm">
                         <Pencil className="h-3.5 w-3.5 mr-1.5" />
-                        Edytuj
+                        Edit
                       </Button>
                     </Link>
                   </div>

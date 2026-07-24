@@ -76,7 +76,7 @@ export default function NewNewsPage() {
       router.push(`/admin/news/${post.id}`)
     } else {
       const data = await res.json()
-      setError(data.error || 'Wystąpił błąd')
+      setError(data.error || 'An error occurred')
       setLoading(false)
     }
   }
@@ -87,10 +87,10 @@ export default function NewNewsPage() {
         <Link href="/admin/news">
           <Button variant="ghost" size="sm">
             <ArrowLeft className="h-4 w-4 mr-1.5" />
-            Powrót
+            Back
           </Button>
         </Link>
-        <h1 className="text-3xl font-serif font-bold text-gray-900">Nowy wpis</h1>
+        <h1 className="text-3xl font-serif font-bold text-gray-900">New post</h1>
       </div>
 
       <form onSubmit={handleSubmit}>
@@ -98,7 +98,7 @@ export default function NewNewsPage() {
           <div className="lg:col-span-2 space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle>Informacje podstawowe</CardTitle>
+                <CardTitle>Basic information</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -156,7 +156,7 @@ export default function NewNewsPage() {
 
             <Card>
               <CardHeader>
-                <CardTitle>Zdjęcie główne (cover)</CardTitle>
+                <CardTitle>Main image (cover)</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-center gap-3">
@@ -170,7 +170,7 @@ export default function NewNewsPage() {
                   <Upload className="h-4 w-4 text-gray-400 flex-shrink-0" />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="coverImageUrl">lub URL zdjęcia</Label>
+                  <Label htmlFor="coverImageUrl">or image URL</Label>
                   <Input
                     id="coverImageUrl"
                     value={form.coverImageUrl}
@@ -181,7 +181,7 @@ export default function NewNewsPage() {
                 {form.coverImageUrl && (
                   <img
                     src={form.coverImageUrl}
-                    alt="Podgląd"
+                    alt="Preview"
                     className="rounded-lg max-h-48 object-cover"
                   />
                 )}
@@ -190,7 +190,7 @@ export default function NewNewsPage() {
 
             <Card>
               <CardHeader>
-                <CardTitle>Treść wpisu — paragrafy i dodatkowe zdjęcia</CardTitle>
+                <CardTitle>Post content — paragraphs and extra images</CardTitle>
               </CardHeader>
               <CardContent>
                 <NewsBlocksEditor blocks={blocks} onChange={setBlocks} postSlug={form.slug || slugify(form.title)} />
@@ -213,7 +213,7 @@ export default function NewNewsPage() {
                     onChange={(e) => setForm((p) => ({ ...p, publishedAt: e.target.value }))}
                   />
                   <p className="text-xs text-gray-500">
-                    Przydatne przy migracji starszych wpisów.
+                    Useful when migrating older posts.
                   </p>
                 </div>
                 <div className="flex items-center gap-3">
@@ -242,7 +242,7 @@ export default function NewNewsPage() {
               style={{ backgroundColor: '#6E2E2A' }}
             >
               <Save className="h-4 w-4 mr-2" />
-              {loading ? 'Zapisywanie...' : 'Utwórz wpis'}
+              {loading ? 'Saving...' : 'Create post'}
             </Button>
           </div>
         </div>

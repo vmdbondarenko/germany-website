@@ -27,12 +27,12 @@ async function uploadImage(file: File, name?: string): Promise<string> {
 
 const ICON_OPTIONS: Array<{ name: string; label: string; Icon: React.ComponentType<{ className?: string }> }> = [
   { name: 'Clock', label: 'Zegar', Icon: Clock },
-  { name: 'Zap', label: 'Błyskawica', Icon: Zap },
+  { name: 'Zap', label: 'Lightning', Icon: Zap },
   { name: 'Wrench', label: 'Klucz', Icon: Wrench },
-  { name: 'Hammer', label: 'Młotek', Icon: Hammer },
+  { name: 'Hammer', label: 'Hammer', Icon: Hammer },
   { name: 'HardHat', label: 'Kask', Icon: HardHat },
-  { name: 'Building', label: 'Budynek', Icon: Building },
-  { name: 'Building2', label: 'Budynek 2', Icon: Building2 },
+  { name: 'Building', label: 'Building', Icon: Building },
+  { name: 'Building2', label: 'Building 2', Icon: Building2 },
   { name: 'Home', label: 'Dom', Icon: Home },
   { name: 'MapPin', label: 'Lokalizacja', Icon: MapPin },
   { name: 'Star', label: 'Gwiazdka', Icon: Star },
@@ -155,15 +155,15 @@ export default function AboutAdminPage() {
     setCities(prev => prev.map(c => c.id === id ? { ...c, [field]: value } : c))
   }
 
-  if (loading) return <div className="p-8 text-sm text-muted-foreground">Ładowanie...</div>
+  if (loading) return <div className="p-8 text-sm text-muted-foreground">Loading...</div>
 
   return (
     <div className="p-6 max-w-4xl mx-auto space-y-12">
-      <h1 className="text-2xl font-semibold">Sekcja O firmie — dane dynamiczne</h1>
+      <h1 className="text-2xl font-semibold">Section O firmie — dane dynamiczne</h1>
 
       {/* ── O firmie ─────────────────────────────────────────────────────────── */}
       <section>
-        <h2 className="text-lg font-semibold mb-4">O firmie — treść</h2>
+        <h2 className="text-lg font-semibold mb-4">About — content</h2>
         <div className="border rounded-xl p-4 space-y-4 bg-card">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             <div className="space-y-2">
@@ -203,7 +203,7 @@ export default function AboutAdminPage() {
             </div>
           </div>
           <div className="space-y-2">
-            <Label>Zdjęcia galerii (pierwsze 3 wyświetlane w siatce)</Label>
+            <Label>Gallery images (first 3 shown in the grid)</Label>
             <div className="flex flex-wrap gap-3">
               {aboutSection.photos.map((url, i) => (
                 <div key={i} className="relative w-32 h-24 rounded-lg overflow-hidden border group">
@@ -223,7 +223,7 @@ export default function AboutAdminPage() {
                 ) : (
                   <>
                     <Upload className="h-5 w-5 text-muted-foreground mb-1" />
-                    <span className="text-xs text-muted-foreground">Dodaj zdjęcie</span>
+                    <span className="text-xs text-muted-foreground">Add image</span>
                   </>
                 )}
                 <input
@@ -239,7 +239,7 @@ export default function AboutAdminPage() {
           <div className="flex justify-end">
             <Button onClick={() => saveAboutSection()} disabled={saving === 'about'}>
               {saving === 'about' ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
-              Zapisz
+              Save
             </Button>
           </div>
         </div>
@@ -249,10 +249,10 @@ export default function AboutAdminPage() {
       <section>
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h2 className="text-lg font-semibold">Nadchodzące inwestycje</h2>
-            <p className="text-xs text-muted-foreground mt-0.5">Pierwsza pozycja (order=0) wyświetlana jest w dużej karcie po lewej stronie.</p>
+            <h2 className="text-lg font-semibold">Upcoming projects</h2>
+            <p className="text-xs text-muted-foreground mt-0.5">The first item (order=0) is shown in the large card on the left.</p>
           </div>
-          <Button size="sm" onClick={addInvestment}><Plus className="h-4 w-4 mr-1" /> Dodaj</Button>
+          <Button size="sm" onClick={addInvestment}><Plus className="h-4 w-4 mr-1" /> Add</Button>
         </div>
         <div className="space-y-4">
           {investments.map((inv) => (
@@ -323,13 +323,13 @@ export default function AboutAdminPage() {
                   </div>
                 </div>
                 <div className="w-16">
-                  <Label className="text-xs">Kolejność</Label>
+                  <Label className="text-xs">Order</Label>
                   <Input type="number" className="h-8 text-sm mt-1" value={inv.order}
                     onChange={e => updateInvestment(inv.id, 'order', parseInt(e.target.value) || 0)} />
                 </div>
                 <div className="ml-auto flex gap-2">
                   <Button size="sm" variant="outline" onClick={() => saveInvestment(inv)} disabled={saving === inv.id}>
-                    {saving === inv.id ? <Loader2 className="h-3 w-3 animate-spin" /> : 'Zapisz'}
+                    {saving === inv.id ? <Loader2 className="h-3 w-3 animate-spin" /> : 'Save'}
                   </Button>
                   <Button size="sm" variant="destructive" onClick={() => deleteInvestment(inv.id)}>
                     <Trash2 className="h-3 w-3" />
@@ -346,7 +346,7 @@ export default function AboutAdminPage() {
       <section>
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-semibold">Nowe miasta</h2>
-          <Button size="sm" onClick={addCity}><Plus className="h-4 w-4 mr-1" /> Dodaj</Button>
+          <Button size="sm" onClick={addCity}><Plus className="h-4 w-4 mr-1" /> Add</Button>
         </div>
         <div className="space-y-3">
           {cities.map((city) => (
@@ -376,14 +376,14 @@ export default function AboutAdminPage() {
                       onChange={e => updateCity(city.id, 'dateEn', e.target.value)} />
                   </div>
                   <div>
-                    <Label className="text-xs">Kolejność</Label>
+                    <Label className="text-xs">Order</Label>
                     <Input type="number" className="h-8 text-sm mt-1" value={city.order}
                       onChange={e => updateCity(city.id, 'order', parseInt(e.target.value) || 0)} />
                   </div>
                 </div>
                 <div className="flex gap-2 shrink-0">
                   <Button size="sm" variant="outline" onClick={() => saveCity(city)} disabled={saving === city.id}>
-                    {saving === city.id ? <Loader2 className="h-3 w-3 animate-spin" /> : 'Zapisz'}
+                    {saving === city.id ? <Loader2 className="h-3 w-3 animate-spin" /> : 'Save'}
                   </Button>
                   <Button size="sm" variant="destructive" onClick={() => deleteCity(city.id)}>
                     <Trash2 className="h-3 w-3" />

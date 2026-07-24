@@ -60,7 +60,7 @@ export default function NewProjectPage() {
       router.push(`/admin/projects/${project.id}`)
     } else {
       const data = await res.json()
-      setError(data.error || 'Wystąpił błąd')
+      setError(data.error || 'An error occurred')
       setLoading(false)
     }
   }
@@ -71,10 +71,10 @@ export default function NewProjectPage() {
         <Link href="/admin">
           <Button variant="ghost" size="sm">
             <ArrowLeft className="h-4 w-4 mr-1.5" />
-            Powrót
+            Back
           </Button>
         </Link>
-        <h1 className="text-3xl font-serif font-bold text-gray-900">Nowa inwestycja</h1>
+        <h1 className="text-3xl font-serif font-bold text-gray-900">New project</h1>
       </div>
 
       <form onSubmit={handleSubmit}>
@@ -86,7 +86,7 @@ export default function NewProjectPage() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="name">Nazwa inwestycji *</Label>
+                  <Label htmlFor="name">Project name *</Label>
                   <Input
                     id="name"
                     value={form.name}
@@ -112,22 +112,22 @@ export default function NewProjectPage() {
                     id="location"
                     value={form.location}
                     onChange={(e) => setForm((p) => ({ ...p, location: e.target.value }))}
-                    placeholder="np. Kraków, ul. Lipowa 12"
+                    placeholder="e.g. München, Musterstraße 12"
                     required
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="description">Opis</Label>
+                  <Label htmlFor="description">Description</Label>
                   <Textarea
                     id="description"
                     value={form.description}
                     onChange={(e) => setForm((p) => ({ ...p, description: e.target.value }))}
-                    placeholder="Opis inwestycji..."
+                    placeholder="Project description..."
                     rows={4}
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="imageUrl">URL zdjęcia głównego</Label>
+                  <Label htmlFor="imageUrl">Main image URL</Label>
                   <Input
                     id="imageUrl"
                     value={form.imageUrl}
@@ -144,7 +144,7 @@ export default function NewProjectPage() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="svgFile">Wgraj plik SVG</Label>
+                  <Label htmlFor="svgFile">Upload SVG file</Label>
                   <div className="flex items-center gap-3">
                     <Input
                       id="svgFile"
@@ -157,7 +157,7 @@ export default function NewProjectPage() {
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="svgContent">lub wklej kod SVG</Label>
+                  <Label htmlFor="svgContent">or paste SVG code</Label>
                   <Textarea
                     id="svgContent"
                     value={form.svgContent}
@@ -169,7 +169,7 @@ export default function NewProjectPage() {
                 </div>
                 {form.svgContent && (
                   <div className="border rounded-lg p-4 bg-gray-50">
-                    <p className="text-xs text-gray-500 mb-2">Podgląd SVG:</p>
+                    <p className="text-xs text-gray-500 mb-2">SVG preview:</p>
                     <div
                       className="max-h-64 overflow-auto"
                       dangerouslySetInnerHTML={{ __html: form.svgContent }}
@@ -183,7 +183,7 @@ export default function NewProjectPage() {
           <div className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle>Ustawienia</CardTitle>
+                <CardTitle>Settings</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2">
@@ -196,9 +196,9 @@ export default function NewProjectPage() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="active">Aktywna</SelectItem>
-                      <SelectItem value="planned">Planowana</SelectItem>
-                      <SelectItem value="completed">Zakończona</SelectItem>
+                      <SelectItem value="active">Active</SelectItem>
+                      <SelectItem value="planned">Planned</SelectItem>
+                      <SelectItem value="completed">Completed</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -218,7 +218,7 @@ export default function NewProjectPage() {
               style={{ backgroundColor: '#6E2E2A' }}
             >
               <Save className="h-4 w-4 mr-2" />
-              {loading ? 'Zapisywanie...' : 'Utwórz inwestycję'}
+              {loading ? 'Saving...' : 'Create project'}
             </Button>
           </div>
         </div>

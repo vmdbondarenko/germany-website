@@ -228,7 +228,7 @@ export default function AdminOverlayEditor({ projectId }: { projectId: string })
               : null
         setActiveKey(firstKey)
       })
-      .catch(() => { setLoading(false); toast.error('Nie udało się załadować projektu') })
+      .catch(() => { setLoading(false); toast.error('Failed to load project') })
   }, [projectId])
 
   // ── Build list of maps to edit ──────────────────────────────────────
@@ -237,7 +237,7 @@ export default function AdminOverlayEditor({ projectId }: { projectId: string })
     const out: MapTarget[] = []
     if (project.svgContent) {
       out.push({
-        key: 'project', label: 'Plan główny', kind: 'project', entityId: project.id,
+        key: 'project', label: 'Main plan', kind: 'project', entityId: project.id,
         svgContent: project.svgContent, imageUrl: project.planImageUrl,
         northAngle: project.northAngle, matchBy: 'id',
         dotOverrides: project.dotOverrides ?? [],
@@ -256,7 +256,7 @@ export default function AdminOverlayEditor({ projectId }: { projectId: string })
       for (const sv of st.stageViews) {
         if (!sv.svgContent) continue
         out.push({
-          key: `sv:${sv.id}`, label: `Etap ${st.name}: ${sv.name}`, kind: 'stageview', entityId: sv.id,
+          key: `sv:${sv.id}`, label: `Stage ${st.name}: ${sv.name}`, kind: 'stageview', entityId: sv.id,
           svgContent: sv.svgContent, imageUrl: sv.imageUrl,
           northAngle: sv.northAngle, matchBy: 'data-unit-id',
           dotOverrides: sv.dotOverrides ?? [],
@@ -369,7 +369,7 @@ export default function AdminOverlayEditor({ projectId }: { projectId: string })
       setProject(prev => prev ? applyDotOverride(prev, map, unitId, { dotX, dotY }) : prev)
       toast.success('Pozycja zapisana')
     } catch {
-      toast.error('Błąd zapisu pozycji')
+      toast.error('Error saving position')
     } finally {
       setSaving(false)
     }
@@ -382,9 +382,9 @@ export default function AdminOverlayEditor({ projectId }: { projectId: string })
       const res = await fetch(`/api/admin/unit-dot-overrides?${qs}`, { method: 'DELETE' })
       if (!res.ok) throw new Error()
       setProject(prev => prev ? applyDotOverride(prev, map, unitId, null) : prev)
-      toast.success('Pozycja przywrócona')
+      toast.success('Position restored')
     } catch {
-      toast.error('Błąd resetowania pozycji')
+      toast.error('Error resetting position')
     } finally {
       setSaving(false)
     }
@@ -405,7 +405,7 @@ export default function AdminOverlayEditor({ projectId }: { projectId: string })
       if (!res.ok) throw new Error()
       toast.success('Kompas zapisany')
     } catch {
-      toast.error('Błąd zapisu kompasu')
+      toast.error('Error saving compass')
     } finally {
       setSaving(false)
     }
@@ -456,7 +456,7 @@ export default function AdminOverlayEditor({ projectId }: { projectId: string })
   if (maps.length === 0) {
     return (
       <div className="p-8 border border-border/60 rounded-xl bg-secondary/30 text-sm">
-        Ten projekt nie ma jeszcze żadnej mapy SVG. Najpierw narysuj polygons w edytorze planu.
+        This project has no SVG map yet. First draw polygons in the plan editor.
       </div>
     )
   }
@@ -473,7 +473,7 @@ export default function AdminOverlayEditor({ projectId }: { projectId: string })
           <ArrowLeft className="h-3.5 w-3.5" /> Projekt
         </Link>
         <div className="h-4 w-px bg-gray-200" />
-        <h2 className="text-xl font-serif font-bold text-gray-900">Pozycje punktów i kompas — {project.name}</h2>
+        <h2 className="text-xl font-serif font-bold text-gray-900">Point positions and compass — {project.name}</h2>
         {saving && <Loader2 className="h-4 w-4 animate-spin text-gray-400" />}
       </div>
 
@@ -583,25 +583,25 @@ export default function AdminOverlayEditor({ projectId }: { projectId: string })
                   </div>
                   <div className="text-xs text-gray-500">
                     Pozycja: {selectedDotHasOverride
-                      ? <span className="text-green-700">własna</span>
+                      ? <span className="text-green-700">custom</span>
                       : <span>automatyczna</span>}
                   </div>
                   {selectedDotHasOverride && (
                     <Button size="sm" variant="outline" className="w-full mt-2" onClick={resetSelectedDot}>
                       <RotateCcw className="h-3.5 w-3.5 mr-1.5" />
-                      Przywróć automatyczną
+                      Restore automatic
                     </Button>
                   )}
                 </div>
               ) : (
-                <div className="text-xs text-gray-500">Kliknij na punkt domu aby wybrać, lub przeciągnij punkt aby ustawić nową pozycję.</div>
+                <div className="text-xs text-gray-500">Click a house point to select, or drag a point to set a new position.</div>
               )}
             </div>
 
             <div className="border border-border/60 rounded-xl p-4 bg-white">
-              <div className="text-sm font-semibold mb-2">Kompas (kierunek północy)</div>
+              <div className="text-sm font-semibold mb-2">Compass (north direction)</div>
               <div className="text-xs text-gray-500 mb-3">
-                Przeciągnij igłę kompasu w prawym górnym rogu, lub wpisz kąt w stopniach (0–359).
+                Drag the compass needle in the top-right corner, or enter the angle in degrees (0–359).
               </div>
               <div className="flex gap-2">
                 <Input
@@ -622,7 +622,7 @@ export default function AdminOverlayEditor({ projectId }: { projectId: string })
                 </Button>
               </div>
               {activeMap.northAngle != null && (
-                <div className="text-xs text-gray-500 mt-2">Aktualny kąt: {activeMap.northAngle}°</div>
+                <div className="text-xs text-gray-500 mt-2">Current angle: {activeMap.northAngle}°</div>
               )}
             </div>
           </div>
@@ -651,7 +651,7 @@ function CompassHandle({
         backdropFilter: 'blur(4px)',
         border: angle == null ? '1px dashed #6E2E2A' : '1px solid transparent',
       }}
-      title={angle == null ? 'Przeciągnij igłę aby ustawić północ' : `Północ: ${angle}°`}
+      title={angle == null ? 'Drag the needle to set north' : `North: ${angle}°`}
     >
       <svg width="56" height="56" viewBox="-20 -20 40 40" style={{ transform: `rotate(${shownAngle}deg)` }}>
         <circle cx="0" cy="0" r="17" fill="none" stroke="#6E2E2A" strokeWidth="0.8" opacity="0.5" />
