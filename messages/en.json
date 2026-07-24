@@ -28,6 +28,10 @@
     "statusCompleted": "Completed",
     "remaining": "Available"
   },
+  "location": {
+    "home": "Home",
+    "subtitle": "Find our projects on the map and choose the home that's right for you."
+  },
   "project": {
     "documentsAndPricing": "Documents & pricing",
     "additionalInfo": "Additional information",

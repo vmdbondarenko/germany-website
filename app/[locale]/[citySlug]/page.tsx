@@ -1,14 +1,16 @@
-import Link from "next/link"
 import { notFound } from "next/navigation"
+import { getLocale, getTranslations } from "next-intl/server"
+import { Link } from "@/i18n/navigation"
 import { ArrowLeft, ChevronRight } from "lucide-react"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { CityMap } from "@/components/lokalizacja/city-map"
 import { prisma } from "@/lib/prisma"
+import { pick } from "@/lib/i18n-content"
+import type { Locale } from "@/i18n/routing"
 import { loadLokalizacjaData } from "@/lib/lokalizacja-points"
 import { loadHeaderCities } from "@/lib/locations"
 import { JsonLd, breadcrumbSchema } from "@/lib/seo/json-ld"
-import { LOCATION_COPY } from "@/lib/seo/landing-copy"
 import type { Metadata } from "next"
 
 export const dynamic = "force-dynamic"
@@ -19,18 +21,23 @@ export async function generateMetadata({
   params: Promise<{ citySlug: string }>
 }): Promise<Metadata> {
   const { citySlug } = await params
-  const location = await prisma.location.findUnique({ where: { slug: citySlug }, select: { name: true } })
+  const locale = (await getLocale()) as Locale
+  const location = await prisma.location.findUnique({
+    where: { slug: citySlug },
+    select: { name: true, nameEn: true },
+  })
   if (!location) return { alternates: { canonical: `/${citySlug}` } }
 
-  // Authored SEO copy (spreadsheet) wins when present; otherwise fall back to
-  // the generic per-location title/description.
-  const copy = LOCATION_COPY[citySlug]
-  const title = copy?.title ?? `${location.name} | Jednopiętrowa Warszawa`
-  const description = copy?.description ?? `${location.name} — sprawdź nasze inwestycje na mapie i wybierz dom idealny dla siebie.`
+  const t = await getTranslations("location")
+  const title = pick(location.name, location.nameEn, locale)
+  const description = t("subtitle")
   return {
     title,
     description,
-    alternates: { canonical: `/${citySlug}` },
+    alternates: {
+      canonical: `/${citySlug}`,
+      languages: { de: `/${citySlug}`, en: `/en/${citySlug}` },
+    },
     openGraph: { title, description, url: `/${citySlug}`, type: "website" },
     twitter: { card: "summary_large_image", title, description },
   }
@@ -42,12 +49,13 @@ export default async function CityLandingPage({
   params: Promise<{ citySlug: string }>
 }) {
   const { citySlug } = await params
+  const locale = (await getLocale()) as Locale
+  const t = await getTranslations("location")
 
   const location = await prisma.location.findUnique({ where: { slug: citySlug } })
   if (!location) notFound()
 
-  // Authored H1 (spreadsheet) wins when present; otherwise the location name.
-  const h1 = LOCATION_COPY[citySlug]?.h1 ?? location.name
+  const name = pick(location.name, location.nameEn, locale)
 
   const [{ cities, points }, headerCities] = await Promise.all([
     loadLokalizacjaData(),
@@ -57,8 +65,8 @@ export default async function CityLandingPage({
   const mapId = process.env.NEXT_PUBLIC_GOOGLE_MAPS_MAP_ID || undefined
 
   const breadcrumb = breadcrumbSchema([
-    { name: "Domy jednorodzinne", path: "/" },
-    { name: location.name, path: `/${citySlug}` },
+    { name: t("home"), path: "/" },
+    { name, path: `/${citySlug}` },
   ])
 
   return (
@@ -76,20 +84,18 @@ export default async function CityLandingPage({
               className="inline-flex items-center gap-2 hover:text-foreground transition-colors"
             >
               <ArrowLeft className="w-4 h-4" />
-              <span className="text-sm font-medium">Domy jednorodzinne</span>
+              <span className="text-sm font-medium">{t("home")}</span>
             </Link>
             <ChevronRight className="w-4 h-4" aria-hidden="true" />
             <span className="text-sm font-medium text-foreground" aria-current="page">
-              {location.name}
+              {name}
             </span>
           </nav>
 
           <h1 className="text-3xl lg:text-4xl font-bold mb-2" style={{ color: "#3E1718" }}>
-            {h1}
+            {name}
           </h1>
-          <p className="text-muted-foreground mb-8">
-            Znajdź nasze inwestycje na mapie i wybierz dom idealny dla siebie.
-          </p>
+          <p className="text-muted-foreground mb-8">{t("subtitle")}</p>
 
           <CityMap
             apiKey={apiKey}

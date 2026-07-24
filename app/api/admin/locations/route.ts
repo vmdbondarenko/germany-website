@@ -16,6 +16,7 @@ export async function POST(request: Request) {
   const item = await prisma.location.create({
     data: {
       name: body.name ?? '',
+      nameEn: body.nameEn || null,
       slug: body.slug ?? '',
       order: body.order ?? 0,
       centerLat: body.centerLat ?? null,

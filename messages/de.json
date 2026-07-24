@@ -28,6 +28,10 @@
     "statusCompleted": "Abgeschlossen",
     "remaining": "Verfügbar"
   },
+  "location": {
+    "home": "Startseite",
+    "subtitle": "Finden Sie unsere Projekte auf der Karte und wählen Sie Ihr passendes Zuhause."
+  },
   "project": {
     "documentsAndPricing": "Dokumente & Preisliste",
     "additionalInfo": "Zusätzliche Informationen",

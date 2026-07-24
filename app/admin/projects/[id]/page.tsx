@@ -27,8 +27,11 @@ type SectionItem = {
   sectionId: string
   icon: string | null
   title: string
+  titleEn: string | null
   subtitle: string | null
+  subtitleEn: string | null
   description: string | null
+  descriptionEn: string | null
   mapUrl: string | null
   order: number
 }
@@ -38,8 +41,11 @@ type ProjectSection = {
   projectId: string
   type: string
   label: string | null
+  labelEn: string | null
   heading: string | null
+  headingEn: string | null
   description: string | null
+  descriptionEn: string | null
   imageUrl: string | null
   imageUrl2: string | null
   mapUrl: string | null
@@ -53,7 +59,9 @@ type GalleryImage = {
   projectId: string
   src: string
   alt: string
+  altEn: string | null
   label: string
+  labelEn: string | null
   order: number
 }
 
@@ -311,17 +319,35 @@ function SectionItemEditor({ item, onUpdate, onDelete, showIcon = true, showMapU
           <Input type="number" value={item.order} className="h-8" onChange={(e) => onUpdate({ order: parseInt(e.target.value) || 0 })} />
         </div>
       </div>
-      <div className="space-y-1">
-        <Label className="text-xs">Tytuł</Label>
-        <Input value={item.title} onChange={(e) => onUpdate({ title: e.target.value })} className="h-8" />
+      <div className="grid grid-cols-2 gap-2">
+        <div className="space-y-1">
+          <Label className="text-xs">Titel · DE</Label>
+          <Input value={item.title} onChange={(e) => onUpdate({ title: e.target.value })} className="h-8" />
+        </div>
+        <div className="space-y-1">
+          <Label className="text-xs">Titel · EN</Label>
+          <Input value={item.titleEn || ''} onChange={(e) => onUpdate({ titleEn: e.target.value || null })} className="h-8" />
+        </div>
       </div>
-      <div className="space-y-1">
-        <Label className="text-xs">Podtytuł</Label>
-        <Input value={item.subtitle || ''} onChange={(e) => onUpdate({ subtitle: e.target.value || null })} className="h-8" placeholder="np. 1,4 km – 3 min samochodem" />
+      <div className="grid grid-cols-2 gap-2">
+        <div className="space-y-1">
+          <Label className="text-xs">Untertitel · DE</Label>
+          <Input value={item.subtitle || ''} onChange={(e) => onUpdate({ subtitle: e.target.value || null })} className="h-8" placeholder="z. B. 1,4 km – 3 Min. mit dem Auto" />
+        </div>
+        <div className="space-y-1">
+          <Label className="text-xs">Untertitel · EN</Label>
+          <Input value={item.subtitleEn || ''} onChange={(e) => onUpdate({ subtitleEn: e.target.value || null })} className="h-8" />
+        </div>
       </div>
-      <div className="space-y-1">
-        <Label className="text-xs">Opis</Label>
-        <Input value={item.description || ''} onChange={(e) => onUpdate({ description: e.target.value || null })} className="h-8" />
+      <div className="grid grid-cols-2 gap-2">
+        <div className="space-y-1">
+          <Label className="text-xs">Beschreibung · DE</Label>
+          <Input value={item.description || ''} onChange={(e) => onUpdate({ description: e.target.value || null })} className="h-8" />
+        </div>
+        <div className="space-y-1">
+          <Label className="text-xs">Beschreibung · EN</Label>
+          <Input value={item.descriptionEn || ''} onChange={(e) => onUpdate({ descriptionEn: e.target.value || null })} className="h-8" />
+        </div>
       </div>
       {showMapUrl && (
         <div className="space-y-1">
@@ -413,24 +439,41 @@ function SectionEditor({ section, projectId, projectSlug, onUpdate, onRefresh }:
 
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label>Etykieta sekcji</Label>
+          <Label>Label · DE</Label>
           <Input value={s.label || ''} onChange={(e) => onUpdate({ ...s, label: e.target.value })} onBlur={() => saveSection({ label: s.label })} placeholder={typeConfig.defaultLabel} />
         </div>
         <div className="space-y-2">
-          <Label>Kolejność</Label>
-          <Input type="number" value={s.order} onChange={(e) => onUpdate({ ...s, order: parseInt(e.target.value) || 0 })} onBlur={() => saveSection({ order: s.order })} />
+          <Label>Label · EN</Label>
+          <Input value={s.labelEn || ''} onChange={(e) => onUpdate({ ...s, labelEn: e.target.value })} onBlur={() => saveSection({ labelEn: s.labelEn })} />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+        <div className="space-y-2">
+          <Label>Überschrift · DE</Label>
+          <Input value={s.heading || ''} onChange={(e) => onUpdate({ ...s, heading: e.target.value })} onBlur={() => saveSection({ heading: s.heading })} />
+        </div>
+        <div className="space-y-2">
+          <Label>Überschrift · EN</Label>
+          <Input value={s.headingEn || ''} onChange={(e) => onUpdate({ ...s, headingEn: e.target.value })} onBlur={() => saveSection({ headingEn: s.headingEn })} />
         </div>
       </div>
 
       <div className="space-y-2">
-        <Label>Nagłówek</Label>
-        <Input value={s.heading || ''} onChange={(e) => onUpdate({ ...s, heading: e.target.value })} onBlur={() => saveSection({ heading: s.heading })} />
+        <Label>Reihenfolge</Label>
+        <Input type="number" value={s.order} onChange={(e) => onUpdate({ ...s, order: parseInt(e.target.value) || 0 })} onBlur={() => saveSection({ order: s.order })} className="max-w-[120px]" />
       </div>
 
       {typeConfig.hasDescription !== false && (
-        <div className="space-y-2">
-          <Label>Opis</Label>
-          <Textarea value={s.description || ''} rows={3} onChange={(e) => onUpdate({ ...s, description: e.target.value })} onBlur={() => saveSection({ description: s.description })} />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <Label>Beschreibung · DE</Label>
+            <Textarea value={s.description || ''} rows={3} onChange={(e) => onUpdate({ ...s, description: e.target.value })} onBlur={() => saveSection({ description: s.description })} />
+          </div>
+          <div className="space-y-2">
+            <Label>Beschreibung · EN</Label>
+            <Textarea value={s.descriptionEn || ''} rows={3} onChange={(e) => onUpdate({ ...s, descriptionEn: e.target.value })} onBlur={() => saveSection({ descriptionEn: s.descriptionEn })} />
+          </div>
         </div>
       )}
 
@@ -544,19 +587,29 @@ function GalleryEditor({ images, projectId, projectSlug, onRefresh }: {
               onChange={(v) => updateImage(img.id, { src: v })}
               uploadName={projectSlug ? `${projectSlug}-galeria-${String(img.order + 1).padStart(2, '0')}` : undefined}
             />
-            <div className="space-y-1">
-              <Label className="text-xs">Tekst alternatywny</Label>
-              <Input value={img.alt} className="h-8" onChange={(e) => updateImage(img.id, { alt: e.target.value })} />
+            <div className="grid grid-cols-2 gap-2">
+              <div className="space-y-1">
+                <Label className="text-xs">Alt-Text · DE</Label>
+                <Input value={img.alt} className="h-8" onChange={(e) => updateImage(img.id, { alt: e.target.value })} />
+              </div>
+              <div className="space-y-1">
+                <Label className="text-xs">Alt-Text · EN</Label>
+                <Input value={img.altEn || ''} className="h-8" onChange={(e) => updateImage(img.id, { altEn: e.target.value })} />
+              </div>
             </div>
             <div className="grid grid-cols-2 gap-2">
               <div className="space-y-1">
-                <Label className="text-xs">Etykieta</Label>
+                <Label className="text-xs">Label · DE</Label>
                 <Input value={img.label} className="h-8" onChange={(e) => updateImage(img.id, { label: e.target.value })} />
               </div>
               <div className="space-y-1">
-                <Label className="text-xs">Kolejność</Label>
-                <Input type="number" value={img.order} className="h-8" onChange={(e) => updateImage(img.id, { order: parseInt(e.target.value) || 0 })} />
+                <Label className="text-xs">Label · EN</Label>
+                <Input value={img.labelEn || ''} className="h-8" onChange={(e) => updateImage(img.id, { labelEn: e.target.value })} />
               </div>
+            </div>
+            <div className="space-y-1">
+              <Label className="text-xs">Reihenfolge</Label>
+              <Input type="number" value={img.order} className="h-8 max-w-[120px]" onChange={(e) => updateImage(img.id, { order: parseInt(e.target.value) || 0 })} />
             </div>
           </div>
         ))}

@@ -13,7 +13,10 @@ import type { Metadata } from 'next'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  alternates: { canonical: '/aktualnosci' },
+  alternates: {
+    canonical: '/aktualnosci',
+    languages: { de: '/aktualnosci', en: '/en/aktualnosci' },
+  },
 }
 
 export default async function AktualnosciPage() {

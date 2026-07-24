@@ -10,6 +10,7 @@ import { slugifyBase } from '@/lib/blob-filename'
 type Location = {
   id: string
   name: string
+  nameEn?: string | null
   slug: string
   order: number
   centerLat: number | null
@@ -78,16 +79,25 @@ export default function LocationsAdminPage() {
           <div key={loc.id} className="border rounded-xl p-4 bg-card space-y-3">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="space-y-1">
-                <Label className="text-xs">Nazwa (H1 / tytuł strony)</Label>
+                <Label className="text-xs">Name · DE (H1 / Seitentitel)</Label>
                 <Input
                   value={loc.name}
                   className="h-8 text-sm"
-                  placeholder="Domy pod Warszawą"
+                  placeholder="Häuser bei München"
                   onChange={e => {
                     const name = e.target.value
                     update(loc.id, 'name', name)
                     if (!loc.slug) update(loc.id, 'slug', slugifyBase(name))
                   }}
+                  onBlur={() => save(loc)}
+                />
+              </div>
+              <div className="space-y-1">
+                <Label className="text-xs">Name · EN</Label>
+                <Input
+                  value={loc.nameEn ?? ''}
+                  className="h-8 text-sm"
+                  onChange={e => update(loc.id, 'nameEn', e.target.value)}
                   onBlur={() => save(loc)}
                 />
               </div>

@@ -33,7 +33,7 @@ export async function generateMetadata({
   return {
     title: pageTitle,
     description,
-    alternates: { canonical },
+    alternates: { canonical, languages: { de: canonical, en: `/en${canonical}` } },
     openGraph: {
       title: pageTitle,
       description,

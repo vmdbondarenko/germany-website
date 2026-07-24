@@ -1,32 +1,44 @@
 import type { Metadata } from 'next'
+import { getLocale } from 'next-intl/server'
 import { prisma } from '@/lib/prisma'
-import { PROJECT_COPY } from '@/lib/seo/landing-copy'
+import { pick } from '@/lib/i18n-content'
+import type { Locale } from '@/i18n/routing'
 
 /**
  * Build the <title>/<meta>/canonical for an investment page. Shared by the
  * legacy /inwestycje/[slug] route and the city /[citySlug]/[slug] route so both
  * URLs render identical metadata — only the canonical differs. `canonicalPath`
  * is the project's canonical URL (city path when assigned, else /inwestycje/...).
+ * Title/description resolve per active locale (German default, English override).
  */
 export async function buildProjectMetadata(slug: string, canonicalPath: string): Promise<Metadata> {
+  const locale = (await getLocale()) as Locale
   const project = await prisma.project.findUnique({
     where: { slug },
-    select: { name: true, heroSubtitle: true, imageUrl: true },
+    select: {
+      name: true,
+      heroSubtitle: true,
+      heroSubtitleEn: true,
+      description: true,
+      descriptionEn: true,
+      imageUrl: true,
+    },
   })
 
-  if (!project) return { alternates: { canonical: canonicalPath } }
+  const languages = { de: canonicalPath, en: `/en${canonicalPath}` }
+  if (!project) return { alternates: { canonical: canonicalPath, languages } }
 
-  // Authored SEO copy (spreadsheet) wins when present; otherwise fall back to
-  // the project name / hero subtitle.
-  const copy = PROJECT_COPY[slug]
-  const pageTitle = copy?.title ?? `${project.name} | Jednopiętrowa Warszawa`
-  const description = copy?.description ?? project.heroSubtitle ?? undefined
+  const pageTitle = project.name
+  const description =
+    pick(project.description, project.descriptionEn, locale) ??
+    pick(project.heroSubtitle, project.heroSubtitleEn, locale) ??
+    undefined
   const images = project.imageUrl ? [project.imageUrl] : undefined
 
   return {
     title: pageTitle,
     description,
-    alternates: { canonical: canonicalPath },
+    alternates: { canonical: canonicalPath, languages },
     openGraph: {
       title: pageTitle,
       description,

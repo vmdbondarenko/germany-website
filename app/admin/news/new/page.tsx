@@ -19,8 +19,10 @@ export default function NewNewsPage() {
   const [error, setError] = useState('')
   const [form, setForm] = useState({
     title: '',
+    titleEn: '',
     slug: '',
     description: '',
+    descriptionEn: '',
     coverImageUrl: '',
     publishedAt: new Date().toISOString().slice(0, 10),
     published: false,
@@ -64,6 +66,7 @@ export default function NewNewsPage() {
         blocks: blocks.map((b) => ({
           type: b.type,
           content: b.content || null,
+          contentEn: b.contentEn || null,
           imageUrl: b.imageUrl || null,
         })),
       }),
@@ -98,15 +101,25 @@ export default function NewNewsPage() {
                 <CardTitle>Informacje podstawowe</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="title">Tytuł *</Label>
-                  <Input
-                    id="title"
-                    value={form.title}
-                    onChange={(e) => handleTitleChange(e.target.value)}
-                    placeholder="np. Nowe mieszkania dostępne już teraz"
-                    required
-                  />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <div className="space-y-2">
+                    <Label htmlFor="title">Titel · DE *</Label>
+                    <Input
+                      id="title"
+                      value={form.title}
+                      onChange={(e) => handleTitleChange(e.target.value)}
+                      placeholder="z. B. Neue Wohnungen ab sofort verfügbar"
+                      required
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="titleEn">Titel · EN</Label>
+                    <Input
+                      id="titleEn"
+                      value={form.titleEn}
+                      onChange={(e) => setForm((p) => ({ ...p, titleEn: e.target.value }))}
+                    />
+                  </div>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="slug">Slug URL *</Label>
@@ -120,12 +133,21 @@ export default function NewNewsPage() {
                   <p className="text-xs text-gray-500">URL: /aktualnosci/{form.slug || 'slug'}</p>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="description">Krótki opis (zajawka)</Label>
+                  <Label htmlFor="descriptionEn">Kurzbeschreibung · EN</Label>
+                  <Textarea
+                    id="descriptionEn"
+                    value={form.descriptionEn}
+                    onChange={(e) => setForm((p) => ({ ...p, descriptionEn: e.target.value }))}
+                    rows={3}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="description">Kurzbeschreibung · DE</Label>
                   <Textarea
                     id="description"
                     value={form.description}
                     onChange={(e) => setForm((p) => ({ ...p, description: e.target.value }))}
-                    placeholder="Krótki opis widoczny na liście aktualności..."
+                    placeholder="Kurzer Teaser für die Übersichtsseite …"
                     rows={3}
                   />
                 </div>

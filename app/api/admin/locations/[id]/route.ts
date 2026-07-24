@@ -11,6 +11,7 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
 
   const data: Record<string, unknown> = {}
   if (body.name !== undefined) data.name = body.name
+  if (body.nameEn !== undefined) data.nameEn = body.nameEn || null
   if (body.slug !== undefined) data.slug = body.slug
   if (body.order !== undefined) data.order = Number(body.order) || 0
   if (body.centerLat !== undefined) data.centerLat = numOrNull(body.centerLat)
