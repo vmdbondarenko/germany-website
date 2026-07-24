@@ -95,19 +95,24 @@ export async function PUT(
     propertyType, prospektUrl, additionalInfo,
     latitude, longitude, northAngle,
     cityLocationId,
+    // English overrides
+    locationEn, descriptionEn, heroSubtitleEn, additionalInfoEn,
   } = body
 
   const data: Record<string, unknown> = {}
   if (name !== undefined) data.name = name
   if (slug !== undefined) data.slug = slug
   if (location !== undefined) data.location = location
+  if (locationEn !== undefined) data.locationEn = locationEn || null
   if (description !== undefined) data.description = description || null
+  if (descriptionEn !== undefined) data.descriptionEn = descriptionEn || null
   if (svgContent !== undefined) data.svgContent = svgContent
   if (imageUrl !== undefined) data.imageUrl = imageUrl
   if (planImageUrl !== undefined) data.planImageUrl = planImageUrl
   if (status !== undefined) data.status = status
   if (published !== undefined) data.published = published
   if (heroSubtitle !== undefined) data.heroSubtitle = heroSubtitle || null
+  if (heroSubtitleEn !== undefined) data.heroSubtitleEn = heroSubtitleEn || null
   if (contactPhone !== undefined) data.contactPhone = contactPhone || null
   if (contactEmail !== undefined) data.contactEmail = contactEmail || null
   if (contactAddress !== undefined) data.contactAddress = contactAddress || null
@@ -123,6 +128,7 @@ export async function PUT(
   if (propertyType !== undefined) data.propertyType = propertyType || null
   if (prospektUrl !== undefined) data.prospektUrl = prospektUrl || null
   if (additionalInfo !== undefined) data.additionalInfo = additionalInfo || null
+  if (additionalInfoEn !== undefined) data.additionalInfoEn = additionalInfoEn || null
   if (latitude !== undefined) {
     data.latitude = latitude === null || latitude === '' ? null : Number(latitude)
   }

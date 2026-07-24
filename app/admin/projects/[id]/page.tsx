@@ -98,13 +98,17 @@ type Project = {
   name: string
   slug: string
   location: string
+  locationEn: string | null
   description: string | null
+  descriptionEn: string | null
   svgContent: string | null
   imageUrl: string | null
   planImageUrl: string | null
   status: string
   published: boolean
   heroSubtitle: string | null
+  heroSubtitleEn: string | null
+  additionalInfoEn: string | null
   contactPhone: string | null
   contactEmail: string | null
   contactAddress: string | null
@@ -739,11 +743,14 @@ export default function EditProjectPage() {
         name: project.name,
         slug: project.slug,
         location: project.location,
+        locationEn: project.locationEn,
         description: project.description,
+        descriptionEn: project.descriptionEn,
         status: project.status,
         published: project.published,
         imageUrl: project.imageUrl,
         heroSubtitle: project.heroSubtitle,
+        heroSubtitleEn: project.heroSubtitleEn,
         contactPhone: project.contactPhone,
         contactEmail: project.contactEmail,
         contactAddress: project.contactAddress,
@@ -757,6 +764,7 @@ export default function EditProjectPage() {
         propertyType: project.propertyType,
         prospektUrl: project.prospektUrl,
         additionalInfo: project.additionalInfo,
+        additionalInfoEn: project.additionalInfoEn,
         latitude: project.latitude,
         longitude: project.longitude,
         cityLocationId: project.cityLocationId,
@@ -845,9 +853,15 @@ export default function EditProjectPage() {
                   <Input value={project.slug} onChange={(e) => setProject(p => p ? { ...p, slug: e.target.value } : p)} />
                 </div>
               </div>
-              <div className="space-y-2">
-                <Label>Lokalizacja (adres)</Label>
-                <Input value={project.location} onChange={(e) => setProject(p => p ? { ...p, location: e.target.value } : p)} placeholder="np. Dobrzykowice, ul. Jarzębinowa" />
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>Standort · DE</Label>
+                  <Input value={project.location} onChange={(e) => setProject(p => p ? { ...p, location: e.target.value } : p)} placeholder="z. B. München, Musterstraße 1" />
+                </div>
+                <div className="space-y-2">
+                  <Label>Standort · EN</Label>
+                  <Input value={project.locationEn || ''} onChange={(e) => setProject(p => p ? { ...p, locationEn: e.target.value } : p)} />
+                </div>
               </div>
               <ImageUploadField
                 label="Zdjęcie główne (hero)"
@@ -855,17 +869,32 @@ export default function EditProjectPage() {
                 onChange={(v) => setProject(p => p ? { ...p, imageUrl: v } : p)}
                 uploadName={project.slug ? `${project.slug}-zdjecie-glowne` : undefined}
               />
-              <div className="space-y-2">
-                <Label>Podtytuł hero</Label>
-                <Input
-                  value={project.heroSubtitle || ''}
-                  onChange={(e) => setProject(p => p ? { ...p, heroSubtitle: e.target.value } : p)}
-                  placeholder="np. Wybierz komfortowy dom z ogrodem i garażem nieopodal Wrocławia"
-                />
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>Hero-Untertitel · DE</Label>
+                  <Input
+                    value={project.heroSubtitle || ''}
+                    onChange={(e) => setProject(p => p ? { ...p, heroSubtitle: e.target.value } : p)}
+                    placeholder="z. B. Ihr komfortables Haus mit Garten"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Hero-Untertitel · EN</Label>
+                  <Input
+                    value={project.heroSubtitleEn || ''}
+                    onChange={(e) => setProject(p => p ? { ...p, heroSubtitleEn: e.target.value } : p)}
+                  />
+                </div>
               </div>
-              <div className="space-y-2">
-                <Label>Opis (meta)</Label>
-                <Textarea value={project.description || ''} rows={3} onChange={(e) => setProject(p => p ? { ...p, description: e.target.value } : p)} />
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>Beschreibung (Meta) · DE</Label>
+                  <Textarea value={project.description || ''} rows={3} onChange={(e) => setProject(p => p ? { ...p, description: e.target.value } : p)} />
+                </div>
+                <div className="space-y-2">
+                  <Label>Beschreibung (Meta) · EN</Label>
+                  <Textarea value={project.descriptionEn || ''} rows={3} onChange={(e) => setProject(p => p ? { ...p, descriptionEn: e.target.value } : p)} />
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -1096,16 +1125,28 @@ export default function EditProjectPage() {
           }
         >
           <div className="space-y-6">
-            <div className="space-y-2">
-              <Label>Tekst informacyjny</Label>
-              <Textarea
-                value={project.additionalInfo || ''}
-                rows={4}
-                onChange={(e) => setProject(p => p ? { ...p, additionalInfo: e.target.value } : p)}
-                placeholder="np. Dokumenty do pobrania, informacje o cenniku, regulaminie itp."
-              />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label>Infotext · DE</Label>
+                <Textarea
+                  value={project.additionalInfo || ''}
+                  rows={4}
+                  onChange={(e) => setProject(p => p ? { ...p, additionalInfo: e.target.value } : p)}
+                  placeholder="z. B. Dokumente zum Download, Preisliste, Hinweise usw."
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Infotext · EN</Label>
+                <Textarea
+                  value={project.additionalInfoEn || ''}
+                  rows={4}
+                  onChange={(e) => setProject(p => p ? { ...p, additionalInfoEn: e.target.value } : p)}
+                />
+              </div>
+            </div>
+            <div>
               <Button size="sm" variant="outline" onClick={handleSaveDetails} disabled={saving}>
-                <Save className="h-3.5 w-3.5 mr-1.5" />Zapisz tekst
+                <Save className="h-3.5 w-3.5 mr-1.5" />Text speichern
               </Button>
             </div>
             <div className="border-t pt-4">

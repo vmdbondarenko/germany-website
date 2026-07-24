@@ -24,6 +24,11 @@
     "statusCompleted": "Abgeschlossen",
     "remaining": "Verfügbar"
   },
+  "project": {
+    "documentsAndPricing": "Dokumente & Preisliste",
+    "additionalInfo": "Zusätzliche Informationen",
+    "documentToDownload": "Dokument zum Herunterladen"
+  },
   "nav": {
     "about": "Über uns",
     "locations": "Standorte",

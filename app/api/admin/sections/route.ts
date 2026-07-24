@@ -29,8 +29,11 @@ export async function POST(request: Request) {
     },
     update: {
       label: body.label,
+      labelEn: body.labelEn,
       heading: body.heading,
+      headingEn: body.headingEn,
       description: body.description,
+      descriptionEn: body.descriptionEn,
       imageUrl: body.imageUrl,
       imageUrl2: body.imageUrl2,
       mapUrl: body.mapUrl,

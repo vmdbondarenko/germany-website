@@ -15,8 +15,9 @@ import { Contact } from '@/components/contact'
 import { JsonLd, breadcrumbSchema, residenceSchema } from '@/lib/seo/json-ld'
 import { resolveAlt, galleryAlt } from '@/lib/seo/image-alt'
 import { PROJECT_COPY } from '@/lib/seo/landing-copy'
-import { getLocale } from 'next-intl/server'
+import { getLocale, getTranslations } from 'next-intl/server'
 import { getHomeContent } from '@/lib/home-content'
+import { pick } from '@/lib/i18n-content'
 import type { Locale } from '@/i18n/routing'
 
 /**
@@ -75,7 +76,39 @@ export async function ProjectDetail({
 
   if (!project) notFound()
 
-  const getSection = (type: string) => project.sections.find(s => s.type === type)
+  const tp = await getTranslations('project')
+  const th = await getTranslations('home')
+  function L(base: string, en: string | null): string
+  function L(base: string | null, en: string | null): string | null
+  function L(base: string | null, en: string | null): string | null {
+    return pick(base, en, locale)
+  }
+
+  type Section = (typeof project.sections)[number]
+  const localizeSection = (s: Section | undefined): Section | undefined =>
+    s && {
+      ...s,
+      label: L(s.label, s.labelEn),
+      heading: L(s.heading, s.headingEn),
+      description: L(s.description, s.descriptionEn),
+      items: s.items.map((it) => ({
+        ...it,
+        title: L(it.title, it.titleEn),
+        subtitle: L(it.subtitle, it.subtitleEn),
+        description: L(it.description, it.descriptionEn),
+      })),
+    }
+  const getSection = (type: string) => localizeSection(project.sections.find(s => s.type === type))
+
+  const localizedGallery = project.galleryImages.map((g) => ({
+    ...g,
+    alt: L(g.alt, g.altEn),
+    label: L(g.label, g.labelEn),
+  }))
+  const projectLocation = L(project.location, project.locationEn)
+  const projectHeroSubtitle = L(project.heroSubtitle, project.heroSubtitleEn)
+  const projectDescription = L(project.description, project.descriptionEn)
+  const projectAdditionalInfo = L(project.additionalInfo, project.additionalInfoEn)
 
   const keyFeatures = getSection('key_features')
   const lokalizacja = getSection('lokalizacja')
@@ -90,9 +123,9 @@ export async function ProjectDetail({
   const oInwestorze = getSection('o_inwestorze')
 
   const STATUS_MAP: Record<string, string> = {
-    active: 'W sprzedaży',
-    planned: 'Wkrótce',
-    completed: 'Zakończona',
+    active: th('statusActive'),
+    planned: th('statusPlanned'),
+    completed: th('statusCompleted'),
   }
 
   // Structured data — mirrors the visible hero breadcrumb and the project's
@@ -119,12 +152,12 @@ export async function ProjectDetail({
   ]
   const residence = residenceSchema({
     name: project.name,
-    description: project.description ?? project.heroSubtitle,
+    description: projectDescription ?? projectHeroSubtitle,
     images: schemaImages,
     path,
     availableCount,
     streetAddress: streetAddress || null,
-    locality: project.investCity ?? project.location,
+    locality: project.investCity ?? projectLocation,
     region: project.investVoivodeship,
     postalCode: project.investPostalCode,
   })
@@ -140,8 +173,8 @@ export async function ProjectDetail({
         <DynamicProjectHero
           title={project.name}
           h1={PROJECT_COPY[project.slug]?.h1}
-          subtitle={project.heroSubtitle || ''}
-          location={project.location}
+          subtitle={projectHeroSubtitle || ''}
+          location={projectLocation}
           status={STATUS_MAP[project.status] || project.status}
           imageUrl={project.imageUrl}
         />
@@ -216,8 +249,8 @@ export async function ProjectDetail({
       )}
 
       {/* Gallery */}
-      {project.galleryImages.length > 0 && (
-        <DynamicGallerySection images={project.galleryImages} projectName={project.name} />
+      {localizedGallery.length > 0 && (
+        <DynamicGallerySection images={localizedGallery} projectName={project.name} />
       )}
 
       {/* Plan Osiedla */}
@@ -226,7 +259,7 @@ export async function ProjectDetail({
       )}
 
       {/* Informacje dodatkowe */}
-      {(project.additionalInfo || project.documents.length > 0) && (
+      {(projectAdditionalInfo || project.documents.length > 0) && (
         <section className="py-16 lg:py-24 bg-[#faf9f7]">
           <div className="container mx-auto px-4 lg:px-8">
 
@@ -236,10 +269,10 @@ export async function ProjectDetail({
                 className="inline-block px-4 py-1.5 rounded-full text-xs font-medium tracking-wide uppercase mb-4"
                 style={{ backgroundColor: 'rgba(110, 46, 42, 0.1)', color: '#6E2E2A' }}
               >
-                Dokumenty i cennik
+                {tp('documentsAndPricing')}
               </span>
               <h2 className="font-serif text-3xl lg:text-4xl font-semibold" style={{ color: '#3E1718' }}>
-                Informacje dodatkowe
+                {tp('additionalInfo')}
               </h2>
             </div>
 
@@ -261,7 +294,7 @@ export async function ProjectDetail({
                         <h3 className="font-serif text-xl font-semibold" style={{ color: '#3E1718' }}>
                           {doc.label}
                         </h3>
-                        <p className="text-sm text-muted-foreground">Dokument do pobrania</p>
+                        <p className="text-sm text-muted-foreground">{tp('documentToDownload')}</p>
                       </div>
                     </div>
                     <a
@@ -282,9 +315,9 @@ export async function ProjectDetail({
               </div>
 
               {/* Right: info text */}
-              {project.additionalInfo && (
+              {projectAdditionalInfo && (
                 <p className="text-muted-foreground leading-relaxed whitespace-pre-line">
-                  {project.additionalInfo}
+                  {projectAdditionalInfo}
                 </p>
               )}
 

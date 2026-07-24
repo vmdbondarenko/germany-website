@@ -24,6 +24,11 @@
     "statusCompleted": "Completed",
     "remaining": "Available"
   },
+  "project": {
+    "documentsAndPricing": "Documents & pricing",
+    "additionalInfo": "Additional information",
+    "documentToDownload": "Document to download"
+  },
   "nav": {
     "about": "About",
     "locations": "Locations",
