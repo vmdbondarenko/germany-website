@@ -16,6 +16,10 @@
     "companyName": "Muster Immobilien GmbH",
     "companyTagline": "Property developer"
   },
+  "meta": {
+    "homeTitle": "New homes from the developer",
+    "homeDescription": "High-quality homes from the developer – thoughtful layouts and careful craftsmanship."
+  },
   "home": {
     "mapHeading": "Where our projects are",
     "mapSubtitle": "Find our projects on the map in your chosen city",
@@ -28,6 +32,32 @@
     "documentsAndPricing": "Documents & pricing",
     "additionalInfo": "Additional information",
     "documentToDownload": "Document to download"
+  },
+  "cookies": {
+    "ariaLabel": "Cookie consent",
+    "title": "Cookies",
+    "body": "We use cookies for analytics and marketing. You can accept all or reject optional ones.",
+    "privacyLink": "Privacy policy",
+    "reject": "Reject",
+    "accept": "Accept",
+    "settings": "Cookie settings"
+  },
+  "legal": {
+    "lastUpdated": "Last updated",
+    "placeholder": "[Placeholder – replace with legally reviewed details.]",
+    "impressumTitle": "Legal notice (Impressum)",
+    "providerHeading": "Information pursuant to § 5 DDG",
+    "contactHeading": "Contact",
+    "registerHeading": "Register entry",
+    "vatHeading": "VAT identification number",
+    "disclaimerHeading": "Liability for content",
+    "disclaimerBody": "As a service provider we are responsible for our own content on these pages under general law. However, we are not obliged to monitor transmitted or stored third-party information. [Replace with legally reviewed text.]",
+    "datenschutzTitle": "Privacy policy",
+    "controllerHeading": "Controller",
+    "dataHeading": "Collection and processing of personal data",
+    "dataBody": "We process personal data (e.g. name, email, phone) that you provide via the contact form solely to handle your enquiry. [Replace with legally reviewed text.]",
+    "rightsHeading": "Your rights under the GDPR",
+    "rightsBody": "You have the right to access, rectification, erasure, restriction of processing, data portability and objection. You also have the right to lodge a complaint with a supervisory authority. [Replace with legally reviewed text.]"
   },
   "news": {
     "heading": "News",
@@ -76,6 +106,6 @@
     "hqLabel": "Registered office",
     "rights": "All rights reserved.",
     "privacy": "Privacy policy",
-    "terms": "Terms"
+    "terms": "Legal notice"
   }
 }

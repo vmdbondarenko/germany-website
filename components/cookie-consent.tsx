@@ -1,7 +1,8 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import Link from "next/link"
+import { useTranslations } from "next-intl"
+import { Link } from "@/i18n/navigation"
 
 // Custom event name the footer "Ustawienia cookies" link dispatches to reopen
 // the banner. Kept in sync with components/cookie-settings-button.tsx.
@@ -45,6 +46,7 @@ function writeConsentCookie(value: "granted" | "denied"): void {
 }
 
 export function CookieConsent() {
+  const t = useTranslations("cookies")
   const [visible, setVisible] = useState(false)
 
   useEffect(() => {
@@ -75,21 +77,20 @@ export function CookieConsent() {
     <div
       role="dialog"
       aria-live="polite"
-      aria-label="Zgoda na pliki cookies"
+      aria-label={t("ariaLabel")}
       className="fixed inset-x-0 bottom-0 z-[9998] px-4 pb-4 sm:px-6 sm:pb-6"
     >
       <div className="container mx-auto max-w-3xl rounded-2xl border border-border bg-card p-6 shadow-2xl sm:p-7">
         <h2 className="font-serif text-xl font-semibold text-foreground mb-2">
-          Pliki cookies
+          {t("title")}
         </h2>
         <p className="text-sm leading-relaxed text-muted-foreground">
-          Używamy plików cookies do celów analitycznych i marketingowych. Możesz
-          zaakceptować wszystkie lub odrzucić opcjonalne.{" "}
+          {t("body")}{" "}
           <Link
-            href="/polityka-prywatnosci"
+            href="/datenschutz"
             className="font-medium text-primary underline underline-offset-2 hover:text-primary/80"
           >
-            Polityka prywatności
+            {t("privacyLink")}
           </Link>
         </p>
         <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:justify-end">
@@ -98,14 +99,14 @@ export function CookieConsent() {
             onClick={reject}
             className="rounded-full border border-border bg-background px-6 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted"
           >
-            Odrzucam
+            {t("reject")}
           </button>
           <button
             type="button"
             onClick={accept}
             className="rounded-full bg-primary px-6 py-2.5 text-sm font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary/90"
           >
-            Akceptuję
+            {t("accept")}
           </button>
         </div>
       </div>

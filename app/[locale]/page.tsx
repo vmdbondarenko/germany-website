@@ -20,26 +20,21 @@ import { getLocale, getTranslations } from "next-intl/server"
 import { getHomeContent } from "@/lib/home-content"
 import { pick } from "@/lib/i18n-content"
 import type { Locale } from "@/i18n/routing"
-import { HOME_COPY } from "@/lib/seo/landing-copy"
 import type { Metadata } from "next"
 
 export const dynamic = "force-dynamic"
 
-export const metadata: Metadata = {
-  title: HOME_COPY.title,
-  description: HOME_COPY.description,
-  alternates: { canonical: "/" },
-  openGraph: {
-    title: HOME_COPY.title,
-    description: HOME_COPY.description,
-    url: "/",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: HOME_COPY.title,
-    description: HOME_COPY.description,
-  },
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("meta")
+  const title = t("homeTitle")
+  const description = t("homeDescription")
+  return {
+    title,
+    description,
+    alternates: { canonical: "/", languages: { de: "/", en: "/en" } },
+    openGraph: { title, description, url: "/", type: "website" },
+    twitter: { card: "summary_large_image", title, description },
+  }
 }
 
 export default async function HomePage() {

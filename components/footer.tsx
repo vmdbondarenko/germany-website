@@ -111,10 +111,10 @@ export async function Footer() {
             © {new Date().getFullYear()} {tc("companyName")}. {t("rights")}
           </p>
           <div className="flex flex-wrap gap-6 text-sm">
-            <Link href="/polityka-prywatnosci" className="text-primary-foreground/50 hover:text-primary-foreground transition-colors">
+            <Link href="/datenschutz" className="text-primary-foreground/50 hover:text-primary-foreground transition-colors">
               {t("privacy")}
             </Link>
-            <Link href="/regulamin" className="text-primary-foreground/50 hover:text-primary-foreground transition-colors">
+            <Link href="/impressum" className="text-primary-foreground/50 hover:text-primary-foreground transition-colors">
               {t("terms")}
             </Link>
             <CookieSettingsButton className="text-primary-foreground/50 hover:text-primary-foreground transition-colors" />

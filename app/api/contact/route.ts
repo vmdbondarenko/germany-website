@@ -5,7 +5,14 @@ import { isValidEmail } from "@/lib/validation/email"
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
-const RECIPIENTS = ["vmdbondarenko@gmail.com", "maryna@jwdevelopment.net"]
+// Recipients + sender are configurable via env so no addresses are hardcoded.
+// CONTACT_RECIPIENTS is a comma-separated list; CONTACT_FROM must be a verified
+// Resend sender (falls back to Resend's test sender for local dev).
+const RECIPIENTS = (process.env.CONTACT_RECIPIENTS || "vmdbondarenko@gmail.com")
+  .split(",")
+  .map((s) => s.trim())
+  .filter(Boolean)
+const FROM = process.env.CONTACT_FROM || "Kontaktformular <onboarding@resend.dev>"
 
 export async function POST(req: Request) {
   try {
@@ -21,21 +28,21 @@ export async function POST(req: Request) {
     }
 
     const emailSubject = subject
-      ? `Zapytanie: ${subject} — ${name}`
-      : `Nowa wiadomość od ${name}`
+      ? `Anfrage: ${subject} — ${name}`
+      : `Neue Nachricht von ${name}`
 
     await resend.emails.send({
-      from: "Formularz kontaktowy <kontakt@vmd-development.com>",
+      from: FROM,
       to: RECIPIENTS,
       replyTo: email,
       subject: emailSubject,
       text: [
-        subject ? `Zapytanie dot.: ${subject}` : "",
-        `Imię i nazwisko: ${name}`,
-        `Email: ${email}`,
+        subject ? `Anfrage zu: ${subject}` : "",
+        `Name: ${name}`,
+        `E-Mail: ${email}`,
         `Telefon: ${phone || "—"}`,
         ``,
-        `Wiadomość:`,
+        `Nachricht:`,
         message || "—",
       ].filter(Boolean).join("\n"),
     })

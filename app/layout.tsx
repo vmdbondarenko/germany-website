@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Script from 'next/script'
-import { getLocale } from 'next-intl/server'
+import { getLocale, getMessages } from 'next-intl/server'
+import { NextIntlClientProvider } from 'next-intl'
 import { Playfair_Display, Inter } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import { GoogleTagManager } from '@next/third-parties/google'
@@ -40,6 +41,7 @@ export default async function RootLayout({
   children: React.ReactNode
 }>) {
   const locale = await getLocale()
+  const messages = await getMessages()
   return (
     <html lang={locale} className={`${playfair.variable} ${inter.variable}`}>
       {/* Google Consent Mode v2 — defaults to denied BEFORE GTM loads.
@@ -71,11 +73,13 @@ export default async function RootLayout({
       </Script>
       {gtmId && <GoogleTagManager gtmId={gtmId} />}
       <body className="font-sans antialiased">
-        <JsonLd schema={organizationSchema()} />
-        {children}
-        <CookieConsent />
-        <Ringostat />
-        <Analytics />
+        <NextIntlClientProvider locale={locale} messages={messages}>
+          <JsonLd schema={organizationSchema()} />
+          {children}
+          <CookieConsent />
+          <Ringostat />
+          <Analytics />
+        </NextIntlClientProvider>
       </body>
     </html>
   )

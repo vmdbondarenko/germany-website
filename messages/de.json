@@ -16,6 +16,10 @@
     "companyName": "Muster Immobilien GmbH",
     "companyTagline": "Immobilienentwickler"
   },
+  "meta": {
+    "homeTitle": "Neue Häuser vom Bauträger",
+    "homeDescription": "Hochwertige Wohnimmobilien vom Bauträger – durchdachte Grundrisse und sorgfältige Verarbeitung."
+  },
   "home": {
     "mapHeading": "Standorte unserer Projekte",
     "mapSubtitle": "Finden Sie unsere Projekte auf der Karte in der gewünschten Stadt",
@@ -28,6 +32,32 @@
     "documentsAndPricing": "Dokumente & Preisliste",
     "additionalInfo": "Zusätzliche Informationen",
     "documentToDownload": "Dokument zum Herunterladen"
+  },
+  "cookies": {
+    "ariaLabel": "Zustimmung zu Cookies",
+    "title": "Cookies",
+    "body": "Wir verwenden Cookies für Analyse- und Marketingzwecke. Sie können alle akzeptieren oder optionale ablehnen.",
+    "privacyLink": "Datenschutzerklärung",
+    "reject": "Ablehnen",
+    "accept": "Akzeptieren",
+    "settings": "Cookie-Einstellungen"
+  },
+  "legal": {
+    "lastUpdated": "Stand",
+    "placeholder": "[Platzhalter – bitte durch rechtlich geprüfte Angaben ersetzen.]",
+    "impressumTitle": "Impressum",
+    "providerHeading": "Angaben gemäß § 5 DDG",
+    "contactHeading": "Kontakt",
+    "registerHeading": "Registereintrag",
+    "vatHeading": "Umsatzsteuer-Identifikationsnummer",
+    "disclaimerHeading": "Haftung für Inhalte",
+    "disclaimerBody": "Als Diensteanbieter sind wir für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Wir sind jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen. [Bitte durch rechtlich geprüften Text ersetzen.]",
+    "datenschutzTitle": "Datenschutzerklärung",
+    "controllerHeading": "Verantwortlicher",
+    "dataHeading": "Erhebung und Verarbeitung personenbezogener Daten",
+    "dataBody": "Wir verarbeiten personenbezogene Daten (z. B. Name, E-Mail, Telefon), die Sie uns über das Kontaktformular mitteilen, ausschließlich zur Bearbeitung Ihrer Anfrage. [Bitte durch rechtlich geprüften Text ersetzen.]",
+    "rightsHeading": "Ihre Rechte nach DSGVO",
+    "rightsBody": "Sie haben das Recht auf Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung, Datenübertragbarkeit und Widerspruch. Zudem steht Ihnen ein Beschwerderecht bei einer Aufsichtsbehörde zu. [Bitte durch rechtlich geprüften Text ersetzen.]"
   },
   "news": {
     "heading": "Aktuelles",
@@ -76,6 +106,6 @@
     "hqLabel": "Firmensitz",
     "rights": "Alle Rechte vorbehalten.",
     "privacy": "Datenschutz",
-    "terms": "AGB"
+    "terms": "Impressum"
   }
 }
