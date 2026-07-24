@@ -29,6 +29,14 @@
     "additionalInfo": "Additional information",
     "documentToDownload": "Document to download"
   },
+  "news": {
+    "heading": "News",
+    "subtitle": "The latest from our company and our projects",
+    "empty": "No posts yet.",
+    "noImage": "No image",
+    "readMore": "Read more",
+    "backToList": "Back to News"
+  },
   "nav": {
     "about": "About",
     "locations": "Locations",

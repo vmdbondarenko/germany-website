@@ -19,6 +19,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
 type BlockInput = {
   type: 'paragraph' | 'image'
   content?: string | null
+  contentEn?: string | null
   imageUrl?: string | null
 }
 
@@ -59,7 +60,9 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
       data: {
         slug,
         title: body.title,
+        titleEn: body.titleEn ?? null,
         description: body.description ?? null,
+        descriptionEn: body.descriptionEn ?? null,
         coverImageUrl: body.coverImageUrl ?? null,
         published: body.published ?? false,
         publishedAt,
@@ -74,6 +77,7 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
             newsPostId: id,
             type: b.type,
             content: b.content ?? null,
+            contentEn: b.contentEn ?? null,
             imageUrl: b.imageUrl ?? null,
             order: idx,
           })),

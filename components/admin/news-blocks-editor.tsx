@@ -11,6 +11,7 @@ import { Trash2, ChevronUp, ChevronDown, Type, ImageIcon, Upload } from 'lucide-
 export type NewsBlock = {
   type: 'paragraph' | 'image'
   content: string
+  contentEn?: string
   imageUrl: string
 }
 
@@ -133,12 +134,25 @@ export function NewsBlocksEditor({
             </div>
 
             {block.type === 'paragraph' ? (
-              <Textarea
-                value={block.content}
-                onChange={(e) => update(idx, { content: e.target.value })}
-                placeholder="Treść paragrafu..."
-                rows={5}
-              />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div className="space-y-1.5">
+                  <Label className="text-xs">Absatz · DE</Label>
+                  <Textarea
+                    value={block.content}
+                    onChange={(e) => update(idx, { content: e.target.value })}
+                    placeholder="Absatztext …"
+                    rows={5}
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <Label className="text-xs">Absatz · EN</Label>
+                  <Textarea
+                    value={block.contentEn ?? ''}
+                    onChange={(e) => update(idx, { contentEn: e.target.value })}
+                    rows={5}
+                  />
+                </div>
+              </div>
             ) : (
               <div className="space-y-3">
                 <div className="flex items-center gap-3">
@@ -169,13 +183,22 @@ export function NewsBlocksEditor({
                     className="rounded-lg max-h-64 object-cover"
                   />
                 )}
-                <div className="space-y-1.5">
-                  <Label className="text-xs">Opis zdjęcia (opcjonalnie)</Label>
-                  <Input
-                    value={block.content}
-                    onChange={(e) => update(idx, { content: e.target.value })}
-                    placeholder="np. Widok z lotu ptaka na inwestycję"
-                  />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <div className="space-y-1.5">
+                    <Label className="text-xs">Bildunterschrift · DE (optional)</Label>
+                    <Input
+                      value={block.content}
+                      onChange={(e) => update(idx, { content: e.target.value })}
+                      placeholder="z. B. Luftaufnahme des Projekts"
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label className="text-xs">Bildunterschrift · EN (optional)</Label>
+                    <Input
+                      value={block.contentEn ?? ''}
+                      onChange={(e) => update(idx, { contentEn: e.target.value })}
+                    />
+                  </div>
                 </div>
               </div>
             )}

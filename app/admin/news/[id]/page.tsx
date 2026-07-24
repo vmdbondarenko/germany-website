@@ -15,6 +15,7 @@ type ApiBlock = {
   id: string
   type: string
   content: string | null
+  contentEn: string | null
   imageUrl: string | null
   order: number
 }
@@ -23,7 +24,9 @@ type ApiPost = {
   id: string
   slug: string
   title: string
+  titleEn: string | null
   description: string | null
+  descriptionEn: string | null
   coverImageUrl: string | null
   published: boolean
   publishedAt: string | null
@@ -39,8 +42,10 @@ export default function EditNewsPage({ params }: { params: Promise<{ id: string 
   const [error, setError] = useState('')
   const [form, setForm] = useState({
     title: '',
+    titleEn: '',
     slug: '',
     description: '',
+    descriptionEn: '',
     coverImageUrl: '',
     publishedAt: '',
     published: false,
@@ -58,8 +63,10 @@ export default function EditNewsPage({ params }: { params: Promise<{ id: string 
       const post: ApiPost = await res.json()
       setForm({
         title: post.title,
+        titleEn: post.titleEn ?? '',
         slug: post.slug,
         description: post.description ?? '',
+        descriptionEn: post.descriptionEn ?? '',
         coverImageUrl: post.coverImageUrl ?? '',
         publishedAt: post.publishedAt ? post.publishedAt.slice(0, 10) : '',
         published: post.published,
@@ -68,6 +75,7 @@ export default function EditNewsPage({ params }: { params: Promise<{ id: string 
         post.blocks.map((b) => ({
           type: b.type === 'image' ? 'image' : 'paragraph',
           content: b.content ?? '',
+          contentEn: b.contentEn ?? '',
           imageUrl: b.imageUrl ?? '',
         }))
       )
@@ -106,6 +114,7 @@ export default function EditNewsPage({ params }: { params: Promise<{ id: string 
         blocks: blocks.map((b) => ({
           type: b.type,
           content: b.content || null,
+          contentEn: b.contentEn || null,
           imageUrl: b.imageUrl || null,
         })),
       }),
@@ -157,14 +166,24 @@ export default function EditNewsPage({ params }: { params: Promise<{ id: string 
               <CardTitle>Informacje podstawowe</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="title">Tytuł *</Label>
-                <Input
-                  id="title"
-                  value={form.title}
-                  onChange={(e) => setForm((p) => ({ ...p, title: e.target.value }))}
-                  required
-                />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div className="space-y-2">
+                  <Label htmlFor="title">Titel · DE *</Label>
+                  <Input
+                    id="title"
+                    value={form.title}
+                    onChange={(e) => setForm((p) => ({ ...p, title: e.target.value }))}
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="titleEn">Titel · EN</Label>
+                  <Input
+                    id="titleEn"
+                    value={form.titleEn}
+                    onChange={(e) => setForm((p) => ({ ...p, titleEn: e.target.value }))}
+                  />
+                </div>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="slug">Slug URL *</Label>
@@ -176,15 +195,26 @@ export default function EditNewsPage({ params }: { params: Promise<{ id: string 
                 />
                 <p className="text-xs text-gray-500">URL: /aktualnosci/{form.slug}</p>
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="description">Krótki opis (zajawka)</Label>
-                <Textarea
-                  id="description"
-                  value={form.description}
-                  onChange={(e) => setForm((p) => ({ ...p, description: e.target.value }))}
-                  placeholder="Krótki opis widoczny na liście aktualności..."
-                  rows={3}
-                />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div className="space-y-2">
+                  <Label htmlFor="description">Kurzbeschreibung · DE</Label>
+                  <Textarea
+                    id="description"
+                    value={form.description}
+                    onChange={(e) => setForm((p) => ({ ...p, description: e.target.value }))}
+                    placeholder="Kurzer Teaser für die Übersichtsseite …"
+                    rows={3}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="descriptionEn">Kurzbeschreibung · EN</Label>
+                  <Textarea
+                    id="descriptionEn"
+                    value={form.descriptionEn}
+                    onChange={(e) => setForm((p) => ({ ...p, descriptionEn: e.target.value }))}
+                    rows={3}
+                  />
+                </div>
               </div>
             </CardContent>
           </Card>

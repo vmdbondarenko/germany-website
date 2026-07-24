@@ -27,6 +27,7 @@ async function makeUniqueSlug(base: string, ignoreId?: string): Promise<string> 
 type BlockInput = {
   type: 'paragraph' | 'image'
   content?: string | null
+  contentEn?: string | null
   imageUrl?: string | null
 }
 
@@ -50,7 +51,9 @@ export async function POST(request: Request) {
     data: {
       slug,
       title: body.title,
+      titleEn: body.titleEn ?? null,
       description: body.description ?? null,
+      descriptionEn: body.descriptionEn ?? null,
       coverImageUrl: body.coverImageUrl ?? null,
       published: body.published ?? false,
       publishedAt,
@@ -58,6 +61,7 @@ export async function POST(request: Request) {
         create: blocks.map((b, idx) => ({
           type: b.type,
           content: b.content ?? null,
+          contentEn: b.contentEn ?? null,
           imageUrl: b.imageUrl ?? null,
           order: idx,
         })),

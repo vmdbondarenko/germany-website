@@ -29,6 +29,14 @@
     "additionalInfo": "Zusätzliche Informationen",
     "documentToDownload": "Dokument zum Herunterladen"
   },
+  "news": {
+    "heading": "Aktuelles",
+    "subtitle": "Neuigkeiten aus unserem Unternehmen und unseren Projekten",
+    "empty": "Noch keine Beiträge.",
+    "noImage": "Kein Bild",
+    "readMore": "Weiterlesen",
+    "backToList": "Zurück zu Aktuelles"
+  },
   "nav": {
     "about": "Über uns",
     "locations": "Standorte",

@@ -1,6 +1,9 @@
-import Link from 'next/link'
 import Image from 'next/image'
+import { getLocale, getTranslations } from 'next-intl/server'
+import { Link } from '@/i18n/navigation'
 import { prisma } from '@/lib/prisma'
+import { pick } from '@/lib/i18n-content'
+import type { Locale } from '@/i18n/routing'
 import { HeaderServer } from '@/components/header-server'
 import { Footer } from '@/components/footer'
 import { Calendar, ArrowRight } from 'lucide-react'
@@ -14,7 +17,11 @@ export const metadata: Metadata = {
 }
 
 export default async function AktualnosciPage() {
-  const posts = await prisma.newsPost.findMany({
+  const locale = (await getLocale()) as Locale
+  const t = await getTranslations('news')
+  const dateLocale = locale === 'en' ? 'en-US' : 'de-DE'
+
+  const rows = await prisma.newsPost.findMany({
     where: { published: true },
     orderBy: [{ publishedAt: 'desc' }, { createdAt: 'desc' }],
     include: {
@@ -25,6 +32,11 @@ export default async function AktualnosciPage() {
       },
     },
   })
+  const posts = rows.map((p) => ({
+    ...p,
+    title: pick(p.title, p.titleEn, locale),
+    description: pick(p.description, p.descriptionEn, locale),
+  }))
 
   const itemList =
     posts.length > 0
@@ -48,16 +60,16 @@ export default async function AktualnosciPage() {
                 className="font-serif text-4xl lg:text-5xl font-semibold mb-4"
                 style={{ color: '#3E1718' }}
               >
-                Aktualności
+                {t('heading')}
               </h1>
               <p className="text-muted-foreground text-base lg:text-lg max-w-2xl mx-auto">
-                Najnowsze informacje z życia naszej firmy i inwestycji
+                {t('subtitle')}
               </p>
             </div>
 
             {posts.length === 0 ? (
               <div className="text-center py-20 text-muted-foreground">
-                <p className="text-lg">Brak aktualności.</p>
+                <p className="text-lg">{t('empty')}</p>
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -81,14 +93,14 @@ export default async function AktualnosciPage() {
                         </div>
                       ) : (
                         <div className="aspect-[16/9] bg-muted flex items-center justify-center">
-                          <span className="text-muted-foreground text-sm">Brak zdjęcia</span>
+                          <span className="text-muted-foreground text-sm">{t('noImage')}</span>
                         </div>
                       )}
 
                       <div className="p-6 flex flex-col flex-grow">
                         <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-3">
                           <Calendar className="h-3.5 w-3.5" />
-                          {date.toLocaleDateString('pl-PL', {
+                          {date.toLocaleDateString(dateLocale, {
                             year: 'numeric',
                             month: 'long',
                             day: 'numeric',
@@ -109,7 +121,7 @@ export default async function AktualnosciPage() {
                           className="mt-4 inline-flex items-center gap-1 text-sm font-medium"
                           style={{ color: '#6E2E2A' }}
                         >
-                          Czytaj więcej
+                          {t('readMore')}
                           <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
                         </span>
                       </div>

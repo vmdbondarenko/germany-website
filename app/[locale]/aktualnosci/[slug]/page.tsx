@@ -1,7 +1,10 @@
-import Link from 'next/link'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
+import { getLocale, getTranslations } from 'next-intl/server'
+import { Link } from '@/i18n/navigation'
 import { prisma } from '@/lib/prisma'
+import { pick } from '@/lib/i18n-content'
+import type { Locale } from '@/i18n/routing'
 import { HeaderServer } from '@/components/header-server'
 import { Footer } from '@/components/footer'
 import { NewsPostContent } from '@/components/news-post-content'
@@ -17,20 +20,20 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>
 }): Promise<Metadata> {
   const { slug } = await params
+  const locale = (await getLocale()) as Locale
   const canonical = `/aktualnosci/${slug}`
   const post = await prisma.newsPost.findUnique({ where: { slug } })
-  if (!post || !post.published) return { title: 'Aktualności', alternates: { canonical } }
+  if (!post || !post.published) return { title: 'News', alternates: { canonical } }
 
-  const pageTitle = `${post.title} — Aktualności`
-  const description = post.description ?? undefined
+  const title = pick(post.title, post.titleEn, locale)
+  const description = pick(post.description, post.descriptionEn, locale) ?? undefined
+  const pageTitle = `${title} — News`
   const images = post.coverImageUrl ? [post.coverImageUrl] : undefined
 
   return {
     title: pageTitle,
     description,
     alternates: { canonical },
-    // Always set openGraph/twitter titles explicitly so cover-less posts never
-    // fall back to the generic site-wide OG/Twitter title.
     openGraph: {
       title: pageTitle,
       description,
@@ -53,12 +56,23 @@ export default async function NewsPostPage({
   params: Promise<{ slug: string }>
 }) {
   const { slug } = await params
-  const post = await prisma.newsPost.findUnique({
+  const locale = (await getLocale()) as Locale
+  const t = await getTranslations('news')
+  const dateLocale = locale === 'en' ? 'en-US' : 'de-DE'
+
+  const raw = await prisma.newsPost.findUnique({
     where: { slug },
     include: { blocks: { orderBy: { order: 'asc' } } },
   })
 
-  if (!post || !post.published) notFound()
+  if (!raw || !raw.published) notFound()
+
+  const post = {
+    ...raw,
+    title: pick(raw.title, raw.titleEn, locale),
+    description: pick(raw.description, raw.descriptionEn, locale),
+    blocks: raw.blocks.map((b) => ({ ...b, content: pick(b.content, b.contentEn, locale) })),
+  }
 
   const date = post.publishedAt ?? post.createdAt
 
@@ -85,13 +99,13 @@ export default async function NewsPostPage({
               className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground mb-8 transition-colors"
             >
               <ArrowLeft className="h-4 w-4" />
-              Wszystkie aktualności
+              {t('backToList')}
             </Link>
 
             <header className="mb-10">
               <div className="flex items-center gap-1.5 text-sm text-muted-foreground mb-4">
                 <Calendar className="h-4 w-4" />
-                {date.toLocaleDateString('pl-PL', {
+                {date.toLocaleDateString(dateLocale, {
                   year: 'numeric',
                   month: 'long',
                   day: 'numeric',
