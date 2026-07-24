@@ -18,7 +18,11 @@
   },
   "home": {
     "mapHeading": "Standorte unserer Projekte",
-    "mapSubtitle": "Finden Sie unsere Projekte auf der Karte in der gewünschten Stadt"
+    "mapSubtitle": "Finden Sie unsere Projekte auf der Karte in der gewünschten Stadt",
+    "statusActive": "Im Verkauf",
+    "statusPlanned": "Demnächst",
+    "statusCompleted": "Abgeschlossen",
+    "remaining": "Verfügbar"
   },
   "nav": {
     "about": "Über uns",

@@ -18,7 +18,11 @@
   },
   "home": {
     "mapHeading": "Where our projects are",
-    "mapSubtitle": "Find our projects on the map in your chosen city"
+    "mapSubtitle": "Find our projects on the map in your chosen city",
+    "statusActive": "For sale",
+    "statusPlanned": "Coming soon",
+    "statusCompleted": "Completed",
+    "remaining": "Available"
   },
   "nav": {
     "about": "About",

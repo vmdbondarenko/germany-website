@@ -18,6 +18,7 @@ import { NewsScroll } from "@/components/news-scroll"
 import { prisma } from "@/lib/prisma"
 import { getLocale, getTranslations } from "next-intl/server"
 import { getHomeContent } from "@/lib/home-content"
+import { pick } from "@/lib/i18n-content"
 import type { Locale } from "@/i18n/routing"
 import { HOME_COPY } from "@/lib/seo/landing-copy"
 import type { Metadata } from "next"
@@ -48,9 +49,14 @@ export default async function HomePage() {
   const mapCopy = { heading: th("mapHeading"), subtitle: th("mapSubtitle") }
 
   const STATUS_LABELS: Record<string, string> = {
-    active: "W sprzedaży",
-    planned: "Wkrótce",
-    completed: "Zakończona",
+    active: th("statusActive"),
+    planned: th("statusPlanned"),
+    completed: th("statusCompleted"),
+  }
+  function L(base: string, en: string | null): string
+  function L(base: string | null, en: string | null): string | null
+  function L(base: string | null, en: string | null): string | null {
+    return pick(base, en, locale)
   }
 
   const dbProjects = await prisma.project.findMany({
@@ -64,6 +70,11 @@ export default async function HomePage() {
       },
     },
   })
+  const keyFeaturesOf = (p: (typeof dbProjects)[number]) =>
+    p.sections[0]?.items.map((i) => ({
+      title: L(i.title, i.titleEn),
+      subtitle: L(i.subtitle, i.subtitleEn),
+    })) ?? []
 
   // Build slideshow slides from published DB projects
   const slideshowSlides = dbProjects
@@ -71,16 +82,15 @@ export default async function HomePage() {
     .map((p) => {
       const available = p.units.filter((u) => u.status === "available").length
       const total = p.units.length
-      const keyFeatures = p.sections[0]?.items.map((i) => ({ title: i.title, subtitle: i.subtitle })) ?? []
       return {
         image: p.imageUrl!,
         title: p.name,
-        address: p.location,
+        address: L(p.location, p.locationEn),
         status: STATUS_LABELS[p.status] || p.status,
-        availability: `Pozostało: ${available} / ${total}`,
+        availability: `${th("remaining")}: ${available} / ${total}`,
         href: `/inwestycje/${p.slug}`,
-        description: p.description,
-        keyFeatures,
+        description: L(p.description, p.descriptionEn),
+        keyFeatures: keyFeaturesOf(p),
       }
     })
 
@@ -89,17 +99,17 @@ export default async function HomePage() {
     .map((p) => ({
       slug: p.slug,
       name: p.name,
-      location: p.location,
+      location: L(p.location, p.locationEn),
       imageUrl: p.imageUrl,
-      heroSubtitle: p.heroSubtitle,
+      heroSubtitle: L(p.heroSubtitle, p.heroSubtitleEn),
       status: p.status,
-      description: p.description,
+      description: L(p.description, p.descriptionEn),
       availableCount: p.units.filter((u) => u.status === "available").length,
       totalCount: p.units.length,
-      keyFeatures: p.sections[0]?.items.map((i) => ({ title: i.title, subtitle: i.subtitle })) ?? [],
+      keyFeatures: keyFeaturesOf(p),
     }))
 
-  const [lokalizacjaData, upcomingInvestments, newCities, aboutSection, teamMembers] = await Promise.all([
+  const [lokalizacjaData, upcomingInvestmentsRaw, newCitiesRaw, aboutSectionRaw, teamMembersRaw] = await Promise.all([
     loadLokalizacjaData(),
     prisma.upcomingInvestment.findMany({ orderBy: { order: 'asc' } }),
     prisma.newCity.findMany({ orderBy: { order: 'asc' } }),
@@ -109,20 +119,38 @@ export default async function HomePage() {
   const mapsApiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || null
   const mapsMapId = process.env.NEXT_PUBLIC_GOOGLE_MAPS_MAP_ID || undefined
 
+  const upcomingInvestments = upcomingInvestmentsRaw.map((i) => ({
+    ...i,
+    title: L(i.title, i.titleEn),
+    description: L(i.description, i.descriptionEn),
+    status: L(i.status, i.statusEn),
+  }))
+  const newCities = newCitiesRaw.map((c) => ({
+    ...c,
+    city: L(c.city, c.cityEn),
+    date: L(c.date, c.dateEn),
+  }))
+  const aboutSection = aboutSectionRaw && {
+    ...aboutSectionRaw,
+    companyName: L(aboutSectionRaw.companyName, aboutSectionRaw.companyNameEn),
+    description: L(aboutSectionRaw.description, aboutSectionRaw.descriptionEn),
+  }
+  const teamMembers = teamMembersRaw.map((m) => ({ ...m, role: L(m.role, m.roleEn) }))
+
   const completedProjects = dbProjects
     .filter((p) => p.status === "completed")
     .map((p) => ({
       slug: p.slug,
       name: p.name,
-      location: p.location,
+      location: L(p.location, p.locationEn),
       imageUrl: p.imageUrl,
-      heroSubtitle: p.heroSubtitle,
-      description: p.description,
+      heroSubtitle: L(p.heroSubtitle, p.heroSubtitleEn),
+      description: L(p.description, p.descriptionEn),
       totalCount: p.units.length,
-      keyFeatures: p.sections[0]?.items.map((i) => ({ title: i.title, subtitle: i.subtitle })) ?? [],
+      keyFeatures: keyFeaturesOf(p),
     }))
 
-  const newsPosts = await prisma.newsPost.findMany({
+  const newsPostsRaw = await prisma.newsPost.findMany({
     where: { published: true },
     orderBy: [{ publishedAt: "desc" }, { createdAt: "desc" }],
     take: 10,
@@ -130,12 +158,19 @@ export default async function HomePage() {
       id: true,
       slug: true,
       title: true,
+      titleEn: true,
       description: true,
+      descriptionEn: true,
       coverImageUrl: true,
       publishedAt: true,
       createdAt: true,
     },
   })
+  const newsPosts = newsPostsRaw.map((p) => ({
+    ...p,
+    title: L(p.title, p.titleEn),
+    description: L(p.description, p.descriptionEn),
+  }))
 
   return (
     <>

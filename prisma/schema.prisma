@@ -56,8 +56,10 @@ model Project {
   id           String  @id @default(cuid())
   name         String
   slug         String  @unique
-  location     String
-  description  String? @db.Text
+  location     String // German (default locale)
+  locationEn   String? // English override
+  description  String? @db.Text // German (default locale)
+  descriptionEn String? @db.Text // English override
   svgContent   String? @db.Text
   imageUrl     String?
   planImageUrl String?
@@ -66,7 +68,8 @@ model Project {
   northAngle   Int? // Compass rotation in degrees (0-359, null = no compass shown) for main plan
 
   // Hero
-  heroSubtitle String?
+  heroSubtitle   String? // German (default locale)
+  heroSubtitleEn String? // English override
 
   // Contact
   contactPhone   String?
@@ -94,7 +97,8 @@ model Project {
   investPostalCode   String?
   propertyType       String? @default("Mieszkanie") // Mieszkanie / Dom jednorodzinny
   prospektUrl        String? // URL to prospekt informacyjny
-  additionalInfo     String? @db.Text // Extra info shown in "Informacje dodatkowe" section
+  additionalInfo     String? @db.Text // Extra info section — German (default locale)
+  additionalInfoEn   String? @db.Text // English override
   latitude           Float? // Geocoded from investment address, used on /lokalizacja map
   longitude          Float?
 
@@ -306,9 +310,12 @@ model ProjectSection {
   projectId   String
   project     Project       @relation(fields: [projectId], references: [id], onDelete: Cascade)
   type        String // key_features, lokalizacja, otoczenie, o_inwestycji, udogodnienia, dodatki, dom, standard, jak_kupic, jak_pomoc, o_inwestorze
-  label       String?
-  heading     String?
-  description String?       @db.Text
+  label         String? // German (default locale)
+  labelEn       String? // English override
+  heading       String? // German (default locale)
+  headingEn     String? // English override
+  description   String? @db.Text // German (default locale)
+  descriptionEn String? @db.Text // English override
   imageUrl    String?
   imageUrl2   String?
   mapUrl      String?
@@ -326,9 +333,12 @@ model SectionItem {
   sectionId   String
   section     ProjectSection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
   icon        String?
-  title       String
-  subtitle    String?
-  description String?
+  title         String // German (default locale)
+  titleEn       String? // English override
+  subtitle      String? // German (default locale)
+  subtitleEn    String? // English override
+  description   String? // German (default locale)
+  descriptionEn String? // English override
   mapUrl      String? // Google Maps URL (or "lat,lng") — shown as an extra pin on the project location map
   order       Int            @default(0)
   createdAt   DateTime       @default(now())
@@ -339,8 +349,10 @@ model GalleryImage {
   projectId String
   project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
   src       String
-  alt       String   @default("")
-  label     String   @default("")
+  alt       String   @default("") // German (default locale)
+  altEn     String? // English override
+  label     String   @default("") // German (default locale)
+  labelEn   String? // English override
   order     Int      @default(0)
   createdAt DateTime @default(now())
 }
@@ -348,8 +360,10 @@ model GalleryImage {
 model NewsPost {
   id            String      @id @default(cuid())
   slug          String      @unique
-  title         String
-  description   String?     @db.Text
+  title         String // German (default locale)
+  titleEn       String? // English override
+  description   String?     @db.Text // German (default locale)
+  descriptionEn String?     @db.Text // English override
   coverImageUrl String?
   published     Boolean     @default(false)
   publishedAt   DateTime?
@@ -363,7 +377,8 @@ model NewsBlock {
   newsPostId String
   newsPost   NewsPost @relation(fields: [newsPostId], references: [id], onDelete: Cascade)
   type       String // "paragraph" | "image"
-  content    String?  @db.Text // paragraph text OR image caption
+  content    String?  @db.Text // paragraph text OR image caption — German (default locale)
+  contentEn  String?  @db.Text // English override
   imageUrl   String? // for image blocks
   order      Int      @default(0)
   createdAt  DateTime @default(now())
@@ -373,9 +388,12 @@ model NewsBlock {
 
 model UpcomingInvestment {
   id          String   @id @default(cuid())
-  title       String
-  description String
-  status      String
+  title       String // German (default locale)
+  description String // German (default locale)
+  status      String // German (default locale)
+  titleEn       String? // English override
+  descriptionEn String? // English override
+  statusEn      String? // English override
   statusColor String   @default("#6E2E2A")
   icon        String   @default("Clock")
   order       Int      @default(0)
@@ -386,7 +404,8 @@ model UpcomingInvestment {
 // (e.g. /domy-pod-warszawa) and groups its assigned projects on the map.
 model Location {
   id        String    @id @default(cuid())
-  name      String // "Domy pod Warszawą" — drives H1 / <title> / <meta>
+  name      String // German (default locale) — drives H1 / <title> / <meta>
+  nameEn    String? // English override
   slug      String    @unique // "domy-pod-warszawa"
   order     Int       @default(0)
   centerLat Float? // optional map-center override; else averaged from projects
@@ -399,8 +418,10 @@ model Location {
 
 model NewCity {
   id        String   @id @default(cuid())
-  city      String
-  date      String
+  city      String // German (default locale)
+  date      String // German (default locale)
+  cityEn    String? // English override
+  dateEn    String? // English override
   order     Int      @default(0)
   createdAt DateTime @default(now())
 }
@@ -408,18 +429,21 @@ model NewCity {
 model TeamMember {
   id        String   @id @default(cuid())
   name      String
-  role      String
+  role      String // German (default locale)
+  roleEn    String? // English override
   image     String?
   order     Int      @default(0)
   createdAt DateTime @default(now())
 }
 
 model AboutSection {
-  id          String   @id @default("main")
-  companyName String   @default("Jednopiętrowa Warszawa")
-  description String   @db.Text
-  photos      Json     @default("[]")
-  updatedAt   DateTime @updatedAt
+  id            String   @id @default("main")
+  companyName   String   @default("Jednopiętrowa Warszawa")
+  companyNameEn String? // English override
+  description   String   @db.Text // German (default locale)
+  descriptionEn String?  @db.Text // English override
+  photos        Json     @default("[]")
+  updatedAt     DateTime @updatedAt
 }
 
 // Admin-managed, per-locale content for the homepage's otherwise-hardcoded
