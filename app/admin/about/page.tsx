@@ -8,9 +8,9 @@ import { Textarea } from '@/components/ui/textarea'
 import Image from 'next/image'
 import { Trash2, Plus, Loader2, GripVertical, Upload, Clock, Zap, Wrench, Hammer, Building, Building2, Home, MapPin, Star, Check, Timer, HardHat, TrendingUp } from 'lucide-react'
 
-type Investment = { id: string; title: string; description: string; status: string; statusColor: string; icon: string; order: number }
-type City = { id: string; city: string; date: string; order: number }
-type AboutSectionData = { companyName: string; description: string; photos: string[] }
+type Investment = { id: string; title: string; description: string; status: string; titleEn?: string | null; descriptionEn?: string | null; statusEn?: string | null; statusColor: string; icon: string; order: number }
+type City = { id: string; city: string; date: string; cityEn?: string | null; dateEn?: string | null; order: number }
+type AboutSectionData = { companyName: string; description: string; companyNameEn?: string | null; descriptionEn?: string | null; photos: string[] }
 
 const STATUS_COLORS = ['#5A2A1C', '#6E2E2A', '#3E1718']
 const EMPTY_INV = { title: '', description: '', status: '', statusColor: '#6E2E2A', icon: 'Clock', order: 0 }
@@ -165,22 +165,42 @@ export default function AboutAdminPage() {
       <section>
         <h2 className="text-lg font-semibold mb-4">O firmie — treść</h2>
         <div className="border rounded-xl p-4 space-y-4 bg-card">
-          <div className="space-y-2">
-            <Label>Nazwa firmy</Label>
-            <Input
-              value={aboutSection.companyName}
-              onChange={e => setAboutSection(prev => ({ ...prev, companyName: e.target.value }))}
-              placeholder="np. Jednopiętrowa Warszawa"
-            />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div className="space-y-2">
+              <Label>Firmenname · DE</Label>
+              <Input
+                value={aboutSection.companyName}
+                onChange={e => setAboutSection(prev => ({ ...prev, companyName: e.target.value }))}
+                placeholder="z. B. Muster Immobilien GmbH"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label>Firmenname · EN</Label>
+              <Input
+                value={aboutSection.companyNameEn ?? ''}
+                onChange={e => setAboutSection(prev => ({ ...prev, companyNameEn: e.target.value }))}
+              />
+            </div>
           </div>
-          <div className="space-y-2">
-            <Label>Opis (akapity oddzielone pustą linią)</Label>
-            <Textarea
-              value={aboutSection.description}
-              onChange={e => setAboutSection(prev => ({ ...prev, description: e.target.value }))}
-              rows={12}
-              className="text-sm"
-            />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div className="space-y-2">
+              <Label>Beschreibung · DE (Absätze durch Leerzeile getrennt)</Label>
+              <Textarea
+                value={aboutSection.description}
+                onChange={e => setAboutSection(prev => ({ ...prev, description: e.target.value }))}
+                rows={12}
+                className="text-sm"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label>Beschreibung · EN</Label>
+              <Textarea
+                value={aboutSection.descriptionEn ?? ''}
+                onChange={e => setAboutSection(prev => ({ ...prev, descriptionEn: e.target.value }))}
+                rows={12}
+                className="text-sm"
+              />
+            </div>
           </div>
           <div className="space-y-2">
             <Label>Zdjęcia galerii (pierwsze 3 wyświetlane w siatce)</Label>
@@ -241,21 +261,38 @@ export default function AboutAdminPage() {
                 <GripVertical className="h-4 w-4 text-muted-foreground shrink-0" />
                 <div className="flex-1 grid grid-cols-2 gap-3">
                   <div>
-                    <Label className="text-xs">Tytuł</Label>
+                    <Label className="text-xs">Titel · DE</Label>
                     <Input className="h-8 text-sm mt-1" value={inv.title}
                       onChange={e => updateInvestment(inv.id, 'title', e.target.value)} />
                   </div>
                   <div>
-                    <Label className="text-xs">Status (etykieta)</Label>
+                    <Label className="text-xs">Titel · EN</Label>
+                    <Input className="h-8 text-sm mt-1" value={inv.titleEn ?? ''}
+                      onChange={e => updateInvestment(inv.id, 'titleEn', e.target.value)} />
+                  </div>
+                  <div>
+                    <Label className="text-xs">Status · DE</Label>
                     <Input className="h-8 text-sm mt-1" value={inv.status}
                       onChange={e => updateInvestment(inv.id, 'status', e.target.value)} />
                   </div>
+                  <div>
+                    <Label className="text-xs">Status · EN</Label>
+                    <Input className="h-8 text-sm mt-1" value={inv.statusEn ?? ''}
+                      onChange={e => updateInvestment(inv.id, 'statusEn', e.target.value)} />
+                  </div>
                 </div>
               </div>
-              <div>
-                <Label className="text-xs">Opis</Label>
-                <Textarea className="text-sm mt-1 min-h-[60px]" value={inv.description}
-                  onChange={e => updateInvestment(inv.id, 'description', e.target.value)} />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div>
+                  <Label className="text-xs">Beschreibung · DE</Label>
+                  <Textarea className="text-sm mt-1 min-h-[60px]" value={inv.description}
+                    onChange={e => updateInvestment(inv.id, 'description', e.target.value)} />
+                </div>
+                <div>
+                  <Label className="text-xs">Beschreibung · EN</Label>
+                  <Textarea className="text-sm mt-1 min-h-[60px]" value={inv.descriptionEn ?? ''}
+                    onChange={e => updateInvestment(inv.id, 'descriptionEn', e.target.value)} />
+                </div>
               </div>
               <div className="flex items-start gap-4 flex-wrap">
                 <div>
@@ -316,16 +353,27 @@ export default function AboutAdminPage() {
             <div key={city.id} className="border rounded-xl p-4 bg-card">
               <div className="flex items-center gap-3">
                 <GripVertical className="h-4 w-4 text-muted-foreground shrink-0" />
-                <div className="flex-1 grid grid-cols-3 gap-3">
+                <div className="flex-1 grid grid-cols-2 md:grid-cols-3 gap-3">
                   <div>
-                    <Label className="text-xs">Miasto</Label>
+                    <Label className="text-xs">Stadt · DE</Label>
                     <Input className="h-8 text-sm mt-1 uppercase" value={city.city}
                       onChange={e => updateCity(city.id, 'city', e.target.value.toUpperCase())} />
                   </div>
                   <div>
-                    <Label className="text-xs">Data (np. od 10.01.2026)</Label>
+                    <Label className="text-xs">Stadt · EN</Label>
+                    <Input className="h-8 text-sm mt-1 uppercase" value={city.cityEn ?? ''}
+                      onChange={e => updateCity(city.id, 'cityEn', e.target.value.toUpperCase())} />
+                  </div>
+                  <div className="hidden md:block" />
+                  <div>
+                    <Label className="text-xs">Datum · DE (z. B. ab 10.01.2026)</Label>
                     <Input className="h-8 text-sm mt-1" value={city.date}
                       onChange={e => updateCity(city.id, 'date', e.target.value)} />
+                  </div>
+                  <div>
+                    <Label className="text-xs">Datum · EN</Label>
+                    <Input className="h-8 text-sm mt-1" value={city.dateEn ?? ''}
+                      onChange={e => updateCity(city.id, 'dateEn', e.target.value)} />
                   </div>
                   <div>
                     <Label className="text-xs">Kolejność</Label>

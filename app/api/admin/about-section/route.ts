@@ -12,10 +12,17 @@ export async function PUT(request: Request) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
   const body = await request.json()
+  const fields = {
+    companyName: body.companyName,
+    companyNameEn: body.companyNameEn || null,
+    description: body.description,
+    descriptionEn: body.descriptionEn || null,
+    photos: body.photos ?? [],
+  }
   const section = await prisma.aboutSection.upsert({
     where: { id: 'main' },
-    update: { companyName: body.companyName, description: body.description, photos: body.photos ?? [] },
-    create: { id: 'main', companyName: body.companyName, description: body.description, photos: body.photos ?? [] },
+    update: fields,
+    create: { id: 'main', ...fields },
   })
   return NextResponse.json(section)
 }

@@ -8,7 +8,7 @@ import { Label } from '@/components/ui/label'
 import { Trash2, Plus, Loader2, Upload, GripVertical } from 'lucide-react'
 import { slugifyBase } from '@/lib/blob-filename'
 
-type TeamMember = { id: string; name: string; role: string; image: string | null; order: number }
+type TeamMember = { id: string; name: string; role: string; roleEn?: string | null; image: string | null; order: number }
 
 async function uploadImage(file: File, name?: string): Promise<string> {
   const form = new FormData()
@@ -128,11 +128,20 @@ export default function TeamAdminPage() {
                   />
                 </div>
                 <div className="space-y-1">
-                  <Label className="text-xs">Stanowisko</Label>
+                  <Label className="text-xs">Position · DE</Label>
                   <Input
                     value={member.role}
                     className="h-8 text-sm"
                     onChange={e => update(member.id, 'role', e.target.value)}
+                    onBlur={() => save(member)}
+                  />
+                </div>
+                <div className="space-y-1">
+                  <Label className="text-xs">Position · EN</Label>
+                  <Input
+                    value={member.roleEn ?? ''}
+                    className="h-8 text-sm"
+                    onChange={e => update(member.id, 'roleEn', e.target.value)}
                     onBlur={() => save(member)}
                   />
                 </div>
