@@ -48,13 +48,38 @@ npx dotenv-cli -e .env.local -- npx prisma migrate deploy
 ## Environment (`.env.local`)
 
 Present: Postgres/Neon (`POSTGRES_PRISMA_URL`, `POSTGRES_URL_NON_POOLING`, …),
-`BLOB_READ_WRITE_TOKEN`, `RESEND_API_KEY`, `ADMIN_PASSWORD`,
+`BLOB_READ_WRITE_TOKEN`, `RESEND_API_KEY`, `ADMIN_PASSWORD`, `SESSION_SECRET`,
 `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY`.
+
+- **`SESSION_SECRET` is REQUIRED** — `lib/auth.ts` throws if unset or <16 chars (signs
+  the admin session cookie). Must be set locally **and** in Vercel or admin login breaks.
+- `MANAGER_PASSWORD` (optional) enables a limited "manager" role login.
 
 Still to fill: `NEXT_PUBLIC_BASE_URL` (used by sitemap/robots/canonicals — currently
 `http://localhost:3000`), `NEXT_PUBLIC_GOOGLE_MAPS_MAP_ID`, and optionally
 `CONTACT_FROM` / `CONTACT_RECIPIENTS` (contact-form email; `CONTACT_FROM` must be a
-verified Resend sender — falls back to `onboarding@resend.dev` for dev).
+verified Resend sender — falls back to `onboarding@resend.dev` for dev),
+`GOOGLE_MAPS_API_KEY` (server-side geocoding in `lib/geocode.ts`).
+
+## Deployment (Vercel) & Git
+
+- **Live:** `https://germany-website-tau.vercel.app` (Vercel project `germany-website`,
+  team `vmdbondarenko-3115s-projects`). Auto-deploys from GitHub `main`.
+- **Repo:** `github.com/vmdbondarenko/germany-website`. The build runs
+  `prisma generate && node scripts/migrate-deploy-with-retry.mjs && next build` — so
+  **migrations run at build time** and the DB env vars must exist in Vercel.
+- **`vercel.json` pins `"framework": "nextjs"`** — do NOT remove it. The project was
+  imported when the repo was an empty README, so Vercel's auto-detected framework is
+  `null` ("Other"), which serves the Next.js build as static → 404s everywhere. The pin
+  forces the Next.js builder.
+- **Package manager: npm only.** `pnpm-lock.yaml` was deleted (it went stale and broke
+  Vercel's frozen pnpm install). Keep `package-lock.json` in sync; don't reintroduce a
+  pnpm lockfile.
+- **Git remote / SSH:** the machine's default GitHub key is another account
+  (`capevbondarenko`, no write access). The remote is set to `git@github:…` (the
+  `~/.ssh/config` alias `Host github` → key `~/.ssh/id_vmd` = `vmdbondarenko`). If a push
+  is denied, the remote got reset to `git@github.com:…` — put it back to the `github` alias.
+- Commit messages end with `Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>`.
 
 ## i18n architecture (read this before touching routing)
 
@@ -105,6 +130,29 @@ The otherwise-hardcoded homepage sections are data-driven via **`HomeSection` /
   `BuyingProcess`) are props-driven; `app/[locale]/page.tsx` fetches and threads content.
 - Edited at **`/admin/home`** (config-driven editor, DE/EN side-by-side).
 - `components/dynamic-icon.tsx` maps admin-entered lucide icon names → components.
+
+#### `/admin/home` ("Startseite") — current state & the "constructor" roadmap
+The nav link is still labelled **"Startseite"** (German) while the rest of admin is
+English — rename to "Homepage" when convenient (`app/admin/layout.tsx`).
+
+Today the editor manages **text only** for a **fixed set of 8 sections** in fixed order:
+hero, process (+items), distinguishes (+items), services (+items), interior, and the
+headings for buying / buying-help / investor. Config lives in the `SECTIONS` array in
+`app/admin/home/page.tsx`.
+
+**Not yet admin-editable (the gap the client asked to close — a homepage "constructor"):**
+- **Images** — hero background, `InteriorShowcase` gallery array, investor logo, and
+  per-section images are still hardcoded in the components.
+- **Contacts** — header dropdowns / footer / contact section read `lib/contact-info.ts`
+  (hardcoded placeholder Polish cities); not in admin.
+- **Add / remove / reorder blocks** — sections are fixed; no dynamic block list.
+- Some content isn't surfaced (individual buying-process steps, investor paragraphs).
+
+Agreed direction (not built): **Tier 1** = wire images + a contacts model into the
+existing editor (biggest practical win, ~1 session). **Tier 2** = a curated block library
+(~6–8 typed blocks: Hero/RichText/Image/Gallery/FeatureGrid/CTA/Steps/Contact) with
+add/reorder/remove — the real "constructor" (~2–3 sessions). **Tier 3** = full page-builder
+with layout/columns/preview across all pages (large). Recommendation was Tier 2.
 
 ## Admin
 
