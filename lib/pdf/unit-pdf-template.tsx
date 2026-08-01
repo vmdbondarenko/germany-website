@@ -293,23 +293,23 @@ function FloorPage({
       {/* Header */}
       <View style={s.header}>
         <View>
-          <Text style={s.headerProject}>Osiedle</Text>
+          <Text style={s.headerProject}>Projekt</Text>
           <Text style={s.headerProjectName}>{pl(data.projectName)}</Text>
         </View>
         <Text style={s.headerUnit}>{pl(data.unitLabel)}</Text>
         {data.totalArea && (
           <Text style={s.headerDetail}>
-            {data.totalArea.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} m²
+            {data.totalArea.toLocaleString('de-DE', { minimumFractionDigits: 2 })} m²
           </Text>
         )}
         {data.rooms && (
           <Text style={s.headerDetail}>
-            {data.rooms} {data.rooms === 1 ? pl('pokój') : data.rooms < 5 ? 'pokoje' : 'pokoi'}
+            {data.rooms} Zimmer
           </Text>
         )}
         {data.price && (
           <Text style={s.headerDetail}>
-            {new Intl.NumberFormat('pl-PL', { maximumFractionDigits: 0 }).format(data.price)} PLN
+            {new Intl.NumberFormat('de-DE', { maximumFractionDigits: 0 }).format(data.price)} €
           </Text>
         )}
         <Text style={s.headerFloor}>{pl(floor.name)}</Text>
@@ -347,24 +347,24 @@ function FloorPage({
             <View style={s.roomTable}>
               <View style={s.roomTableHeader}>
                 <Text style={[s.roomTableHeaderText, { width: 25 }]}>NR</Text>
-                <Text style={[s.roomTableHeaderText, { flex: 1 }]}>{pl('POMIESZCZENIE')}</Text>
-                <Text style={[s.roomTableHeaderText, { width: 55, textAlign: 'right' }]}>POW.</Text>
+                <Text style={[s.roomTableHeaderText, { flex: 1 }]}>{'RAUM'}</Text>
+                <Text style={[s.roomTableHeaderText, { width: 55, textAlign: 'right' }]}>FLÄCHE</Text>
               </View>
               {floor.rooms.map((room, i) => (
                 <View key={i} style={[s.roomRow, i % 2 === 1 ? s.roomRowAlt : {}]}>
                   <Text style={s.roomNr}>{room.number}</Text>
                   <Text style={s.roomName}>{pl(room.name)}</Text>
                   <Text style={s.roomArea}>
-                    {room.area ? `${room.area.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} m²` : '—'}
+                    {room.area ? `${room.area.toLocaleString('de-DE', { minimumFractionDigits: 2 })} m²` : '—'}
                   </Text>
                 </View>
               ))}
               {floor.area && (
                 <View style={s.roomSumaRow}>
                   <Text style={[s.roomSumaText, { width: 25 }]}></Text>
-                  <Text style={[s.roomSumaText, { flex: 1 }]}>SUMA</Text>
+                  <Text style={[s.roomSumaText, { flex: 1 }]}>GESAMT</Text>
                   <Text style={[s.roomSumaText, { width: 55, textAlign: 'right' }]}>
-                    {floor.area.toLocaleString('pl-PL', { minimumFractionDigits: 2 })} m²
+                    {floor.area.toLocaleString('de-DE', { minimumFractionDigits: 2 })} m²
                   </Text>
                 </View>
               )}
@@ -385,7 +385,7 @@ function FloorPage({
                   borderRadius: 4,
                 }}
               />
-              <Text style={s.floorPlan2dLabel}>{pl(`Rzut ${floor.name.toLowerCase()}`)}</Text>
+              <Text style={s.floorPlan2dLabel}>{pl(`Grundriss ${floor.name.toLowerCase()}`)}</Text>
             </View>
           )}
 

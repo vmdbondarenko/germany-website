@@ -6,9 +6,9 @@ import type { Locale } from '@/i18n/routing'
 
 /**
  * Build the <title>/<meta>/canonical for an investment page. Shared by the
- * legacy /inwestycje/[slug] route and the city /[citySlug]/[slug] route so both
+ * legacy /projekte/[slug] route and the city /[citySlug]/[slug] route so both
  * URLs render identical metadata — only the canonical differs. `canonicalPath`
- * is the project's canonical URL (city path when assigned, else /inwestycje/...).
+ * is the project's canonical URL (city path when assigned, else /projekte/...).
  * Title/description resolve per active locale (German default, English override).
  */
 export async function buildProjectMetadata(slug: string, canonicalPath: string): Promise<Metadata> {

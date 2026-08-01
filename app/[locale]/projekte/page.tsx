@@ -10,13 +10,23 @@ import type { Metadata } from 'next'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  alternates: { canonical: '/inwestycje' },
+  title: 'Projekte – Neue Häuser vom Bauträger',
+  description:
+    'Entdecken Sie unsere Bauprojekte in Berlin und Brandenburg – hochwertige Häuser im Stil des Bayerischen Mauerwerks, direkt vom Bauträger.',
+  alternates: { canonical: '/projekte', languages: { de: '/projekte', en: '/en/projekte' } },
+  openGraph: {
+    title: 'Projekte – Neue Häuser vom Bauträger',
+    description:
+      'Entdecken Sie unsere Bauprojekte in Berlin und Brandenburg – hochwertige Häuser direkt vom Bauträger.',
+    url: '/projekte',
+    type: 'website',
+  },
 }
 
 function formatPrice(price: number): string {
-  return new Intl.NumberFormat('pl-PL', {
+  return new Intl.NumberFormat('de-DE', {
     style: 'currency',
-    currency: 'PLN',
+    currency: 'EUR',
     maximumFractionDigits: 0,
   }).format(price)
 }
@@ -38,16 +48,16 @@ export default async function InwestycjePage() {
               className="text-4xl lg:text-5xl font-serif font-bold mb-4"
               style={{ color: '#3E1718' }}
             >
-              Nasze inwestycje
+              Unsere Projekte
             </h1>
             <p className="text-lg text-gray-600 max-w-2xl">
-              Odkryj nasze projekty deweloperskie i znajdź dom idealny dla siebie.
+              Entdecken Sie unsere Bauprojekte und finden Sie Ihr passendes Zuhause.
             </p>
           </div>
 
           {projects.length === 0 ? (
             <div className="text-center py-20 text-gray-400">
-              Brak aktywnych inwestycji
+              Keine aktiven Projekte
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -61,7 +71,7 @@ export default async function InwestycjePage() {
                 const minPrice = prices.length ? Math.min(...prices) : null
 
                 return (
-                  <Link key={project.id} href={`/inwestycje/${project.slug}`}>
+                  <Link key={project.id} href={`/projekte/${project.slug}`}>
                     <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 group">
                       <div className="aspect-video bg-gray-100 relative overflow-hidden">
                         {project.imageUrl ? (
@@ -87,10 +97,10 @@ export default async function InwestycjePage() {
                             }`}
                           >
                             {project.status === 'active'
-                              ? 'W sprzedaży'
+                              ? 'Im Verkauf'
                               : project.status === 'planned'
-                              ? 'Planowana'
-                              : 'Zakończona'}
+                              ? 'Geplant'
+                              : 'Abgeschlossen'}
                           </span>
                         </div>
                       </div>
@@ -112,22 +122,22 @@ export default async function InwestycjePage() {
                         )}
                         <div className="flex gap-2 flex-wrap mb-4">
                           <Badge className="bg-green-100 text-green-800 hover:bg-green-100">
-                            {available} dostępnych
+                            {available} verfügbar
                           </Badge>
                           {reserved > 0 && (
                             <Badge className="bg-yellow-100 text-yellow-800 hover:bg-yellow-100">
-                              {reserved} zarezerwowanych
+                              {reserved} reserviert
                             </Badge>
                           )}
                           {sold > 0 && (
                             <Badge className="bg-red-100 text-red-800 hover:bg-red-100">
-                              {sold} sprzedanych
+                              {sold} verkauft
                             </Badge>
                           )}
                         </div>
                         {minPrice && (
                           <p className="text-sm font-medium" style={{ color: '#6E2E2A' }}>
-                            Od {formatPrice(minPrice)}
+                            Ab {formatPrice(minPrice)}
                           </p>
                         )}
                       </div>

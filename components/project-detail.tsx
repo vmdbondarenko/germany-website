@@ -21,7 +21,7 @@ import { pick } from '@/lib/i18n-content'
 import type { Locale } from '@/i18n/routing'
 
 /**
- * Full investment page body. Rendered by both /inwestycje/[slug] (legacy, only
+ * Full investment page body. Rendered by both /projekte/[slug] (legacy, only
  * for projects without an assigned city) and /[citySlug]/[slug] (canonical city
  * path). `canonicalPath` feeds the breadcrumb + Residence JSON-LD so structured
  * data points at the canonical URL. `cities` (for the header dropdown) is passed
@@ -326,10 +326,10 @@ export async function ProjectDetail({
         </section>
       )}
 
-      {/* Jak kupić */}
+      {/* Buying process */}
       {jakKupic && <BuyingProcess content={buyingContent} />}
 
-      {/* Jak jeszcze możemy pomóc? */}
+      {/* How else we help */}
       {jakPomoc && (
         <DynamicTwoColumnSection
           section={jakPomoc}

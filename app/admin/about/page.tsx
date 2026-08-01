@@ -338,7 +338,7 @@ export default function AboutAdminPage() {
               </div>
             </div>
           ))}
-          {investments.length === 0 && <p className="text-sm text-muted-foreground">Brak inwestycji.</p>}
+          {investments.length === 0 && <p className="text-sm text-muted-foreground">No upcoming investments.</p>}
         </div>
       </section>
 
@@ -392,7 +392,7 @@ export default function AboutAdminPage() {
               </div>
             </div>
           ))}
-          {cities.length === 0 && <p className="text-sm text-muted-foreground">Brak miast.</p>}
+          {cities.length === 0 && <p className="text-sm text-muted-foreground">No cities.</p>}
         </div>
       </section>
     </div>

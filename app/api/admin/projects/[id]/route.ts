@@ -182,7 +182,7 @@ export async function PUT(
   if (oldSlug) {
     // The new slug may itself have been a historical alias — free it first.
     await prisma.projectSlugAlias.deleteMany({ where: { slug: project.slug } })
-    // Record the old slug → this project so /inwestycje/{old} and /{city}/{old}
+    // Record the old slug → this project so /projekte/{old} and /{city}/{old}
     // keep 308-redirecting to the current canonical. Upsert covers re-renames.
     await prisma.projectSlugAlias.upsert({
       where: { slug: oldSlug },

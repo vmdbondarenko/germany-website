@@ -18,6 +18,20 @@ type UpcomingInvestment = { id: string; title: string; description: string; stat
 type NewCity = { id: string; city: string; date: string }
 type AboutSectionData = { companyName: string; description: string; photos?: unknown } | null
 
+// Default company name + history (German) shown until an admin overrides them in
+// the DB (AboutSection). Paragraphs are separated by a blank line; the section
+// splits on "\n\n".
+const DEFAULT_COMPANY_NAME = "Projektentwicklung Einstöckiges Berlin GmbH"
+const DEFAULT_ABOUT_DESCRIPTION = [
+  "Seit 2026 sind wir unter dem Namen Projektentwicklung Einstöckiges Berlin GmbH als Projektentwickler in Berlin tätig. Dieser Schritt ist die konsequente Fortsetzung eines langjährigen Weges, der auf Erfahrung, Qualität und dem Vertrauen unserer Kunden basiert.",
+  "Unsere Geschichte begann 2016 in der Ukraine. Unter dem Namen „Einstöckiges Kiew“ realisierten wir hochwertige Einfamilienhäuser aus Ziegeln im charakteristischen Stil des Bayerischen Mauerwerks. Ein besonderes Merkmal unserer Projekte ist der Einsatz exklusiver handgeformter Ziegel. Diese werden heute ausschließlich für unsere Bauvorhaben produziert und direkt nach dem Brennvorgang aus dem Ziegelwerk geliefert. So können wir eine gleichbleibend hohe Qualität und die unverwechselbare Optik jedes einzelnen Hauses gewährleisten.",
+  "Ausgehend von Kiew erweiterten wir unsere Tätigkeit kontinuierlich und realisierten erfolgreich Projekte auch in Lwiw, Tscherniwzi und Dnipro.",
+  "Im Jahr 2022 traten wir unter dem Namen „Einstöckige Warschau“ in den europäischen Markt ein. Den Auftakt bildete ein Doppelhaus in einem Vorort der polnischen Hauptstadt. In den darauffolgenden vier Jahren wuchs das Unternehmen deutlich und erweiterte seine Projektentwicklung auf weitere Städte wie Breslau, Krakau und Posen.",
+  "2025 erschlossen wir einen weiteren Markt und begannen mit der Entwicklung neuer Wohnprojekte im Umland von Baku in Aserbaidschan. Damit setzten wir unseren internationalen Wachstumskurs konsequent fort.",
+  "Heute entwickeln und realisieren wir erfolgreich Projekte in allen Ländern, in denen wir vertreten sind.",
+  "Unabhängig vom Land folgen alle unsere Häuser derselben Philosophie: zeitlose Architektur, hochwertige Materialien, durchdachte Grundrisse und eine präzise Ausführung bis ins kleinste Detail.",
+].join("\n\n")
+
 export function About({ upcomingInvestments, newCities, aboutSection }: { upcomingInvestments: UpcomingInvestment[]; newCities: NewCity[]; aboutSection: AboutSectionData }) {
   const [isVisible, setIsVisible] = useState(false)
   const [expansionVisible, setExpansionVisible] = useState(false)
@@ -67,12 +81,12 @@ export function About({ upcomingInvestments, newCities, aboutSection }: { upcomi
     : ["/images/house-main.jpg", "/images/house-balcony.jpg", "/images/house-terrace.jpg"]
   const companyImages = companySrcs.map((src, i) => ({
     src,
-    alt: numberedSectionAlt("O firmie", "Jednopiętrowa Warszawa", i),
+    alt: numberedSectionAlt("Unternehmensgeschichte", "", i),
   }))
 
   const techImages = [
-    { src: "/images/tech-house-main.jpg", alt: "Dom w stylu Wiązania Bawarskiego z ręcznie formowanej cegły z ogrodem i tarasem" },
-    { src: "/images/tech-houses-twin.jpg", alt: "Dwa domy bliźniaki z cegły w stylu Wiązania Bawarskiego na osiedlu" },
+    { src: "/images/tech-house-main.jpg", alt: numberedSectionAlt("Bauweise und Entwicklung", "", 0) },
+    { src: "/images/tech-houses-twin.jpg", alt: numberedSectionAlt("Bauweise und Entwicklung", "", 1) },
   ]
 
   const handlePrevImage = () => {
@@ -92,13 +106,13 @@ export function About({ upcomingInvestments, newCities, aboutSection }: { upcomi
   }
 
   const stats = [
-    { value: "+10", label: "lat doświadczenia" },
-    { value: "+800", label: "zbudowanych domów" },
-    { value: "96%", label: "budynków oddanych w terminie" },
+    { value: "10+", label: "Jahre Erfahrung" },
+    { value: "900+", label: "gebaute Häuser" },
+    { value: "96 %", label: "der Bauprojekte termingerecht übergeben" },
   ]
 
   return (
-    <section id="o-firmie" className="py-12 lg:py-20 bg-background">
+    <section id="unternehmen" className="py-12 lg:py-20 bg-background">
       <div className="container mx-auto px-4 lg:px-8">
         {/* Stats */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20 lg:mb-32">
@@ -141,15 +155,15 @@ export function About({ upcomingInvestments, newCities, aboutSection }: { upcomi
           {/* Section Header */}
           <div className="relative text-center mb-14 lg:mb-20">
             <h2 className="font-serif text-3xl lg:text-5xl font-semibold mb-5 leading-tight" style={{ color: '#3E1718' }}>
-              Już wkrótce rozpoczynamy budowę
+              Bald beginnen wir mit dem Bau
               <br />
               <span className="relative inline-block mt-1">
-                kolejnych inwestycji!
+                weiterer Projekte!
                 <div className="absolute -bottom-2 left-0 right-0 h-1 rounded-full opacity-30" style={{ backgroundColor: '#6E2E2A' }} />
               </span>
             </h2>
             <p className="text-muted-foreground text-base lg:text-lg max-w-2xl mx-auto leading-relaxed">
-              Nowe lokalizacje, nowe etapy rozwoju i kolejne inwestycje w starannie wybranych miejscach.
+              Neue Standorte, neue Entwicklungsphasen und weitere Projekte an sorgfältig ausgewählten Orten.
             </p>
           </div>
 
@@ -286,10 +300,10 @@ export function About({ upcomingInvestments, newCities, aboutSection }: { upcomi
                   </svg>
                 </div>
                 <h3 className="font-serif text-2xl lg:text-4xl font-semibold mb-3 text-white">
-                  Zaczynamy budować w kolejnych miastach!
+                  Wir bauen bald in weiteren Städten!
                 </h3>
                 <p className="text-white/60 text-sm lg:text-base max-w-xl mx-auto">
-                  Rozszerzamy działalność na nowe rynki
+                  Wir erweitern unsere Tätigkeit auf neue Märkte
                 </p>
               </div>
               
@@ -343,11 +357,11 @@ export function About({ upcomingInvestments, newCities, aboutSection }: { upcomi
                       <div className="w-3 h-3 rounded-full border border-white/20" style={{ backgroundColor: '#3E1718' }} />
                     </div>
                     <p className="text-white font-medium text-base lg:text-lg">
-                      Domy w Kijowie, Lwowie i Baku
+                      Häuser in Kiew, Lwiw und Baku
                     </p>
                   </div>
                   <p className="text-white/60 text-sm lg:text-base max-w-lg text-center leading-relaxed">
-                    W naszej ofercie posiadamy również domy wolnostojące, bliźniacze oraz szeregowe w Kijowie, we Lwowie i w Baku!
+                    In unserem Angebot finden Sie außerdem freistehende Häuser, Doppelhäuser und Reihenhäuser in Kiew, Lwiw und Baku!
                   </p>
                 </div>
               </div>
@@ -359,13 +373,13 @@ export function About({ upcomingInvestments, newCities, aboutSection }: { upcomi
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           <div className="order-2 lg:order-1">
             <p className="text-primary text-sm font-medium tracking-widest uppercase mb-4">
-              O firmie
+              Unternehmensgeschichte
             </p>
             <h2 className="font-serif text-3xl lg:text-5xl font-semibold text-foreground mb-6 text-balance">
-              {aboutSection?.companyName ?? 'Jednopiętrowa Warszawa'}
+              {aboutSection?.companyName ?? DEFAULT_COMPANY_NAME}
             </h2>
             <div className="space-y-4 text-muted-foreground text-base lg:text-lg leading-relaxed">
-              {(aboutSection?.description ?? '').split('\n\n').filter(Boolean).map((para, i) => (
+              {(aboutSection?.description || DEFAULT_ABOUT_DESCRIPTION).split('\n\n').filter(Boolean).map((para, i) => (
                 <p key={i}>{para}</p>
               ))}
             </div>
@@ -441,7 +455,7 @@ export function About({ upcomingInvestments, newCities, aboutSection }: { upcomi
                   className="col-span-7 row-span-3 relative rounded-2xl overflow-hidden shadow-lg flex items-center justify-center border-2 border-dashed border-border/40"
                   style={{ backgroundColor: '#F5F2EF' }}
                 >
-                  <p className="text-muted-foreground/40 text-xs text-center px-4">Dodaj zdjęcie w panelu administracyjnym</p>
+                  <p className="text-muted-foreground/40 text-xs text-center px-4">Bild im Adminbereich hinzufügen</p>
                 </div>
               )}
             </div>
@@ -458,7 +472,7 @@ export function About({ upcomingInvestments, newCities, aboutSection }: { upcomi
             <button
               onClick={() => setSelectedImageIndex(-1)}
               className="absolute top-4 right-4 lg:top-8 lg:right-8 w-12 h-12 flex items-center justify-center rounded-full bg-[#3E1718]/10 hover:bg-[#3E1718]/20 transition-colors duration-300 z-50 border border-[#6E2E2A]/20"
-              aria-label="Zamknij"
+              aria-label="Schließen"
             >
               <X className="w-6 h-6 text-[#3E1718]" />
             </button>
@@ -475,7 +489,7 @@ export function About({ upcomingInvestments, newCities, aboutSection }: { upcomi
                 handlePrevImage()
               }}
               className="absolute left-4 lg:left-8 top-1/2 -translate-y-1/2 w-14 h-14 lg:w-16 lg:h-16 flex items-center justify-center rounded-full bg-white/90 hover:bg-white shadow-lg hover:shadow-xl transition-all duration-300 z-50 border border-[#6E2E2A]/20"
-              aria-label="Poprzednie zdjęcie"
+              aria-label="Vorheriges Bild"
             >
               <ChevronLeft className="w-7 h-7 lg:w-8 lg:h-8 text-[#3E1718]" />
             </button>
@@ -487,7 +501,7 @@ export function About({ upcomingInvestments, newCities, aboutSection }: { upcomi
                 handleNextImage()
               }}
               className="absolute right-4 lg:right-8 top-1/2 -translate-y-1/2 w-14 h-14 lg:w-16 lg:h-16 flex items-center justify-center rounded-full bg-white/90 hover:bg-white shadow-lg hover:shadow-xl transition-all duration-300 z-50 border border-[#6E2E2A]/20"
-              aria-label="Następne zdjęcie"
+              aria-label="Nächstes Bild"
             >
               <ChevronRight className="w-7 h-7 lg:w-8 lg:h-8 text-[#3E1718]" />
             </button>
@@ -516,12 +530,12 @@ export function About({ upcomingInvestments, newCities, aboutSection }: { upcomi
             <div className="flex items-center justify-center gap-4 mb-4">
               <div className="h-px w-12 bg-gradient-to-r from-transparent to-[#6E2E2A]/40" />
               <span className="text-xs font-medium tracking-[0.2em] uppercase" style={{ color: '#5A2A1C' }}>
-                Nasze wartości
+                Unsere Werte
               </span>
               <div className="h-px w-12 bg-gradient-to-l from-transparent to-[#6E2E2A]/40" />
             </div>
             <h2 className="font-serif text-2xl lg:text-3xl font-semibold" style={{ color: '#3E1718' }}>
-              Fundamenty naszej działalności
+              Das Fundament unseres Handelns
             </h2>
           </div>
 
@@ -529,23 +543,23 @@ export function About({ upcomingInvestments, newCities, aboutSection }: { upcomi
           <div ref={sectionRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6 max-w-6xl mx-auto">
             {[
               {
-                title: "Nasza misja",
-                description: "Wierzymy, że własny dom lub lokal mieszkalny z indywidualnym ogrodem nie jest trudno dostępnym przywilejem. Dążymy do sukcesu, a największym sukcesem jest dla nas zadowolony klient.",
+                title: "Unsere Mission",
+                description: "Wir sind überzeugt, dass ein eigenes Haus oder eine Wohnung mit eigenem Grundstück kein unerreichbarer Luxus sein sollte, sondern eine realistische Möglichkeit für viele Menschen. Unser Anspruch ist es, hochwertigen Wohnraum zu schaffen und das Vertrauen unserer Kunden durch Qualität, Transparenz und Verlässlichkeit zu gewinnen. Der größte Maßstab unseres Erfolgs sind zufriedene Eigentümer.",
                 brickColor: "#6E2E2A",
               },
               {
-                title: "Nasza wizja",
-                description: "Naszym celem jest dostarczenie tego, czego sami oczekiwalibyśmy od dewelopera: bezpieczeństwa transakcji, wysokiej jakości materiałów budowlanych i atrakcyjnej ceny.",
+                title: "Unsere Vision",
+                description: "Wir möchten unseren Kunden genau das bieten, was wir selbst von einem Projektentwickler erwarten würden: sichere und transparente Prozesse, hochwertige Baumaterialien sowie ein überzeugendes Preis-Leistungs-Verhältnis.",
                 brickColor: "#5A2A1C",
               },
               {
-                title: "Nasza strategia",
-                description: "Budujemy trwałe relacje z klientami, skupiając się na efektywnym i terminowym realizowaniu projektów. Kreujemy przestrzenie pełne komfortu i harmonii.",
+                title: "Unsere Strategie",
+                description: "Wir setzen auf langfristige Kundenbeziehungen und effiziente und termingerechte Umsetzung unserer Projekte. Dabei legen wir großen Wert auf Termintreue, Qualität und eine sorgfältige Planung. So entstehen Wohnräume, die Komfort, Funktionalität und zeitlose Architektur miteinander verbinden.",
                 brickColor: "#3E1718",
               },
               {
-                title: "Nasz styl",
-                description: null,
+                title: "Unser Stil",
+                description: "Ein charakteristisches Merkmal unserer Häuser ist das Fassadenmauerwerk im bayerischen Stil. Die unterschiedlichen Farbtöne der Ziegel verleihen jedem Gebäude eine individuelle Ausstrahlung und schaffen ein harmonisches Gesamtbild, das auch über viele Jahre hinweg seinen zeitlosen Charakter bewahrt.",
                 brickColor: "#120A0A",
               },
             ].map((card, index) => (
@@ -577,26 +591,15 @@ export function About({ upcomingInvestments, newCities, aboutSection }: { upcomi
                 </h3>
                 
                 {/* Description */}
-                {card.title === "Nasz styl" ? (
-                  <p className="text-muted-foreground text-xs lg:text-sm leading-relaxed text-center">
-                    Stosujemy <strong>Wiązanie Bawarskie</strong>*, które nadaje elewacji elegancki i ponadczasowy charakter. Różnorodne odcienie cegły tworzą naturalny wzór, odporny na zmieniające się trendy.
-                  </p>
-                ) : (
-                  <p className="text-muted-foreground text-xs lg:text-sm leading-relaxed text-center">
-                    {card.description}
-                  </p>
-                )}
+                <p className="text-muted-foreground text-xs lg:text-sm leading-relaxed text-center">
+                  {card.description}
+                </p>
               </div>
             ))}
           </div>
-
-          {/* Footnote */}
-          <p className="mt-6 text-muted-foreground/60 text-[11px] leading-relaxed max-w-3xl mx-auto px-2">
-            * <strong>Wiązanie Bawarskie</strong> to artystyczna okładzina elewacji, oparta na nieregularnym połączeniu cegieł klinkierowych w 4–8 odcieniach — zwykle od czerwieni po ciemny brąz — tworząca barwny, estetyczny wzór. Technologia ta narodziła się w Niemczech, zwłaszcza w Bawarii, w XVII–XVIII wieku. W tamtych czasach, ze względu na niedoskonałość pieców, nie było możliwe wypalenie całej partii cegieł w identycznym kolorze. Budowniczowie musieli więc mieszać cegły z różnych partii, co z czasem przekształciło się w rozpoznawalny styl architektoniczny.
-          </p>
         </div>
 
-        {/* Wyjątkowa technologia - Premium Section */}
+        {/* Bauweise und Entwicklung - Premium Section */}
         <div className="mt-24 lg:mt-36">
           {/* Premium Background Container */}
           <div className="relative py-16 lg:py-24 -mx-4 lg:-mx-8 px-4 lg:px-8 rounded-3xl overflow-hidden">
@@ -627,7 +630,7 @@ export function About({ upcomingInvestments, newCities, aboutSection }: { upcomi
               {/* Section Header */}
               <div className="text-center mb-14 lg:mb-20">
                 <h2 className="font-serif text-3xl lg:text-5xl font-semibold" style={{ color: '#3E1718' }}>
-                  Wyjątkowa technologia
+                  Bauweise und Entwicklung
                 </h2>
               </div>
 
@@ -637,18 +640,19 @@ export function About({ upcomingInvestments, newCities, aboutSection }: { upcomi
                 <div className="order-2 lg:order-1">
                   <div className="space-y-6 text-muted-foreground text-base lg:text-lg leading-relaxed">
                     <p>
-                      Nieustannie dążymy do doskonałości, integrując nowoczesne technologie z tradycyjnym rzemiosłem,
-                      aby dostarczać nie tylko wygodne miejsca do życia, lecz również przestrzenie, które pozwalają
-                      na realizację marzeń. Jesteśmy gotowi sprostać wszystkim oczekiwaniom naszych klientów,
-                      zapewniając kompleksową obsługę na każdym etapie procesu inwestycyjnego.
+                      Wir entwickeln unsere Bauweise kontinuierlich weiter und verbinden moderne Technologien mit traditioneller Handwerkskunst. Unser Ziel ist es, nicht nur komfortable Häuser zu schaffen, sondern Lebensräume, in denen Träume Wirklichkeit werden können. Dabei begleiten wir unsere Kunden zuverlässig durch alle Phasen der Projektentwicklung – von der Planung bis zur Fertigstellung.
                     </p>
                     <p>
-                      Pomysł na budowanie domów w stylu Wiązania Bawarskiego z ręcznie formowanej cegły powstał
-                      z myślą o możliwości zaoferowania klientom czegoś nietypowego i wyjątkowego – wyróżniającego
-                      na tle innych nieruchomości. Na Ukrainie firma Jednopiętrowy Kijów stała się wiodąca na rynku,
-                      co skłoniło nas do ekspansji i rozwoju projektu w Polsce. Jednopiętrowa Warszawa, dzięki
-                      bogatemu doświadczeniu, kreatywności oraz skrupulatności w realizacji projektów, błyskawicznie
-                      zdobywa zaufanie wielu klientów.
+                      Die Idee, Häuser im Stil des Bayerischen Mauerwerks mit handgeformten Ziegeln zu errichten, entstand aus dem Wunsch, Wohnraum mit einem unverwechselbaren architektonischen Charakter zu schaffen. Die Kombination aus exklusiven Materialien und sorgfältiger Ausführung verleiht jedem Gebäude eine individuelle Ausstrahlung und eine dauerhaft hohe Wertigkeit.
+                    </p>
+                    <p>
+                      Unter der Marke „Einstöckiges Kiew“ entwickelte sich unser Unternehmen innerhalb weniger Jahre zu einem der führenden Anbieter im Segment hochwertiger Einfamilienhäuser in der Ukraine. Diese Entwicklung bildete die Grundlage für unsere Expansion nach Polen.
+                    </p>
+                    <p>
+                      Mit „Einstöckige Warschau“ konnten wir dank unserer langjährigen Erfahrung, unseres hohen Qualitätsanspruchs und einer konsequenten Kundenorientierung das Vertrauen zahlreicher Kunden gewinnen.
+                    </p>
+                    <p>
+                      Heute setzen wir diesen Weg in Deutschland fort. Mit unserer Erfahrung aus mehreren europäischen Märkten, hohen Qualitätsstandards und einer klaren architektonischen Handschrift entwickeln wir Wohnprojekte, die Ästhetik, Langlebigkeit und moderne Bauqualität auf überzeugende Weise miteinander verbinden.
                     </p>
                   </div>
                   
@@ -661,7 +665,7 @@ export function About({ upcomingInvestments, newCities, aboutSection }: { upcomi
                         background: 'linear-gradient(135deg, #6E2E2A 0%, #5A2A1C 50%, #3E1718 100%)',
                       }}
                     >
-                      <span>Skontaktuj sie!</span>
+                      <span>Kontakt aufnehmen</span>
                       <svg className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
                       </svg>
@@ -679,7 +683,7 @@ export function About({ upcomingInvestments, newCities, aboutSection }: { upcomi
                     >
                       <Image
                         src="/images/tech-house-main.jpg"
-                        alt={numberedSectionAlt("Wyjątkowa technologia", "Jednopiętrowa Warszawa", 0)}
+                        alt={numberedSectionAlt("Bauweise und Entwicklung", "", 0)}
                         fill
                         className="object-cover transition-transform duration-700 group-hover:scale-105"
                       />
@@ -696,7 +700,7 @@ export function About({ upcomingInvestments, newCities, aboutSection }: { upcomi
                     >
                       <Image
                         src="/images/tech-houses-twin.jpg"
-                        alt={numberedSectionAlt("Wyjątkowa technologia", "Jednopiętrowa Warszawa", 1)}
+                        alt={numberedSectionAlt("Bauweise und Entwicklung", "", 1)}
                         fill
                         className="object-cover transition-transform duration-700 group-hover:scale-105"
                       />
@@ -719,7 +723,7 @@ export function About({ upcomingInvestments, newCities, aboutSection }: { upcomi
             <button
               onClick={() => setSelectedTechImageIndex(-1)}
               className="absolute top-4 right-4 lg:top-8 lg:right-8 w-12 h-12 flex items-center justify-center rounded-full bg-[#3E1718]/10 hover:bg-[#3E1718]/20 transition-colors duration-300 z-50 border border-[#6E2E2A]/20"
-              aria-label="Zamknij"
+              aria-label="Schließen"
             >
               <X className="w-6 h-6 text-[#3E1718]" />
             </button>
@@ -736,7 +740,7 @@ export function About({ upcomingInvestments, newCities, aboutSection }: { upcomi
                 handlePrevTechImage()
               }}
               className="absolute left-4 lg:left-8 top-1/2 -translate-y-1/2 w-14 h-14 lg:w-16 lg:h-16 flex items-center justify-center rounded-full bg-white/90 hover:bg-white shadow-lg hover:shadow-xl transition-all duration-300 z-50 border border-[#6E2E2A]/20"
-              aria-label="Poprzednie zdjęcie"
+              aria-label="Vorheriges Bild"
             >
               <ChevronLeft className="w-7 h-7 lg:w-8 lg:h-8 text-[#3E1718]" />
             </button>
@@ -748,7 +752,7 @@ export function About({ upcomingInvestments, newCities, aboutSection }: { upcomi
                 handleNextTechImage()
               }}
               className="absolute right-4 lg:right-8 top-1/2 -translate-y-1/2 w-14 h-14 lg:w-16 lg:h-16 flex items-center justify-center rounded-full bg-white/90 hover:bg-white shadow-lg hover:shadow-xl transition-all duration-300 z-50 border border-[#6E2E2A]/20"
-              aria-label="Następne zdjęcie"
+              aria-label="Nächstes Bild"
             >
               <ChevronRight className="w-7 h-7 lg:w-8 lg:h-8 text-[#3E1718]" />
             </button>
@@ -760,7 +764,7 @@ export function About({ upcomingInvestments, newCities, aboutSection }: { upcomi
             >
               <Image
                 src={techImages[selectedTechImageIndex].src}
-                alt={numberedSectionAlt("Wyjątkowa technologia", "Jednopiętrowa Warszawa", selectedTechImageIndex)}
+                alt={numberedSectionAlt("Bauweise und Entwicklung", "", selectedTechImageIndex)}
                 width={1600}
                 height={1100}
                 className="max-w-full max-h-full object-contain rounded-2xl shadow-2xl"

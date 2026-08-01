@@ -52,18 +52,18 @@ export function NewsScroll({ posts }: { posts: NewsPostData[] }) {
               className="font-serif text-3xl lg:text-4xl font-semibold mb-3"
               style={{ color: "#3E1718" }}
             >
-              Aktualności
+              Aktuelles
             </h2>
             <p className="text-muted-foreground text-base lg:text-lg max-w-xl">
-              Najnowsze informacje z życia naszej firmy i inwestycji
+              Neuigkeiten aus unserem Unternehmen und unseren Projekten
             </p>
           </div>
           <Link
-            href="/aktualnosci"
+            href="/aktuelles"
             className="hidden md:flex items-center gap-1.5 text-sm font-medium hover:opacity-80 transition-opacity"
             style={{ color: "#6E2E2A" }}
           >
-            Wszystkie aktualności
+            Alle Neuigkeiten
             <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
@@ -72,7 +72,7 @@ export function NewsScroll({ posts }: { posts: NewsPostData[] }) {
           <button
             onClick={() => scroll("left")}
             className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-12 h-12 lg:w-14 lg:h-14 flex items-center justify-center rounded-full bg-white shadow-lg hover:shadow-xl transition-all duration-300 border border-border/20 disabled:opacity-30"
-            aria-label="Poprzedni wpis"
+            aria-label="Vorheriger Beitrag"
             disabled={!showLeft}
           >
             <ChevronLeft className="w-6 h-6 lg:w-7 lg:h-7 text-[#3E1718]" />
@@ -81,7 +81,7 @@ export function NewsScroll({ posts }: { posts: NewsPostData[] }) {
           <button
             onClick={() => scroll("right")}
             className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-12 h-12 lg:w-14 lg:h-14 flex items-center justify-center rounded-full bg-white shadow-lg hover:shadow-xl transition-all duration-300 border border-border/20 disabled:opacity-30"
-            aria-label="Następny wpis"
+            aria-label="Nächster Beitrag"
             disabled={!showRight}
           >
             <ChevronRight className="w-6 h-6 lg:w-7 lg:h-7 text-[#3E1718]" />
@@ -97,7 +97,7 @@ export function NewsScroll({ posts }: { posts: NewsPostData[] }) {
               return (
                 <Link
                   key={post.id}
-                  href={`/aktualnosci/${post.slug}`}
+                  href={`/aktuelles/${post.slug}`}
                   className="flex-shrink-0 w-[340px] group bg-card rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-500 hover:-translate-y-1 border border-border/50 flex flex-col cursor-pointer"
                 >
                   {post.coverImageUrl ? (
@@ -111,13 +111,13 @@ export function NewsScroll({ posts }: { posts: NewsPostData[] }) {
                     </div>
                   ) : (
                     <div className="aspect-[16/9] bg-muted flex items-center justify-center">
-                      <span className="text-muted-foreground text-xs">Brak zdjęcia</span>
+                      <span className="text-muted-foreground text-xs">Kein Bild</span>
                     </div>
                   )}
                   <div className="p-5 flex flex-col flex-grow">
                     <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-2">
                       <Calendar className="h-3 w-3" />
-                      {new Date(date).toLocaleDateString("pl-PL", {
+                      {new Date(date).toLocaleDateString("de-DE", {
                         year: "numeric",
                         month: "long",
                         day: "numeric",
@@ -143,11 +143,11 @@ export function NewsScroll({ posts }: { posts: NewsPostData[] }) {
 
         <div className="mt-8 text-center md:hidden">
           <Link
-            href="/aktualnosci"
+            href="/aktuelles"
             className="inline-flex items-center gap-1.5 text-sm font-medium"
             style={{ color: "#6E2E2A" }}
           >
-            Wszystkie aktualności
+            Alle Neuigkeiten
             <ArrowRight className="h-4 w-4" />
           </Link>
         </div>

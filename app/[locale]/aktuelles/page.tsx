@@ -14,8 +14,8 @@ export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   alternates: {
-    canonical: '/aktualnosci',
-    languages: { de: '/aktualnosci', en: '/en/aktualnosci' },
+    canonical: '/aktuelles',
+    languages: { de: '/aktuelles', en: '/en/aktuelles' },
   },
 }
 
@@ -46,7 +46,7 @@ export default async function AktualnosciPage() {
       ? itemListSchema(
           posts.map((post) => ({
             name: post.title,
-            path: `/aktualnosci/${post.slug}`,
+            path: `/aktuelles/${post.slug}`,
           })),
         )
       : null
@@ -82,7 +82,7 @@ export default async function AktualnosciPage() {
                   return (
                     <Link
                       key={post.id}
-                      href={`/aktualnosci/${post.slug}`}
+                      href={`/aktuelles/${post.slug}`}
                       className="group bg-card rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-500 hover:-translate-y-1 border border-border/50 flex flex-col"
                     >
                       {thumb ? (

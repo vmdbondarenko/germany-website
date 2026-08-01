@@ -5,26 +5,12 @@ import sharp from 'sharp'
 import React from 'react'
 import { UnitPdfDocument, type UnitPdfData } from '@/lib/pdf/unit-pdf-template'
 import { typeArea, floorArea } from '@/lib/house-type-area'
-import { cityContacts, primaryContact } from '@/lib/contact-info'
+import { primaryContact, company } from '@/lib/contact-info'
 
-// Phone shown in the generated PDF, selected by the investment's assigned city
-// (Location.slug), never by project name. Any new investment automatically gets
-// the right number once it is assigned to one of these cities in admin.
-// Unassigned/unknown city → Warszawa (the developer's HQ city). This only
-// affects the PDF phone; the PDF email is left unchanged.
-// Numbers come from lib/contact-info.ts (single source of truth); only the
-// investment-city-slug → city-name mapping lives here.
-const phoneForCityName = (name: string): string =>
-  cityContacts.find((c) => c.city === name)?.phone ?? primaryContact.phone
-const PDF_PHONE_BY_CITY_SLUG: Record<string, string> = {
-  'domy-pod-warszawa': phoneForCityName('Warszawa'),
-  'domy-pod-wroclawiem': phoneForCityName('Wrocław'),
-  'domy-pod-krakowem': phoneForCityName('Kraków'),
-}
-const PDF_PHONE_FALLBACK = primaryContact.phone
-
-function pdfPhoneForCity(citySlug: string | null | undefined): string {
-  return (citySlug && PDF_PHONE_BY_CITY_SLUG[citySlug]) || PDF_PHONE_FALLBACK
+// Phone shown in the generated PDF. Comes from lib/contact-info.ts (single
+// source of truth — the German HQ number).
+function pdfPhoneForCity(_citySlug: string | null | undefined): string {
+  return primaryContact.phone
 }
 
 async function fetchImageAsDataUri(url: string): Promise<string | null> {
@@ -121,12 +107,11 @@ export async function GET(
     let companyAddress: string | null = null
     if (unit.company) {
       const c = unit.company
-      // Unit number (Nr lokalu) belongs with the building number, not after the
-      // city: "ul. Postępu, 12C/U5, Warszawa" — not ".../U5" tacked on the end.
+      // Unit number belongs with the building number, not after the city.
       const buildingPart = [c.salesBuildingNr, c.salesUnitNr].filter(Boolean).join('/')
       const parts = [c.salesStreet, buildingPart, c.salesCity].filter(Boolean)
       if (parts.length > 0) {
-        companyAddress = `ul. ${parts.join(', ')}`
+        companyAddress = parts.join(', ')
       }
     }
 
@@ -175,13 +160,12 @@ export async function GET(
           label: img.label,
         }))
         .filter((img): img is { src: string; label: string } => img.src !== null),
-      companyName: unit.company?.name ?? null,
+      // Fall back to the German HQ company data when a unit has no linked Company.
+      companyName: unit.company?.name ?? company.name,
       companyWebsite: unit.company?.websiteUrl ?? null,
-      companyEmail: unit.company?.contactEmail ?? project.contactEmail ?? null,
-      // Phone is chosen by the investment's assigned city (see pdfPhoneForCity);
-      // email above is intentionally left unchanged.
+      companyEmail: unit.company?.contactEmail ?? project.contactEmail ?? company.email,
       companyPhone: pdfPhoneForCity(project.cityLocation?.slug),
-      companyAddress,
+      companyAddress: companyAddress ?? company.addressOneLine,
     }
 
     const buffer = await renderToBuffer(

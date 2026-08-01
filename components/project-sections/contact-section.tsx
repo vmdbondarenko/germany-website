@@ -57,9 +57,9 @@ export function DynamicContactSection({
         setSubmitted(true)
         setPhoneNumber("")
         setCountry(DEFAULT_COUNTRY)
-      } else alert("Wystąpił błąd. Spróbuj ponownie lub skontaktuj się telefonicznie.")
+      } else alert("Es ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut oder kontaktieren Sie uns telefonisch.")
     } catch {
-      alert("Wystąpił błąd. Spróbuj ponownie lub skontaktuj się telefonicznie.")
+      alert("Es ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut oder kontaktieren Sie uns telefonisch.")
     } finally {
       setIsSubmitting(false)
     }
@@ -68,7 +68,7 @@ export function DynamicContactSection({
   const contactItems = [
     phone && { icon: Phone, label: "Telefon", value: phone, href: `tel:${phone}` },
     email && { icon: Mail, label: "Email", value: email, href: `mailto:${email}` },
-    address && { icon: MapPin, label: "Biuro", value: address },
+    address && { icon: MapPin, label: "Büro", value: address },
   ].filter(Boolean) as Array<{ icon: React.ComponentType<{ className?: string }>; label: string; value: string; href?: string }>
 
   return (
@@ -77,10 +77,10 @@ export function DynamicContactSection({
         <div className="grid lg:grid-cols-2 gap-16">
           <div>
             <h2 className="font-serif text-3xl lg:text-4xl font-semibold text-white mb-6">
-              Skontaktuj się z nami
+              Kontaktieren Sie uns
             </h2>
             <p className="text-gray-400 mb-8 leading-relaxed">
-              Masz pytania dotyczące inwestycji? Chętnie odpowiemy na wszystkie wątpliwości i pomożemy wybrać najlepszą opcję.
+              Haben Sie Fragen zum Projekt? Wir beantworten gerne alle Ihre Fragen und helfen Ihnen, die beste Option zu wählen.
             </p>
             <div className="space-y-4">
               {contactItems.map((item, i) => (
@@ -105,14 +105,14 @@ export function DynamicContactSection({
             {submitted ? (
               <div className="flex flex-col items-center justify-center h-full text-center">
                 <Send className="w-12 h-12 text-green-400 mb-4" />
-                <h3 className="text-xl font-semibold text-white mb-2">Dziękujemy!</h3>
-                <p className="text-gray-400">Wkrótce się z Tobą skontaktujemy.</p>
+                <h3 className="text-xl font-semibold text-white mb-2">Vielen Dank!</h3>
+                <p className="text-gray-400">Wir melden uns in Kürze bei Ihnen.</p>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
-                  <input name="firstName" placeholder="Imię" required className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/10 text-white placeholder:text-gray-500 focus:outline-none focus:border-[#6E2E2A]" />
-                  <input name="lastName" placeholder="Nazwisko" required className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/10 text-white placeholder:text-gray-500 focus:outline-none focus:border-[#6E2E2A]" />
+                  <input name="firstName" placeholder="Vorname" required className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/10 text-white placeholder:text-gray-500 focus:outline-none focus:border-[#6E2E2A]" />
+                  <input name="lastName" placeholder="Nachname" required className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/10 text-white placeholder:text-gray-500 focus:outline-none focus:border-[#6E2E2A]" />
                 </div>
                 <input name="email" type="email" placeholder="Email" required aria-invalid={!!emailError} aria-describedby={emailError ? "project-email-error" : undefined} onChange={() => emailError && setEmailError(null)} className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/10 text-white placeholder:text-gray-500 focus:outline-none focus:border-[#6E2E2A]" />
                 {emailError && (
@@ -132,14 +132,14 @@ export function DynamicContactSection({
                   }}
                   error={phoneError}
                 />
-                <textarea name="message" placeholder="Wiadomość" rows={4} className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/10 text-white placeholder:text-gray-500 focus:outline-none focus:border-[#6E2E2A] resize-none" />
+                <textarea name="message" placeholder="Nachricht" rows={4} className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/10 text-white placeholder:text-gray-500 focus:outline-none focus:border-[#6E2E2A] resize-none" />
                 <button
                   type="submit"
                   disabled={isSubmitting}
                   className="w-full py-3 rounded-lg font-medium transition-all hover:opacity-90 disabled:opacity-50"
                   style={{ backgroundColor: "#6E2E2A", color: "white" }}
                 >
-                  {isSubmitting ? "Wysyłanie..." : "Wyślij wiadomość"}
+                  {isSubmitting ? "Wird gesendet …" : "Nachricht senden"}
                 </button>
               </form>
             )}

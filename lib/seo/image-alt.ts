@@ -58,12 +58,12 @@ export function resolveAlt(existing: string | null | undefined, fallback: string
 
 /** Gallery: `{projectName} - Galeria - {01|02|03…}` (1-based, zero-padded). */
 export function galleryAlt(projectName: string, index: number): string {
-  return join(projectName, 'Galeria', String(index + 1).padStart(2, '0'))
+  return join(projectName, 'Galerie', String(index + 1).padStart(2, '0'))
 }
 
-/** News article images: `Aktualności - {postTitle} - {01|02|03…}` (1-based, zero-padded). */
+/** News article images: `Aktuelles - {postTitle} - {01|02|03…}` (1-based, zero-padded). */
 export function newsImageAlt(postTitle: string, index: number): string {
-  return join('Aktualności', postTitle, String(index + 1).padStart(2, '0'))
+  return join('Aktuelles', postTitle, String(index + 1).padStart(2, '0'))
 }
 
 /** Numbered homepage section image override: `{label} - {brand} - {01|02|03…}`
@@ -72,24 +72,24 @@ export function numberedSectionAlt(label: string, brand: string, index: number):
   return join(label, brand, String(index + 1).padStart(2, '0'))
 }
 
-/** Team member image caption override: `Kim jesteśmy - {name} - {position}`. */
+/** Team member image caption override: `Über uns - {name} - {position}`. */
 export function teamMemberAlt(name: string, position: string): string {
-  return join('Kim jesteśmy', name, position)
+  return join('Über uns', name, position)
 }
 
-/** House types / floor plans: `{projectName} - Typy domów - {cleanedImageName}`. */
+/** House types / floor plans: `{projectName} - Haustypen - {cleanedImageName}`. */
 export function houseTypeAlt(projectName: string, url: string): string {
-  return join(projectName, 'Typy domów', cleanImageName(url))
+  return join(projectName, 'Haustypen', cleanImageName(url))
 }
 
 /** Site plan: `{projectName} - Plan osiedla - {cleanedImageName}`. */
 export function sitePlanAlt(projectName: string, url: string): string {
-  return join(projectName, 'Plan osiedla', cleanImageName(url))
+  return join(projectName, 'Lageplan', cleanImageName(url))
 }
 
 /** Investment scheme: `{projectName} - Schemat inwestycji - {cleanedImageName}`. */
 export function schemeAlt(projectName: string, url: string): string {
-  return join(projectName, 'Schemat inwestycji', cleanImageName(url))
+  return join(projectName, 'Projektschema', cleanImageName(url))
 }
 
 /** Homepage / general sections: `{sectionTitle} - {cleanedImageName}`. */

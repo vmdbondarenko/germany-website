@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { getTranslations } from "next-intl/server"
 import { HeaderServer } from "@/components/header-server"
 import { Footer } from "@/components/footer"
+import { company } from "@/lib/contact-info"
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("legal")
@@ -29,13 +30,16 @@ export default async function ImpressumPage() {
           </h1>
           <div className="space-y-8">
             <Section heading={t("providerHeading")}>
-              {tc("companyName")}
-              {"\n"}
-              {t("placeholder")}
+              {[company.name, ...company.addressLines].join("\n")}
             </Section>
-            <Section heading={t("contactHeading")}>{t("placeholder")}</Section>
-            <Section heading={t("registerHeading")}>{t("placeholder")}</Section>
-            <Section heading={t("vatHeading")}>{t("placeholder")}</Section>
+            <Section heading={t("managingDirectorHeading")}>{company.managingDirector}</Section>
+            <Section heading={t("contactHeading")}>
+              {`${tc("phone")}: ${company.phone}\n${tc("email")}: ${company.email}`}
+            </Section>
+            <Section heading={t("registerHeading")}>
+              {`${t("registerCourtLabel")}: ${company.registerCourt}\n${t("registrationNumberLabel")}: ${company.registrationNumber}`}
+            </Section>
+            <Section heading={t("vatHeading")}>{company.vatId || t("pending")}</Section>
             <Section heading={t("disclaimerHeading")}>{t("disclaimerBody")}</Section>
           </div>
         </article>

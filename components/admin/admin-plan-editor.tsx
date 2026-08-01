@@ -1217,7 +1217,7 @@ export default function AdminPlanEditor({
                     onClick={() => setBottomTab('stages')}
                     className={`px-3 py-1 rounded text-sm font-medium transition-colors ${bottomTab === 'stages' ? 'bg-gray-900 text-white' : 'hover:bg-gray-100 text-gray-600'}`}
                   >
-                    Etapy ({drawUnits.length}/{stages.length})
+                    Stages ({drawUnits.length}/{stages.length})
                   </button>
                 </div>
               ) : (

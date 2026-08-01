@@ -35,11 +35,11 @@ function fullOf(h: Pick<PriceHistoryEntry, 'totalPrice' | 'parkingPrice' | 'stor
 
 function fmtPLN(v: number | null | undefined) {
   if (v == null) return "—"
-  return new Intl.NumberFormat("pl-PL", { style: "currency", currency: "PLN", maximumFractionDigits: 0 }).format(v)
+  return new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR", maximumFractionDigits: 0 }).format(v)
 }
 
 function fmtDate(d: string | Date) {
-  return new Date(d).toLocaleDateString("pl-PL", { day: "2-digit", month: "2-digit", year: "numeric" })
+  return new Date(d).toLocaleDateString("de-DE", { day: "2-digit", month: "2-digit", year: "numeric" })
 }
 
 export function PriceHistoryModal({ isOpen, onClose, title, area, currentPrice, currentExtras, history }: PriceHistoryModalProps) {
@@ -115,23 +115,23 @@ export function PriceHistoryModal({ isOpen, onClose, title, area, currentPrice, 
       <div className="relative bg-card rounded-2xl border border-border shadow-2xl w-full max-w-xl max-h-[85vh] flex flex-col overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-border/60 bg-secondary/30">
           <div>
-            <h2 className="font-serif text-lg font-semibold" style={{ color: "#3E1718" }}>Historia cen</h2>
+            <h2 className="font-serif text-lg font-semibold" style={{ color: "#3E1718" }}>Preisverlauf</h2>
             <p className="text-xs mt-0.5" style={{ color: "#6E2E2A" }}>{title}</p>
           </div>
           <button
             onClick={onClose}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-foreground/10 hover:bg-foreground/20 transition-colors"
-            aria-label="Zamknij"
+            aria-label="Schließen"
           >
             <X className="h-3.5 w-3.5" />
-            Zamknij
+            Schließen
           </button>
         </div>
 
         {omnibusLow != null && (
           <div className="px-6 py-3 border-b border-border/60 bg-amber-50">
             <p className="text-xs" style={{ color: "#3E1718" }}>
-              Najniższa cena z 30 dni przed obniżką:{" "}
+              Niedrigster Preis der letzten 30 Tage vor der Senkung:{" "}
               <span className="font-semibold" style={{ textDecoration: "line-through" }}>{fmtPLN(omnibusLow)}</span>
             </p>
           </div>
@@ -140,18 +140,18 @@ export function PriceHistoryModal({ isOpen, onClose, title, area, currentPrice, 
         <div className="flex-1 overflow-y-auto">
           {rows.length === 0 ? (
             <div className="p-8 text-center text-sm" style={{ color: "#3E1718", opacity: 0.6 }}>
-              Brak historii cen dla tej nieruchomości.
+              Kein Preisverlauf für diese Immobilie vorhanden.
             </div>
           ) : (
             <table className="w-full text-sm">
               <thead className="bg-secondary/30 sticky top-0">
                 <tr>
-                  <th className="px-6 py-2 text-left text-xs font-semibold uppercase tracking-wide" style={{ color: "#3E1718" }}>Data</th>
-                  <th className="px-6 py-2 text-right text-xs font-semibold uppercase tracking-wide" style={{ color: "#3E1718" }}>Cena</th>
+                  <th className="px-6 py-2 text-left text-xs font-semibold uppercase tracking-wide" style={{ color: "#3E1718" }}>Datum</th>
+                  <th className="px-6 py-2 text-right text-xs font-semibold uppercase tracking-wide" style={{ color: "#3E1718" }}>Preis</th>
                   {area ? (
-                    <th className="px-6 py-2 text-right text-xs font-semibold uppercase tracking-wide" style={{ color: "#3E1718" }}>Cena/m²</th>
+                    <th className="px-6 py-2 text-right text-xs font-semibold uppercase tracking-wide" style={{ color: "#3E1718" }}>Preis/m²</th>
                   ) : null}
-                  <th className="px-6 py-2 text-right text-xs font-semibold uppercase tracking-wide" style={{ color: "#3E1718" }}>Zmiana</th>
+                  <th className="px-6 py-2 text-right text-xs font-semibold uppercase tracking-wide" style={{ color: "#3E1718" }}>Änderung</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border/40">
@@ -164,14 +164,14 @@ export function PriceHistoryModal({ isOpen, onClose, title, area, currentPrice, 
                     <tr key={h.id} className={isCurrent ? "bg-secondary/20" : ""}>
                       <td className="px-6 py-2" style={{ color: "#3E1718" }}>
                         {fmtDate(h.date)}
-                        {isCurrent && <span className="ml-2 text-[10px] uppercase font-semibold" style={{ color: "#6E2E2A" }}>aktualna</span>}
+                        {isCurrent && <span className="ml-2 text-[10px] uppercase font-semibold" style={{ color: "#6E2E2A" }}>aktuell</span>}
                       </td>
                       <td className="px-6 py-2 text-right font-semibold" style={{ color: "#6E2E2A" }}>
                         {fmtPLN(h.fullPrice)}
                       </td>
                       {area ? (
                         <td className="px-6 py-2 text-right" style={{ color: "#3E1718", opacity: 0.75 }}>
-                          {h.totalPrice != null ? `${Math.round((h.totalPrice as number) / area).toLocaleString("pl-PL")} zł` : "—"}
+                          {h.totalPrice != null ? `${Math.round((h.totalPrice as number) / area).toLocaleString("de-DE")} €` : "—"}
                         </td>
                       ) : null}
                       <td className="px-6 py-2 text-right text-xs">
@@ -179,7 +179,7 @@ export function PriceHistoryModal({ isOpen, onClose, title, area, currentPrice, 
                           <span style={{ color: "#3E1718", opacity: 0.4 }}>—</span>
                         ) : h.delta === 0 ? (
                           <span className="inline-flex items-center gap-1" style={{ color: "#3E1718", opacity: 0.5 }}>
-                            <Minus className="h-3 w-3" /> bez zmian
+                            <Minus className="h-3 w-3" /> keine Änderung
                           </span>
                         ) : h.delta > 0 ? (
                           <span className="inline-flex items-center gap-1 text-red-600">
@@ -202,7 +202,7 @@ export function PriceHistoryModal({ isOpen, onClose, title, area, currentPrice, 
         </div>
 
         <div className="px-6 py-3 border-t border-border/60 bg-secondary/10 text-[11px]" style={{ color: "#3E1718", opacity: 0.6 }}>
-          Historia cen prezentowana zgodnie z wymogami ustawy o jawności cen mieszkań deweloperskich.
+          Übersicht über die bisherige Preisentwicklung dieser Immobilie.
         </div>
       </div>
     </div>,

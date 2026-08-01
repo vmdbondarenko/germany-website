@@ -130,7 +130,7 @@ export default function NewNewsPage() {
                     placeholder="nowe-mieszkania-dostepne"
                     required
                   />
-                  <p className="text-xs text-gray-500">URL: /aktualnosci/{form.slug || 'slug'}</p>
+                  <p className="text-xs text-gray-500">URL: /aktuelles/{form.slug || 'slug'}</p>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="descriptionEn">Kurzbeschreibung · EN</Label>

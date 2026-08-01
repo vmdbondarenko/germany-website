@@ -150,7 +150,7 @@ export default function EditNewsPage({ params }: { params: Promise<{ id: string 
           <h1 className="text-3xl font-serif font-bold text-gray-900">Edit post</h1>
         </div>
         {form.published && form.slug && (
-          <Link href={`/aktualnosci/${form.slug}`} target="_blank">
+          <Link href={`/aktuelles/${form.slug}`} target="_blank">
             <Button variant="outline" size="sm">
               <ExternalLink className="h-4 w-4 mr-1.5" />
               View
@@ -193,7 +193,7 @@ export default function EditNewsPage({ params }: { params: Promise<{ id: string 
                   onChange={(e) => setForm((p) => ({ ...p, slug: e.target.value }))}
                   required
                 />
-                <p className="text-xs text-gray-500">URL: /aktualnosci/{form.slug}</p>
+                <p className="text-xs text-gray-500">URL: /aktuelles/{form.slug}</p>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <div className="space-y-2">

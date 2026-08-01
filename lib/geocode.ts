@@ -21,7 +21,7 @@ export async function geocodeAddress(address: string): Promise<GeocodeResult> {
   try {
     res = await fetch(url.toString())
   } catch (e) {
-    return { ok: false, reason: `Błąd sieci: ${(e as Error).message}` }
+    return { ok: false, reason: `Network error: ${(e as Error).message}` }
   }
   if (!res.ok) {
     return { ok: false, reason: `HTTP ${res.status} z Google Geocoding` }
@@ -37,7 +37,7 @@ export async function geocodeAddress(address: string): Promise<GeocodeResult> {
     return { ok: false, reason: `Google: ${data.status}${detail}`, status: data.status }
   }
   if (!data.results?.length) {
-    return { ok: false, reason: 'Brak wyników dla tego adresu', status: 'ZERO_RESULTS' }
+    return { ok: false, reason: 'No results for this address', status: 'ZERO_RESULTS' }
   }
 
   const { lat, lng } = data.results[0].geometry.location

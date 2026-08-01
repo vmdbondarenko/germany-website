@@ -224,9 +224,9 @@ export function Contact() {
 
             {/* Google Map */}
             <div className="bg-card rounded-3xl border border-border shadow-lg overflow-hidden flex-1 min-h-[300px] relative">
-              <a 
-                href="https://maps.app.goo.gl/CidFZGc5Us2DgdcB7" 
-                target="_blank" 
+              <a
+                href={headquarters.mapHref}
+                target="_blank"
                 rel="noopener noreferrer"
                 className="absolute top-4 right-4 z-10 bg-white px-4 py-2 rounded-lg shadow-md hover:shadow-lg transition-shadow flex items-center gap-2 text-sm font-medium text-foreground"
               >
@@ -234,14 +234,14 @@ export function Contact() {
                 {t("openInMaps")}
               </a>
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2444.5659682936557!2d20.99834!3d52.18056!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x471ecc8c92692e57%3A0x1db66f6007dab0b6!2sPost%C4%99pu%2012C%2C%2002-676%20Warszawa!5e0!3m2!1spl!2spl!4v1710355200000!5m2!1spl!2spl"
+                src={headquarters.mapEmbedSrc}
                 width="100%"
                 height="100%"
                 style={{ border: 0, minHeight: '300px' }}
                 allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                title="JW Development - Lokalizacja biura"
+                title="Projektentwicklung Einstöckiges Berlin GmbH – Büro"
                 className="absolute inset-0"
               />
             </div>

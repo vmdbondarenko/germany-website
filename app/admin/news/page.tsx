@@ -75,7 +75,7 @@ export default async function NewsAdminPage() {
                   </div>
                   <div className="flex items-center gap-2">
                     {post.published && (
-                      <Link href={`/aktualnosci/${post.slug}`} target="_blank">
+                      <Link href={`/aktuelles/${post.slug}`} target="_blank">
                         <Button variant="outline" size="sm">
                           <ExternalLink className="h-3.5 w-3.5" />
                         </Button>

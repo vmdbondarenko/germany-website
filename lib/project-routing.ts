@@ -7,13 +7,13 @@ type ResolvedProject = {
 
 /** The single canonical URL for a project: city path when assigned, else legacy. */
 export function projectCanonicalPath(p: ResolvedProject): string {
-  return p.cityLocation ? `/${p.cityLocation.slug}/${p.slug}` : `/inwestycje/${p.slug}`
+  return p.cityLocation ? `/${p.cityLocation.slug}/${p.slug}` : `/projekte/${p.slug}`
 }
 
 /**
  * Resolve an incoming slug to a project by its current slug first, then by a
  * historical slug alias (set when a slug is renamed in admin). Returns null when
- * nothing matches. Used by /inwestycje/[slug] and /[citySlug]/[slug] so renamed
+ * nothing matches. Used by /projekte/[slug] and /[citySlug]/[slug] so renamed
  * projects keep their old URLs alive via a 308 to the current canonical.
  */
 export async function resolveProjectBySlug(slug: string): Promise<ResolvedProject | null> {

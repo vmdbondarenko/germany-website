@@ -44,9 +44,9 @@ const STATUS_COLOR: Record<string, string> = {
 }
 
 const STATUS_LABEL: Record<string, string> = {
-  available: 'Dostępny',
-  reserved: 'Zarezerwowany',
-  sold: 'Sprzedany',
+  available: 'Verfügbar',
+  reserved: 'Reserviert',
+  sold: 'Verkauft',
 }
 
 function centroid(pts: { x: number; y: number }[]) {
@@ -106,7 +106,7 @@ export function InvestmentSchemaViewer({ slug, projectName }: InvestmentSchemaVi
         }
       } catch (e) {
         console.error(e)
-        setError('Nie udało się załadować schematu')
+        setError('Schema konnte nicht geladen werden')
       } finally {
         setLoading(false)
       }
@@ -204,7 +204,7 @@ export function InvestmentSchemaViewer({ slug, projectName }: InvestmentSchemaVi
       <section className="py-16 lg:py-24 bg-[#faf9f7]">
         <div className="container mx-auto px-4 lg:px-8">
           <div className="flex items-center justify-center h-96">
-            <div className="animate-pulse text-[#6E2E2A]">Ładowanie schematu...</div>
+            <div className="animate-pulse text-[#6E2E2A]">Schema wird geladen …</div>
           </div>
         </div>
       </section>
@@ -227,10 +227,10 @@ export function InvestmentSchemaViewer({ slug, projectName }: InvestmentSchemaVi
             Plan Osiedla
           </span>
           <h2 className="font-serif text-3xl lg:text-4xl font-semibold text-[#3E1718] mb-4">
-            Schemat inwestycji
+            Projektschema
           </h2>
           <p className="text-[#3E1718]/70 max-w-2xl mx-auto">
-            Kliknij na działkę, aby zobaczyć szczegóły. Przytrzymaj Shift i przeciągnij lub użyj kółka myszy, aby przybliżyć/oddalić plan.
+            Klicken Sie auf ein Grundstück, um Details zu sehen. Halten Sie die Umschalttaste gedrückt und ziehen Sie, oder nutzen Sie das Mausrad, um den Plan zu vergrößern/verkleinern.
           </p>
         </div>
 
@@ -414,7 +414,7 @@ export function InvestmentSchemaViewer({ slug, projectName }: InvestmentSchemaVi
                       <div className="flex items-start gap-3">
                         <Ruler className="h-5 w-5 text-[#6E2E2A] mt-0.5" />
                         <div>
-                          <div className="text-xs text-[#3E1718]/50 uppercase tracking-wide">Powierzchnia</div>
+                          <div className="text-xs text-[#3E1718]/50 uppercase tracking-wide">Fläche</div>
                           <div className="font-medium text-[#3E1718]">{selectedUnit.area} m²</div>
                         </div>
                       </div>
@@ -424,7 +424,7 @@ export function InvestmentSchemaViewer({ slug, projectName }: InvestmentSchemaVi
                       <div className="flex items-start gap-3">
                         <Trees className="h-5 w-5 text-[#6E2E2A] mt-0.5" />
                         <div>
-                          <div className="text-xs text-[#3E1718]/50 uppercase tracking-wide">Ogród</div>
+                          <div className="text-xs text-[#3E1718]/50 uppercase tracking-wide">Garten</div>
                           <div className="font-medium text-[#3E1718]">{selectedUnit.gardenArea} m²</div>
                         </div>
                       </div>
@@ -434,7 +434,7 @@ export function InvestmentSchemaViewer({ slug, projectName }: InvestmentSchemaVi
                       <div className="flex items-start gap-3">
                         <MapPin className="h-5 w-5 text-[#6E2E2A] mt-0.5" />
                         <div>
-                          <div className="text-xs text-[#3E1718]/50 uppercase tracking-wide">Pokoje</div>
+                          <div className="text-xs text-[#3E1718]/50 uppercase tracking-wide">Zimmer</div>
                           <div className="font-medium text-[#3E1718]">{selectedUnit.rooms}</div>
                         </div>
                       </div>
@@ -444,7 +444,7 @@ export function InvestmentSchemaViewer({ slug, projectName }: InvestmentSchemaVi
                       <div className="flex items-start gap-3">
                         <Home className="h-5 w-5 text-[#6E2E2A] mt-0.5" />
                         <div>
-                          <div className="text-xs text-[#3E1718]/50 uppercase tracking-wide">Piętra</div>
+                          <div className="text-xs text-[#3E1718]/50 uppercase tracking-wide">Etagen</div>
                           <div className="font-medium text-[#3E1718]">{selectedUnit.floors}</div>
                         </div>
                       </div>
@@ -452,7 +452,7 @@ export function InvestmentSchemaViewer({ slug, projectName }: InvestmentSchemaVi
 
                     {selectedUnit.price && selectedUnit.status === 'available' && (
                       <div className="pt-2 border-t border-[#6E2E2A]/10">
-                        <div className="text-xs text-[#3E1718]/50 uppercase tracking-wide mb-1">Cena</div>
+                        <div className="text-xs text-[#3E1718]/50 uppercase tracking-wide mb-1">Preis</div>
                         <div className="text-2xl font-semibold text-[#6E2E2A]">
                           {selectedUnit.price.toLocaleString('pl-PL')} PLN
                         </div>
@@ -475,7 +475,7 @@ export function InvestmentSchemaViewer({ slug, projectName }: InvestmentSchemaVi
                         style={{ backgroundColor: '#6E2E2A' }}
                       >
                         <Phone className="h-4 w-4" />
-                        Zapytaj o tę działkę
+                        Dieses Grundstück anfragen
                       </Link>
                     </div>
                   )}

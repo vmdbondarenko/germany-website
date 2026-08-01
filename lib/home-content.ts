@@ -62,9 +62,9 @@ export type LocalizedHome = {
 
 const DEFAULT_HERO = {
   eyebrow: t("Immobilienentwickler", "Property developer"),
-  title: t("Neue Häuser vom Bauträger", "New homes from the developer"),
+  title: t("Neue Häuser direkt vom Bauträger zum Verkauf", "New homes from the developer"),
   subtitle: t(
-    "Wir schaffen hochwertige Wohnimmobilien mit Charakter — durchdachte Grundrisse, sorgfältige Verarbeitung und ein Zuhause zum Wohlfühlen.",
+    "Seit über 10 Jahren bauen wir einzigartige Immobilien im charakteristischen Stil des Bayerischen Mauerwerks aus handgeformten Ziegeln.",
     "We build high-quality homes with character — thoughtful layouts, careful craftsmanship and a place to feel at home.",
   ),
   primaryCta: t("Projekte ansehen", "View projects"),
@@ -72,16 +72,19 @@ const DEFAULT_HERO = {
 }
 
 const DEFAULT_PROCESS = {
-  heading: t("Warum Sie uns wählen sollten", "Why choose us"),
+  heading: t("Warum wir?", "Why choose us"),
   description: t(
     "Wir schaffen moderne Wohnprojekte in grüner Umgebung — mit Blick auf Alltagskomfort, Architektur und Ausführungsqualität.",
     "We create modern developments in green surroundings — focused on everyday comfort, architecture and build quality.",
   ),
   items: [
-    { icon: "MapPin", title: t("Attraktive Lage", "Attractive location"), description: t("Sorgfältig gewählte Standorte verbinden Wohnkomfort mit guter Anbindung an die städtische Infrastruktur.", "Carefully chosen locations combine living comfort with easy access to city infrastructure.") },
-    { icon: "Home", title: t("Privater Freiraum", "Private space"), description: t("Jedes Haus bietet einen eigenen Garten für Komfort, Erholung und tägliche Nähe zur Natur.", "Every home offers its own garden for comfort, relaxation and daily contact with nature.") },
-    { icon: "Trees", title: t("Grüne Umgebung", "Green surroundings"), description: t("Unsere Projekte entstehen in ruhigen, grünen Wohnlagen — ideal für Familien.", "Our projects are set in quiet, green residential areas — ideal for families.") },
-    { icon: "Settings", title: t("Komfort und Funktion", "Comfort and function"), description: t("Durchdachte Raumaufteilungen, Stellplätze und moderne Lösungen für den Alltag.", "Thoughtful layouts, parking spaces and modern solutions for everyday living.") },
+    { icon: "ShieldCheck", title: t("Vertrauen und Zuverlässigkeit", "Trust and reliability"), description: t("Seit zehn Jahren stehen wir für Verlässlichkeit, Transparenz und eine partnerschaftliche Zusammenarbeit. Ohne einen einzigen Rechtsstreit.", "For ten years we have stood for reliability, transparency and partnership. Without a single legal dispute.") },
+    { icon: "Award", title: t("Erfahrung", "Experience"), description: t("Langjährige Erfahrung, hohe Fachkompetenz und eine persönliche Betreuung ermöglichen eine effiziente und zuverlässige Umsetzung unserer Projekte.", "Long-standing experience, deep expertise and personal support enable the efficient and reliable delivery of our projects.") },
+    { icon: "Gem", title: t("Qualität", "Quality"), description: t("Wir entwickeln moderne Wohnprojekte in naturnaher Umgebung und legen besonderen Wert auf Wohnkomfort, architektonische Ästhetik und höchste Bauqualität.", "We develop modern residential projects in natural surroundings, with particular emphasis on living comfort, architectural aesthetics and the highest build quality.") },
+    { icon: "MapPin", title: t("Attraktive Lage", "Attractive location"), description: t("Unsere Standorte werden mit großer Sorgfalt ausgewählt. Sie verbinden die Ruhe des Wohnens im Grünen mit einer ausgezeichneten Anbindung an die städtische Infrastruktur.", "Our locations are selected with great care. They combine the calm of living amid greenery with excellent access to urban infrastructure.") },
+    { icon: "Home", title: t("Privater Wohnbereich", "Private living space"), description: t("Jede Wohneinheit verfügt über ein eigenes Grundstück, das zusätzlichen Freiraum für Erholung, Familie und Freizeit bietet.", "Every home has its own plot, offering additional space for relaxation, family and leisure.") },
+    { icon: "Trees", title: t("Leben im Grünen", "Living amid greenery"), description: t("Unsere Projekte entstehen in ruhigen Wohnlagen in der Nähe von Wäldern, Seen und Wasserlandschaften. Ein idealer Ort für Familien mit Kindern und alle, die Ruhe, frische Luft und Weite schätzen.", "Our projects are set in quiet residential areas near forests, lakes and waterways. An ideal place for families with children and anyone who values calm, fresh air and open space.") },
+    { icon: "Settings", title: t("Komfort und Funktionalität", "Comfort and functionality"), description: t("Durchdachte Grundrisse, Stellplätze direkt am Haus und moderne technische Lösungen sorgen für ein komfortables und funktionales Wohnen im Alltag.", "Thoughtful layouts, parking right by the house and modern technical solutions ensure comfortable, functional everyday living.") },
   ],
 }
 
@@ -89,13 +92,14 @@ const DEFAULT_DISTINGUISHES = {
   eyebrow: t("Unser Angebot", "Our offer"),
   heading: t("Was uns auszeichnet", "What sets us apart"),
   description: t(
-    "Wir achten auf jedes Detail — von der Materialauswahl bis zur individuellen Planung.",
+    "Wir legen Wert auf jedes Detail – von der Auswahl hochwertiger Materialien bis hin zur individuellen Planung und sorgfältigen Ausführung jedes einzelnen Hauses.",
     "We care about every detail — from material selection to individual planning.",
   ),
   items: [
-    { icon: "Layers", title: t("Hochwertige Materialien", "High-quality materials"), description: t("Wir setzen auf langlebige, sorgfältig ausgewählte Baumaterialien für dauerhafte Qualität.", "We rely on durable, carefully selected building materials for lasting quality.") },
-    { icon: "PenLine", title: t("Planung und Gestaltung", "Design and planning"), description: t("Wir realisieren eigene Projekte auf eigenen Grundstücken — mit Raum für individuelle Anpassungen.", "We build our own projects on our own plots — with room for individual adjustments.") },
-    { icon: "ArrowUpToLine", title: t("Lichtdurchflutete Räume", "Light-filled rooms"), description: t("Großzügige Raumhöhen und große Fenster bringen viel Tageslicht in die Wohnräume.", "Generous ceiling heights and large windows bring plenty of daylight into the living spaces.") },
+    { icon: "Layers", title: t("Handgeformte Ziegel", "Hand-formed bricks"), description: t("Für unsere Fassaden verwenden wir exklusive handgeformte Ziegel, bei denen jeder Stein eine individuelle Struktur und Oberfläche aufweist. Dadurch erhält jedes Gebäude seinen eigenen Charakter und eine zeitlose, hochwertige Optik. Neben ihrer besonderen Ästhetik überzeugen diese Ziegel durch ihre Langlebigkeit und Widerstandsfähigkeit.", "For our facades we use exclusive hand-formed bricks in which every stone has an individual structure and surface. This gives each building its own character and a timeless, high-quality look. Beyond their distinctive aesthetics, these bricks impress with their durability and resilience.") },
+    { icon: "PenLine", title: t("Individuelle Planung", "Individual planning"), description: t("Wir realisieren ausschließlich eigene Projekte auf unseren eigenen Grundstücken. Solange sich das Bauvorhaben in der Planungs- oder Bauphase befindet, haben Käufer die Möglichkeit, den Grundriss an ihre persönlichen Bedürfnisse und ihren Lebensstil anzupassen.", "We build exclusively our own projects on our own plots. As long as the project is in the planning or construction phase, buyers can adapt the floor plan to their personal needs and lifestyle.") },
+    { icon: "ArrowUpToLine", title: t("Raumhöhen bis zu 6 Metern", "Ceiling heights of up to 6 metres"), description: t("Auf Wunsch realisieren wir Wohnbereiche mit Deckenhöhen von bis zu sechs Metern. Diese architektonische Lösung ermöglicht den Einbau von Panoramafenstern, lässt die Räume mit Tageslicht durchfluten und schafft ein Gefühl von Großzügigkeit, Behaglichkeit und moderner Eleganz.", "On request we create living areas with ceiling heights of up to six metres. This architectural solution allows for panoramic windows, floods the rooms with daylight and creates a sense of spaciousness, comfort and modern elegance.") },
+    { icon: "KeyRound", title: t("Schlüsselfertige Innenausstattung", "Turnkey interiors"), description: t("Wir realisieren schlüsselfertige Innenausstattungen, die bezugsfertig übergeben werden. Funktionale Grundrisse, hochwertige Materialien und ein durchdachtes Gestaltungskonzept schaffen Wohnräume, die Komfort, Ästhetik und Alltagstauglichkeit miteinander verbinden.", "We deliver turnkey interiors ready to move into. Functional layouts, high-quality materials and a considered design concept create living spaces that combine comfort, aesthetics and everyday practicality.") },
   ],
 }
 
@@ -121,15 +125,13 @@ const DEFAULT_INTERIOR = {
 }
 
 const DEFAULT_BUYING = {
-  heading: t("So kaufen Sie Ihre Wunschimmobilie", "How to buy your dream home"),
+  heading: t("Wie kaufen Sie Ihre Traumimmobilie?", "How to buy your dream home"),
   steps: [
-    t("Kontakt mit dem Vertrieb und Terminvereinbarung vor Ort.", "Contact our sales team and arrange a viewing on site."),
-    t("Besichtigung vor Ort und Gespräch über das Angebot.", "On-site visit and a conversation about the offer."),
-    t("Unterzeichnung der Reservierungsvereinbarung.", "Sign the reservation agreement."),
-    t("Beratung zur Finanzierung.", "Financing consultation."),
-    t("Unterzeichnung des Kaufvertrags.", "Sign the purchase contract."),
-    t("Übergabe der fertigen Immobilie.", "Handover of the finished property."),
-    t("Unterzeichnung des Eigentumsübertrags.", "Sign the transfer of ownership."),
+    t("Kontakt mit unserem Vertrieb aufnehmen und einen Termin auf der Baustelle vereinbaren.", "Contact our sales team and arrange an appointment on site."),
+    t("Besichtigung des Projekts und Beratung.", "Viewing of the project and consultation."),
+    t("Beratung durch einen Finanzierungsexperten.*", "Consultation with a financing expert.*"),
+    t("Vertragsunterzeichnung.", "Signing of the contract."),
+    t("Übergabe der Immobilie.", "Handover of the property."),
   ],
   helpHeading: t("Wie wir zusätzlich helfen", "How else we help"),
   help: [
@@ -140,15 +142,11 @@ const DEFAULT_BUYING = {
   investor: {
     eyebrow: t("Über das Unternehmen", "About the company"),
     experienceBadge: t("Erfahrener Bauträger", "Experienced developer"),
-    heading: t("Ihr Bauträger", "Your developer"),
+    heading: t("Wer wir sind", "Who we are"),
     paragraphs: [
       t(
-        "[Platzhalter] Wir sind ein Immobilienentwickler mit Fokus auf hochwertige Wohnhäuser. Ersetzen Sie diesen Text im Admin-Bereich durch Ihre Unternehmensgeschichte.",
-        "[Placeholder] We are a property developer focused on high-quality homes. Replace this text in the admin panel with your company story.",
-      ),
-      t(
-        "[Platzhalter] Beschreiben Sie hier Ihre Werte, Ihre Erfahrung und was Ihr Unternehmen auszeichnet.",
-        "[Placeholder] Describe your values, your experience and what makes your company stand out here.",
+        "Als Projektentwickler möchten wir unseren Kunden genau das bieten, was wir selbst von einem Bauträger erwarten würden: transparente und sichere Abläufe, hochwertige Baumaterialien sowie attraktive Preise.",
+        "As a property developer, we want to offer our customers exactly what we would expect from a developer ourselves: transparent and secure processes, high-quality building materials and attractive prices.",
       ),
     ],
     ctaLabel: t("Kontakt", "Contact"),
@@ -217,8 +215,8 @@ export async function getHomeContent(locale: Locale): Promise<LocalizedHome> {
       eyebrow: eyebrow("hero", DEFAULT_HERO.eyebrow),
       title: heading("hero", DEFAULT_HERO.title),
       subtitle: description("hero", DEFAULT_HERO.subtitle),
-      primaryCta: cta("hero", "primary", DEFAULT_HERO.primaryCta, "#w-sprzedazy"),
-      secondaryCta: cta("hero", "secondary", DEFAULT_HERO.secondaryCta, "#o-firmie"),
+      primaryCta: cta("hero", "primary", DEFAULT_HERO.primaryCta, "#verkauf"),
+      secondaryCta: cta("hero", "secondary", DEFAULT_HERO.secondaryCta, "#unternehmen"),
     },
     process: {
       heading: heading("process", DEFAULT_PROCESS.heading),

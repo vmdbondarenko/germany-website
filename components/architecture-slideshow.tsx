@@ -114,7 +114,7 @@ export function ArchitectureSlideshow({ dbSlides = [] }: { dbSlides?: SlideData[
         className="inline-block text-[11px] font-medium px-4 py-2 rounded-lg transition-all duration-300 hover:opacity-90 shadow-md"
         style={{ backgroundColor: '#6E2E2A', color: 'rgba(255, 255, 255, 0.95)' }}
       >
-        Zobacz inwestycję
+        Projekt ansehen
       </a>
     </>
   )

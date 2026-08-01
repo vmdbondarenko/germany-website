@@ -119,7 +119,7 @@ export function ProjectLocationMap({ apiKey, mapId, projectName, projectLat, pro
                 <p className="font-serif font-semibold text-sm" style={{ color: "#3E1718" }}>
                   {projectName}
                 </p>
-                <p className="text-[11px] text-muted-foreground mt-0.5">Lokalizacja inwestycji</p>
+                <p className="text-[11px] text-muted-foreground mt-0.5">Projektstandort</p>
               </div>
             </InfoWindow>
           )}
@@ -152,7 +152,7 @@ export function ProjectLocationMap({ apiKey, mapId, projectName, projectLat, pro
                         style={{ color: "#6E2E2A" }}
                       >
                         <MapPin className="h-3 w-3" />
-                        Otwórz w Google Maps
+                        In Google Maps öffnen
                       </a>
                     )}
                   </div>

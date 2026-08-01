@@ -21,7 +21,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params
   const locale = (await getLocale()) as Locale
-  const canonical = `/aktualnosci/${slug}`
+  const canonical = `/aktuelles/${slug}`
   const post = await prisma.newsPost.findUnique({ where: { slug } })
   if (!post || !post.published) return { title: 'News', alternates: { canonical } }
 
@@ -84,7 +84,7 @@ export default async function NewsPostPage({
       : null,
     datePublished: date,
     dateModified: post.updatedAt,
-    path: `/aktualnosci/${post.slug}`,
+    path: `/aktuelles/${post.slug}`,
   })
 
   return (
@@ -95,7 +95,7 @@ export default async function NewsPostPage({
         <article className="pt-24 pb-20 lg:pb-32">
           <div className="container mx-auto px-4 lg:px-8 max-w-4xl">
             <Link
-              href="/aktualnosci"
+              href="/aktuelles"
               className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground mb-8 transition-colors"
             >
               <ArrowLeft className="h-4 w-4" />

@@ -27,7 +27,7 @@ export default async function CityProjectPage({
 
   // Resolve by current slug or historical alias. Redirect (308) to the canonical
   // whenever it differs from the requested path: a renamed slug, the wrong city
-  // in the URL, or a project with no city (canonical lives at /inwestycje/...).
+  // in the URL, or a project with no city (canonical lives at /projekte/...).
   const project = await resolveProjectBySlug(slug)
   if (!project) notFound()
 

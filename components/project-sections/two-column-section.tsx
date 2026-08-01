@@ -88,7 +88,7 @@ function LocationItemsGrid({ items }: { items: SectionItemData[] }) {
                   title={coords ? "Widoczny jako pinezka na mapie" : undefined}
                 >
                   <MapPin className="h-3 w-3" />
-                  Otwórz w Google Maps
+                  In Google Maps öffnen
                 </a>
               )}
             </div>
@@ -151,7 +151,7 @@ function MapContent({ section, projectMap, hideItems = false }: { section: Secti
               style={{ color: "#3E1718" }}
             >
               <MapPin className="h-4 w-4" style={{ color: "#6E2E2A" }} />
-              Otwórz w Google Maps
+              In Google Maps öffnen
             </a>
             <iframe
               src={embedSrc}
@@ -294,7 +294,7 @@ export function DynamicTwoColumnSection({
                 style={{ color: "#3E1718" }}
               >
                 <MapPin className="h-4 w-4" style={{ color: "#6E2E2A" }} />
-                Otwórz w Google Maps
+                In Google Maps öffnen
               </a>
               <iframe
                 src={embedSrc}

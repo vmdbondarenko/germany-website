@@ -468,7 +468,7 @@ export default function AdminStageEditor({ projectId, stages: initialStages, uni
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center justify-between">
-          <span>Etapy inwestycji ({stages.length})</span>
+          <span>Project stages ({stages.length})</span>
         </CardTitle>
         <p className="text-sm text-muted-foreground">
           Draw stage polygons on the main plan (above), then add stages here with matching SVG element IDs. Each stage has its own views with plot polygons.

@@ -184,13 +184,13 @@ export default function HomeAdminPage() {
                   onDe={(v) => patch(def.id, { primaryCtaLabelDe: v })} onEn={(v) => patch(def.id, { primaryCtaLabelEn: v })} />
                 <div>
                   <Label className="text-xs text-gray-500">Button 1 · Link</Label>
-                  <Input value={s.primaryCtaHref} onChange={(e) => patch(def.id, { primaryCtaHref: e.target.value })} placeholder="#w-sprzedazy" />
+                  <Input value={s.primaryCtaHref} onChange={(e) => patch(def.id, { primaryCtaHref: e.target.value })} placeholder="#verkauf" />
                 </div>
                 <BilingualInput label="Button 2 · Text" de={s.secondaryCtaLabelDe} en={s.secondaryCtaLabelEn}
                   onDe={(v) => patch(def.id, { secondaryCtaLabelDe: v })} onEn={(v) => patch(def.id, { secondaryCtaLabelEn: v })} />
                 <div>
                   <Label className="text-xs text-gray-500">Button 2 · Link</Label>
-                  <Input value={s.secondaryCtaHref} onChange={(e) => patch(def.id, { secondaryCtaHref: e.target.value })} placeholder="#o-firmie" />
+                  <Input value={s.secondaryCtaHref} onChange={(e) => patch(def.id, { secondaryCtaHref: e.target.value })} placeholder="#unternehmen" />
                 </div>
               </div>
             )}

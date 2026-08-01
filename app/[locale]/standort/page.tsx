@@ -17,8 +17,8 @@ export async function generateMetadata(): Promise<Metadata> {
     title: t("mapHeading"),
     description: t("mapSubtitle"),
     alternates: {
-      canonical: "/lokalizacja",
-      languages: { de: "/lokalizacja", en: "/en/lokalizacja" },
+      canonical: "/standort",
+      languages: { de: "/standort", en: "/en/standort" },
     },
   }
 }
@@ -36,7 +36,7 @@ export default async function LokalizacjaPage() {
 
   const breadcrumb = breadcrumbSchema([
     { name: tl("home"), path: "/" },
-    { name: t("mapHeading"), path: "/lokalizacja" },
+    { name: t("mapHeading"), path: "/standort" },
   ])
 
   return (

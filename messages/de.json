@@ -13,7 +13,7 @@
     "scrollLeft": "Nach links scrollen",
     "scrollRight": "Nach rechts scrollen",
     "contact": "Kontakt",
-    "companyName": "Muster Immobilien GmbH",
+    "companyName": "Projektentwicklung Einstöckiges Berlin GmbH",
     "companyTagline": "Immobilienentwickler"
   },
   "meta": {
@@ -51,9 +51,13 @@
     "placeholder": "[Platzhalter – bitte durch rechtlich geprüfte Angaben ersetzen.]",
     "impressumTitle": "Impressum",
     "providerHeading": "Angaben gemäß § 5 DDG",
+    "managingDirectorHeading": "Vertreten durch",
     "contactHeading": "Kontakt",
     "registerHeading": "Registereintrag",
+    "registerCourtLabel": "Registergericht",
+    "registrationNumberLabel": "Registernummer",
     "vatHeading": "Umsatzsteuer-Identifikationsnummer",
+    "pending": "Wird nachgereicht.",
     "disclaimerHeading": "Haftung für Inhalte",
     "disclaimerBody": "Als Diensteanbieter sind wir für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Wir sind jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen. [Bitte durch rechtlich geprüften Text ersetzen.]",
     "datenschutzTitle": "Datenschutzerklärung",

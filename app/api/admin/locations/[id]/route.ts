@@ -26,7 +26,7 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
   if (!(await isAuthenticated())) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   const { id } = await params
   // Project.cityLocationId is onDelete: SetNull — assigned projects simply
-  // revert to being served at /inwestycje/{slug}.
+  // revert to being served at /projekte/{slug}.
   await prisma.location.delete({ where: { id } })
   return NextResponse.json({ success: true })
 }

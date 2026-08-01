@@ -23,21 +23,21 @@ type ProjectData = {
 
 const STATUS_CONFIG = {
   available: {
-    label: 'Dostępna',
+    label: 'Verfügbar',
     fill: '#22c55e',
     stroke: '#16a34a',
     bg: 'bg-green-100',
     text: 'text-green-800',
   },
   reserved: {
-    label: 'Rezerwacja',
+    label: 'Reserviert',
     fill: '#eab308',
     stroke: '#ca8a04',
     bg: 'bg-yellow-100',
     text: 'text-yellow-800',
   },
   sold: {
-    label: 'Sprzedana',
+    label: 'Verkauft',
     fill: '#ef4444',
     stroke: '#dc2626',
     bg: 'bg-red-100',
@@ -48,7 +48,7 @@ const STATUS_CONFIG = {
 type StatusKey = keyof typeof STATUS_CONFIG
 
 function formatPrice(price: number | null): string {
-  if (!price) return 'Cena na zapytanie'
+  if (!price) return 'Preis auf Anfrage'
   return new Intl.NumberFormat('pl-PL', {
     style: 'currency',
     currency: 'PLN',
@@ -152,7 +152,7 @@ export function InteractiveSitePlan({ slug }: { slug: string }) {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <div className="text-gray-400">Ładowanie planu...</div>
+        <div className="text-gray-400">Plan wird geladen …</div>
       </div>
     )
   }
@@ -160,7 +160,7 @@ export function InteractiveSitePlan({ slug }: { slug: string }) {
   if (!data?.svgContent) {
     return (
       <div className="text-center py-20 text-gray-400">
-        Plan zagospodarowania nie jest jeszcze dostępny.
+        Der Lageplan ist noch nicht verfügbar.
       </div>
     )
   }
@@ -181,7 +181,7 @@ export function InteractiveSitePlan({ slug }: { slug: string }) {
           onClick={() => setFilter(null)}
           style={filter === null ? { backgroundColor: '#6E2E2A' } : {}}
         >
-          Wszystkie ({data.units.length})
+          Alle ({data.units.length})
         </Button>
         {(Object.entries(STATUS_CONFIG) as [StatusKey, (typeof STATUS_CONFIG)[StatusKey]][]).map(
           ([status, cfg]) => (
@@ -265,25 +265,25 @@ export function InteractiveSitePlan({ slug }: { slug: string }) {
               <dl className="grid grid-cols-2 gap-2 text-sm mb-4">
                 {selectedUnit.area && (
                   <>
-                    <dt className="text-gray-500">Powierzchnia</dt>
+                    <dt className="text-gray-500">Fläche</dt>
                     <dd className="font-medium">{selectedUnit.area} m²</dd>
                   </>
                 )}
                 {selectedUnit.rooms && (
                   <>
-                    <dt className="text-gray-500">Pokoje</dt>
+                    <dt className="text-gray-500">Zimmer</dt>
                     <dd className="font-medium">{selectedUnit.rooms}</dd>
                   </>
                 )}
                 {selectedUnit.floors && (
                   <>
-                    <dt className="text-gray-500">Piętra</dt>
+                    <dt className="text-gray-500">Etagen</dt>
                     <dd className="font-medium">{selectedUnit.floors}</dd>
                   </>
                 )}
                 {selectedUnit.price && selectedUnit.status !== 'sold' && (
                   <>
-                    <dt className="text-gray-500">Cena</dt>
+                    <dt className="text-gray-500">Preis</dt>
                     <dd className="font-medium text-base" style={{ color: '#6E2E2A' }}>
                       {formatPrice(selectedUnit.price)}
                     </dd>
@@ -295,11 +295,11 @@ export function InteractiveSitePlan({ slug }: { slug: string }) {
               )}
               {selectedUnit.status === 'available' && (
                 <a
-                  href={`mailto:kontakt@jednopietrowawarszawa.pl?subject=Zapytanie o działkę ${selectedUnit.label}`}
+                  href={`mailto:vitalina@jwdevelopment.net?subject=Anfrage zum Grundstück ${selectedUnit.label}`}
                 >
                   <Button className="w-full" style={{ backgroundColor: '#6E2E2A' }}>
                     <Mail className="h-4 w-4 mr-2" />
-                    Zapytaj o tę działkę
+                    Dieses Grundstück anfragen
                   </Button>
                 </a>
               )}
@@ -312,13 +312,13 @@ export function InteractiveSitePlan({ slug }: { slug: string }) {
               <p className="text-sm font-medium text-gray-700">
                 {filter
                   ? `${STATUS_CONFIG[filter as StatusKey]?.label} (${filteredUnits.length})`
-                  : `Wszystkie działki (${filteredUnits.length})`}
+                  : `Alle Grundstücke (${filteredUnits.length})`}
               </p>
             </div>
             <div className="max-h-80 overflow-y-auto divide-y">
               {filteredUnits.length === 0 ? (
                 <div className="px-4 py-6 text-center text-gray-400 text-sm">
-                  Brak działek
+                  Keine Grundstücke
                 </div>
               ) : (
                 filteredUnits.map((unit) => {

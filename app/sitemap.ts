@@ -37,9 +37,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date()
   const staticRoutes: MetadataRoute.Sitemap = [
     entry('/', { lastModified: now, changeFrequency: 'weekly', priority: 1 }),
-    entry('/inwestycje', { lastModified: now, changeFrequency: 'weekly', priority: 0.9 }),
-    entry('/aktualnosci', { lastModified: now, changeFrequency: 'weekly', priority: 0.7 }),
-    entry('/lokalizacja', { lastModified: now, changeFrequency: 'monthly', priority: 0.6 }),
+    entry('/projekte', { lastModified: now, changeFrequency: 'weekly', priority: 0.9 }),
+    entry('/aktuelles', { lastModified: now, changeFrequency: 'weekly', priority: 0.7 }),
+    entry('/standort', { lastModified: now, changeFrequency: 'monthly', priority: 0.6 }),
     entry('/impressum', { lastModified: now, changeFrequency: 'yearly', priority: 0.2 }),
     entry('/datenschutz', { lastModified: now, changeFrequency: 'yearly', priority: 0.2 }),
   ]
@@ -67,7 +67,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   )
 
   const investmentRoutes: MetadataRoute.Sitemap = projects.map((p) =>
-    entry(p.cityLocation ? `/${p.cityLocation.slug}/${p.slug}` : `/inwestycje/${p.slug}`, {
+    entry(p.cityLocation ? `/${p.cityLocation.slug}/${p.slug}` : `/projekte/${p.slug}`, {
       lastModified: p.updatedAt,
       changeFrequency: 'weekly',
       priority: 0.8,
@@ -76,7 +76,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   )
 
   const articleRoutes: MetadataRoute.Sitemap = posts.map((p) =>
-    entry(`/aktualnosci/${p.slug}`, {
+    entry(`/aktuelles/${p.slug}`, {
       lastModified: p.updatedAt,
       changeFrequency: 'monthly',
       priority: 0.5,

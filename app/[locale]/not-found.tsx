@@ -3,12 +3,12 @@ import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
 
 const SECTION_LINKS: { label: string; href: string }[] = [
-  { label: 'O firmie', href: '/#o-firmie' },
-  { label: 'Lokalizacja', href: '/lokalizacja' },
-  { label: 'W sprzedaży', href: '/#w-sprzedazy' },
-  { label: 'Zakończone', href: '/#zakonczone' },
-  { label: 'O nas', href: '/#zespol' },
-  { label: 'Aktualności', href: '/#aktualnosci' },
+  { label: 'Über uns', href: '/#unternehmen' },
+  { label: 'Standort', href: '/standort' },
+  { label: 'Im Verkauf', href: '/#verkauf' },
+  { label: 'Abgeschlossen', href: '/#abgeschlossen' },
+  { label: 'Team', href: '/#team' },
+  { label: 'Aktuelles', href: '/aktuelles' },
   { label: 'Kontakt', href: '/#kontakt' },
 ]
 
@@ -23,18 +23,18 @@ export default function NotFound() {
               className="inline-block px-4 py-1.5 rounded-full text-xs font-medium tracking-wide uppercase mb-6"
               style={{ backgroundColor: 'rgba(110, 46, 42, 0.1)', color: '#6E2E2A' }}
             >
-              Błąd 404
+              Fehler 404
             </span>
 
             <h1
               className="font-serif text-4xl lg:text-5xl font-semibold mb-5 leading-tight"
               style={{ color: '#3E1718' }}
             >
-              404 – Strona nie została znaleziona
+              404 – Seite nicht gefunden
             </h1>
 
             <p className="text-lg text-muted-foreground leading-relaxed mb-10">
-              Strona, której szukasz, nie istnieje lub została przeniesiona.
+              Die gesuchte Seite existiert nicht oder wurde verschoben.
             </p>
 
             <Link
@@ -42,16 +42,16 @@ export default function NotFound() {
               className="inline-block text-sm font-medium px-6 py-3 rounded-lg transition-all duration-300 hover:opacity-90"
               style={{ backgroundColor: '#6E2E2A', color: 'rgba(255, 255, 255, 0.95)' }}
             >
-              Wróć na stronę główną
+              Zurück zur Startseite
             </Link>
           </div>
 
-          <nav aria-label="Główne sekcje" className="max-w-3xl mx-auto mt-16 lg:mt-20">
+          <nav aria-label="Hauptbereiche" className="max-w-3xl mx-auto mt-16 lg:mt-20">
             <h2
               className="font-serif text-xl lg:text-2xl font-semibold text-center mb-8"
               style={{ color: '#3E1718' }}
             >
-              Przejdź do głównych sekcji
+              Zu den Hauptbereichen
             </h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
               {SECTION_LINKS.map((link) => (

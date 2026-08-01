@@ -185,17 +185,17 @@ const SECTION_TYPES: Array<{
   type: string; label: string; defaultLabel: string; defaultOrder: number
   hasItems?: boolean; hasImage?: boolean; hasImage2?: boolean; hasMap?: boolean; hasDescription?: boolean
 }> = [
-  { type: 'key_features', label: 'Kluczowe cechy', defaultLabel: 'Cechy', hasItems: true, hasImage: false, hasDescription: false, defaultOrder: 1 },
-  { type: 'lokalizacja', label: 'Lokalizacja', defaultLabel: 'Lokalizacja', hasItems: true, hasImage: true, hasMap: true, defaultOrder: 2 },
-  { type: 'otoczenie', label: 'Otoczenie', defaultLabel: 'Otoczenie', hasItems: true, hasImage: true, defaultOrder: 3 },
-  { type: 'o_inwestycji', label: 'O Inwestycji', defaultLabel: 'O Inwestycji', hasImage: true, hasImage2: true, defaultOrder: 4 },
-  { type: 'udogodnienia', label: 'Udogodnienia', defaultLabel: 'Udogodnienia', hasItems: true, hasImage: true, defaultOrder: 5 },
-  { type: 'dodatki', label: 'Dodatki', defaultLabel: 'Dodatki', hasImage: true, defaultOrder: 6 },
-  { type: 'dom', label: 'Dom', defaultLabel: 'Dom', hasImage: true, defaultOrder: 7 },
+  { type: 'key_features', label: 'Key features', defaultLabel: 'Merkmale', hasItems: true, hasImage: false, hasDescription: false, defaultOrder: 1 },
+  { type: 'lokalizacja', label: 'Location', defaultLabel: 'Standort', hasItems: true, hasImage: true, hasMap: true, defaultOrder: 2 },
+  { type: 'otoczenie', label: 'Surroundings', defaultLabel: 'Umgebung', hasItems: true, hasImage: true, defaultOrder: 3 },
+  { type: 'o_inwestycji', label: 'About the project', defaultLabel: 'Über das Projekt', hasImage: true, hasImage2: true, defaultOrder: 4 },
+  { type: 'udogodnienia', label: 'Amenities', defaultLabel: 'Ausstattung', hasItems: true, hasImage: true, defaultOrder: 5 },
+  { type: 'dodatki', label: 'Extras', defaultLabel: 'Extras', hasImage: true, defaultOrder: 6 },
+  { type: 'dom', label: 'House', defaultLabel: 'Haus', hasImage: true, defaultOrder: 7 },
   { type: 'standard', label: 'Standard', defaultLabel: 'Standard', hasItems: true, defaultOrder: 8 },
-  { type: 'jak_kupic', label: 'How to buy', defaultLabel: 'How to buy your dream home?', hasDescription: false, hasImage: false, defaultOrder: 10 },
-  { type: 'jak_pomoc', label: 'How else can we help?', defaultLabel: 'How else can we help?', hasItems: true, defaultOrder: 11 },
-  { type: 'o_inwestorze', label: 'O inwestorze', defaultLabel: 'O inwestorze', hasImage: true, defaultOrder: 12 },
+  { type: 'jak_kupic', label: 'How to buy', defaultLabel: 'Wie kaufen Sie Ihre Traumimmobilie?', hasDescription: false, hasImage: false, defaultOrder: 10 },
+  { type: 'jak_pomoc', label: 'How else can we help?', defaultLabel: 'Wie wir zusätzlich helfen', hasItems: true, defaultOrder: 11 },
+  { type: 'o_inwestorze', label: 'About the investor', defaultLabel: 'Über das Unternehmen', hasImage: true, defaultOrder: 12 },
 ]
 
 function getTypeConfig(type: string) {
@@ -862,7 +862,7 @@ export default function EditProjectPage() {
           </Button>
         </Link>
         <h1 className="text-3xl font-serif font-bold text-gray-900">{project.name}</h1>
-        <Link href={`/inwestycje/${project.slug}`} target="_blank">
+        <Link href={`/projekte/${project.slug}`} target="_blank">
           <Button variant="outline" size="sm">
             <ExternalLink className="h-3.5 w-3.5 mr-1.5" />
             Preview publiczny
@@ -1003,9 +1003,9 @@ export default function EditProjectPage() {
                 value={project.cityLocationId ?? '__none__'}
                 onValueChange={(v) => setProject(p => p ? { ...p, cityLocationId: v === '__none__' ? null : v } : p)}
               >
-                <SelectTrigger><SelectValue placeholder="Brak przypisania" /></SelectTrigger>
+                <SelectTrigger><SelectValue placeholder="No assignment" /></SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="__none__">Brak (serwowane na /inwestycje/{project.slug})</SelectItem>
+                  <SelectItem value="__none__">None (served at /projekte/{project.slug})</SelectItem>
                   {locations.map(loc => (
                     <SelectItem key={loc.id} value={loc.id}>{loc.name}</SelectItem>
                   ))}
@@ -1013,8 +1013,8 @@ export default function EditProjectPage() {
               </Select>
               <p className="text-xs text-muted-foreground mt-2">
                 {project.cityLocationId
-                  ? <>Address: <code>/{locations.find(l => l.id === project.cityLocationId)?.slug}/{project.slug}</code>. Old address <code>/inwestycje/{project.slug}</code> redirects (308).</>
-                  : <>Bez miasta inwestycja jest serwowana pod <code>/inwestycje/{project.slug}</code>. Add locations in the “Locations” tab.</>}
+                  ? <>Address: <code>/{locations.find(l => l.id === project.cityLocationId)?.slug}/{project.slug}</code>. Old address <code>/projekte/{project.slug}</code> redirects (308).</>
+                  : <>Without a city the project is served at <code>/projekte/{project.slug}</code>. Add locations in the “Locations” tab.</>}
               </p>
             </CardContent>
           </Card>
@@ -1052,7 +1052,7 @@ export default function EditProjectPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="space-y-2">
               <Label>Telefon</Label>
-              <Input value={project.contactPhone || ''} onChange={(e) => setProject(p => p ? { ...p, contactPhone: e.target.value } : p)} placeholder="+48 452 068 785" />
+              <Input value={project.contactPhone || ''} onChange={(e) => setProject(p => p ? { ...p, contactPhone: e.target.value } : p)} placeholder="+49 175 5080012" />
             </div>
             <div className="space-y-2">
               <Label>Email</Label>
@@ -1072,7 +1072,7 @@ export default function EditProjectPage() {
         <CollapsibleCard title="Company & project location">
           <div className="space-y-4">
             <div>
-              <p className="text-xs font-medium text-gray-500 mb-3">Lokalizacja inwestycji (kolumny CSV 30-37)</p>
+              <p className="text-xs font-medium text-gray-500 mb-3">Project location (CSV columns 30-37)</p>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
                 <div className="space-y-1">
                   <Label className="text-xs">Region</Label>

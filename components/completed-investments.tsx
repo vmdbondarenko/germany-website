@@ -57,18 +57,18 @@ export function CompletedInvestments({ projects }: { projects: InvestmentData[] 
   if (projects.length === 0) return null
 
   return (
-    <section id="zakonczone" className="py-20 lg:py-32 bg-background">
+    <section id="abgeschlossen" className="py-20 lg:py-32 bg-background">
       <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto text-center mb-16">
           <h2
             className="font-serif text-4xl lg:text-5xl font-bold mb-6"
             style={{ color: "#3E1718" }}
           >
-            Inwestycje zakończone
+            Abgeschlossene Projekte
           </h2>
           <p className="text-lg text-muted-foreground leading-relaxed">
-            Poznaj nasze zrealizowane projekty, które stały się domami dla
-            zadowolonych rodzin.
+            Entdecken Sie unsere realisierten Projekte, die zum Zuhause
+            zufriedener Familien geworden sind.
           </p>
         </div>
 
@@ -81,7 +81,7 @@ export function CompletedInvestments({ projects }: { projects: InvestmentData[] 
                 backgroundColor: "#5A3D2B",
                 color: "rgba(255, 255, 255, 0.95)",
               }}
-              aria-label="Poprzednia inwestycja"
+              aria-label="Vorheriges Projekt"
             >
               <ChevronLeft className="w-6 h-6" />
             </button>
@@ -107,7 +107,7 @@ export function CompletedInvestments({ projects }: { projects: InvestmentData[] 
                     />
                   ) : (
                     <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-400 text-sm">
-                      Brak zdjęcia
+                      Kein Bild
                     </div>
                   )}
                   <div className="absolute top-2 left-2">
@@ -118,7 +118,7 @@ export function CompletedInvestments({ projects }: { projects: InvestmentData[] 
                         color: "rgba(255, 255, 255, 0.95)",
                       }}
                     >
-                      Zakończone
+                      Abgeschlossen
                     </span>
                   </div>
                 </div>
@@ -139,7 +139,7 @@ export function CompletedInvestments({ projects }: { projects: InvestmentData[] 
                     className="text-[10px] font-medium mb-3"
                     style={{ color: "#8B4513" }}
                   >
-                    Pozostało: 0 / {project.totalCount}
+                    Verfügbar: 0 / {project.totalCount}
                   </p>
 
                   {project.keyFeatures.length > 0 ? (
@@ -161,14 +161,14 @@ export function CompletedInvestments({ projects }: { projects: InvestmentData[] 
                   ) : null}
 
                   <Link
-                    href={`/inwestycje/${project.slug}`}
+                    href={`/projekte/${project.slug}`}
                     className="inline-block w-full text-center text-xs font-medium px-4 py-2 rounded-lg transition-all duration-300 hover:opacity-90"
                     style={{
                       backgroundColor: "#5A3D2B",
                       color: "rgba(255, 255, 255, 0.95)",
                     }}
                   >
-                    Zobacz inwestycję
+                    Projekt ansehen
                   </Link>
                 </div>
               </div>
@@ -183,7 +183,7 @@ export function CompletedInvestments({ projects }: { projects: InvestmentData[] 
                 backgroundColor: "#5A3D2B",
                 color: "rgba(255, 255, 255, 0.95)",
               }}
-              aria-label="Następna inwestycja"
+              aria-label="Nächstes Projekt"
             >
               <ChevronRight className="w-6 h-6" />
             </button>

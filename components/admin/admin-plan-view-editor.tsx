@@ -488,7 +488,7 @@ function ViewCanvas({
             <DialogTitle>{stageMode ? 'Select stage' : 'Select an object from the main plan'}</DialogTitle>
           </DialogHeader>
           <Input
-            placeholder="Szukaj..."
+            placeholder="Search..."
             value={pickerSearch}
             onChange={e => setPickerSearch(e.target.value)}
             className="mb-2"

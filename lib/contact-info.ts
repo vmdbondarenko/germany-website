@@ -1,46 +1,61 @@
-// Shared contact data — single source of truth for phone numbers / emails shown
-// across the site (header phone dropdown, footer, contact section). Keep all
-// numbers here so they are never duplicated by hand in multiple components.
+// Shared contact + legal company data — single source of truth for everything
+// shown across the site (header phone dropdown, footer, contact section, PDF,
+// Impressum, Datenschutz, Organization schema). Keep all values here so nothing
+// is duplicated by hand.
 
 export type CityContact = {
-  /** City label, exactly as displayed (Polish, with diacritics). */
+  /** Office label shown above the number (e.g. the city). */
   city: string
-  /** Human-readable phone, e.g. "+48 788 830 036". */
+  /** Human-readable phone, e.g. "+49 175 5080012". */
   phone: string
-  /** tel: href with no spaces, e.g. "tel:+48788830036". */
+  /** tel: href with no spaces, e.g. "tel:+491755080012". */
   phoneHref: string
-  /** Contact email for this city. */
+  /** Contact email. */
   email: string
 }
 
+// Single German office.
 export const cityContacts: CityContact[] = [
   {
-    city: "Warszawa",
-    phone: "+48 788 830 036",
-    phoneHref: "tel:+48788830036",
-    email: "maryna@jwdevelopment.net",
-  },
-  {
-    city: "Kraków",
-    phone: "+48 795 260 007",
-    phoneHref: "tel:+48795260007",
-    email: "daryna@jwdevelopment.net",
-  },
-  {
-    city: "Wrocław",
-    phone: "+48 795 140 224",
-    phoneHref: "tel:+48795140224",
-    email: "olena@jwdevelopment.net",
+    city: "Berlin",
+    phone: "+49 175 5080012",
+    phoneHref: "tel:+491755080012",
+    email: "vitalina@jwdevelopment.net",
   },
 ]
 
 /** Primary contact used wherever a single number/email is shown. */
 export const primaryContact = cityContacts[0]
 
-/** Registered company address (Siedziba spółki). */
+/** Registered company address (Firmensitz). */
 export const headquarters = {
-  addressLines: ["02-676 Warszawa", "ul. Postępu 12c/lok U5"],
+  addressLines: ["Pariser Platz 6a", "10117 Berlin"],
   /** One-line form for map links / single-line displays. */
-  addressOneLine: "Postępu 12C / lok. U5, 02-676 Warszawa",
-  mapHref: "https://maps.google.com/?q=Postępu+12C+Warszawa",
+  addressOneLine: "Pariser Platz 6a, 10117 Berlin",
+  mapHref: "https://maps.google.com/?q=Pariser+Platz+6a,+10117+Berlin",
+  /** Keyless Google Maps embed (no API key required). */
+  mapEmbedSrc: "https://www.google.com/maps?q=Pariser+Platz+6a%2C+10117+Berlin&output=embed",
+}
+
+/**
+ * Full legal company identity for the Impressum / Datenschutz / Organization
+ * schema. VAT ID, §34c authority, and any supervisory authority are intentionally
+ * left empty — fill them in once the official values are available.
+ */
+export const company = {
+  name: "Projektentwicklung Einstöckiges Berlin GmbH",
+  managingDirector: "Vitalina Kalinichenko",
+  addressLines: ["Pariser Platz 6a", "10117 Berlin", "Deutschland"],
+  addressOneLine: "Pariser Platz 6a, 10117 Berlin",
+  street: "Pariser Platz 6a",
+  postalCode: "10117",
+  city: "Berlin",
+  country: "DE",
+  phone: primaryContact.phone,
+  phoneHref: primaryContact.phoneHref,
+  email: primaryContact.email,
+  registerCourt: "Amtsgericht Charlottenburg",
+  registrationNumber: "HRB 288526 B",
+  /** Not yet available — do not invent. */
+  vatId: "" as string,
 }

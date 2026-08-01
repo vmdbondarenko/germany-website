@@ -63,7 +63,7 @@ export async function POST(request: Request) {
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err)
     if (msg.includes('Unique constraint') && msg.includes('slug')) {
-      return NextResponse.json({ error: 'Firma z takim slugiem już istnieje' }, { status: 400 })
+      return NextResponse.json({ error: 'A company with this slug already exists' }, { status: 400 })
     }
     console.error('Company create error:', msg)
     return NextResponse.json({ error: msg }, { status: 500 })

@@ -10,6 +10,8 @@ import {
   Hammer,
   KeyRound,
   ShieldCheck,
+  Award,
+  Gem,
   Sparkles,
   type LucideIcon,
 } from "lucide-react"
@@ -28,6 +30,8 @@ const ICONS: Record<string, LucideIcon> = {
   Hammer,
   KeyRound,
   ShieldCheck,
+  Award,
+  Gem,
   Sparkles,
 }
 

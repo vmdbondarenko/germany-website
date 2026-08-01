@@ -3,7 +3,7 @@ import type { FeatureSection } from "@/lib/home-content"
 
 export function Process({ content }: { content: FeatureSection }) {
   return (
-    <section id="proces" className="py-20 lg:py-32 bg-muted/30">
+    <section id="ablauf" className="py-20 lg:py-32 bg-muted/30">
       <div className="container mx-auto px-4 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-16 lg:mb-20">

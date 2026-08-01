@@ -83,7 +83,7 @@ export default async function HomePage() {
         address: L(p.location, p.locationEn),
         status: STATUS_LABELS[p.status] || p.status,
         availability: `${th("remaining")}: ${available} / ${total}`,
-        href: `/inwestycje/${p.slug}`,
+        href: `/projekte/${p.slug}`,
         description: L(p.description, p.descriptionEn),
         keyFeatures: keyFeaturesOf(p),
       }

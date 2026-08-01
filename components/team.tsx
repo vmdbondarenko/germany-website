@@ -7,11 +7,11 @@ import { teamMemberAlt } from "@/lib/seo/image-alt"
 const ACCENTS = ["#6E2E2A", "#5A2A1C", "#3E1718"]
 
 const FALLBACK_MEMBERS = [
-  { id: "1", name: "Serhii Mohylenko", role: "Deweloper, Inwestor", image: "/team/Sergiej Mogylenko.jpg", order: 0 },
-  { id: "2", name: "Maryna Monastyretska", role: "Członek zarządu, Dyrektor generalny", image: "/team/Maryna Monastyretska.jpg", order: 1 },
-  { id: "3", name: "Vitalina Kalinichenko", role: "Zastępca dyrektora generalnego", image: "/team/Vitalina Kalinichenko.jpg", order: 2 },
+  { id: "1", name: "Serhii Mohylenko", role: "Bauträger, Investor", image: "/team/Sergiej Mogylenko.jpg", order: 0 },
+  { id: "2", name: "Maryna Monastyretska", role: "Vorstandsmitglied, Geschäftsführerin", image: "/team/Maryna Monastyretska.jpg", order: 1 },
+  { id: "3", name: "Vitalina Kalinichenko", role: "Stellvertretende Geschäftsführerin", image: "/team/Vitalina Kalinichenko.jpg", order: 2 },
   { id: "4", name: "Kristina Stepanchuk", role: "Office Manager", image: "/team/KristinaStepanchuk.jpg", order: 3 },
-  { id: "5", name: "Olena Bilan", role: "Kierownik oddziału we Wrocławiu", image: "/team/Olena Bilan.jpg", order: 4 },
+  { id: "5", name: "Olena Bilan", role: "Niederlassungsleiterin Breslau", image: "/team/Olena Bilan.jpg", order: 4 },
 ]
 
 type TeamMemberData = { id: string; name: string; role: string; image: string | null; order: number }
@@ -142,7 +142,7 @@ export function Team({ members: membersProp }: { members?: TeamMemberData[] }) {
   )
 
   return (
-    <section id="zespol" className="py-20 lg:py-28 relative overflow-hidden">
+    <section id="team" className="py-20 lg:py-28 relative overflow-hidden">
       {/* Premium Multi-Layer Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-[#3E1718] via-[#4A1F1E] to-[#2A0F0E]" />
       
@@ -187,11 +187,11 @@ export function Team({ members: membersProp }: { members?: TeamMemberData[] }) {
           </div>
           
           <h2 className="font-serif text-3xl lg:text-5xl font-semibold mb-5 leading-tight text-white">
-            Kim jesteśmy?
+            Wer wir sind?
           </h2>
-          
+
           <p className="text-white/60 text-base lg:text-lg max-w-3xl mx-auto leading-relaxed">
-            Jako zespół chcemy dać naszym klientom to, czego sami oczekiwalibyśmy od dewelopera: bezpieczeństwa transakcji, wysokiej jakości materiałów budowlanych i atrakcyjnej ceny.
+            Als Team möchten wir unseren Kunden genau das bieten, was wir selbst von einem Bauträger erwarten würden: sichere Abläufe, hochwertige Baumaterialien und attraktive Preise.
           </p>
         </div>
 

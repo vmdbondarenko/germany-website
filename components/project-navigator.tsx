@@ -80,9 +80,9 @@ type Stage = {
 }
 
 const STATUS_CONFIG = {
-  available: { label: 'Dostępna', fill: '#86efac', stroke: '#86efac', bg: 'bg-green-100', text: 'text-green-800' },
-  reserved: { label: 'Rezerwacja', fill: '#fde047', stroke: '#fde047', bg: 'bg-yellow-100', text: 'text-yellow-800' },
-  sold: { label: 'Sprzedana', fill: '#f87171', stroke: '#f87171', bg: 'bg-red-100', text: 'text-red-800' },
+  available: { label: 'Verfügbar', fill: '#86efac', stroke: '#86efac', bg: 'bg-green-100', text: 'text-green-800' },
+  reserved: { label: 'Reserviert', fill: '#fde047', stroke: '#fde047', bg: 'bg-yellow-100', text: 'text-yellow-800' },
+  sold: { label: 'Verkauft', fill: '#f87171', stroke: '#f87171', bg: 'bg-red-100', text: 'text-red-800' },
 }
 type StatusKey = keyof typeof STATUS_CONFIG
 
@@ -324,8 +324,8 @@ function NorthCompass({ angle }: { angle: number | null }) {
 }
 
 function fmt(price: number | null) {
-  if (!price) return 'Na zapytanie'
-  return new Intl.NumberFormat('pl-PL', { style: 'currency', currency: 'PLN', maximumFractionDigits: 0 }).format(price)
+  if (!price) return 'Auf Anfrage'
+  return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'PLN', maximumFractionDigits: 0 }).format(price)
 }
 
 // Full price shown to buyers = base price + optional extras (parking/storage/
@@ -342,28 +342,28 @@ function fullPriceOf(u: Pick<Unit, 'price' | 'parkingPrice' | 'storagePrice' | '
 // Non-zero extras bundled into the full price, labelled for display.
 function priceExtras(u: Pick<Unit, 'parkingPrice' | 'storagePrice' | 'rightsPrice' | 'otherPrice'>): { label: string; amount: number }[] {
   const out: { label: string; amount: number }[] = []
-  if (u.parkingPrice) out.push({ label: 'parking', amount: u.parkingPrice })
-  if (u.storagePrice) out.push({ label: 'komórka lokatorska', amount: u.storagePrice })
-  if (u.rightsPrice)  out.push({ label: 'prawa do nieruchomości', amount: u.rightsPrice })
-  if (u.otherPrice)   out.push({ label: 'ogródek', amount: u.otherPrice })
+  if (u.parkingPrice) out.push({ label: 'Stellplatz', amount: u.parkingPrice })
+  if (u.storagePrice) out.push({ label: 'Abstellraum', amount: u.storagePrice })
+  if (u.rightsPrice)  out.push({ label: 'Grundstücksrechte', amount: u.rightsPrice })
+  if (u.otherPrice)   out.push({ label: 'Garten', amount: u.otherPrice })
   return out
 }
 
 function extrasLine(u: Pick<Unit, 'parkingPrice' | 'storagePrice' | 'rightsPrice' | 'otherPrice'>): string | null {
   const ex = priceExtras(u)
   if (ex.length === 0) return null
-  const hasParking = ex.some(e => e.label === 'parking')
-  const others = ex.filter(e => e.label !== 'parking')
+  const hasParking = ex.some(e => e.label === 'Stellplatz')
+  const others = ex.filter(e => e.label !== 'Stellplatz')
   const parts: string[] = []
-  if (hasParking) parts.push('Parking jest zawarty w cenie')
+  if (hasParking) parts.push('Stellplatz ist im Preis enthalten')
   if (others.length > 0) {
-    parts.push('w tym ' + others.map(e => `${e.label} ${new Intl.NumberFormat('pl-PL').format(e.amount)} zł`).join(', '))
+    parts.push('davon ' + others.map(e => `${e.label} ${new Intl.NumberFormat('de-DE').format(e.amount)} €`).join(', '))
   }
   return parts.join('; ')
 }
 
 function fmtDate(d: string | Date) {
-  return new Date(d).toLocaleDateString('pl-PL', { day: '2-digit', month: '2-digit', year: 'numeric' })
+  return new Date(d).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' })
 }
 
 function fullPriceOfHistory(h: PriceHistoryEntry): number | null {
@@ -458,7 +458,7 @@ export function ProjectNavigator({ slug, projectName }: { slug: string; projectN
   // Derived: the active stage object
   const currentStage = useMemo(() => stages.find(s => s.id === activeStageId) ?? null, [stages, activeStageId])
 
-  // Only show działki that have a polygon drawn for them in any SVG (main
+  // Only show plots (działki) that have a polygon drawn for them in any SVG (main
   // plan, additional plan views, or stage views). Polygons reference units via
   // either id="<svgElementId>" (main plan) or data-unit-id="<unit.id>".
   const displayUnits = useMemo(() => {
@@ -522,7 +522,7 @@ export function ProjectNavigator({ slug, projectName }: { slug: string; projectN
         bv = (b[sortKey] as string | number) ?? ''
       }
       if (typeof av === 'string' && typeof bv === 'string') {
-        return sortDir === 'asc' ? av.localeCompare(bv, 'pl') : bv.localeCompare(av, 'pl')
+        return sortDir === 'asc' ? av.localeCompare(bv, 'de') : bv.localeCompare(av, 'de')
       }
       return sortDir === 'asc' ? (av as number) - (bv as number) : (bv as number) - (av as number)
     })
@@ -743,7 +743,7 @@ polygon:hover { fill-opacity: 0.45; }`
 
   // ── View navigation for NO-STAGE mode (existing plan views) ──
   const allViews = useMemo(() => {
-    const mainPlan = { id: null as string | null, name: 'Plan główny' }
+    const mainPlan = { id: null as string | null, name: 'Hauptplan' }
     return [mainPlan, ...planViews.map(pv => ({ id: pv.id, name: pv.name }))]
   }, [planViews])
 
@@ -951,13 +951,13 @@ polygon:hover { fill-opacity: 0.45; }`
     <div className="py-20 text-center">
       <div className="inline-flex items-center gap-3 px-6 py-3 rounded-xl bg-secondary/50 border border-border/40">
         <div className="w-4 h-4 border-2 border-t-transparent rounded-full animate-spin" style={{ borderColor: '#6E2E2A', borderTopColor: 'transparent' }} />
-        <span className="text-sm font-medium" style={{ color: '#3E1718' }}>Ładowanie...</span>
+        <span className="text-sm font-medium" style={{ color: '#3E1718' }}>Wird geladen …</span>
       </div>
     </div>
   )
   if (!data) return (
     <div className="py-20 text-center">
-      <p className="text-base" style={{ color: '#3E1718', opacity: 0.6 }}>Błąd ładowania danych.</p>
+      <p className="text-base" style={{ color: '#3E1718', opacity: 0.6 }}>Fehler beim Laden der Daten.</p>
     </div>
   )
 
@@ -984,7 +984,7 @@ polygon:hover { fill-opacity: 0.45; }`
                 style={{ backgroundColor: 'rgba(110, 46, 42, 0.1)', color: '#6E2E2A' }}
               >
                 <SlidersHorizontal className="h-3 w-3" />
-                <span>Filtry</span>
+                <span>Filter</span>
                 {hasFilters && (
                   <span className="px-1.5 py-0.5 text-xs text-white rounded-full font-medium" style={{ backgroundColor: '#6E2E2A' }}>
                     {filteredUnits.length}/{displayUnits.length}
@@ -1000,7 +1000,7 @@ polygon:hover { fill-opacity: 0.45; }`
                 style={{ backgroundColor: 'rgba(110, 46, 42, 0.1)', color: '#6E2E2A' }}
               >
                 <SlidersHorizontal className="h-3 w-3" />
-                <span>Filtry</span>
+                <span>Filter</span>
                 {hasFilters && (
                   <span className="px-1.5 py-0.5 text-xs text-white rounded-full font-medium" style={{ backgroundColor: '#6E2E2A' }}>
                     {filteredUnits.length}/{displayUnits.length}
@@ -1013,7 +1013,7 @@ polygon:hover { fill-opacity: 0.45; }`
                 className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium transition-colors border border-border/60 hover:bg-secondary/50"
                 style={{ color: '#3E1718' }}
               >
-                Osiedle
+                Übersicht
               </button>
               {stages.map((stage) => (
                 <button
@@ -1057,7 +1057,7 @@ polygon:hover { fill-opacity: 0.45; }`
               </div>
             ) : (
               <div className="border border-border/60 rounded-2xl p-16 text-center bg-secondary/30">
-                <p className="text-base" style={{ color: '#3E1718', opacity: 0.6 }}>Brak widoku dla tego etapu.</p>
+                <p className="text-base" style={{ color: '#3E1718', opacity: 0.6 }}>Keine Ansicht für diese Phase.</p>
               </div>
             )}
 
@@ -1070,7 +1070,7 @@ polygon:hover { fill-opacity: 0.45; }`
                   onClick={goToPrevStageView}
                   className="absolute left-2 top-2 sm:left-3 sm:top-4 z-20 flex items-center justify-center w-7 h-7 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl transition-all shadow-sm text-white cursor-pointer hover:opacity-90"
                   style={{ backgroundColor: 'rgba(62, 23, 24, 0.7)' }}
-                  aria-label="Poprzedni widok"
+                  aria-label="Vorherige Ansicht"
                 >
                   <ChevronLeft className="h-3.5 w-3.5 sm:h-5 sm:w-5" />
                 </button>
@@ -1078,7 +1078,7 @@ polygon:hover { fill-opacity: 0.45; }`
                   onClick={goToNextStageView}
                   className="absolute right-2 top-2 sm:right-3 sm:top-4 z-20 flex items-center justify-center w-7 h-7 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl transition-all shadow-sm text-white cursor-pointer hover:opacity-90"
                   style={{ backgroundColor: 'rgba(62, 23, 24, 0.7)' }}
-                  aria-label="Następny widok"
+                  aria-label="Nächste Ansicht"
                 >
                   <ChevronRight className="h-3.5 w-3.5 sm:h-5 sm:w-5" />
                 </button>
@@ -1144,7 +1144,7 @@ polygon:hover { fill-opacity: 0.45; }`
             className={`px-5 py-2 rounded-xl text-sm font-medium transition-all ${activeStage === 'all' ? 'text-white shadow-sm' : 'border border-border/60 hover:bg-secondary/50'}`}
             style={activeStage === 'all' ? { backgroundColor: '#6E2E2A' } : { color: '#3E1718' }}
           >
-            Wszystkie etapy
+            Alle Phasen
           </button>
           {stageFilterOptions.map((s) => (
             <button
@@ -1153,7 +1153,7 @@ polygon:hover { fill-opacity: 0.45; }`
               className={`px-5 py-2 rounded-xl text-sm font-medium transition-all ${activeStage === s ? 'text-white shadow-sm' : 'border border-border/60 hover:bg-secondary/50'}`}
               style={activeStage === s ? { backgroundColor: '#6E2E2A' } : { color: '#3E1718' }}
             >
-              Etap {s}
+              Phase {s}
             </button>
           ))}
         </div>
@@ -1162,7 +1162,7 @@ polygon:hover { fill-opacity: 0.45; }`
       {!hasStages && planViews.length > 0 && !activeView && (
         <div className="text-center">
           <p className="text-sm font-medium" style={{ color: '#6E2E2A' }}>
-            Kliknij na obszar na planie lub użyj strzałek, aby zobaczyć działki
+            Klicken Sie auf einen Bereich im Plan oder nutzen Sie die Pfeile, um die Grundstücke zu sehen
           </p>
         </div>
       )}
@@ -1184,7 +1184,7 @@ polygon:hover { fill-opacity: 0.45; }`
               style={{ backgroundColor: 'rgba(110, 46, 42, 0.1)', color: '#6E2E2A' }}
             >
               <SlidersHorizontal className="h-3 w-3" />
-              <span>Filtry</span>
+              <span>Filter</span>
               {hasFilters && (
                 <span className="px-1.5 py-0.5 text-xs text-white rounded-full font-medium" style={{ backgroundColor: '#6E2E2A' }}>
                   {filteredUnits.length}/{displayUnits.length}
@@ -1200,7 +1200,7 @@ polygon:hover { fill-opacity: 0.45; }`
                 style={{ backgroundColor: 'rgba(110, 46, 42, 0.1)', color: '#6E2E2A' }}
                 disabled
               >
-                Osiedle
+                Übersicht
               </button>
               {stages.map((stage) => (
                 <button
@@ -1248,10 +1248,10 @@ polygon:hover { fill-opacity: 0.45; }`
                       >
                         <div className="font-serif font-semibold text-base text-white">{stageTooltip.stage.name}</div>
                         <div className="mt-1 text-xs" style={{ color: 'rgba(255,255,255,0.7)' }}>
-                          {stageTooltip.stage.stageViews.length} {stageTooltip.stage.stageViews.length === 1 ? 'widok' : 'widoków'}
+                          {stageTooltip.stage.stageViews.length} {stageTooltip.stage.stageViews.length === 1 ? 'Ansicht' : 'Ansichten'}
                         </div>
                         <div className="mt-1.5 text-xs" style={{ color: 'rgba(255,255,255,0.5)' }}>
-                          Kliknij aby zobaczyć
+                          Zum Ansehen klicken
                         </div>
                       </div>
                     )}
@@ -1269,11 +1269,11 @@ polygon:hover { fill-opacity: 0.45; }`
                   </div>
                 ) : (
                   <div className="border border-border/60 rounded-2xl p-16 text-center bg-secondary/30">
-                    <p className="text-base" style={{ color: '#3E1718', opacity: 0.6 }}>Brak zawartości dla tego widoku.</p>
+                    <p className="text-base" style={{ color: '#3E1718', opacity: 0.6 }}>Kein Inhalt für diese Ansicht.</p>
                   </div>
                 )
               ) : (
-                /* No-stage mode: showing a plan view (Dodatkowe widoki) with Działki polygons */
+                /* No-stage mode: showing a plan view with plot polygons */
                 viewSvgHtml ? (
                   <>
                     <div
@@ -1303,7 +1303,7 @@ polygon:hover { fill-opacity: 0.45; }`
                   </div>
                 ) : (
                   <div className="border border-border/60 rounded-2xl p-16 text-center bg-secondary/30">
-                    <p className="text-base" style={{ color: '#3E1718', opacity: 0.6 }}>Brak zawartości dla tego widoku.</p>
+                    <p className="text-base" style={{ color: '#3E1718', opacity: 0.6 }}>Kein Inhalt für diese Ansicht.</p>
                   </div>
                 )
               )
@@ -1331,21 +1331,21 @@ polygon:hover { fill-opacity: 0.45; }`
                     >
                       <div className="font-serif font-semibold text-base text-white">{stageTooltip.stage.name}</div>
                       <div className="mt-1 text-xs" style={{ color: 'rgba(255,255,255,0.7)' }}>
-                        {stageTooltip.stage.stageViews.length} {stageTooltip.stage.stageViews.length === 1 ? 'widok' : 'widoków'}
+                        {stageTooltip.stage.stageViews.length} {stageTooltip.stage.stageViews.length === 1 ? 'Ansicht' : 'Ansichten'}
                       </div>
                       <div className="mt-1.5 text-xs" style={{ color: 'rgba(255,255,255,0.5)' }}>
-                        Kliknij aby zobaczyć
+                        Zum Ansehen klicken
                       </div>
                     </div>
                   )}
                 </>
               ) : (
                 <div className="border border-border/60 rounded-2xl p-16 text-center bg-secondary/30">
-                  <p className="text-base" style={{ color: '#3E1718', opacity: 0.6 }}>Plan zagospodarowania nie jest jeszcze dostępny.</p>
+                  <p className="text-base" style={{ color: '#3E1718', opacity: 0.6 }}>Der Lageplan ist noch nicht verfügbar.</p>
                 </div>
               )
             ) : data.svgContent ? (
-              /* No-stage: main plan has direct Działki interaction */
+              /* No-stage: main plan has direct plot interaction */
               <>
                 <div
                   ref={svgRef}
@@ -1364,7 +1364,7 @@ polygon:hover { fill-opacity: 0.45; }`
               </>
             ) : (
               <div className="border border-border/60 rounded-2xl p-16 text-center bg-secondary/30">
-                <p className="text-base" style={{ color: '#3E1718', opacity: 0.6 }}>Plan zagospodarowania nie jest jeszcze dostępny.</p>
+                <p className="text-base" style={{ color: '#3E1718', opacity: 0.6 }}>Der Lageplan ist noch nicht verfügbar.</p>
               </div>
             )}
 
@@ -1375,7 +1375,7 @@ polygon:hover { fill-opacity: 0.45; }`
                   onClick={goToPrevView}
                   className="absolute left-2 top-2 sm:left-3 sm:top-4 z-20 flex items-center justify-center w-7 h-7 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl transition-all shadow-sm text-white cursor-pointer hover:opacity-90"
                   style={{ backgroundColor: 'rgba(62, 23, 24, 0.7)' }}
-                  aria-label="Poprzedni widok"
+                  aria-label="Vorherige Ansicht"
                   title={allViews[(currentViewIndex > 0 ? currentViewIndex - 1 : allViews.length - 1)]?.name}
                 >
                   <ChevronLeft className="h-3.5 w-3.5 sm:h-5 sm:w-5" />
@@ -1384,7 +1384,7 @@ polygon:hover { fill-opacity: 0.45; }`
                   onClick={goToNextView}
                   className="absolute right-2 top-2 sm:right-3 sm:top-4 z-20 flex items-center justify-center w-7 h-7 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl transition-all shadow-sm text-white cursor-pointer hover:opacity-90"
                   style={{ backgroundColor: 'rgba(62, 23, 24, 0.7)' }}
-                  aria-label="Następny widok"
+                  aria-label="Nächste Ansicht"
                   title={allViews[(currentViewIndex < allViews.length - 1 ? currentViewIndex + 1 : 0)]?.name}
                 >
                   <ChevronRight className="h-3.5 w-3.5 sm:h-5 sm:w-5" />
@@ -1460,39 +1460,39 @@ function UnitTooltip({ unit, onPdfClick, variant = 'overlay', className = '' }: 
       <div className="space-y-1.5 mb-3">
         {unit.area != null && (
           <div className="flex items-center justify-between gap-4">
-            <span className="text-xs" style={{ color: 'rgba(255,255,255,0.6)' }}>Powierzchnia</span>
+            <span className="text-xs" style={{ color: 'rgba(255,255,255,0.6)' }}>Fläche</span>
             <span className="text-sm font-semibold text-white">{unit.area} m²</span>
           </div>
         )}
         {unit.gardenArea != null && (
           <div className="flex items-center justify-between gap-4">
-            <span className="text-xs" style={{ color: 'rgba(255,255,255,0.6)' }}>Ogród</span>
+            <span className="text-xs" style={{ color: 'rgba(255,255,255,0.6)' }}>Garten</span>
             <span className="text-sm font-semibold text-white">{unit.gardenArea} m²</span>
           </div>
         )}
         {unit.rooms != null && (
           <div className="flex items-center justify-between gap-4">
-            <span className="text-xs" style={{ color: 'rgba(255,255,255,0.6)' }}>Pokoje</span>
+            <span className="text-xs" style={{ color: 'rgba(255,255,255,0.6)' }}>Zimmer</span>
             <span className="text-sm font-semibold text-white">{unit.rooms}</span>
           </div>
         )}
         {unit.floors != null && (
           <div className="flex items-center justify-between gap-4">
-            <span className="text-xs" style={{ color: 'rgba(255,255,255,0.6)' }}>Kondygnacje</span>
+            <span className="text-xs" style={{ color: 'rgba(255,255,255,0.6)' }}>Etagen</span>
             <span className="text-sm font-semibold text-white">{unit.floors}</span>
           </div>
         )}
         {unit.price != null && (
           <div className="pt-1 mt-1 border-t border-white/10">
             <div className="flex items-center justify-between gap-4">
-              <span className="text-xs" style={{ color: 'rgba(255,255,255,0.6)' }}>Cena</span>
+              <span className="text-xs" style={{ color: 'rgba(255,255,255,0.6)' }}>Preis</span>
               <span className="text-sm font-bold text-white">
                 {unit.status === 'sold' ? '—' : fmt(fullPriceOf(unit))}
               </span>
             </div>
             {unit.status !== 'sold' && (
               <div className="text-right">
-                {unit.area ? <div className="text-xs" style={{ color: 'rgba(255,255,255,0.5)' }}>{Math.round(unit.price / unit.area).toLocaleString('pl-PL')} zł/m²</div> : null}
+                {unit.area ? <div className="text-xs" style={{ color: 'rgba(255,255,255,0.5)' }}>{Math.round(unit.price / unit.area).toLocaleString('de-DE')} €/m²</div> : null}
                 {(() => {
                   const ex = extrasLine(unit)
                   return ex ? <div className="text-[10px] mt-0.5" style={{ color: 'rgba(255,255,255,0.55)' }}>{ex}</div> : null
@@ -1532,35 +1532,35 @@ function FilterPanel({ filterStatus, setFilterStatus, filterRooms, setFilterRoom
         <Select value={filterStatus} onValueChange={setFilterStatus}>
           <SelectTrigger className="h-7 text-xs border-border/60 bg-background"><SelectValue placeholder="Status" /></SelectTrigger>
           <SelectContent>
-            <SelectItem value="all" className="text-xs">Wszystkie</SelectItem>
-            <SelectItem value="available" className="text-xs">Dostępna</SelectItem>
-            <SelectItem value="reserved" className="text-xs">Rezerwacja</SelectItem>
-            <SelectItem value="sold" className="text-xs">Sprzedana</SelectItem>
+            <SelectItem value="all" className="text-xs">Alle</SelectItem>
+            <SelectItem value="available" className="text-xs">Verfügbar</SelectItem>
+            <SelectItem value="reserved" className="text-xs">Reserviert</SelectItem>
+            <SelectItem value="sold" className="text-xs">Verkauft</SelectItem>
           </SelectContent>
         </Select>
         {roomOptions.length > 0 && (
           <Select value={filterRooms} onValueChange={setFilterRooms}>
-            <SelectTrigger className="h-7 text-xs border-border/60 bg-background"><SelectValue placeholder="Pokoje" /></SelectTrigger>
+            <SelectTrigger className="h-7 text-xs border-border/60 bg-background"><SelectValue placeholder="Zimmer" /></SelectTrigger>
             <SelectContent>
-              <SelectItem value="all" className="text-xs">Wszystkie</SelectItem>
+              <SelectItem value="all" className="text-xs">Alle</SelectItem>
               {roomOptions.map((r) => (
-                <SelectItem key={r} value={String(r)} className="text-xs">{r} pokoje</SelectItem>
+                <SelectItem key={r} value={String(r)} className="text-xs">{r} Zimmer</SelectItem>
               ))}
             </SelectContent>
           </Select>
         )}
-        <Input className="h-7 text-xs border-border/60 bg-background" placeholder="Pow. min m²" value={filterAreaMin} onChange={(e) => setFilterAreaMin(e.target.value)} type="number" />
-        <Input className="h-7 text-xs border-border/60 bg-background" placeholder="Pow. max m²" value={filterAreaMax} onChange={(e) => setFilterAreaMax(e.target.value)} type="number" />
-        <Input className="h-7 text-xs border-border/60 bg-background" placeholder="Ogród min m²" value={filterGardenMin} onChange={(e) => setFilterGardenMin(e.target.value)} type="number" />
-        <Input className="h-7 text-xs border-border/60 bg-background" placeholder="Ogród max m²" value={filterGardenMax} onChange={(e) => setFilterGardenMax(e.target.value)} type="number" />
+        <Input className="h-7 text-xs border-border/60 bg-background" placeholder="Fläche min m²" value={filterAreaMin} onChange={(e) => setFilterAreaMin(e.target.value)} type="number" />
+        <Input className="h-7 text-xs border-border/60 bg-background" placeholder="Fläche max m²" value={filterAreaMax} onChange={(e) => setFilterAreaMax(e.target.value)} type="number" />
+        <Input className="h-7 text-xs border-border/60 bg-background" placeholder="Garten min m²" value={filterGardenMin} onChange={(e) => setFilterGardenMin(e.target.value)} type="number" />
+        <Input className="h-7 text-xs border-border/60 bg-background" placeholder="Garten max m²" value={filterGardenMax} onChange={(e) => setFilterGardenMax(e.target.value)} type="number" />
       </div>
       {hasFilters && (
         <div className="flex items-center justify-between mt-3 pt-3 border-t border-border/60">
           <p className="text-xs" style={{ color: '#3E1718', opacity: 0.7 }}>
-            Pokazuje {filteredUnits.length} z {totalCount} nieruchomości
+            Zeigt {filteredUnits.length} von {totalCount} Immobilien
           </p>
           <button onClick={clearFilters} className="text-xs flex items-center gap-1 transition-colors hover:opacity-80" style={{ color: '#6E2E2A' }}>
-            <X className="h-3 w-3" /> Wyczyść filtry
+            <X className="h-3 w-3" /> Filter zurücksetzen
           </button>
         </div>
       )}
@@ -1589,8 +1589,8 @@ function UnitTable({ sortedUnits, selectedUnit, setSelectedUnit, handleSort, Sor
             <tr className="border-b border-border/60 bg-secondary/50">
               {([
                 ['label', 'Nr'],
-                ['area', 'Pow.'],
-                ['price', 'Cena'],
+                ['area', 'Fläche'],
+                ['price', 'Preis'],
                 ['status', 'Status'],
               ] as [SortKey, string][]).map(([key, label]) => (
                 <th
@@ -1623,7 +1623,7 @@ function UnitTable({ sortedUnits, selectedUnit, setSelectedUnit, handleSort, Sor
                       </div>
                       {unit.status !== 'sold' && unit.price != null && unit.area ? (
                         <div className="text-[10px] mt-0.5" style={{ color: '#6E2E2A', opacity: 0.7 }}>
-                          {Math.round(unit.price / unit.area).toLocaleString('pl-PL')} zł/m²
+                          {Math.round(unit.price / unit.area).toLocaleString('de-DE')} €/m²
                         </div>
                       ) : null}
                     </td>
@@ -1639,11 +1639,11 @@ function UnitTable({ sortedUnits, selectedUnit, setSelectedUnit, handleSort, Sor
                       <td colSpan={4} className="px-3 py-3">
                         <div className="grid grid-cols-2 gap-x-3 gap-y-2 text-xs">
                           <div>
-                            <div className="text-[10px] uppercase tracking-wide mb-0.5" style={{ color: '#3E1718', opacity: 0.5 }}>Ogród</div>
+                            <div className="text-[10px] uppercase tracking-wide mb-0.5" style={{ color: '#3E1718', opacity: 0.5 }}>Garten</div>
                             <div style={{ color: '#3E1718' }}>{unit.gardenArea != null ? `${unit.gardenArea} m²` : '—'}</div>
                           </div>
                           <div>
-                            <div className="text-[10px] uppercase tracking-wide mb-0.5" style={{ color: '#3E1718', opacity: 0.5 }}>Pokoje</div>
+                            <div className="text-[10px] uppercase tracking-wide mb-0.5" style={{ color: '#3E1718', opacity: 0.5 }}>Zimmer</div>
                             <div style={{ color: '#3E1718' }}>{unit.rooms ?? '—'}</div>
                           </div>
                           {(() => {
@@ -1657,7 +1657,7 @@ function UnitTable({ sortedUnits, selectedUnit, setSelectedUnit, handleSort, Sor
                           })()}
                           {unitLow30 != null && (
                             <div className="col-span-2 text-[10px]" style={{ color: '#3E1718', opacity: 0.6 }}>
-                              Najniższa cena z 30 dni: <span style={{ textDecoration: 'line-through' }}>{fmt(unitLow30)}</span>
+                              Niedrigster Preis der letzten 30 Tage: <span style={{ textDecoration: 'line-through' }}>{fmt(unitLow30)}</span>
                             </div>
                           )}
                         </div>
@@ -1670,7 +1670,7 @@ function UnitTable({ sortedUnits, selectedUnit, setSelectedUnit, handleSort, Sor
                               style={{ color: '#6E2E2A', border: '1px solid rgba(110,46,42,0.3)' }}
                             >
                               <History className="h-3.5 w-3.5" />
-                              Historia
+                              Verlauf
                             </button>
                           )}
                           {unit.houseType && (
@@ -1694,7 +1694,7 @@ function UnitTable({ sortedUnits, selectedUnit, setSelectedUnit, handleSort, Sor
                               }}
                             >
                               <Mail className="h-3.5 w-3.5 mr-1.5" />
-                              Zapytaj
+                              Anfragen
                             </Button>
                           )}
                         </div>
@@ -1707,7 +1707,7 @@ function UnitTable({ sortedUnits, selectedUnit, setSelectedUnit, handleSort, Sor
             {sortedUnits.length === 0 && (
               <tr>
                 <td colSpan={4} className="px-4 py-10 text-center text-sm" style={{ color: '#3E1718', opacity: 0.5 }}>
-                  Brak wyników dla wybranych filtrów
+                  Keine Ergebnisse für die gewählten Filter
                 </td>
               </tr>
             )}
@@ -1721,12 +1721,12 @@ function UnitTable({ sortedUnits, selectedUnit, setSelectedUnit, handleSort, Sor
           <thead>
             <tr className="border-b border-border/60 bg-secondary/50">
               {([
-                ['label', 'Nr domu'],
-                ['area', 'Pow. m²'],
-                ['gardenArea', 'Ogród m²'],
-                ['rooms', 'Pokoje'],
-                ['price', 'Cena'],
-                ['pricePerM2', 'Cena/m²'],
+                ['label', 'Haus-Nr.'],
+                ['area', 'Fläche m²'],
+                ['gardenArea', 'Garten m²'],
+                ['rooms', 'Zimmer'],
+                ['price', 'Preis'],
+                ['pricePerM2', 'Preis/m²'],
                 ['status', 'Status'],
               ] as [SortKey, string][]).map(([key, label]) => (
                 <th
@@ -1766,8 +1766,8 @@ function UnitTable({ sortedUnits, selectedUnit, setSelectedUnit, handleSort, Sor
                           onClick={(e) => { e.stopPropagation(); onHistoryClick(unit) }}
                           className="inline-flex items-center justify-center h-6 w-6 rounded-md border transition-colors hover:bg-secondary/60"
                           style={{ borderColor: 'rgba(110,46,42,0.3)', color: '#6E2E2A' }}
-                          title="Historia cen"
-                          aria-label="Historia cen"
+                          title="Preisverlauf"
+                          aria-label="Preisverlauf"
                         >
                           <History className="h-3.5 w-3.5" />
                         </button>
@@ -1781,15 +1781,15 @@ function UnitTable({ sortedUnits, selectedUnit, setSelectedUnit, handleSort, Sor
                       <div
                         className="text-[10px] font-normal mt-0.5"
                         style={{ color: '#3E1718', opacity: 0.6 }}
-                        title="Najniższa cena z ostatnich 30 dni przed obniżką"
+                        title="Niedrigster Preis der letzten 30 Tage vor der Senkung"
                       >
                         <span style={{ textDecoration: 'line-through' }}>{fmt(unitLow30)}</span>
-                        <span className="ml-1">(30 dni)</span>
+                        <span className="ml-1">(30 Tage)</span>
                       </div>
                     )}
                   </td>
                   <td className="px-5 py-4" style={{ color: '#6E2E2A', opacity: 0.75 }}>
-                    {unit.status === 'sold' || !unit.price || !unit.area ? '—' : `${Math.round(unit.price / unit.area).toLocaleString('pl-PL')} zł`}
+                    {unit.status === 'sold' || !unit.price || !unit.area ? '—' : `${Math.round(unit.price / unit.area).toLocaleString('de-DE')} €`}
                   </td>
                   <td className="px-5 py-4">
                     <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${cfg.bg} ${cfg.text}`}>
@@ -1822,7 +1822,7 @@ function UnitTable({ sortedUnits, selectedUnit, setSelectedUnit, handleSort, Sor
                         }}
                       >
                         <Mail className="h-3.5 w-3.5 mr-1.5" />
-                        Zapytaj
+                        Anfragen
                       </Button>
                     )}
                   </td>
@@ -1832,7 +1832,7 @@ function UnitTable({ sortedUnits, selectedUnit, setSelectedUnit, handleSort, Sor
             {sortedUnits.length === 0 && (
               <tr>
                 <td colSpan={10} className="px-5 py-16 text-center" style={{ color: '#3E1718', opacity: 0.5 }}>
-                  Brak wyników dla wybranych filtrów
+                  Keine Ergebnisse für die gewählten Filter
                 </td>
               </tr>
             )}
@@ -1844,16 +1844,16 @@ function UnitTable({ sortedUnits, selectedUnit, setSelectedUnit, handleSort, Sor
 }
 
 // Disclaimers shown on every investment page, between the "Schemat inwestycji"
-// section and "Typy domów" — visualizations (renders, brick colour) are
+// section and "Haustypen" — visualizations (renders, brick colour) are
 // indicative only.
 function VisualizationFootnotes() {
   return (
     <div className="max-w-[74rem] mx-auto pt-10 space-y-1.5">
       <p className="text-xs leading-relaxed" style={{ color: '#3E1718', opacity: 0.55 }}>
-        * Kolorystyka cegły zaprezentowana na wizualizacjach ma charakter poglądowy i nie stanowi ostatecznego odwzorowania kolorów użytych w realizacji inwestycji.
+        * Die auf den Visualisierungen dargestellte Ziegelfarbe dient nur der Veranschaulichung und stellt keine verbindliche Wiedergabe der bei der Umsetzung verwendeten Farben dar.
       </p>
       <p className="text-xs leading-relaxed" style={{ color: '#3E1718', opacity: 0.55 }}>
-        * Prezentowane wizualizacje mają charakter wyłącznie poglądowy i nie stanowią odwzorowania wszystkich elementów projektowych ani technicznych.
+        * Die dargestellten Visualisierungen dienen ausschließlich der Veranschaulichung und geben nicht alle planerischen oder technischen Elemente wieder.
       </p>
     </div>
   )
@@ -1872,10 +1872,10 @@ function HouseTypesCarousel({ data, activeHouseTypeIndex, setActiveHouseTypeInde
     <div className="space-y-5 pt-4">
       <div className="text-center mb-8">
         <h3 className="font-serif text-2xl lg:text-3xl font-semibold mb-2" style={{ color: '#3E1718' }}>
-          Typy domów
+          Haustypen
         </h3>
         <p className="text-muted-foreground text-sm">
-          Wybierz typ domu dopasowany do Twoich potrzeb
+          Wählen Sie den Haustyp, der zu Ihren Bedürfnissen passt
         </p>
       </div>
 
@@ -1886,7 +1886,7 @@ function HouseTypesCarousel({ data, activeHouseTypeIndex, setActiveHouseTypeInde
               onClick={() => { setActiveHouseTypeIndex((activeHouseTypeIndex === 0 ? data.houseTypes.length - 1 : activeHouseTypeIndex - 1)); setActiveFloor(0); setFloorView('3d'); }}
               className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 lg:-translate-x-6 z-10 w-10 h-10 flex items-center justify-center rounded-sm transition-all hover:opacity-80"
               style={{ backgroundColor: 'rgba(110, 46, 42, 0.7)' }}
-              aria-label="Poprzedni typ"
+              aria-label="Vorheriger Typ"
             >
               <ChevronLeft className="w-5 h-5 text-white" />
             </button>
@@ -1894,7 +1894,7 @@ function HouseTypesCarousel({ data, activeHouseTypeIndex, setActiveHouseTypeInde
               onClick={() => { setActiveHouseTypeIndex((activeHouseTypeIndex === data.houseTypes.length - 1 ? 0 : activeHouseTypeIndex + 1)); setActiveFloor(0); setFloorView('3d'); }}
               className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 lg:translate-x-6 z-10 w-10 h-10 flex items-center justify-center rounded-sm transition-all hover:opacity-80"
               style={{ backgroundColor: '#3E1718' }}
-              aria-label="Następny typ"
+              aria-label="Nächster Typ"
             >
               <ChevronRight className="w-5 h-5 text-white" />
             </button>
@@ -1936,7 +1936,7 @@ function HouseTypesCarousel({ data, activeHouseTypeIndex, setActiveHouseTypeInde
                           ? (currentFloor.image3dUrl ?? currentFloor.image2dUrl ?? '')
                           : (currentFloor.image2dUrl ?? currentFloor.image3dUrl ?? '')}
                         alt={resolveAlt(
-                          `${currentType.name} - ${currentFloor.name} Rzut ${floorView === '3d' ? '3D' : '2D'}`,
+                          `${currentType.name} - ${currentFloor.name} Grundriss ${floorView === '3d' ? '3D' : '2D'}`,
                           houseTypeAlt(projectName ?? '', currentFloor.image3dUrl ?? currentFloor.image2dUrl ?? ''),
                         )}
                         onLoad={applyIntrinsicSize}
@@ -1952,7 +1952,7 @@ function HouseTypesCarousel({ data, activeHouseTypeIndex, setActiveHouseTypeInde
                             ? { backgroundColor: '#6E2E2A', color: '#fff' }
                             : { backgroundColor: 'transparent', color: '#3E1718', border: '1px solid', borderColor: 'rgba(0,0,0,0.15)' }}
                         >
-                          Rzut 3D
+                          Grundriss 3D
                         </button>
                       )}
                       {currentFloor.image2dUrl && (
@@ -1963,7 +1963,7 @@ function HouseTypesCarousel({ data, activeHouseTypeIndex, setActiveHouseTypeInde
                             ? { backgroundColor: '#6E2E2A', color: '#fff' }
                             : { backgroundColor: 'transparent', color: '#3E1718', border: '1px solid', borderColor: 'rgba(0,0,0,0.15)' }}
                         >
-                          Rzut 2D
+                          Grundriss 2D
                         </button>
                       )}
                     </div>
@@ -1975,8 +1975,8 @@ function HouseTypesCarousel({ data, activeHouseTypeIndex, setActiveHouseTypeInde
                 {currentFloor && currentFloor.rooms.length > 0 && (
                   <div>
                     <div className="flex justify-between mb-3 text-sm font-medium" style={{ color: '#3E1718' }}>
-                      <span>Pomieszczenie</span>
-                      <span>Powierzchnia</span>
+                      <span>Raum</span>
+                      <span>Fläche</span>
                     </div>
                     <div className="divide-y divide-border/40">
                       {currentFloor.rooms.map((room, index) => (
@@ -1993,7 +1993,7 @@ function HouseTypesCarousel({ data, activeHouseTypeIndex, setActiveHouseTypeInde
                     </div>
                     {currentFloor.area && (
                       <div className="flex justify-between mt-3 pt-3 border-t border-border/60">
-                        <span className="text-sm font-semibold" style={{ color: '#3E1718' }}>Razem</span>
+                        <span className="text-sm font-semibold" style={{ color: '#3E1718' }}>Gesamt</span>
                         <span className="text-sm font-semibold" style={{ color: '#6E2E2A' }}>{currentFloor.area} m²</span>
                       </div>
                     )}
@@ -2003,7 +2003,7 @@ function HouseTypesCarousel({ data, activeHouseTypeIndex, setActiveHouseTypeInde
             </div>
           ) : (
             <div className="p-8 text-center" style={{ color: '#3E1718', opacity: 0.5 }}>
-              Brak planów kondygnacji dla tego typu domu.
+              Keine Grundrisse für diesen Haustyp.
             </div>
           )}
         </div>
@@ -2016,7 +2016,7 @@ function HouseTypesCarousel({ data, activeHouseTypeIndex, setActiveHouseTypeInde
                 onClick={() => { setActiveHouseTypeIndex(index); setActiveFloor(0); setFloorView('3d'); }}
                 className={`w-2.5 h-2.5 rounded-full transition-all ${activeHouseTypeIndex === index ? '' : 'opacity-40'}`}
                 style={{ backgroundColor: '#6E2E2A' }}
-                aria-label={`Typ domu ${index + 1}`}
+                aria-label={`Haustyp ${index + 1}`}
               />
             ))}
           </div>
@@ -2054,19 +2054,19 @@ function UnitDetailCard({ unit, onClose, onContactClick, onPdfClick }: { unit: U
       </div>
       <div className="p-5">
         <dl className="grid grid-cols-2 gap-x-6 gap-y-3 text-sm mb-5">
-          {unit.area && <><dt style={{ color: '#3E1718', opacity: 0.6 }}>Powierzchnia</dt><dd className="font-semibold" style={{ color: '#3E1718' }}>{unit.area} m²</dd></>}
-          {unit.gardenArea && <><dt style={{ color: '#3E1718', opacity: 0.6 }}>Ogród</dt><dd className="font-semibold" style={{ color: '#3E1718' }}>{unit.gardenArea} m²</dd></>}
-          {unit.rooms && <><dt style={{ color: '#3E1718', opacity: 0.6 }}>Pokoje</dt><dd className="font-semibold" style={{ color: '#3E1718' }}>{unit.rooms}</dd></>}
-          {unit.floor && <><dt style={{ color: '#3E1718', opacity: 0.6 }}>Piętro</dt><dd className="font-semibold" style={{ color: '#3E1718' }}>{unit.floor}</dd></>}
-          {unit.price && <><dt style={{ color: '#3E1718', opacity: 0.6 }}>Cena</dt><dd className="font-semibold text-lg" style={{ color: '#6E2E2A' }}>{fmt(fullPriceOf(unit))}</dd></>}
-          {unit.price && unit.area ? <><dt style={{ color: '#3E1718', opacity: 0.6 }}>Cena/m²</dt><dd className="font-semibold" style={{ color: '#6E2E2A' }}>{Math.round(unit.price / unit.area).toLocaleString('pl-PL')} zł</dd></> : null}
+          {unit.area && <><dt style={{ color: '#3E1718', opacity: 0.6 }}>Fläche</dt><dd className="font-semibold" style={{ color: '#3E1718' }}>{unit.area} m²</dd></>}
+          {unit.gardenArea && <><dt style={{ color: '#3E1718', opacity: 0.6 }}>Garten</dt><dd className="font-semibold" style={{ color: '#3E1718' }}>{unit.gardenArea} m²</dd></>}
+          {unit.rooms && <><dt style={{ color: '#3E1718', opacity: 0.6 }}>Zimmer</dt><dd className="font-semibold" style={{ color: '#3E1718' }}>{unit.rooms}</dd></>}
+          {unit.floor && <><dt style={{ color: '#3E1718', opacity: 0.6 }}>Etage</dt><dd className="font-semibold" style={{ color: '#3E1718' }}>{unit.floor}</dd></>}
+          {unit.price && <><dt style={{ color: '#3E1718', opacity: 0.6 }}>Preis</dt><dd className="font-semibold text-lg" style={{ color: '#6E2E2A' }}>{fmt(fullPriceOf(unit))}</dd></>}
+          {unit.price && unit.area ? <><dt style={{ color: '#3E1718', opacity: 0.6 }}>Preis/m²</dt><dd className="font-semibold" style={{ color: '#6E2E2A' }}>{Math.round(unit.price / unit.area).toLocaleString('de-DE')} €</dd></> : null}
           {priceExtras(unit).map((e) => (
             <span key={e.label} className="contents">
-              {e.label === 'parking' ? (
-                <span className="col-span-2 italic" style={{ color: '#3E1718', opacity: 0.6 }}>Parking jest zawarty w cenie</span>
+              {e.label === 'Stellplatz' ? (
+                <span className="col-span-2 italic" style={{ color: '#3E1718', opacity: 0.6 }}>Stellplatz ist im Preis enthalten</span>
               ) : (
                 <>
-                  <dt style={{ color: '#3E1718', opacity: 0.6 }}>w tym {e.label}</dt>
+                  <dt style={{ color: '#3E1718', opacity: 0.6 }}>davon {e.label}</dt>
                   <dd className="font-medium" style={{ color: '#3E1718', opacity: 0.85 }}>{fmt(e.amount)}</dd>
                 </>
               )}
@@ -2074,7 +2074,7 @@ function UnitDetailCard({ unit, onClose, onContactClick, onPdfClick }: { unit: U
           ))}
           {omnibusLow != null ? (
             <>
-              <dt style={{ color: '#3E1718', opacity: 0.6 }}>Najniższa cena z 30 dni</dt>
+              <dt style={{ color: '#3E1718', opacity: 0.6 }}>Niedrigster Preis der letzten 30 Tage</dt>
               <dd className="font-semibold" style={{ color: '#3E1718', opacity: 0.7, textDecoration: 'line-through' }}>{fmt(omnibusLow)}</dd>
             </>
           ) : null}
@@ -2087,7 +2087,7 @@ function UnitDetailCard({ unit, onClose, onContactClick, onPdfClick }: { unit: U
               className="w-full flex items-center justify-between px-4 py-3 text-sm font-medium bg-secondary/30 hover:bg-secondary/50 transition-colors"
               style={{ color: '#3E1718' }}
             >
-              <span>Historia cen ({historyDesc.length})</span>
+              <span>Preisverlauf ({historyDesc.length})</span>
               <ChevronDown className={`h-4 w-4 transition-transform ${historyOpen ? 'rotate-180' : ''}`} />
             </button>
             {historyOpen && (
@@ -2113,7 +2113,7 @@ function UnitDetailCard({ unit, onClose, onContactClick, onPdfClick }: { unit: U
               style={{ color: '#6E2E2A', border: '2px solid #6E2E2A' }}
             >
               <FileDown className="h-4 w-4" />
-              Pobierz plan (PDF)
+              Plan herunterladen (PDF)
             </button>
           )}
           {unit.status !== 'sold' && (
@@ -2123,7 +2123,7 @@ function UnitDetailCard({ unit, onClose, onContactClick, onPdfClick }: { unit: U
               onClick={onContactClick}
             >
               <Mail className="h-4 w-4 mr-2" />
-              Zapytaj o tę nieruchomość
+              Diese Immobilie anfragen
             </Button>
           )}
         </div>

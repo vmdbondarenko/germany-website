@@ -81,10 +81,10 @@ export function ContactModal({ isOpen, onClose, subject }: ContactModalProps) {
         setPhoneNumber("")
         setCountry(DEFAULT_COUNTRY)
       } else {
-        alert("Wystąpił błąd. Spróbuj ponownie lub skontaktuj się telefonicznie.")
+        alert("Es ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut oder kontaktieren Sie uns telefonisch.")
       }
     } catch {
-      alert("Wystąpił błąd. Spróbuj ponownie lub skontaktuj się telefonicznie.")
+      alert("Es ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut oder kontaktieren Sie uns telefonisch.")
     } finally {
       setIsSubmitting(false)
     }
@@ -102,40 +102,40 @@ export function ContactModal({ isOpen, onClose, subject }: ContactModalProps) {
         <button
           onClick={onClose}
           className="absolute top-4 right-4 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-foreground/10 hover:bg-foreground/20 transition-colors"
-          aria-label="Zamknij"
+          aria-label="Schließen"
         >
           <X className="h-3.5 w-3.5" />
-          Zamknij
+          Schließen
         </button>
 
         <h2 className="font-serif text-2xl font-semibold text-foreground mb-2">
-          Skontaktuj się z nami
+          Kontaktieren Sie uns
         </h2>
         {subject && (
           <p className="text-sm text-muted-foreground mb-6">
-            Zapytanie dot.: <span className="font-medium text-foreground">{subject}</span>
+            Anfrage zu: <span className="font-medium text-foreground">{subject}</span>
           </p>
         )}
         {!subject && (
           <p className="text-sm text-muted-foreground mb-6">
-            Wypełnij formularz, a wkrótce się z Tobą skontaktujemy.
+            Füllen Sie das Formular aus, wir melden uns in Kürze bei Ihnen.
           </p>
         )}
 
         {submitted ? (
           <div className="flex flex-col items-center justify-center py-12 text-center">
             <Send className="h-12 w-12 mb-4" style={{ color: '#6E2E2A' }} />
-            <h3 className="text-xl font-semibold text-foreground mb-2">Dziękujemy!</h3>
-            <p className="text-muted-foreground">Wkrótce się z Tobą skontaktujemy.</p>
-            <Button onClick={onClose} className="mt-6" variant="outline">Zamknij</Button>
+            <h3 className="text-xl font-semibold text-foreground mb-2">Vielen Dank!</h3>
+            <p className="text-muted-foreground">Wir melden uns in Kürze bei Ihnen.</p>
+            <Button onClick={onClose} className="mt-6" variant="outline">Schließen</Button>
           </div>
         ) : (
           <form ref={formRef} onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label htmlFor="modal-name" className="block text-sm font-medium text-foreground mb-1.5">
-                Imię i nazwisko *
+                Name *
               </label>
-              <Input id="modal-name" name="name" type="text" required placeholder="Jan Kowalski" className="bg-background border-border" />
+              <Input id="modal-name" name="name" type="text" required placeholder="Max Mustermann" className="bg-background border-border" />
             </div>
             <div>
               <label htmlFor="modal-phone" className="block text-sm font-medium text-foreground mb-1.5">
@@ -156,9 +156,9 @@ export function ContactModal({ isOpen, onClose, subject }: ContactModalProps) {
             </div>
             <div>
               <label htmlFor="modal-email" className="block text-sm font-medium text-foreground mb-1.5">
-                Adres e-mail *
+                E-Mail-Adresse *
               </label>
-              <Input id="modal-email" name="email" type="email" required placeholder="jan@example.com" className="bg-background border-border" aria-invalid={!!emailError} aria-describedby={emailError ? "modal-email-error" : undefined} onChange={() => emailError && setEmailError(null)} />
+              <Input id="modal-email" name="email" type="email" required placeholder="max@beispiel.de" className="bg-background border-border" aria-invalid={!!emailError} aria-describedby={emailError ? "modal-email-error" : undefined} onChange={() => emailError && setEmailError(null)} />
               {emailError && (
                 <p id="modal-email-error" className="mt-1.5 text-sm text-red-600">
                   {emailError}
@@ -167,14 +167,14 @@ export function ContactModal({ isOpen, onClose, subject }: ContactModalProps) {
             </div>
             <div>
               <label htmlFor="modal-message" className="block text-sm font-medium text-foreground mb-1.5">
-                Treść wiadomości
+                Nachricht
               </label>
-              <Textarea id="modal-message" name="message" rows={3} placeholder="Napisz do nas..." className="bg-background border-border resize-none" />
+              <Textarea id="modal-message" name="message" rows={3} placeholder="Schreiben Sie uns …" className="bg-background border-border resize-none" />
             </div>
             <div className="flex items-start gap-3">
               <Checkbox id="modal-privacy" required className="mt-1" />
               <label htmlFor="modal-privacy" className="text-xs text-muted-foreground leading-relaxed">
-                Zapoznałem się z informacjami na temat przetwarzania danych osobowych, które znajdują się w Polityce prywatności.
+                Ich habe die Informationen zur Verarbeitung personenbezogener Daten in der Datenschutzerklärung zur Kenntnis genommen.
               </label>
             </div>
             <Button
@@ -184,8 +184,8 @@ export function ContactModal({ isOpen, onClose, subject }: ContactModalProps) {
               className="w-full font-medium"
               style={{ backgroundColor: '#6E2E2A', color: 'white' }}
             >
-              {isSubmitting ? "Wysyłanie..." : (
-                <>Wyślij wiadomość <Send className="ml-2 h-4 w-4" /></>
+              {isSubmitting ? "Wird gesendet …" : (
+                <>Nachricht senden <Send className="ml-2 h-4 w-4" /></>
               )}
             </Button>
           </form>

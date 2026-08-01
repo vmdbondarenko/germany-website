@@ -19,9 +19,9 @@ type InvestmentData = {
 }
 
 const STATUS_MAP: Record<string, { label: string; color: string }> = {
-  active: { label: "W sprzedaży", color: "#16a34a" },
-  planned: { label: "Wkrótce", color: "#666" },
-  completed: { label: "Zakończona", color: "#9ca3af" },
+  active: { label: "Im Verkauf", color: "#16a34a" },
+  planned: { label: "Demnächst", color: "#666" },
+  completed: { label: "Abgeschlossen", color: "#9ca3af" },
 }
 
 export function Investments({ projects }: { projects: InvestmentData[] }) {
@@ -61,17 +61,17 @@ export function Investments({ projects }: { projects: InvestmentData[] }) {
   if (projects.length === 0) return null
 
   return (
-    <section id="w-sprzedazy" className="py-20 lg:py-32 bg-background">
+    <section id="verkauf" className="py-20 lg:py-32 bg-background">
       <div className="container mx-auto px-4 lg:px-8">
         <div className="text-center mb-16">
           <h2
             className="font-serif text-3xl lg:text-4xl font-semibold mb-4"
             style={{ color: "#3E1718" }}
           >
-            Wszystkie dostępne inwestycje
+            Alle verfügbaren Projekte
           </h2>
           <p className="text-muted-foreground text-base lg:text-lg max-w-2xl mx-auto">
-            Nowoczesne domy i osiedla w zielonym otoczeniu
+            Moderne Häuser und Wohnanlagen im Grünen
           </p>
         </div>
 
@@ -80,7 +80,7 @@ export function Investments({ projects }: { projects: InvestmentData[] }) {
             <button
               onClick={() => scroll("left")}
               className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-12 h-12 lg:w-14 lg:h-14 flex items-center justify-center rounded-full bg-white shadow-lg hover:shadow-xl transition-all duration-300 border border-border/20"
-              aria-label="Poprzednia inwestycja"
+              aria-label="Vorheriges Projekt"
             >
               <ChevronLeft className="w-6 h-6 lg:w-7 lg:h-7 text-[#3E1718]" />
             </button>
@@ -90,7 +90,7 @@ export function Investments({ projects }: { projects: InvestmentData[] }) {
             <button
               onClick={() => scroll("right")}
               className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-12 h-12 lg:w-14 lg:h-14 flex items-center justify-center rounded-full bg-white shadow-lg hover:shadow-xl transition-all duration-300 border border-border/20"
-              aria-label="Następna inwestycja"
+              aria-label="Nächstes Projekt"
             >
               <ChevronRight className="w-6 h-6 lg:w-7 lg:h-7 text-[#3E1718]" />
             </button>
@@ -106,7 +106,7 @@ export function Investments({ projects }: { projects: InvestmentData[] }) {
               return (
                 <Link
                   key={project.slug}
-                  href={`/inwestycje/${project.slug}`}
+                  href={`/projekte/${project.slug}`}
                   className="flex-shrink-0 w-[380px] group bg-card rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-500 hover:-translate-y-1 border border-border/50 flex flex-col cursor-pointer"
                 >
                   <div className="relative aspect-[4/3] overflow-hidden">
@@ -119,7 +119,7 @@ export function Investments({ projects }: { projects: InvestmentData[] }) {
                       />
                     ) : (
                       <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-400">
-                        Brak zdjęcia
+                        Kein Bild
                       </div>
                     )}
                     <div className="absolute top-4 left-4">
@@ -151,7 +151,7 @@ export function Investments({ projects }: { projects: InvestmentData[] }) {
                       className="text-xs font-medium mb-4"
                       style={{ color: "#5A2A1C" }}
                     >
-                      Pozostało: {project.availableCount} / {project.totalCount}
+                      Verfügbar: {project.availableCount} / {project.totalCount}
                     </p>
 
                     {project.keyFeatures.length > 0 ? (
@@ -179,7 +179,7 @@ export function Investments({ projects }: { projects: InvestmentData[] }) {
                         color: "rgba(255, 255, 255, 0.95)",
                       }}
                     >
-                      Zobacz inwestycję
+                      Projekt ansehen
                     </span>
                   </div>
                 </Link>

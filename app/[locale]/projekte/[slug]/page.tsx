@@ -14,7 +14,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params
   const project = await resolveProjectBySlug(slug)
-  const canonical = project ? projectCanonicalPath(project) : `/inwestycje/${slug}`
+  const canonical = project ? projectCanonicalPath(project) : `/projekte/${slug}`
   return buildProjectMetadata(project?.slug ?? slug, canonical)
 }
 
@@ -33,7 +33,7 @@ export default async function ProjectPage({
   if (!project) notFound()
 
   const canonical = projectCanonicalPath(project)
-  if (canonical !== `/inwestycje/${slug}`) permanentRedirect(canonical)
+  if (canonical !== `/projekte/${slug}`) permanentRedirect(canonical)
 
   const cities = await loadHeaderCities()
   return <ProjectDetail slug={project.slug} canonicalPath={canonical} cities={cities} />

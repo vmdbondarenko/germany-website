@@ -5,9 +5,11 @@
 // returns a plain object; render it with <JsonLd> to emit a single
 // <script type="application/ld+json"> block.
 
-import { primaryContact } from '@/lib/contact-info'
+import { primaryContact, company } from '@/lib/contact-info'
 
-export const SITE_URL = 'https://www.jednopietrowawarszawa.pl'
+export const SITE_URL = (
+  process.env.NEXT_PUBLIC_BASE_URL || 'https://germany-website-tau.vercel.app'
+).replace(/\/$/, '')
 
 /** Build an absolute URL on the canonical www host from a root-relative path.
  *  Already-absolute URLs (e.g. Vercel Blob images) are returned unchanged. */
@@ -16,8 +18,8 @@ export function absoluteUrl(path: string): string {
   return `${SITE_URL}${path.startsWith('/') ? path : `/${path}`}`
 }
 
-const ORG_NAME = 'Jednopiętrowa Warszawa sp. z o.o.'
-const ORG_LOGO = absoluteUrl('/images/logo-jednopietrowa.png')
+const ORG_NAME = 'Projektentwicklung Einstöckiges Berlin GmbH'
+const ORG_LOGO = absoluteUrl('/images/logo.png')
 
 /** Bare Organization node, reused as author/publisher inside other schemas. */
 const organizationNode = {
@@ -43,10 +45,13 @@ export function organizationSchema() {
     name: ORG_NAME,
     url: SITE_URL,
     logo: ORG_LOGO,
-    sameAs: [
-      'https://www.instagram.com/jednopietrowawarszawa/',
-      'https://www.youtube.com/@jednopietrowawarszawasp.zo6617',
-    ],
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: company.street,
+      postalCode: company.postalCode,
+      addressLocality: company.city,
+      addressCountry: company.country,
+    },
     contactPoint: {
       '@type': 'ContactPoint',
       contactType: 'sales',
@@ -121,7 +126,7 @@ export function residenceSchema(opts: {
 }) {
   const address: Record<string, unknown> = {
     '@type': 'PostalAddress',
-    addressCountry: 'PL',
+    addressCountry: 'DE',
   }
   if (opts.streetAddress) address.streetAddress = opts.streetAddress
   if (opts.locality) address.addressLocality = opts.locality

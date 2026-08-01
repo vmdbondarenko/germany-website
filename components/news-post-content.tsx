@@ -80,7 +80,7 @@ export function NewsPostContent({
             className="font-serif text-2xl lg:text-3xl font-semibold mb-8 text-center"
             style={{ color: "#3E1718" }}
           >
-            Galeria
+            Galerie
           </h2>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4">
             {images.map((image, index) => (
@@ -117,7 +117,7 @@ export function NewsPostContent({
           <button
             onClick={() => setLightboxIdx(-1)}
             className="absolute top-4 right-4 lg:top-8 lg:right-8 w-12 h-12 flex items-center justify-center rounded-full bg-[#3E1718]/10 hover:bg-[#3E1718]/20 transition-colors z-50 border border-[#6E2E2A]/20"
-            aria-label="Zamknij"
+            aria-label="Schließen"
           >
             <X className="w-6 h-6 text-[#3E1718]" />
           </button>
@@ -132,7 +132,7 @@ export function NewsPostContent({
                   handlePrev()
                 }}
                 className="absolute left-4 lg:left-8 top-1/2 -translate-y-1/2 w-14 h-14 lg:w-16 lg:h-16 flex items-center justify-center rounded-full bg-white/90 hover:bg-white shadow-lg hover:shadow-xl transition-all z-50 border border-[#6E2E2A]/20"
-                aria-label="Poprzednie zdjęcie"
+                aria-label="Vorheriges Bild"
               >
                 <ChevronLeft className="w-7 h-7 lg:w-8 lg:h-8 text-[#3E1718]" />
               </button>
@@ -142,7 +142,7 @@ export function NewsPostContent({
                   handleNext()
                 }}
                 className="absolute right-4 lg:right-8 top-1/2 -translate-y-1/2 w-14 h-14 lg:w-16 lg:h-16 flex items-center justify-center rounded-full bg-white/90 hover:bg-white shadow-lg hover:shadow-xl transition-all z-50 border border-[#6E2E2A]/20"
-                aria-label="Następne zdjęcie"
+                aria-label="Nächstes Bild"
               >
                 <ChevronRight className="w-7 h-7 lg:w-8 lg:h-8 text-[#3E1718]" />
               </button>

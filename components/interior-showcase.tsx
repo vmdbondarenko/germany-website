@@ -9,75 +9,75 @@ import type { InteriorContent } from "@/lib/home-content"
 const interiorImages = [
   {
     src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/10-1.jpg-JakdJk0xlSKqLQ3K8fZyKuvvXu6CO3.png",
-    alt: "Otwarty salon z jadalnią i kuchnią",
+    alt: "Offener Wohnbereich mit Essbereich und Küche",
   },
   {
     src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/9-1.jpg-9RJlI6NAiWuYeJkx7mVmdHhN6bSb6o.png",
-    alt: "Nowoczesna kuchnia",
+    alt: "Moderne Küche",
   },
   {
     src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/8-2.jpg-z8jrfgleBqsV78lLib5OTfc5YMPk1u.png",
-    alt: "Przestronny salon ze schodami",
+    alt: "Großzügiges Wohnzimmer mit Treppe",
   },
   {
     src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/3-5.jpg-crfYtjepayNCjnzX7DMeFqugKYZkfC.png",
-    alt: "Przytulna sypialnia na poddaszu",
+    alt: "Gemütliches Schlafzimmer im Dachgeschoss",
   },
   {
     src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/4-4.jpg-ymJoRt6aGNLJFJ0e1XDIEzIaFAxr2l.png",
-    alt: "Elegancka sypialnia z toaletką",
+    alt: "Elegantes Schlafzimmer mit Schminktisch",
   },
   {
     src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/3-4.jpg-W6DRzmkYhVYAUaFOCDSsBgSjOKBnr3.png",
-    alt: "Luksusowa łazienka",
+    alt: "Luxuriöses Badezimmer",
   },
   {
     src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/1-5.jpg-dxDapnUd5kiqzBZwMRvlQabJ0OBWY8.png",
-    alt: "Nowoczesna łazienka na poddaszu",
+    alt: "Modernes Badezimmer im Dachgeschoss",
   },
   {
     src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/2-5.jpg-SVke9rt1z8lX0KkHP5QzI0SwbTdTAz.png",
-    alt: "Stylowa łazienka",
+    alt: "Stilvolles Badezimmer",
   },
   {
     src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/5-4.jpg-5kZsHK8GHwUsFmsuWHUuB1lyMxwQ5x.png",
-    alt: "Nowoczesna łazienka z prysznicem",
+    alt: "Modernes Badezimmer mit Dusche",
   },
   {
     src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/4-3.jpg-JSrb9ZKtM4WPQiyKdwDhf4GUTzyPiN.png",
-    alt: "Łazienka z wanną",
+    alt: "Badezimmer mit Badewanne",
   },
   {
     src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/6-3.jpg-mWrO2hyJpEIJo1lmAdPIaF2sW5UW0k.png",
-    alt: "Domowe biuro",
+    alt: "Homeoffice",
   },
   {
     src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/7-2.jpg-VoUGVf4UKlKhAvEX4C5HesFFkDdprZ.png",
-    alt: "Pokój gościnny",
+    alt: "Gästezimmer",
   },
   {
     src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/6-4.jpg-CHMKQhnpjzHVcXK7yDZzs0lTdsp2an.png",
-    alt: "Pokój dziecięcy na poddaszu",
+    alt: "Kinderzimmer im Dachgeschoss",
   },
   {
     src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/7-3.jpg-hclO2HP0ZFr9Jus1IZh7NmvZdmEXIV.png",
-    alt: "Jasny pokój dziecięcy",
+    alt: "Helles Kinderzimmer",
   },
   {
     src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/2-4.jpg-WXPDN3LqMMSfGpalVYJpo6eIKu5jdr.png",
-    alt: "Nowoczesny przedpokój",
+    alt: "Moderner Flur",
   },
   {
     src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/1-4.jpg-WzfLLkp2xUQMIHDjWdBckxngJsxmln.png",
-    alt: "Funkcjonalna garderoba",
+    alt: "Funktionaler Ankleideraum",
   },
   {
     src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/5-5.jpg-rlQ3Xgtmc2WC3f1xwyv0EbTaYs0Zdc.png",
-    alt: "Jasny salon",
+    alt: "Helles Wohnzimmer",
   },
   {
     src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/8-3.jpg-qDoqamGeF5u5ypsF2siVl9tuZZRQyw.png",
-    alt: "Pokój rodzinny",
+    alt: "Familienzimmer",
   },
 ]
 

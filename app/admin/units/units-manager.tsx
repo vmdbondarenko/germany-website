@@ -125,29 +125,29 @@ export function UnitsManager({ initialUnits }: { initialUnits: Unit[] }) {
           <Input
             value={search}
             onChange={e => setSearch(e.target.value)}
-            placeholder="Szukaj po nazwie, budynku, inwestycji…"
+            placeholder="Search by name, building, project…"
             className="pl-9"
           />
         </div>
         <Select value={projectFilter} onValueChange={setProjectFilter}>
-          <SelectTrigger><SelectValue placeholder="Inwestycja" /></SelectTrigger>
+          <SelectTrigger><SelectValue placeholder="Project" /></SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">Wszystkie inwestycje</SelectItem>
+            <SelectItem value="all">All projects</SelectItem>
             {projects.map(([id, name]) => <SelectItem key={id} value={id}>{name}</SelectItem>)}
           </SelectContent>
         </Select>
         <Select value={companyFilter} onValueChange={setCompanyFilter}>
           <SelectTrigger><SelectValue placeholder="Company" /></SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">Wszystkie firmy</SelectItem>
-            <SelectItem value="none">Bez firmy</SelectItem>
+            <SelectItem value="all">All companies</SelectItem>
+            <SelectItem value="none">No company</SelectItem>
             {companies.map(([id, name]) => <SelectItem key={id} value={id}>{name}</SelectItem>)}
           </SelectContent>
         </Select>
         <Select value={statusFilter} onValueChange={setStatusFilter}>
           <SelectTrigger><SelectValue placeholder="Status" /></SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">Wszystkie statusy</SelectItem>
+            <SelectItem value="all">All statuses</SelectItem>
             <SelectItem value="available">Available</SelectItem>
             <SelectItem value="reserved">Reserved</SelectItem>
             <SelectItem value="sold">Sold</SelectItem>
@@ -166,7 +166,7 @@ export function UnitsManager({ initialUnits }: { initialUnits: Unit[] }) {
         <table className="w-full text-sm">
           <thead className="bg-gray-50 border-b">
             <tr className="text-left">
-              <th className="px-3 py-2.5 font-semibold text-gray-600 uppercase tracking-wider text-xs">Inwestycja</th>
+              <th className="px-3 py-2.5 font-semibold text-gray-600 uppercase tracking-wider text-xs">Project</th>
               <th className="px-3 py-2.5 font-semibold text-gray-600 uppercase tracking-wider text-xs">Firma</th>
               <th className="px-3 py-2.5 font-semibold text-gray-600 uppercase tracking-wider text-xs">Building</th>
               <th className="px-3 py-2.5 font-semibold text-gray-600 uppercase tracking-wider text-xs">Plot</th>

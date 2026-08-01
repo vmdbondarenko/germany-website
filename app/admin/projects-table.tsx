@@ -152,7 +152,7 @@ export function AdminProjectsTable({ rows }: { rows: Row[] }) {
                           Edit
                         </Button>
                       </Link>
-                      <Link href={`/inwestycje/${row.slug}`} target="_blank">
+                      <Link href={`/projekte/${row.slug}`} target="_blank">
                         <Button variant="ghost" size="sm">
                           <Eye className="h-3.5 w-3.5" />
                         </Button>

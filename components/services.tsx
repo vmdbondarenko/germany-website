@@ -28,7 +28,7 @@ export function Services({ content }: { content: FeatureSection }) {
   }, [])
 
   return (
-    <section id="jak-pomagamy" className="py-20 lg:py-28 relative overflow-hidden">
+    <section id="so-helfen-wir" className="py-20 lg:py-28 relative overflow-hidden">
       {/* Premium Layered Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-[#FAF9F7] via-[#F8F6F4] to-[#F5F2EF]" />
 

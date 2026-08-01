@@ -54,7 +54,7 @@ export default function LocationsAdminPage() {
   }
 
   const remove = async (id: string) => {
-    if (!confirm('Delete this location? Assigned projects will revert to /inwestycje/{slug}.')) return
+    if (!confirm('Delete this location? Assigned projects will revert to /projekte/{slug}.')) return
     await fetch(`/api/admin/locations/${id}`, { method: 'DELETE' })
     setItems(prev => prev.filter(l => l.id !== id))
   }

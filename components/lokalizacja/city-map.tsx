@@ -34,9 +34,9 @@ export type ProjectPoint = {
 }
 
 const STATUS_MAP: Record<string, { label: string; color: string }> = {
-  active: { label: "W sprzedaży", color: "#16a34a" },
-  planned: { label: "Wkrótce", color: "#666" },
-  completed: { label: "Zakończona", color: "#9ca3af" },
+  active: { label: "Im Verkauf", color: "#16a34a" },
+  planned: { label: "Demnächst", color: "#666" },
+  completed: { label: "Abgeschlossen", color: "#9ca3af" },
 }
 
 export function CityMap({
@@ -177,7 +177,7 @@ export function CityMap({
                         className="text-xs font-medium underline"
                         style={{ color: "#6E2E2A" }}
                       >
-                        Zobacz inwestycję →
+                        Projekt ansehen →
                       </Link>
                     </div>
                   </InfoWindow>
@@ -190,10 +190,10 @@ export function CityMap({
             <div className="text-center p-8">
               <MapPin className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
               <p className="text-lg font-medium text-muted-foreground">
-                Mapa zostanie uruchomiona po dodaniu klucza Google Maps API
+                Die Karte wird nach Hinzufügen des Google-Maps-API-Schlüssels angezeigt
               </p>
               <p className="text-sm text-muted-foreground mt-2">
-                Ustaw NEXT_PUBLIC_GOOGLE_MAPS_API_KEY w zmiennych środowiskowych
+                Setzen Sie NEXT_PUBLIC_GOOGLE_MAPS_API_KEY in den Umgebungsvariablen
               </p>
             </div>
           </div>
@@ -207,7 +207,7 @@ export function CityMap({
             <button
               onClick={() => scroll("left")}
               className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-12 h-12 lg:w-14 lg:h-14 flex items-center justify-center rounded-full bg-white shadow-lg hover:shadow-xl transition-all duration-300 border border-border/20"
-              aria-label="Poprzednia inwestycja"
+              aria-label="Vorheriges Projekt"
             >
               <ChevronLeft className="w-6 h-6 lg:w-7 lg:h-7 text-[#3E1718]" />
             </button>
@@ -216,7 +216,7 @@ export function CityMap({
             <button
               onClick={() => scroll("right")}
               className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-12 h-12 lg:w-14 lg:h-14 flex items-center justify-center rounded-full bg-white shadow-lg hover:shadow-xl transition-all duration-300 border border-border/20"
-              aria-label="Następna inwestycja"
+              aria-label="Nächstes Projekt"
             >
               <ChevronRight className="w-6 h-6 lg:w-7 lg:h-7 text-[#3E1718]" />
             </button>
@@ -245,7 +245,7 @@ export function CityMap({
                       />
                     ) : (
                       <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-400">
-                        Brak zdjęcia
+                        Kein Bild
                       </div>
                     )}
                     <div className="absolute top-4 left-4">
@@ -277,7 +277,7 @@ export function CityMap({
                       className="text-xs font-medium mb-4"
                       style={{ color: "#5A2A1C" }}
                     >
-                      Pozostało: {p.availableCount} / {p.totalCount}
+                      Verfügbar: {p.availableCount} / {p.totalCount}
                     </p>
 
                     {p.keyFeatures.length > 0 ? (
@@ -305,7 +305,7 @@ export function CityMap({
                         color: "rgba(255, 255, 255, 0.95)",
                       }}
                     >
-                      Zobacz inwestycję
+                      Projekt ansehen
                     </span>
                   </div>
                 </Link>
@@ -315,7 +315,7 @@ export function CityMap({
         </div>
       ) : (
         <p className="mt-8 text-muted-foreground text-sm">
-          Brak inwestycji w sprzedaży{cityLabel ? ` dla: ${cityLabel}` : ""}.
+          Keine Projekte im Verkauf{cityLabel ? ` für: ${cityLabel}` : ""}.
         </p>
       )}
     </>

@@ -98,7 +98,7 @@ export function DynamicGallerySection({
               handlePrev()
             }}
             className="absolute left-4 lg:left-8 top-1/2 -translate-y-1/2 w-14 h-14 lg:w-16 lg:h-16 flex items-center justify-center rounded-full bg-white/90 hover:bg-white shadow-lg hover:shadow-xl transition-all z-50 border border-[#6E2E2A]/20"
-            aria-label="Poprzednie zdjęcie"
+            aria-label="Vorheriges Bild"
           >
             <ChevronLeft className="w-7 h-7 lg:w-8 lg:h-8 text-[#3E1718]" />
           </button>
@@ -108,7 +108,7 @@ export function DynamicGallerySection({
               handleNext()
             }}
             className="absolute right-4 lg:right-8 top-1/2 -translate-y-1/2 w-14 h-14 lg:w-16 lg:h-16 flex items-center justify-center rounded-full bg-white/90 hover:bg-white shadow-lg hover:shadow-xl transition-all z-50 border border-[#6E2E2A]/20"
-            aria-label="Następne zdjęcie"
+            aria-label="Nächstes Bild"
           >
             <ChevronRight className="w-7 h-7 lg:w-8 lg:h-8 text-[#3E1718]" />
           </button>

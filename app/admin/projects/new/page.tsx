@@ -104,7 +104,7 @@ export default function NewProjectPage() {
                     placeholder="np. osiedle-szlacheckie"
                     required
                   />
-                  <p className="text-xs text-gray-500">URL: /inwestycje/{form.slug || 'slug'}</p>
+                  <p className="text-xs text-gray-500">URL: /projekte/{form.slug || 'slug'}</p>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="location">Lokalizacja *</Label>

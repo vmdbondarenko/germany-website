@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { getTranslations } from "next-intl/server"
 import { HeaderServer } from "@/components/header-server"
 import { Footer } from "@/components/footer"
+import { company } from "@/lib/contact-info"
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("legal")
@@ -29,13 +30,13 @@ export default async function DatenschutzPage() {
           </h1>
           <div className="space-y-8">
             <Section heading={t("controllerHeading")}>
-              {tc("companyName")}
-              {"\n"}
-              {t("placeholder")}
+              {[company.name, ...company.addressLines].join("\n")}
             </Section>
             <Section heading={t("dataHeading")}>{t("dataBody")}</Section>
             <Section heading={t("rightsHeading")}>{t("rightsBody")}</Section>
-            <Section heading={t("contactHeading")}>{t("placeholder")}</Section>
+            <Section heading={t("contactHeading")}>
+              {`${tc("phone")}: ${company.phone}\n${tc("email")}: ${company.email}`}
+            </Section>
           </div>
         </article>
       </main>

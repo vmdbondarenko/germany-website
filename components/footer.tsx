@@ -1,5 +1,4 @@
 import { getTranslations } from "next-intl/server"
-import { Instagram, Youtube } from "lucide-react"
 import { Link } from "@/i18n/navigation"
 import { cityContacts, headquarters } from "@/lib/contact-info"
 import { CookieSettingsButton } from "@/components/cookie-settings-button"
@@ -10,16 +9,14 @@ export async function Footer() {
   const tc = await getTranslations("common")
 
   const navLinks = [
-    { href: "#o-firmie", label: tn("about") },
-    { href: "#w-sprzedazy", label: t("navInvestments") },
-    { href: "#proces", label: t("navWhyUs") },
+    { href: "#unternehmen", label: tn("about") },
+    { href: "#verkauf", label: t("navInvestments") },
+    { href: "#ablauf", label: t("navWhyUs") },
     { href: "#kontakt", label: tn("contact") },
   ]
 
-  const socialLinks = [
-    { href: "https://www.instagram.com/jednopietrowawarszawa/", icon: Instagram, label: "Instagram" },
-    { href: "https://www.youtube.com/@jednopietrowawarszawasp.zo6617", icon: Youtube, label: "YouTube" },
-  ]
+  // No German social profiles provided yet — add them here when available.
+  const socialLinks: { href: string; icon: React.ComponentType<{ className?: string }>; label: string }[] = []
 
   return (
     <footer className="bg-foreground text-primary-foreground py-16 lg:py-20">

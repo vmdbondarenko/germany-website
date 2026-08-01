@@ -35,17 +35,17 @@ export function DynamicPlanSection({ slug, projectName }: { slug: string; projec
               color: "#6E2E2A",
             }}
           >
-            Plan Osiedla
+            Lageplan
           </span>
           <h2
             className="font-serif text-3xl lg:text-4xl font-semibold mb-4"
             style={{ color: "#3E1718" }}
           >
-            Schemat inwestycji
+            Projektschema
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            Wybierz nieruchomość na mapie lub skorzystaj z filtrów, aby znaleźć
-            swój wymarzony dom
+            Wählen Sie eine Immobilie auf der Karte oder nutzen Sie die Filter, um
+            Ihr Traumhaus zu finden
           </p>
         </div>
         <ProjectNavigator slug={slug} projectName={projectName} />
