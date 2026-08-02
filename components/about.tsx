@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from "react"
 import Image from "next/image"
 import { ChevronLeft, ChevronRight, X, Clock, Zap, Wrench, Hammer, Building, Building2, Home, MapPin, Star, Check, Timer, HardHat, TrendingUp } from "lucide-react"
 import { numberedSectionAlt } from "@/lib/seo/image-alt"
+import { DEFAULT_COMPANY_NAME, DEFAULT_ABOUT_DESCRIPTION, DEFAULT_ABOUT_PHOTOS } from "@/lib/content-defaults"
 
 const INVESTMENT_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
   Clock, Zap, Wrench, Hammer, Building, Building2, Home, MapPin, Star, Check, Timer, HardHat, TrendingUp,
@@ -18,19 +19,8 @@ type UpcomingInvestment = { id: string; title: string; description: string; stat
 type NewCity = { id: string; city: string; date: string }
 type AboutSectionData = { companyName: string; description: string; photos?: unknown } | null
 
-// Default company name + history (German) shown until an admin overrides them in
-// the DB (AboutSection). Paragraphs are separated by a blank line; the section
-// splits on "\n\n".
-const DEFAULT_COMPANY_NAME = "Projektentwicklung Einstöckiges Berlin GmbH"
-const DEFAULT_ABOUT_DESCRIPTION = [
-  "Seit 2026 sind wir unter dem Namen Projektentwicklung Einstöckiges Berlin GmbH als Projektentwickler in Berlin tätig. Dieser Schritt ist die konsequente Fortsetzung eines langjährigen Weges, der auf Erfahrung, Qualität und dem Vertrauen unserer Kunden basiert.",
-  "Unsere Geschichte begann 2016 in der Ukraine. Unter dem Namen „Einstöckiges Kiew“ realisierten wir hochwertige Einfamilienhäuser aus Ziegeln im charakteristischen Stil des Bayerischen Mauerwerks. Ein besonderes Merkmal unserer Projekte ist der Einsatz exklusiver handgeformter Ziegel. Diese werden heute ausschließlich für unsere Bauvorhaben produziert und direkt nach dem Brennvorgang aus dem Ziegelwerk geliefert. So können wir eine gleichbleibend hohe Qualität und die unverwechselbare Optik jedes einzelnen Hauses gewährleisten.",
-  "Ausgehend von Kiew erweiterten wir unsere Tätigkeit kontinuierlich und realisierten erfolgreich Projekte auch in Lwiw, Tscherniwzi und Dnipro.",
-  "Im Jahr 2022 traten wir unter dem Namen „Einstöckige Warschau“ in den europäischen Markt ein. Den Auftakt bildete ein Doppelhaus in einem Vorort der polnischen Hauptstadt. In den darauffolgenden vier Jahren wuchs das Unternehmen deutlich und erweiterte seine Projektentwicklung auf weitere Städte wie Breslau, Krakau und Posen.",
-  "2025 erschlossen wir einen weiteren Markt und begannen mit der Entwicklung neuer Wohnprojekte im Umland von Baku in Aserbaidschan. Damit setzten wir unseren internationalen Wachstumskurs konsequent fort.",
-  "Heute entwickeln und realisieren wir erfolgreich Projekte in allen Ländern, in denen wir vertreten sind.",
-  "Unabhängig vom Land folgen alle unsere Häuser derselben Philosophie: zeitlose Architektur, hochwertige Materialien, durchdachte Grundrisse und eine präzise Ausführung bis ins kleinste Detail.",
-].join("\n\n")
+// Company name + history defaults live in lib/content-defaults.ts (shared with
+// the seed script so they can never drift).
 
 export function About({ upcomingInvestments, newCities, aboutSection }: { upcomingInvestments: UpcomingInvestment[]; newCities: NewCity[]; aboutSection: AboutSectionData }) {
   const [isVisible, setIsVisible] = useState(false)
@@ -78,7 +68,7 @@ export function About({ upcomingInvestments, newCities, aboutSection }: { upcomi
   // image (overrides authored alts), index = image sequence.
   const companySrcs = dbPhotos.length > 0
     ? dbPhotos
-    : ["/images/house-main.jpg", "/images/house-balcony.jpg", "/images/house-terrace.jpg"]
+    : DEFAULT_ABOUT_PHOTOS
   const companyImages = companySrcs.map((src, i) => ({
     src,
     alt: numberedSectionAlt("Unternehmensgeschichte", "", i),
