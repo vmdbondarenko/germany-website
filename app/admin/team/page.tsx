@@ -4,11 +4,13 @@ import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { Trash2, Plus, Loader2, Upload, GripVertical } from 'lucide-react'
 import { slugifyBase } from '@/lib/blob-filename'
 
 type TeamMember = { id: string; name: string; role: string; roleEn?: string | null; image: string | null; order: number }
+type SectionFields = { headingDe: string; headingEn: string; descriptionDe: string; descriptionEn: string }
 
 async function uploadImage(file: File, name?: string): Promise<string> {
   const form = new FormData()
@@ -25,12 +27,40 @@ export default function TeamAdminPage() {
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState<string | null>(null)
   const [uploading, setUploading] = useState<string | null>(null)
+  // "Wer wir sind?" section heading/description → HomeSection id "team".
+  const [section, setSection] = useState<SectionFields>({ headingDe: '', headingEn: '', descriptionDe: '', descriptionEn: '' })
+  const [sectionOrder, setSectionOrder] = useState(13)
+  const [sectionSaving, setSectionSaving] = useState(false)
 
   useEffect(() => {
-    fetch('/api/admin/team-members')
-      .then(r => r.json())
-      .then(data => { setMembers(data); setLoading(false) })
+    Promise.all([
+      fetch('/api/admin/team-members').then(r => r.json()).catch(() => []),
+      fetch('/api/admin/home-sections').then(r => r.json()).catch(() => []),
+    ]).then(([memberData, sections]) => {
+      setMembers(Array.isArray(memberData) ? memberData : [])
+      const team = Array.isArray(sections) ? sections.find((s: { id: string }) => s.id === 'team') : null
+      if (team) {
+        setSection({
+          headingDe: team.headingDe ?? '',
+          headingEn: team.headingEn ?? '',
+          descriptionDe: team.descriptionDe ?? '',
+          descriptionEn: team.descriptionEn ?? '',
+        })
+        if (typeof team.order === 'number') setSectionOrder(team.order)
+      }
+      setLoading(false)
+    })
   }, [])
+
+  const saveSection = async () => {
+    setSectionSaving(true)
+    await fetch('/api/admin/home-sections', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: 'team', order: sectionOrder, ...section }),
+    })
+    setSectionSaving(false)
+  }
 
   const update = (id: string, field: string, value: string | number) =>
     setMembers(prev => prev.map(m => m.id === id ? { ...m, [field]: value } : m))
@@ -83,6 +113,32 @@ export default function TeamAdminPage() {
           <p className="text-xs text-muted-foreground mt-1">Display order is controlled by the “Order” field.</p>
         </div>
         <Button onClick={add}><Plus className="h-4 w-4 mr-1" />Add person</Button>
+      </div>
+
+      {/* Section heading + description (HomeSection id "team") */}
+      <div className="border rounded-xl p-4 bg-card space-y-4">
+        <h2 className="text-sm font-semibold">Section heading &amp; description</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div className="space-y-1">
+            <Label className="text-xs">Heading · DE</Label>
+            <Input value={section.headingDe} className="h-8 text-sm" onChange={e => setSection(s => ({ ...s, headingDe: e.target.value }))} />
+          </div>
+          <div className="space-y-1">
+            <Label className="text-xs">Heading · EN</Label>
+            <Input value={section.headingEn} className="h-8 text-sm" onChange={e => setSection(s => ({ ...s, headingEn: e.target.value }))} />
+          </div>
+          <div className="space-y-1 sm:col-span-2">
+            <Label className="text-xs">Description · DE</Label>
+            <Textarea rows={2} value={section.descriptionDe} className="text-sm" onChange={e => setSection(s => ({ ...s, descriptionDe: e.target.value }))} />
+          </div>
+          <div className="space-y-1 sm:col-span-2">
+            <Label className="text-xs">Description · EN</Label>
+            <Textarea rows={2} value={section.descriptionEn} className="text-sm" onChange={e => setSection(s => ({ ...s, descriptionEn: e.target.value }))} />
+          </div>
+        </div>
+        <Button size="sm" variant="outline" onClick={saveSection} disabled={sectionSaving}>
+          {sectionSaving ? <Loader2 className="h-3 w-3 animate-spin" /> : 'Save section'}
+        </Button>
       </div>
 
       <div className="space-y-4">
