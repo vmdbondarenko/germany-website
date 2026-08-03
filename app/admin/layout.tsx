@@ -69,6 +69,10 @@ export default async function AdminLayout({ children }: { children: React.ReactN
                     <Users className="h-4 w-4" />
                     Team
                   </Link>
+                  <Link href="/admin/settings" className="flex items-center gap-1.5 text-sm text-gray-600 hover:text-gray-900">
+                    <Building2 className="h-4 w-4" />
+                    Unternehmenseinstellungen
+                  </Link>
                 </>
               )}
             </div>
