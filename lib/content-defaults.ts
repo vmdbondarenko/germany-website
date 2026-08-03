@@ -190,6 +190,36 @@ export const DEFAULT_TEAM = {
   ),
 }
 
+// ── "Seit unserer Gründung" — figures by period (reuses HomeSection id
+// "since-founding" + one HomeSectionItem per period; item.description holds the
+// two country lines separated by a newline).
+export const DEFAULT_SINCE_FOUNDING = {
+  heading: t("Seit unserer Gründung", "Since our founding"),
+  periods: [
+    {
+      title: t("Seit Unternehmensgründung", "Since the company was founded"),
+      description: t(
+        "Ukraine: 820 Familien haben sich für ein Haus von uns entschieden.\nPolen: 83 Familien haben sich für ein Haus von uns entschieden.",
+        "Ukraine: 820 families have chosen a home from us.\nPoland: 83 families have chosen a home from us.",
+      ),
+    },
+    {
+      title: t("Erstes Halbjahr 2026 (1. und 2. Quartal)", "First half of 2026 (Q1 and Q2)"),
+      description: t(
+        "Ukraine: 91 Familien haben sich für ein Haus von uns entschieden.\nPolen: 34 Familien haben sich für ein Haus von uns entschieden.",
+        "Ukraine: 91 families have chosen a home from us.\nPoland: 34 families have chosen a home from us.",
+      ),
+    },
+    {
+      title: t("Geschäftsjahr 2025", "Financial year 2025"),
+      description: t(
+        "Ukraine: 188 Familien haben sich für ein Haus von uns entschieden.\nPolen: 19 Familien haben sich für ein Haus von uns entschieden.",
+        "Ukraine: 188 families have chosen a home from us.\nPoland: 19 families have chosen a home from us.",
+      ),
+    },
+  ],
+}
+
 export type TeamMemberDefault = { name: string; role: LocalizedText; image: string; order: number }
 
 export const DEFAULT_TEAM_MEMBERS: TeamMemberDefault[] = [

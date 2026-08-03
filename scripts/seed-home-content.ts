@@ -47,6 +47,7 @@ import {
   DEFAULT_NEW_CITIES,
   DEFAULT_TEAM,
   DEFAULT_TEAM_MEMBERS,
+  DEFAULT_SINCE_FOUNDING,
 } from '../lib/content-defaults'
 
 const APPLY = process.argv.includes('--apply')
@@ -84,6 +85,7 @@ const SECTIONS: SectionDef[] = [
   { id: 'upcoming', order: 11, heading: DEFAULT_UPCOMING.line1, eyebrow: DEFAULT_UPCOMING.line2, description: DEFAULT_UPCOMING.subtitle },
   { id: 'new-cities', order: 12, heading: DEFAULT_NEW_CITIES.heading, description: DEFAULT_NEW_CITIES.subtitle, items: [{ icon: '', title: DEFAULT_NEW_CITIES.noteTitle, description: DEFAULT_NEW_CITIES.noteText }] },
   { id: 'team', order: 13, heading: DEFAULT_TEAM.heading, description: DEFAULT_TEAM.description },
+  { id: 'since-founding', order: 14, heading: DEFAULT_SINCE_FOUNDING.heading, items: DEFAULT_SINCE_FOUNDING.periods.map((p) => ({ icon: '', title: p.title, description: p.description })) },
 ]
 
 const ABOUT = { id: 'main', companyName: DEFAULT_COMPANY_NAME, description: DEFAULT_ABOUT_DESCRIPTION, photos: DEFAULT_ABOUT_PHOTOS }

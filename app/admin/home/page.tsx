@@ -33,6 +33,7 @@ const SECTIONS: SectionDef[] = [
   { id: 'bauweise', label: 'Bauweise und Entwicklung', fields: ['heading', 'description', 'cta'], hasItems: false, hint: 'Absätze in der Beschreibung durch eine Leerzeile trennen. Nur der primäre CTA (Label + Link) wird verwendet.' },
   { id: 'upcoming', label: 'Demnächst — Überschrift', fields: ['eyebrow', 'heading', 'description'], hasItems: false, hint: 'Überschrift = 1. Zeile, Eyebrow = 2. (hervorgehobene) Zeile, Beschreibung = Untertitel.' },
   { id: 'new-cities', label: 'Neue Städte — Überschrift', fields: ['heading', 'description'], hasItems: true, hint: 'Überschrift + Untertitel; ein Eintrag (Titel + Beschreibung) = die Fußnote.' },
+  { id: 'since-founding', label: 'Seit unserer Gründung', fields: ['heading'], hasItems: true, hint: 'Ein Eintrag pro Zeitraum: Titel = Zeitraum; Text = Länderzeilen (z. B. „Ukraine: 820 Familien …“), je Land eine Zeile.' },
 ]
 
 type Item = {

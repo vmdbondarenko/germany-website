@@ -510,6 +510,44 @@ export function About({ content, upcomingInvestments, newCities, aboutSection }:
           </div>
         )}
 
+        {/* Seit unserer Gründung — figures by period */}
+        <div className="mt-20 lg:mt-32">
+          <div className="text-center mb-12 lg:mb-16">
+            <h2 className="font-serif text-2xl lg:text-3xl font-semibold" style={{ color: '#3E1718' }}>
+              {content.sinceFounding.heading}
+            </h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 lg:gap-6 max-w-6xl mx-auto">
+            {content.sinceFounding.periods.map((period, i) => (
+              <div
+                key={i}
+                className="group bg-card rounded-2xl border border-border/40 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-400 p-6 lg:p-8"
+              >
+                <div className="w-10 h-1 rounded-full mb-5 transition-all duration-300 group-hover:w-16" style={{ backgroundColor: '#6E2E2A' }} />
+                <h3 className="font-serif text-lg lg:text-xl font-semibold mb-6 leading-snug" style={{ color: '#3E1718' }}>
+                  {period.title}
+                </h3>
+                <div className="space-y-5">
+                  {period.lines.map((line, j) => {
+                    const m = line.match(/^(.*?):\s*([\d.,]+)\s*(.*)$/)
+                    if (!m) return <p key={j} className="text-sm text-muted-foreground leading-relaxed">{line}</p>
+                    const [, country, number, rest] = m
+                    return (
+                      <div key={j}>
+                        <div className="flex items-baseline gap-2">
+                          <span className="font-serif text-3xl lg:text-4xl font-semibold text-primary">{number}</span>
+                          <span className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">{country}</span>
+                        </div>
+                        <p className="text-sm text-muted-foreground leading-relaxed mt-1">{rest}</p>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
         {/* Mission / Vision / Strategy / Prices - Premium Editorial Section */}
         <div className="mt-20 lg:mt-32">
           {/* Section Header */}

@@ -17,6 +17,7 @@ import {
   DEFAULT_UPCOMING,
   DEFAULT_NEW_CITIES,
   DEFAULT_TEAM,
+  DEFAULT_SINCE_FOUNDING,
 } from "@/lib/content-defaults"
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -182,13 +183,14 @@ export type AboutContent = {
   upcoming: { line1: string; line2: string; subtitle: string }
   newCities: { heading: string; subtitle: string; noteTitle: string; noteText: string }
   team: { heading: string; description: string }
+  sinceFounding: { heading: string; periods: { title: string; lines: string[] }[] }
 }
 
 export async function getAboutContent(locale: Locale): Promise<AboutContent> {
   const de = locale !== "en"
   const L = (s: LocalizedText) => (de ? s.de : s.en)
   const rows = await prisma.homeSection.findMany({
-    where: { id: { in: ["stats", "values", "bauweise", "upcoming", "new-cities", "team"] } },
+    where: { id: { in: ["stats", "values", "bauweise", "upcoming", "new-cities", "team", "since-founding"] } },
     include: { items: { orderBy: { order: "asc" } } },
   })
   const byId = new Map(rows.map((r) => [r.id, r]))
@@ -246,5 +248,18 @@ export async function getAboutContent(locale: Locale): Promise<AboutContent> {
     description: (de ? teamRow?.descriptionDe : teamRow?.descriptionEn) || L(DEFAULT_TEAM.description),
   }
 
-  return { stats, values, bauweise, upcoming, newCities, team }
+  const toLines = (s: string) => s.split("\n").map((x) => x.trim()).filter(Boolean)
+  const sfRow = byId.get("since-founding")
+  const sinceFounding = {
+    heading: (de ? sfRow?.headingDe : sfRow?.headingEn) || L(DEFAULT_SINCE_FOUNDING.heading),
+    periods:
+      sfRow && sfRow.items.length > 0
+        ? sfRow.items.map((it) => ({
+            title: (de ? it.titleDe : it.titleEn) || "",
+            lines: toLines((de ? it.descriptionDe : it.descriptionEn) || ""),
+          }))
+        : DEFAULT_SINCE_FOUNDING.periods.map((p) => ({ title: L(p.title), lines: toLines(L(p.description)) })),
+  }
+
+  return { stats, values, bauweise, upcoming, newCities, team, sinceFounding }
 }
