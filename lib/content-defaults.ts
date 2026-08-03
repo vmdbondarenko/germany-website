@@ -155,6 +155,9 @@ export const DEFAULT_BAUWEISE = {
   heading: t("Bauweise und Entwicklung", "Construction and development"),
   ctaLabel: t("Kontakt aufnehmen", "Get in touch"),
   ctaHref: "#kontakt",
+  // Section photos (shared DE/EN) — HomeSection.imageUrl / imageUrl2 override these.
+  image1: "/images/tech-house-main.jpg",
+  image2: "/images/tech-houses-twin.jpg",
   paragraphs: [
     t("Wir entwickeln unsere Bauweise kontinuierlich weiter und verbinden moderne Technologien mit traditioneller Handwerkskunst. Unser Ziel ist es, nicht nur komfortable Häuser zu schaffen, sondern Lebensräume, in denen Träume Wirklichkeit werden können. Dabei begleiten wir unsere Kunden zuverlässig durch alle Phasen der Projektentwicklung – von der Planung bis zur Fertigstellung.", "We continually refine our construction methods, combining modern technology with traditional craftsmanship. Our goal is not only to create comfortable houses but living spaces in which dreams can come true. We reliably accompany our customers through every phase of the development — from planning to completion."),
     t("Die Idee, Häuser im Stil des Bayerischen Mauerwerks mit handgeformten Ziegeln zu errichten, entstand aus dem Wunsch, Wohnraum mit einem unverwechselbaren architektonischen Charakter zu schaffen. Die Kombination aus exklusiven Materialien und sorgfältiger Ausführung verleiht jedem Gebäude eine individuelle Ausstrahlung und eine dauerhaft hohe Wertigkeit.", "The idea of building houses in the style of Bavarian brickwork with hand-formed bricks arose from the desire to create living space with a distinctive architectural character. The combination of exclusive materials and careful execution gives each building an individual character and lasting high value."),

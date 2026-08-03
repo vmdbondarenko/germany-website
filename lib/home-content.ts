@@ -179,7 +179,7 @@ export async function getHomeContent(locale: Locale): Promise<LocalizedHome> {
 export type AboutContent = {
   stats: { value: string; label: string }[]
   values: { eyebrow: string; heading: string; cards: { title: string; description: string }[] }
-  bauweise: { heading: string; paragraphs: string[]; ctaLabel: string; ctaHref: string }
+  bauweise: { heading: string; paragraphs: string[]; ctaLabel: string; ctaHref: string; image1: string; image2: string }
   upcoming: { line1: string; line2: string; subtitle: string }
   newCities: { heading: string; subtitle: string; noteTitle: string; noteText: string }
   team: { heading: string; description: string }
@@ -224,6 +224,8 @@ export async function getAboutContent(locale: Locale): Promise<AboutContent> {
     paragraphs: bwDesc ? bwDesc.split("\n\n").filter(Boolean) : DEFAULT_BAUWEISE.paragraphs.map(L),
     ctaLabel: (de ? bwRow?.primaryCtaLabelDe : bwRow?.primaryCtaLabelEn) || L(DEFAULT_BAUWEISE.ctaLabel),
     ctaHref: bwRow?.primaryCtaHref || DEFAULT_BAUWEISE.ctaHref,
+    image1: bwRow?.imageUrl || DEFAULT_BAUWEISE.image1,
+    image2: bwRow?.imageUrl2 || DEFAULT_BAUWEISE.image2,
   }
 
   const upRow = byId.get("upcoming")

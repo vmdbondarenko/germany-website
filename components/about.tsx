@@ -76,8 +76,8 @@ export function About({ content, upcomingInvestments, newCities, aboutSection }:
   }))
 
   const techImages = [
-    { src: "/images/tech-house-main.jpg", alt: numberedSectionAlt("Bauweise und Entwicklung", "", 0) },
-    { src: "/images/tech-houses-twin.jpg", alt: numberedSectionAlt("Bauweise und Entwicklung", "", 1) },
+    { src: content.bauweise.image1, alt: numberedSectionAlt("Bauweise und Entwicklung", "", 0) },
+    { src: content.bauweise.image2, alt: numberedSectionAlt("Bauweise und Entwicklung", "", 1) },
   ]
 
   const handlePrevImage = () => {
@@ -677,7 +677,7 @@ export function About({ content, upcomingInvestments, newCities, aboutSection }:
                       className="col-span-12 relative rounded-3xl overflow-hidden shadow-xl group aspect-[4/3] cursor-pointer"
                     >
                       <Image
-                        src="/images/tech-house-main.jpg"
+                        src={content.bauweise.image1}
                         alt={numberedSectionAlt("Bauweise und Entwicklung", "", 0)}
                         fill
                         className="object-cover transition-transform duration-700 group-hover:scale-105"
@@ -694,7 +694,7 @@ export function About({ content, upcomingInvestments, newCities, aboutSection }:
                       className="col-span-12 relative rounded-2xl overflow-hidden shadow-lg group aspect-[16/9] cursor-pointer"
                     >
                       <Image
-                        src="/images/tech-houses-twin.jpg"
+                        src={content.bauweise.image2}
                         alt={numberedSectionAlt("Bauweise und Entwicklung", "", 1)}
                         fill
                         className="object-cover transition-transform duration-700 group-hover:scale-105"
