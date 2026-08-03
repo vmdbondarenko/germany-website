@@ -197,7 +197,7 @@ export default async function HomePage() {
         <CompletedInvestments projects={completedProjects} />
         <Process content={home.process} />
         <Distinguishes content={home.distinguishes} />
-        <Team members={teamMembers} />
+        <Team members={teamMembers} content={aboutContent.team} />
         <Services content={home.services} />
         <InteriorShowcase content={home.interior} />
         <BuyingProcess content={home.buying} />

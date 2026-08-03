@@ -20,7 +20,10 @@
  * USAGE
  *   Dry run:   npx tsx scripts/seed-home-content.ts
  *   Apply:     npx dotenv-cli -e .env.local -- npx tsx scripts/seed-home-content.ts --apply
- *   Overwrite: ... --apply --force        Team too: ... --apply --team
+ *   Overwrite: ... --apply --force
+ *
+ * Seeds home/about HomeSections, the AboutSection, and TeamMember rows (all
+ * idempotent; existing rows are skipped unless --force).
  */
 import {
   t,
@@ -42,11 +45,12 @@ import {
   DEFAULT_BAUWEISE,
   DEFAULT_UPCOMING,
   DEFAULT_NEW_CITIES,
+  DEFAULT_TEAM,
+  DEFAULT_TEAM_MEMBERS,
 } from '../lib/content-defaults'
 
 const APPLY = process.argv.includes('--apply')
 const FORCE = process.argv.includes('--force')
-const SEED_TEAM = process.argv.includes('--team')
 
 type SectionDef = {
   id: string
@@ -79,18 +83,13 @@ const SECTIONS: SectionDef[] = [
   { id: 'bauweise', order: 10, heading: DEFAULT_BAUWEISE.heading, description: { de: DEFAULT_BAUWEISE.paragraphs.map((p) => p.de).join('\n\n'), en: DEFAULT_BAUWEISE.paragraphs.map((p) => p.en).join('\n\n') }, primaryCta: { label: DEFAULT_BAUWEISE.ctaLabel, href: DEFAULT_BAUWEISE.ctaHref } },
   { id: 'upcoming', order: 11, heading: DEFAULT_UPCOMING.line1, eyebrow: DEFAULT_UPCOMING.line2, description: DEFAULT_UPCOMING.subtitle },
   { id: 'new-cities', order: 12, heading: DEFAULT_NEW_CITIES.heading, description: DEFAULT_NEW_CITIES.subtitle, items: [{ icon: '', title: DEFAULT_NEW_CITIES.noteTitle, description: DEFAULT_NEW_CITIES.noteText }] },
+  { id: 'team', order: 13, heading: DEFAULT_TEAM.heading, description: DEFAULT_TEAM.description },
 ]
 
 const ABOUT = { id: 'main', companyName: DEFAULT_COMPANY_NAME, description: DEFAULT_ABOUT_DESCRIPTION, photos: DEFAULT_ABOUT_PHOTOS }
 
-// Team fallback (only with --team). Mirrors components/team.tsx FALLBACK_MEMBERS.
-const TEAM: { name: string; role: LocalizedText; image: string; order: number }[] = [
-  { name: 'Serhii Mohylenko', role: t('Bauträger, Investor', 'Developer, Investor'), image: '/team/Sergiej Mogylenko.jpg', order: 0 },
-  { name: 'Maryna Monastyretska', role: t('Vorstandsmitglied, Geschäftsführerin', 'Board member, Managing Director'), image: '/team/Maryna Monastyretska.jpg', order: 1 },
-  { name: 'Vitalina Kalinichenko', role: t('Stellvertretende Geschäftsführerin', 'Deputy Managing Director'), image: '/team/Vitalina Kalinichenko.jpg', order: 2 },
-  { name: 'Kristina Stepanchuk', role: t('Office Manager', 'Office Manager'), image: '/team/KristinaStepanchuk.jpg', order: 3 },
-  { name: 'Olena Bilan', role: t('Niederlassungsleiterin Breslau', 'Branch Manager Wrocław'), image: '/team/Olena Bilan.jpg', order: 4 },
-]
+// Team members mirror the shared single source (components/team.tsx fallback).
+const TEAM = DEFAULT_TEAM_MEMBERS
 
 function trunc(s: string, n = 80) { return s.length > n ? s.slice(0, n) + '…' : s }
 
@@ -107,7 +106,7 @@ function printPlan() {
   console.log(`  companyName: ${ABOUT.companyName}`)
   console.log(`  description: ${ABOUT.description.split('\n\n').length} paragraphs (${ABOUT.description.length} chars)`)
   console.log(`  photos: ${ABOUT.photos.length} → ${ABOUT.photos.join(', ')}`)
-  console.log(`\n=== TeamMember ===  ${SEED_TEAM ? `${TEAM.length} rows` : 'SKIPPED (pass --team to include)'}`)
+  console.log(`\n=== TeamMember ===  ${TEAM.length} rows (${TEAM.map((m) => m.name).join(', ')})`)
   console.log('\n=== NOT seeded (would change appearance) ===')
   console.log('  UpcomingInvestment, NewCity — empty on the live site; seeding would add cards.')
 }
@@ -149,16 +148,16 @@ async function apply() {
       aboutExists ? updated++ : created++
       console.log(`${aboutExists ? 'update' : 'create'} AboutSection main`)
     }
-    if (SEED_TEAM) {
-      const teamCount = await prisma.teamMember.count()
-      if (teamCount > 0 && !FORCE) { console.log(`skip   TeamMember (${teamCount} rows exist)`) }
-      else {
-        for (const m of TEAM) {
-          await prisma.teamMember.create({ data: { name: m.name, role: m.role.de, roleEn: m.role.en, image: m.image, order: m.order } })
-          created++
-        }
-        console.log(`create ${TEAM.length} TeamMember rows`)
+    const teamCount = await prisma.teamMember.count()
+    if (teamCount > 0 && !FORCE) {
+      skipped++
+      console.log(`skip   TeamMember (${teamCount} rows exist)`)
+    } else {
+      for (const m of TEAM) {
+        await prisma.teamMember.create({ data: { name: m.name, role: m.role.de, roleEn: m.role.en, image: m.image, order: m.order } })
+        created++
       }
+      console.log(`create ${TEAM.length} TeamMember rows`)
     }
     console.log(`\nDONE — created ${created}, updated ${updated}, skipped ${skipped}, items ${items}`)
   } finally {
@@ -168,7 +167,7 @@ async function apply() {
 
 async function main() {
   console.log(APPLY ? '=== APPLY MODE (writing to DB) ===' : '=== DRY RUN (no writes) ===')
-  console.log(`flags: ${[APPLY && 'apply', FORCE && 'force', SEED_TEAM && 'team'].filter(Boolean).join(', ') || '(none)'}`)
+  console.log(`flags: ${[APPLY && 'apply', FORCE && 'force'].filter(Boolean).join(', ') || '(none)'}`)
   printPlan()
   if (!APPLY) { console.log('\nDry run only — re-run with --apply to write. Existing rows are skipped unless --force.'); return }
   await apply()

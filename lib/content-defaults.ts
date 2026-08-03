@@ -179,3 +179,23 @@ export const DEFAULT_NEW_CITIES = {
 
 // Presentational brick colors for the value cards (index-aligned with cards).
 export const VALUE_BRICK_COLORS = ["#6E2E2A", "#5A2A1C", "#3E1718", "#120A0A"]
+
+// ── Team section (heading/description reuse HomeSection id "team"; members reuse
+// the TeamMember model). Fallback used until admin edits / DB is seeded.
+export const DEFAULT_TEAM = {
+  heading: t("Wer wir sind?", "Who we are?"),
+  description: t(
+    "Als Team möchten wir unseren Kunden genau das bieten, was wir selbst von einem Bauträger erwarten würden: sichere Abläufe, hochwertige Baumaterialien und attraktive Preise.",
+    "As a team, we want to offer our customers exactly what we would expect from a developer ourselves: secure processes, high-quality building materials and attractive prices.",
+  ),
+}
+
+export type TeamMemberDefault = { name: string; role: LocalizedText; image: string; order: number }
+
+export const DEFAULT_TEAM_MEMBERS: TeamMemberDefault[] = [
+  { name: "Serhii Mohylenko", role: t("Bauträger, Investor", "Developer, Investor"), image: "/team/Sergiej Mogylenko.jpg", order: 0 },
+  { name: "Maryna Monastyretska", role: t("Vorstandsmitglied, Geschäftsführerin", "Board member, Managing Director"), image: "/team/Maryna Monastyretska.jpg", order: 1 },
+  { name: "Vitalina Kalinichenko", role: t("Stellvertretende Geschäftsführerin", "Deputy Managing Director"), image: "/team/Vitalina Kalinichenko.jpg", order: 2 },
+  { name: "Kristina Stepanchuk", role: t("Office Manager", "Office Manager"), image: "/team/KristinaStepanchuk.jpg", order: 3 },
+  { name: "Olena Bilan", role: t("Niederlassungsleiterin Breslau", "Branch Manager Wrocław"), image: "/team/Olena Bilan.jpg", order: 4 },
+]

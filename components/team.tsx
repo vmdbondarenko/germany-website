@@ -3,20 +3,21 @@
 import { useEffect, useState, useRef } from "react"
 import Image from "next/image"
 import { teamMemberAlt } from "@/lib/seo/image-alt"
+import { DEFAULT_TEAM, DEFAULT_TEAM_MEMBERS } from "@/lib/content-defaults"
 
 const ACCENTS = ["#6E2E2A", "#5A2A1C", "#3E1718"]
 
-const FALLBACK_MEMBERS = [
-  { id: "1", name: "Serhii Mohylenko", role: "Bauträger, Investor", image: "/team/Sergiej Mogylenko.jpg", order: 0 },
-  { id: "2", name: "Maryna Monastyretska", role: "Vorstandsmitglied, Geschäftsführerin", image: "/team/Maryna Monastyretska.jpg", order: 1 },
-  { id: "3", name: "Vitalina Kalinichenko", role: "Stellvertretende Geschäftsführerin", image: "/team/Vitalina Kalinichenko.jpg", order: 2 },
-  { id: "4", name: "Kristina Stepanchuk", role: "Office Manager", image: "/team/KristinaStepanchuk.jpg", order: 3 },
-  { id: "5", name: "Olena Bilan", role: "Niederlassungsleiterin Breslau", image: "/team/Olena Bilan.jpg", order: 4 },
-]
-
 type TeamMemberData = { id: string; name: string; role: string; image: string | null; order: number }
 
-export function Team({ members: membersProp }: { members?: TeamMemberData[] }) {
+// German fallback used until the TeamMember table is seeded (from the shared
+// single source, so it can't drift from the seed).
+const FALLBACK_MEMBERS: TeamMemberData[] = DEFAULT_TEAM_MEMBERS.map((m, i) => ({
+  id: String(i + 1), name: m.name, role: m.role.de, image: m.image, order: m.order,
+}))
+
+export function Team({ members: membersProp, content }: { members?: TeamMemberData[]; content?: { heading: string; description: string } }) {
+  const heading = content?.heading ?? DEFAULT_TEAM.heading.de
+  const description = content?.description ?? DEFAULT_TEAM.description.de
   const teamMembers = (membersProp && membersProp.length > 0 ? membersProp : FALLBACK_MEMBERS).map((m, i) => ({
     ...m,
     accent: ACCENTS[i % ACCENTS.length],
@@ -187,11 +188,11 @@ export function Team({ members: membersProp }: { members?: TeamMemberData[] }) {
           </div>
           
           <h2 className="font-serif text-3xl lg:text-5xl font-semibold mb-5 leading-tight text-white">
-            Wer wir sind?
+            {heading}
           </h2>
 
           <p className="text-white/60 text-base lg:text-lg max-w-3xl mx-auto leading-relaxed">
-            Als Team möchten wir unseren Kunden genau das bieten, was wir selbst von einem Bauträger erwarten würden: sichere Abläufe, hochwertige Baumaterialien und attraktive Preise.
+            {description}
           </p>
         </div>
 
