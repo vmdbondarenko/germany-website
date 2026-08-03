@@ -18,6 +18,7 @@ import {
   DEFAULT_NEW_CITIES,
   DEFAULT_TEAM,
   DEFAULT_SINCE_FOUNDING,
+  DEFAULT_ERSTE_BAYERISCHE,
 } from "@/lib/content-defaults"
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -264,4 +265,102 @@ export async function getAboutContent(locale: Locale): Promise<AboutContent> {
   }
 
   return { stats, values, bauweise, upcoming, newCities, team, sinceFounding }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// "Erste Bayerische" — the first investment, presented in full on the homepage
+// directly after the Bauweise section. Reuses HomeSection "erste-bayerische"
+// (eyebrow = project name, heading, description = intro) + kind-discriminated
+// HomeSectionItem rows (hero / wide / block:location|nature|see|closing /
+// travel / gallery). Every field falls back per-locale to the shared defaults,
+// so the section renders identically before an admin edits it.
+// ─────────────────────────────────────────────────────────────────────────────
+
+export type EbImage = { image: string; alt: string }
+export type EbBlock = { title: string; body: string; image: string; alt: string }
+export type ErsteBayerischeContent = {
+  projectName: string
+  heading: string
+  intro: string
+  hero: EbImage
+  wide: EbImage
+  blocks: {
+    location: EbBlock
+    nature: EbBlock
+    see: EbBlock
+    closing: { title: string; body: string }
+  }
+  travelHeading: string
+  travel: { icon: string; title: string; description: string; meta: string }[]
+  gallery: EbImage[]
+}
+
+export async function getErsteBayerischeContent(locale: Locale): Promise<ErsteBayerischeContent> {
+  const de = locale !== "en"
+  const L = (s: LocalizedText) => (de ? s.de : s.en)
+  const D = DEFAULT_ERSTE_BAYERISCHE
+
+  const row = await prisma.homeSection.findUnique({
+    where: { id: "erste-bayerische" },
+    include: { items: { orderBy: { order: "asc" } } },
+  })
+  const items = row?.items ?? []
+  const one = (kind: string) => items.find((it) => it.kind === kind)
+  const many = (kind: string) => items.filter((it) => it.kind === kind)
+
+  const txt = (v: string | null | undefined, fb: string) => (v && v.trim() ? v : fb)
+  const tDe = (it: { titleDe: string | null; titleEn: string | null } | undefined) =>
+    it ? (de ? it.titleDe : it.titleEn) : null
+  const dDe = (it: { descriptionDe: string | null; descriptionEn: string | null } | undefined) =>
+    it ? (de ? it.descriptionDe : it.descriptionEn) : null
+  const aDe = (it: { imageAltDe: string | null; imageAltEn: string | null } | undefined) =>
+    it ? (de ? it.imageAltDe : it.imageAltEn) : null
+  const img = (kind: string, fb: { image: string; alt: LocalizedText }): EbImage => {
+    const it = one(kind)
+    return { image: txt(it?.imageUrl, fb.image), alt: txt(aDe(it), L(fb.alt)) }
+  }
+  const block = (kind: string, fb: typeof D.blocks.location): EbBlock => {
+    const it = one(kind)
+    return {
+      title: txt(tDe(it), L(fb.title)),
+      body: txt(dDe(it), L(fb.body)),
+      image: txt(it?.imageUrl, fb.image),
+      alt: txt(aDe(it), L(fb.alt)),
+    }
+  }
+
+  const closingIt = one("block:closing")
+  const travelItems = many("travel")
+  const galleryItems = many("gallery")
+
+  return {
+    projectName: txt(de ? row?.eyebrowDe : row?.eyebrowEn, L(D.projectName)),
+    heading: txt(de ? row?.headingDe : row?.headingEn, L(D.heading)),
+    intro: txt(de ? row?.descriptionDe : row?.descriptionEn, L(D.intro)),
+    hero: img("hero", D.hero),
+    wide: img("wide", D.wide),
+    blocks: {
+      location: block("block:location", D.blocks.location),
+      nature: block("block:nature", D.blocks.nature),
+      see: block("block:see", D.blocks.see),
+      closing: {
+        title: txt(de ? closingIt?.titleDe : closingIt?.titleEn, L(D.blocks.closing.title)),
+        body: txt(de ? closingIt?.descriptionDe : closingIt?.descriptionEn, L(D.blocks.closing.body)),
+      },
+    },
+    travelHeading: L(D.travelHeading),
+    travel:
+      travelItems.length > 0
+        ? travelItems.map((it) => ({
+            icon: it.icon || "Sparkles",
+            title: (de ? it.titleDe : it.titleEn) || "",
+            description: (de ? it.descriptionDe : it.descriptionEn) || "",
+            meta: (de ? it.metaDe : it.metaEn) || "",
+          }))
+        : D.travel.map((tv) => ({ icon: tv.icon, title: L(tv.title), description: "", meta: L(tv.meta) })),
+    gallery:
+      galleryItems.length > 0
+        ? galleryItems.map((it) => ({ image: it.imageUrl || "", alt: aDe(it) || "" })).filter((g) => g.image)
+        : D.gallery.map((g) => ({ image: g.image, alt: L(g.alt) })),
+  }
 }

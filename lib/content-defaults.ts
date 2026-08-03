@@ -167,6 +167,98 @@ export const DEFAULT_BAUWEISE = {
   ],
 }
 
+// First real investment presented in full on the homepage, directly after the
+// Bauweise section. Reuses HomeSection "erste-bayerische" (eyebrow = project
+// name, heading, description = intro) + kind-discriminated HomeSectionItem rows
+// (hero / wide / block:* / travel / gallery). All images fall back to existing
+// in-repo photos (thematically the Bavarian "bawarska" set) until real project
+// photos are uploaded in admin.
+export const DEFAULT_ERSTE_BAYERISCHE = {
+  projectName: t("Erste Bayerische", "Erste Bayerische"),
+  heading: t(
+    "Wohnen im Grünen – nur wenige Minuten von Berlin entfernt",
+    "Living surrounded by nature — just minutes from Berlin",
+  ),
+  intro: t(
+    "Unser neues Wohnprojekt „Erste Bayerische“ entsteht in Königs Wusterhausen, Ortsteil Niederlehme – einer attraktiven Wohnlage im südöstlichen Berliner Umland. Das moderne Doppelhaus verbindet naturnahes Wohnen mit einer hervorragenden Anbindung an die Hauptstadt.",
+    "Our new residential project “Erste Bayerische” is being built in Königs Wusterhausen, in the Niederlehme district — an attractive residential location in the south-eastern surroundings of Berlin. The modern semi-detached house combines living close to nature with excellent connections to the capital.",
+  ),
+  hero: {
+    image: "/images/bawarska-hero.jpg",
+    alt: t(
+      "Modernes Doppelhaus im bayerischen Stil des Projekts Erste Bayerische",
+      "Modern Bavarian-style semi-detached house of the Erste Bayerische project",
+    ),
+  },
+  wide: {
+    image: "/images/bawarska-przestrzen-wide.jpg",
+    alt: t(
+      "Grüne Umgebung mit Seen und Wäldern rund um Niederlehme",
+      "Green surroundings with lakes and forests around Niederlehme",
+    ),
+  },
+  blocks: {
+    location: {
+      title: t("Grüne Ruhe mit bester Anbindung", "Green calm with excellent connections"),
+      body: t(
+        "Hier genießen Sie die Ruhe einer grünen Umgebung, ohne auf die Vorteile einer gut ausgebauten Infrastruktur verzichten zu müssen. Dank der Nähe zur Autobahn A10 und der guten Verkehrsanbindung dauert die Fahrt nach Berlin nur wenige Minuten – ideal für Berufspendler und alle, die die Nähe zur Metropole mit einer hohen Wohnqualität verbinden möchten.",
+        "Here you enjoy the calm of green surroundings without giving up the advantages of well-developed infrastructure. Thanks to the proximity to the A10 motorway and good transport connections, the drive to Berlin takes only a few minutes — ideal for commuters and everyone who wants to combine closeness to the metropolis with a high quality of living.",
+      ),
+      image: "/images/bawarska-gallery-1.jpg",
+      alt: t(
+        "Wohnhaus mit gepflegtem Garten in ruhiger Lage",
+        "Residential house with a well-kept garden in a quiet location",
+      ),
+    },
+    nature: {
+      title: t("Seen, Wälder und die Dahme", "Lakes, forests and the Dahme"),
+      body: t(
+        "Die Umgebung zeichnet sich durch zahlreiche Seen, die Wasserlandschaft der Dahme sowie weitläufige Waldgebiete aus. Spazier- und Radwege laden zu vielfältigen Freizeitaktivitäten direkt vor der Haustür ein.",
+        "The surroundings are characterised by numerous lakes, the water landscape of the Dahme river and expansive forest areas. Walking and cycling paths invite you to a wide range of leisure activities right on your doorstep.",
+      ),
+      image: "/images/bawarska-gallery-2.jpg",
+      alt: t(
+        "Wald- und Wasserlandschaft der Dahme",
+        "Forest and water landscape of the Dahme",
+      ),
+    },
+    see: {
+      title: t("Zeuthener See & Marina", "Zeuthener See & marina"),
+      body: t(
+        "Nur wenige Minuten entfernt liegt der Zeuthener See mit seiner modernen Marina und Liegeplätzen für Segel- und Motorboote – ein attraktiver Ort für Erholung und Wassersport.",
+        "Just a few minutes away lies Zeuthener See with its modern marina and berths for sailing and motor boats — an attractive place for recreation and water sports.",
+      ),
+      image: "/images/bawarska-przestrzen.jpg",
+      alt: t(
+        "Marina am Zeuthener See mit Bootsliegeplätzen",
+        "Marina at Zeuthener See with boat berths",
+      ),
+    },
+    closing: {
+      title: t("", ""),
+      body: t(
+        "So verbindet das Projekt eine ruhige Wohnlage im Grünen mit einer ausgezeichneten Erreichbarkeit Berlins und einer modernen Infrastruktur.",
+        "In this way, the project combines a quiet residential location surrounded by greenery with excellent access to Berlin and a modern infrastructure.",
+      ),
+    },
+  },
+  travelHeading: t(
+    "Auch im Alltag profitieren Sie von kurzen Wegen",
+    "Short distances in everyday life, too",
+  ),
+  travel: [
+    { icon: "Train", title: t("Bahnhof Niederlehme", "Niederlehme railway station"), meta: t("ca. 4–5 Minuten mit dem Auto", "approx. 4–5 minutes by car") },
+    { icon: "Route", title: t("Anschluss an die Autobahn A10", "A10 motorway access"), meta: t("ca. 2–3 Minuten", "approx. 2–3 minutes") },
+    { icon: "ShoppingCart", title: t("Supermärkte und Einkaufsmöglichkeiten", "Supermarkets and shopping"), meta: t("in unmittelbarer Nähe", "in the immediate vicinity") },
+    { icon: "Plane", title: t("Flughafen Berlin Brandenburg (BER)", "Berlin Brandenburg Airport (BER)"), meta: t("ca. 20–25 Minuten mit dem Auto", "approx. 20–25 minutes by car") },
+  ],
+  gallery: [
+    { image: "/images/bawarska-gallery-3.jpg", alt: t("Fassade im bayerischen Mauerwerksstil", "Facade in Bavarian brickwork style") },
+    { image: "/images/bawarska-gallery-4.jpg", alt: t("Außenansicht des Wohnprojekts Erste Bayerische", "Exterior of the Erste Bayerische residential project") },
+    { image: "/images/bawarska-gallery-5.jpg", alt: t("Wohnumgebung im Grünen bei Niederlehme", "Green residential setting near Niederlehme") },
+  ],
+}
+
 export const DEFAULT_UPCOMING = {
   line1: t("Bald beginnen wir mit dem Bau", "We will soon begin building"),
   line2: t("weiterer Projekte!", "further projects!"),

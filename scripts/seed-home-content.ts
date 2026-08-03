@@ -48,6 +48,7 @@ import {
   DEFAULT_TEAM,
   DEFAULT_TEAM_MEMBERS,
   DEFAULT_SINCE_FOUNDING,
+  DEFAULT_ERSTE_BAYERISCHE,
 } from '../lib/content-defaults'
 
 const APPLY = process.argv.includes('--apply')
@@ -90,6 +91,35 @@ const SECTIONS: SectionDef[] = [
 
 const ABOUT = { id: 'main', companyName: DEFAULT_COMPANY_NAME, description: DEFAULT_ABOUT_DESCRIPTION, photos: DEFAULT_ABOUT_PHOTOS }
 
+// ── "Erste Bayerische" — richer, kind-discriminated items (hero / wide /
+// block:* / travel / gallery). Seeded separately from the generic SECTIONS
+// loop because its items carry images, alt text and a meta (time) field.
+const EB = DEFAULT_ERSTE_BAYERISCHE
+const EB_SECTION = { id: 'erste-bayerische', order: 15, eyebrow: EB.projectName, heading: EB.heading, description: EB.intro }
+
+type EbSeedItem = {
+  kind: string; icon?: string; titleDe?: string; titleEn?: string
+  descriptionDe?: string; descriptionEn?: string
+  imageUrl?: string; imageAltDe?: string; imageAltEn?: string; metaDe?: string; metaEn?: string
+  order: number
+}
+function ebItems(): EbSeedItem[] {
+  const out: EbSeedItem[] = []
+  let order = 0
+  const push = (o: Omit<EbSeedItem, 'order'>) => out.push({ ...o, order: order++ })
+  const block = (kind: string, b: typeof EB.blocks.location) =>
+    push({ kind, titleDe: b.title.de, titleEn: b.title.en, descriptionDe: b.body.de, descriptionEn: b.body.en, imageUrl: b.image, imageAltDe: b.alt.de, imageAltEn: b.alt.en })
+  push({ kind: 'hero', imageUrl: EB.hero.image, imageAltDe: EB.hero.alt.de, imageAltEn: EB.hero.alt.en })
+  block('block:location', EB.blocks.location)
+  push({ kind: 'wide', imageUrl: EB.wide.image, imageAltDe: EB.wide.alt.de, imageAltEn: EB.wide.alt.en })
+  block('block:nature', EB.blocks.nature)
+  block('block:see', EB.blocks.see)
+  push({ kind: 'block:closing', titleDe: EB.blocks.closing.title.de, titleEn: EB.blocks.closing.title.en, descriptionDe: EB.blocks.closing.body.de, descriptionEn: EB.blocks.closing.body.en })
+  for (const t of EB.travel) push({ kind: 'travel', icon: t.icon, titleDe: t.title.de, titleEn: t.title.en, metaDe: t.meta.de, metaEn: t.meta.en })
+  for (const g of EB.gallery) push({ kind: 'gallery', imageUrl: g.image, imageAltDe: g.alt.de, imageAltEn: g.alt.en })
+  return out
+}
+
 // Team members mirror the shared single source (components/team.tsx fallback).
 const TEAM = DEFAULT_TEAM_MEMBERS
 
@@ -104,6 +134,11 @@ function printPlan() {
     if (s.description) console.log(`    desc     DE: ${trunc(s.description.de)}\n             EN: ${trunc(s.description.en)}`)
     s.items?.forEach((it, i) => console.log(`    item[${i}] ${it.icon}  DE: ${it.title.de} | EN: ${it.title.en}`))
   }
+  const eb = ebItems()
+  console.log('\n=== HomeSection "erste-bayerische" (investment) ===')
+  console.log(`  eyebrow/heading/description set; ${eb.length} items`)
+  const byKind = eb.reduce<Record<string, number>>((m, it) => ((m[it.kind.split(':')[0]] = (m[it.kind.split(':')[0]] || 0) + 1), m), {})
+  console.log(`  items by kind: ${Object.entries(byKind).map(([k, n]) => `${k}×${n}`).join(', ')}`)
   console.log('\n=== AboutSection (id "main") ===')
   console.log(`  companyName: ${ABOUT.companyName}`)
   console.log(`  description: ${ABOUT.description.split('\n\n').length} paragraphs (${ABOUT.description.length} chars)`)
@@ -142,6 +177,33 @@ async function apply() {
         }
       }
     }
+    // Erste Bayerische (richer, kind-discriminated items).
+    const ebExisting = await prisma.homeSection.findUnique({ where: { id: EB_SECTION.id } })
+    if (ebExisting && !FORCE) { skipped++; console.log('skip   HomeSection erste-bayerische (exists)') }
+    else {
+      const data = {
+        order: EB_SECTION.order, enabled: true,
+        eyebrowDe: EB_SECTION.eyebrow.de, eyebrowEn: EB_SECTION.eyebrow.en,
+        headingDe: EB_SECTION.heading.de, headingEn: EB_SECTION.heading.en,
+        descriptionDe: EB_SECTION.description.de, descriptionEn: EB_SECTION.description.en,
+      }
+      await prisma.homeSection.upsert({ where: { id: EB_SECTION.id }, create: { id: EB_SECTION.id, ...data }, update: data })
+      ebExisting ? (updated++, console.log('update HomeSection erste-bayerische')) : (created++, console.log('create HomeSection erste-bayerische'))
+      await prisma.homeSectionItem.deleteMany({ where: { sectionId: EB_SECTION.id } })
+      for (const it of ebItems()) {
+        await prisma.homeSectionItem.create({
+          data: {
+            sectionId: EB_SECTION.id, kind: it.kind, icon: it.icon ?? null,
+            titleDe: it.titleDe ?? null, titleEn: it.titleEn ?? null,
+            descriptionDe: it.descriptionDe ?? null, descriptionEn: it.descriptionEn ?? null,
+            imageUrl: it.imageUrl ?? null, imageAltDe: it.imageAltDe ?? null, imageAltEn: it.imageAltEn ?? null,
+            metaDe: it.metaDe ?? null, metaEn: it.metaEn ?? null, order: it.order,
+          },
+        })
+        items++
+      }
+    }
+
     const aboutExists = await prisma.aboutSection.findUnique({ where: { id: ABOUT.id } })
     if (aboutExists && !FORCE) { skipped++; console.log('skip   AboutSection main (exists)') }
     else {

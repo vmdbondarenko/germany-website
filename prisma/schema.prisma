@@ -511,10 +511,21 @@ model HomeSectionItem {
   sectionId     String
   section       HomeSection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
   icon          String? // lucide-react icon name
+  // Optional discriminator so a single section can hold heterogeneous ordered
+  // items (e.g. "hero" | "wide" | "block:location" | "travel" | "gallery").
+  // null = plain text item (legacy sections: stats/values/new-cities/…).
+  kind          String?
   titleDe       String?
   titleEn       String?
   descriptionDe String?     @db.Text
   descriptionEn String?     @db.Text
+  // Optional per-item image (gallery images, per-block/hero/wide photos) + alt.
+  imageUrl      String?
+  imageAltDe    String?
+  imageAltEn    String?
+  // Small translatable label (e.g. a travel-time / distance badge).
+  metaDe        String?
+  metaEn        String?
   order         Int         @default(0)
   createdAt     DateTime    @default(now())
 

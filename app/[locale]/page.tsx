@@ -2,6 +2,7 @@ import { HeaderServer } from "@/components/header-server"
 import { Hero } from "@/components/hero"
 import { ArchitectureSlideshow } from "@/components/architecture-slideshow"
 import { About } from "@/components/about"
+import { ErsteBayerische } from "@/components/erste-bayerische"
 import { Investments } from "@/components/investments"
 import { CompletedInvestments } from "@/components/completed-investments"
 import { CityMap } from "@/components/lokalizacja/city-map"
@@ -17,7 +18,7 @@ import { Footer } from "@/components/footer"
 import { NewsScroll } from "@/components/news-scroll"
 import { prisma } from "@/lib/prisma"
 import { getLocale, getTranslations } from "next-intl/server"
-import { getHomeContent, getAboutContent } from "@/lib/home-content"
+import { getHomeContent, getAboutContent, getErsteBayerischeContent } from "@/lib/home-content"
 import { pick } from "@/lib/i18n-content"
 import type { Locale } from "@/i18n/routing"
 import type { Metadata } from "next"
@@ -41,6 +42,7 @@ export default async function HomePage() {
   const locale = (await getLocale()) as Locale
   const home = await getHomeContent(locale)
   const aboutContent = await getAboutContent(locale)
+  const ersteBayerische = await getErsteBayerischeContent(locale)
   const th = await getTranslations("home")
   const mapCopy = { heading: th("mapHeading"), subtitle: th("mapSubtitle") }
 
@@ -175,6 +177,7 @@ export default async function HomePage() {
         <Hero content={home.hero} />
         <ArchitectureSlideshow dbSlides={slideshowSlides} />
         <About content={aboutContent} upcomingInvestments={upcomingInvestments} newCities={newCities} aboutSection={aboutSection} />
+        <ErsteBayerische content={ersteBayerische} />
         <Investments projects={activeProjects} />
         {lokalizacjaData.points.length > 0 && (
           <section className="py-20 lg:py-32 bg-muted/30">

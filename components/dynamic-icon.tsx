@@ -13,6 +13,10 @@ import {
   Award,
   Gem,
   Sparkles,
+  Train,
+  Route,
+  ShoppingCart,
+  Plane,
   type LucideIcon,
 } from "lucide-react"
 
@@ -33,6 +37,10 @@ const ICONS: Record<string, LucideIcon> = {
   Award,
   Gem,
   Sparkles,
+  Train,
+  Route,
+  ShoppingCart,
+  Plane,
 }
 
 export function DynamicIcon({

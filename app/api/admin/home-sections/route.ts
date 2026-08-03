@@ -42,10 +42,16 @@ export async function PUT(request: Request) {
 
   type ItemInput = {
     icon?: string
+    kind?: string
     titleDe?: string
     titleEn?: string
     descriptionDe?: string
     descriptionEn?: string
+    imageUrl?: string
+    imageAltDe?: string
+    imageAltEn?: string
+    metaDe?: string
+    metaEn?: string
   }
   const items: ItemInput[] = Array.isArray(body.items) ? body.items : []
 
@@ -62,10 +68,16 @@ export async function PUT(request: Request) {
             data: items.map((it, i) => ({
               sectionId: id,
               icon: it.icon || null,
+              kind: it.kind || null,
               titleDe: it.titleDe || null,
               titleEn: it.titleEn || null,
               descriptionDe: it.descriptionDe || null,
               descriptionEn: it.descriptionEn || null,
+              imageUrl: it.imageUrl || null,
+              imageAltDe: it.imageAltDe || null,
+              imageAltEn: it.imageAltEn || null,
+              metaDe: it.metaDe || null,
+              metaEn: it.metaEn || null,
               order: i,
             })),
           }),
