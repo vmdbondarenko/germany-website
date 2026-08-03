@@ -27,6 +27,12 @@ const SECTIONS: SectionDef[] = [
   { id: 'buying', label: 'Kaufprozess — Überschrift', fields: ['heading'], hasItems: false },
   { id: 'buying-help', label: 'Zusätzliche Hilfe — Überschrift', fields: ['heading'], hasItems: false },
   { id: 'investor', label: 'Über das Unternehmen — Überschrift', fields: ['heading'], hasItems: false },
+  // ── About-page blocks (Phase 2 Group A) ──
+  { id: 'stats', label: 'Kennzahlen (Stats)', fields: [], hasItems: true, hint: 'Pro Kennzahl: Titel = Wert (z. B. „10+“), Beschreibung = Label (z. B. „Jahre Erfahrung“).' },
+  { id: 'values', label: 'Unsere Werte', fields: ['eyebrow', 'heading'], hasItems: true, hint: 'Pro Karte: Titel + Beschreibung. Reihenfolge = Anzeigereihenfolge (Farben sind fest).' },
+  { id: 'bauweise', label: 'Bauweise und Entwicklung', fields: ['heading', 'description', 'cta'], hasItems: false, hint: 'Absätze in der Beschreibung durch eine Leerzeile trennen. Nur der primäre CTA (Label + Link) wird verwendet.' },
+  { id: 'upcoming', label: 'Demnächst — Überschrift', fields: ['eyebrow', 'heading', 'description'], hasItems: false, hint: 'Überschrift = 1. Zeile, Eyebrow = 2. (hervorgehobene) Zeile, Beschreibung = Untertitel.' },
+  { id: 'new-cities', label: 'Neue Städte — Überschrift', fields: ['heading', 'description'], hasItems: true, hint: 'Überschrift + Untertitel; ein Eintrag (Titel + Beschreibung) = die Fußnote.' },
 ]
 
 type Item = {

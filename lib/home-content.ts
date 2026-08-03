@@ -11,6 +11,11 @@ import {
   DEFAULT_SERVICES,
   DEFAULT_INTERIOR,
   DEFAULT_BUYING,
+  DEFAULT_STATS,
+  DEFAULT_VALUES,
+  DEFAULT_BAUWEISE,
+  DEFAULT_UPCOMING,
+  DEFAULT_NEW_CITIES,
 } from "@/lib/content-defaults"
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -159,4 +164,79 @@ export async function getHomeContent(locale: Locale): Promise<LocalizedHome> {
       },
     },
   }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// About-page blocks (Phase 2 Group A) — stats, values, Bauweise, and the two
+// promo headers. Reuses HomeSection / HomeSectionItem (ids: stats, values,
+// bauweise, upcoming, new-cities). Every field falls back per-locale to the
+// shared defaults, so the section renders identically before an admin edits it
+// and never blanks the English locale.
+// ─────────────────────────────────────────────────────────────────────────────
+
+export type AboutContent = {
+  stats: { value: string; label: string }[]
+  values: { eyebrow: string; heading: string; cards: { title: string; description: string }[] }
+  bauweise: { heading: string; paragraphs: string[]; ctaLabel: string; ctaHref: string }
+  upcoming: { line1: string; line2: string; subtitle: string }
+  newCities: { heading: string; subtitle: string; noteTitle: string; noteText: string }
+}
+
+export async function getAboutContent(locale: Locale): Promise<AboutContent> {
+  const de = locale !== "en"
+  const L = (s: LocalizedText) => (de ? s.de : s.en)
+  const rows = await prisma.homeSection.findMany({
+    where: { id: { in: ["stats", "values", "bauweise", "upcoming", "new-cities"] } },
+    include: { items: { orderBy: { order: "asc" } } },
+  })
+  const byId = new Map(rows.map((r) => [r.id, r]))
+
+  const statsRow = byId.get("stats")
+  const stats =
+    statsRow && statsRow.items.length > 0
+      ? statsRow.items.map((it) => ({
+          value: (de ? it.titleDe : it.titleEn) || "",
+          label: (de ? it.descriptionDe : it.descriptionEn) || "",
+        }))
+      : DEFAULT_STATS.map((s) => ({ value: s.value, label: L(s.label) }))
+
+  const valuesRow = byId.get("values")
+  const values = {
+    eyebrow: (de ? valuesRow?.eyebrowDe : valuesRow?.eyebrowEn) || L(DEFAULT_VALUES.eyebrow),
+    heading: (de ? valuesRow?.headingDe : valuesRow?.headingEn) || L(DEFAULT_VALUES.heading),
+    cards:
+      valuesRow && valuesRow.items.length > 0
+        ? valuesRow.items.map((it) => ({
+            title: (de ? it.titleDe : it.titleEn) || "",
+            description: (de ? it.descriptionDe : it.descriptionEn) || "",
+          }))
+        : DEFAULT_VALUES.cards.map((c) => ({ title: L(c.title), description: L(c.description) })),
+  }
+
+  const bwRow = byId.get("bauweise")
+  const bwDesc = de ? bwRow?.descriptionDe : bwRow?.descriptionEn
+  const bauweise = {
+    heading: (de ? bwRow?.headingDe : bwRow?.headingEn) || L(DEFAULT_BAUWEISE.heading),
+    paragraphs: bwDesc ? bwDesc.split("\n\n").filter(Boolean) : DEFAULT_BAUWEISE.paragraphs.map(L),
+    ctaLabel: (de ? bwRow?.primaryCtaLabelDe : bwRow?.primaryCtaLabelEn) || L(DEFAULT_BAUWEISE.ctaLabel),
+    ctaHref: bwRow?.primaryCtaHref || DEFAULT_BAUWEISE.ctaHref,
+  }
+
+  const upRow = byId.get("upcoming")
+  const upcoming = {
+    line1: (de ? upRow?.headingDe : upRow?.headingEn) || L(DEFAULT_UPCOMING.line1),
+    line2: (de ? upRow?.eyebrowDe : upRow?.eyebrowEn) || L(DEFAULT_UPCOMING.line2),
+    subtitle: (de ? upRow?.descriptionDe : upRow?.descriptionEn) || L(DEFAULT_UPCOMING.subtitle),
+  }
+
+  const ncRow = byId.get("new-cities")
+  const ncItem = ncRow?.items[0]
+  const newCities = {
+    heading: (de ? ncRow?.headingDe : ncRow?.headingEn) || L(DEFAULT_NEW_CITIES.heading),
+    subtitle: (de ? ncRow?.descriptionDe : ncRow?.descriptionEn) || L(DEFAULT_NEW_CITIES.subtitle),
+    noteTitle: (de ? ncItem?.titleDe : ncItem?.titleEn) || L(DEFAULT_NEW_CITIES.noteTitle),
+    noteText: (de ? ncItem?.descriptionDe : ncItem?.descriptionEn) || L(DEFAULT_NEW_CITIES.noteText),
+  }
+
+  return { stats, values, bauweise, upcoming, newCities }
 }

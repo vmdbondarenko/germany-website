@@ -17,7 +17,7 @@ import { Footer } from "@/components/footer"
 import { NewsScroll } from "@/components/news-scroll"
 import { prisma } from "@/lib/prisma"
 import { getLocale, getTranslations } from "next-intl/server"
-import { getHomeContent } from "@/lib/home-content"
+import { getHomeContent, getAboutContent } from "@/lib/home-content"
 import { pick } from "@/lib/i18n-content"
 import type { Locale } from "@/i18n/routing"
 import type { Metadata } from "next"
@@ -40,6 +40,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function HomePage() {
   const locale = (await getLocale()) as Locale
   const home = await getHomeContent(locale)
+  const aboutContent = await getAboutContent(locale)
   const th = await getTranslations("home")
   const mapCopy = { heading: th("mapHeading"), subtitle: th("mapSubtitle") }
 
@@ -173,7 +174,7 @@ export default async function HomePage() {
       <main>
         <Hero content={home.hero} />
         <ArchitectureSlideshow dbSlides={slideshowSlides} />
-        <About upcomingInvestments={upcomingInvestments} newCities={newCities} aboutSection={aboutSection} />
+        <About content={aboutContent} upcomingInvestments={upcomingInvestments} newCities={newCities} aboutSection={aboutSection} />
         <Investments projects={activeProjects} />
         {lokalizacjaData.points.length > 0 && (
           <section className="py-20 lg:py-32 bg-muted/30">

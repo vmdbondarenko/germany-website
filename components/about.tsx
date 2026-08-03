@@ -4,7 +4,8 @@ import { useEffect, useState, useRef } from "react"
 import Image from "next/image"
 import { ChevronLeft, ChevronRight, X, Clock, Zap, Wrench, Hammer, Building, Building2, Home, MapPin, Star, Check, Timer, HardHat, TrendingUp } from "lucide-react"
 import { numberedSectionAlt } from "@/lib/seo/image-alt"
-import { DEFAULT_COMPANY_NAME, DEFAULT_ABOUT_DESCRIPTION, DEFAULT_ABOUT_PHOTOS } from "@/lib/content-defaults"
+import { DEFAULT_COMPANY_NAME, DEFAULT_ABOUT_DESCRIPTION, DEFAULT_ABOUT_PHOTOS, VALUE_BRICK_COLORS } from "@/lib/content-defaults"
+import type { AboutContent } from "@/lib/home-content"
 
 const INVESTMENT_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
   Clock, Zap, Wrench, Hammer, Building, Building2, Home, MapPin, Star, Check, Timer, HardHat, TrendingUp,
@@ -22,7 +23,7 @@ type AboutSectionData = { companyName: string; description: string; photos?: unk
 // Company name + history defaults live in lib/content-defaults.ts (shared with
 // the seed script so they can never drift).
 
-export function About({ upcomingInvestments, newCities, aboutSection }: { upcomingInvestments: UpcomingInvestment[]; newCities: NewCity[]; aboutSection: AboutSectionData }) {
+export function About({ content, upcomingInvestments, newCities, aboutSection }: { content: AboutContent; upcomingInvestments: UpcomingInvestment[]; newCities: NewCity[]; aboutSection: AboutSectionData }) {
   const [isVisible, setIsVisible] = useState(false)
   const [expansionVisible, setExpansionVisible] = useState(false)
   const sectionRef = useRef<HTMLDivElement>(null)
@@ -95,11 +96,7 @@ export function About({ upcomingInvestments, newCities, aboutSection }: { upcomi
     setSelectedTechImageIndex((prev) => (prev === techImages.length - 1 ? 0 : prev + 1))
   }
 
-  const stats = [
-    { value: "10+", label: "Jahre Erfahrung" },
-    { value: "900+", label: "gebaute Häuser" },
-    { value: "96 %", label: "der Bauprojekte termingerecht übergeben" },
-  ]
+  const stats = content.stats
 
   return (
     <section id="unternehmen" className="py-12 lg:py-20 bg-background">
@@ -145,15 +142,15 @@ export function About({ upcomingInvestments, newCities, aboutSection }: { upcomi
           {/* Section Header */}
           <div className="relative text-center mb-14 lg:mb-20">
             <h2 className="font-serif text-3xl lg:text-5xl font-semibold mb-5 leading-tight" style={{ color: '#3E1718' }}>
-              Bald beginnen wir mit dem Bau
+              {content.upcoming.line1}
               <br />
               <span className="relative inline-block mt-1">
-                weiterer Projekte!
+                {content.upcoming.line2}
                 <div className="absolute -bottom-2 left-0 right-0 h-1 rounded-full opacity-30" style={{ backgroundColor: '#6E2E2A' }} />
               </span>
             </h2>
             <p className="text-muted-foreground text-base lg:text-lg max-w-2xl mx-auto leading-relaxed">
-              Neue Standorte, neue Entwicklungsphasen und weitere Projekte an sorgfältig ausgewählten Orten.
+              {content.upcoming.subtitle}
             </p>
           </div>
 
@@ -290,10 +287,10 @@ export function About({ upcomingInvestments, newCities, aboutSection }: { upcomi
                   </svg>
                 </div>
                 <h3 className="font-serif text-2xl lg:text-4xl font-semibold mb-3 text-white">
-                  Wir bauen bald in weiteren Städten!
+                  {content.newCities.heading}
                 </h3>
                 <p className="text-white/60 text-sm lg:text-base max-w-xl mx-auto">
-                  Wir erweitern unsere Tätigkeit auf neue Märkte
+                  {content.newCities.subtitle}
                 </p>
               </div>
               
@@ -347,11 +344,11 @@ export function About({ upcomingInvestments, newCities, aboutSection }: { upcomi
                       <div className="w-3 h-3 rounded-full border border-white/20" style={{ backgroundColor: '#3E1718' }} />
                     </div>
                     <p className="text-white font-medium text-base lg:text-lg">
-                      Häuser in Kiew, Lwiw und Baku
+                      {content.newCities.noteTitle}
                     </p>
                   </div>
                   <p className="text-white/60 text-sm lg:text-base max-w-lg text-center leading-relaxed">
-                    In unserem Angebot finden Sie außerdem freistehende Häuser, Doppelhäuser und Reihenhäuser in Kiew, Lwiw und Baku!
+                    {content.newCities.noteText}
                   </p>
                 </div>
               </div>
@@ -520,39 +517,20 @@ export function About({ upcomingInvestments, newCities, aboutSection }: { upcomi
             <div className="flex items-center justify-center gap-4 mb-4">
               <div className="h-px w-12 bg-gradient-to-r from-transparent to-[#6E2E2A]/40" />
               <span className="text-xs font-medium tracking-[0.2em] uppercase" style={{ color: '#5A2A1C' }}>
-                Unsere Werte
+                {content.values.eyebrow}
               </span>
               <div className="h-px w-12 bg-gradient-to-l from-transparent to-[#6E2E2A]/40" />
             </div>
             <h2 className="font-serif text-2xl lg:text-3xl font-semibold" style={{ color: '#3E1718' }}>
-              Das Fundament unseres Handelns
+              {content.values.heading}
             </h2>
           </div>
 
           {/* Premium Cards Grid */}
           <div ref={sectionRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6 max-w-6xl mx-auto">
-            {[
-              {
-                title: "Unsere Mission",
-                description: "Wir sind überzeugt, dass ein eigenes Haus oder eine Wohnung mit eigenem Grundstück kein unerreichbarer Luxus sein sollte, sondern eine realistische Möglichkeit für viele Menschen. Unser Anspruch ist es, hochwertigen Wohnraum zu schaffen und das Vertrauen unserer Kunden durch Qualität, Transparenz und Verlässlichkeit zu gewinnen. Der größte Maßstab unseres Erfolgs sind zufriedene Eigentümer.",
-                brickColor: "#6E2E2A",
-              },
-              {
-                title: "Unsere Vision",
-                description: "Wir möchten unseren Kunden genau das bieten, was wir selbst von einem Projektentwickler erwarten würden: sichere und transparente Prozesse, hochwertige Baumaterialien sowie ein überzeugendes Preis-Leistungs-Verhältnis.",
-                brickColor: "#5A2A1C",
-              },
-              {
-                title: "Unsere Strategie",
-                description: "Wir setzen auf langfristige Kundenbeziehungen und effiziente und termingerechte Umsetzung unserer Projekte. Dabei legen wir großen Wert auf Termintreue, Qualität und eine sorgfältige Planung. So entstehen Wohnräume, die Komfort, Funktionalität und zeitlose Architektur miteinander verbinden.",
-                brickColor: "#3E1718",
-              },
-              {
-                title: "Unser Stil",
-                description: "Ein charakteristisches Merkmal unserer Häuser ist das Fassadenmauerwerk im bayerischen Stil. Die unterschiedlichen Farbtöne der Ziegel verleihen jedem Gebäude eine individuelle Ausstrahlung und schaffen ein harmonisches Gesamtbild, das auch über viele Jahre hinweg seinen zeitlosen Charakter bewahrt.",
-                brickColor: "#120A0A",
-              },
-            ].map((card, index) => (
+            {content.values.cards.map((card, index) => {
+              const brickColor = VALUE_BRICK_COLORS[index % VALUE_BRICK_COLORS.length]
+              return (
               <div
                 key={index}
                 className="group relative bg-card aspect-square flex flex-col items-center justify-center p-6 lg:p-8 rounded-2xl border border-border/40 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-400"
@@ -565,27 +543,28 @@ export function About({ upcomingInvestments, newCities, aboutSection }: { upcomi
                         ? "opacity-100 translate-y-0" 
                         : "opacity-0 translate-y-3"
                     }`}
-                    style={{ 
-                      backgroundColor: card.brickColor,
+                    style={{
+                      backgroundColor: brickColor,
                       transitionDelay: `${index * 120}ms`,
                     }}
                   />
                 </div>
                 
                 {/* Title */}
-                <h3 
+                <h3
                   className="font-serif text-lg lg:text-xl font-semibold mb-3 tracking-tight text-center"
-                  style={{ color: card.brickColor }}
+                  style={{ color: brickColor }}
                 >
                   {card.title}
                 </h3>
-                
+
                 {/* Description */}
                 <p className="text-muted-foreground text-xs lg:text-sm leading-relaxed text-center">
                   {card.description}
                 </p>
               </div>
-            ))}
+              )
+            })}
           </div>
         </div>
 
@@ -620,7 +599,7 @@ export function About({ upcomingInvestments, newCities, aboutSection }: { upcomi
               {/* Section Header */}
               <div className="text-center mb-14 lg:mb-20">
                 <h2 className="font-serif text-3xl lg:text-5xl font-semibold" style={{ color: '#3E1718' }}>
-                  Bauweise und Entwicklung
+                  {content.bauweise.heading}
                 </h2>
               </div>
 
@@ -629,33 +608,21 @@ export function About({ upcomingInvestments, newCities, aboutSection }: { upcomi
                 {/* Text Column */}
                 <div className="order-2 lg:order-1">
                   <div className="space-y-6 text-muted-foreground text-base lg:text-lg leading-relaxed">
-                    <p>
-                      Wir entwickeln unsere Bauweise kontinuierlich weiter und verbinden moderne Technologien mit traditioneller Handwerkskunst. Unser Ziel ist es, nicht nur komfortable Häuser zu schaffen, sondern Lebensräume, in denen Träume Wirklichkeit werden können. Dabei begleiten wir unsere Kunden zuverlässig durch alle Phasen der Projektentwicklung – von der Planung bis zur Fertigstellung.
-                    </p>
-                    <p>
-                      Die Idee, Häuser im Stil des Bayerischen Mauerwerks mit handgeformten Ziegeln zu errichten, entstand aus dem Wunsch, Wohnraum mit einem unverwechselbaren architektonischen Charakter zu schaffen. Die Kombination aus exklusiven Materialien und sorgfältiger Ausführung verleiht jedem Gebäude eine individuelle Ausstrahlung und eine dauerhaft hohe Wertigkeit.
-                    </p>
-                    <p>
-                      Unter der Marke „Einstöckiges Kiew“ entwickelte sich unser Unternehmen innerhalb weniger Jahre zu einem der führenden Anbieter im Segment hochwertiger Einfamilienhäuser in der Ukraine. Diese Entwicklung bildete die Grundlage für unsere Expansion nach Polen.
-                    </p>
-                    <p>
-                      Mit „Einstöckige Warschau“ konnten wir dank unserer langjährigen Erfahrung, unseres hohen Qualitätsanspruchs und einer konsequenten Kundenorientierung das Vertrauen zahlreicher Kunden gewinnen.
-                    </p>
-                    <p>
-                      Heute setzen wir diesen Weg in Deutschland fort. Mit unserer Erfahrung aus mehreren europäischen Märkten, hohen Qualitätsstandards und einer klaren architektonischen Handschrift entwickeln wir Wohnprojekte, die Ästhetik, Langlebigkeit und moderne Bauqualität auf überzeugende Weise miteinander verbinden.
-                    </p>
+                    {content.bauweise.paragraphs.map((para, i) => (
+                      <p key={i}>{para}</p>
+                    ))}
                   </div>
                   
                   {/* CTA Button */}
                   <div className="mt-8">
-                    <a 
-                      href="#kontakt"
+                    <a
+                      href={content.bauweise.ctaHref}
                       className="inline-flex items-center gap-3 px-8 py-4 rounded-full text-white font-medium shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5 group"
-                      style={{ 
+                      style={{
                         background: 'linear-gradient(135deg, #6E2E2A 0%, #5A2A1C 50%, #3E1718 100%)',
                       }}
                     >
-                      <span>Kontakt aufnehmen</span>
+                      <span>{content.bauweise.ctaLabel}</span>
                       <svg className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
                       </svg>

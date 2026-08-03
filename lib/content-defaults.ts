@@ -130,3 +130,52 @@ export const DEFAULT_ABOUT_PHOTOS = [
   "/images/house-balcony.jpg",
   "/images/house-terrace.jpg",
 ]
+
+// ── About-page blocks (Phase 2 Group A) — reused via HomeSection/HomeSectionItem.
+// Brick colors for the value cards are presentational and stay in the component.
+
+export const DEFAULT_STATS: { value: string; label: LocalizedText }[] = [
+  { value: "10+", label: t("Jahre Erfahrung", "years of experience") },
+  { value: "900+", label: t("gebaute Häuser", "houses built") },
+  { value: "96 %", label: t("der Bauprojekte termingerecht übergeben", "of construction projects delivered on time") },
+]
+
+export const DEFAULT_VALUES = {
+  eyebrow: t("Unsere Werte", "Our values"),
+  heading: t("Das Fundament unseres Handelns", "The foundation of what we do"),
+  cards: [
+    { title: t("Unsere Mission", "Our mission"), description: t("Wir sind überzeugt, dass ein eigenes Haus oder eine Wohnung mit eigenem Grundstück kein unerreichbarer Luxus sein sollte, sondern eine realistische Möglichkeit für viele Menschen. Unser Anspruch ist es, hochwertigen Wohnraum zu schaffen und das Vertrauen unserer Kunden durch Qualität, Transparenz und Verlässlichkeit zu gewinnen. Der größte Maßstab unseres Erfolgs sind zufriedene Eigentümer.", "We are convinced that owning a house or an apartment with its own plot of land should not be an unattainable luxury but a realistic option for many people. Our aim is to create high-quality living space and to earn our customers' trust through quality, transparency and reliability. The greatest measure of our success is satisfied owners.") },
+    { title: t("Unsere Vision", "Our vision"), description: t("Wir möchten unseren Kunden genau das bieten, was wir selbst von einem Projektentwickler erwarten würden: sichere und transparente Prozesse, hochwertige Baumaterialien sowie ein überzeugendes Preis-Leistungs-Verhältnis.", "We want to offer our customers exactly what we would expect from a property developer ourselves: secure and transparent processes, high-quality building materials and a compelling price-performance ratio.") },
+    { title: t("Unsere Strategie", "Our strategy"), description: t("Wir setzen auf langfristige Kundenbeziehungen und effiziente und termingerechte Umsetzung unserer Projekte. Dabei legen wir großen Wert auf Termintreue, Qualität und eine sorgfältige Planung. So entstehen Wohnräume, die Komfort, Funktionalität und zeitlose Architektur miteinander verbinden.", "We focus on long-term customer relationships and the efficient, on-time delivery of our projects. We place great value on meeting deadlines, quality and careful planning. This creates living spaces that combine comfort, functionality and timeless architecture.") },
+    { title: t("Unser Stil", "Our style"), description: t("Ein charakteristisches Merkmal unserer Häuser ist das Fassadenmauerwerk im bayerischen Stil. Die unterschiedlichen Farbtöne der Ziegel verleihen jedem Gebäude eine individuelle Ausstrahlung und schaffen ein harmonisches Gesamtbild, das auch über viele Jahre hinweg seinen zeitlosen Charakter bewahrt.", "A characteristic feature of our houses is the Bavarian-style facade brickwork. The varying shades of the bricks give each building an individual character and create a harmonious overall look that retains its timeless character over many years.") },
+  ],
+}
+
+export const DEFAULT_BAUWEISE = {
+  heading: t("Bauweise und Entwicklung", "Construction and development"),
+  ctaLabel: t("Kontakt aufnehmen", "Get in touch"),
+  ctaHref: "#kontakt",
+  paragraphs: [
+    t("Wir entwickeln unsere Bauweise kontinuierlich weiter und verbinden moderne Technologien mit traditioneller Handwerkskunst. Unser Ziel ist es, nicht nur komfortable Häuser zu schaffen, sondern Lebensräume, in denen Träume Wirklichkeit werden können. Dabei begleiten wir unsere Kunden zuverlässig durch alle Phasen der Projektentwicklung – von der Planung bis zur Fertigstellung.", "We continually refine our construction methods, combining modern technology with traditional craftsmanship. Our goal is not only to create comfortable houses but living spaces in which dreams can come true. We reliably accompany our customers through every phase of the development — from planning to completion."),
+    t("Die Idee, Häuser im Stil des Bayerischen Mauerwerks mit handgeformten Ziegeln zu errichten, entstand aus dem Wunsch, Wohnraum mit einem unverwechselbaren architektonischen Charakter zu schaffen. Die Kombination aus exklusiven Materialien und sorgfältiger Ausführung verleiht jedem Gebäude eine individuelle Ausstrahlung und eine dauerhaft hohe Wertigkeit.", "The idea of building houses in the style of Bavarian brickwork with hand-formed bricks arose from the desire to create living space with a distinctive architectural character. The combination of exclusive materials and careful execution gives each building an individual character and lasting high value."),
+    t("Unter der Marke „Einstöckiges Kiew“ entwickelte sich unser Unternehmen innerhalb weniger Jahre zu einem der führenden Anbieter im Segment hochwertiger Einfamilienhäuser in der Ukraine. Diese Entwicklung bildete die Grundlage für unsere Expansion nach Polen.", "Under the brand “Einstöckiges Kiew”, our company became one of the leading providers in the high-quality single-family home segment in Ukraine within a few years. This development formed the basis for our expansion into Poland."),
+    t("Mit „Einstöckige Warschau“ konnten wir dank unserer langjährigen Erfahrung, unseres hohen Qualitätsanspruchs und einer konsequenten Kundenorientierung das Vertrauen zahlreicher Kunden gewinnen.", "With “Einstöckige Warschau”, thanks to our many years of experience, our high quality standards and a consistent customer focus, we won the trust of numerous customers."),
+    t("Heute setzen wir diesen Weg in Deutschland fort. Mit unserer Erfahrung aus mehreren europäischen Märkten, hohen Qualitätsstandards und einer klaren architektonischen Handschrift entwickeln wir Wohnprojekte, die Ästhetik, Langlebigkeit und moderne Bauqualität auf überzeugende Weise miteinander verbinden.", "Today we are continuing this path in Germany. With our experience from several European markets, high quality standards and a clear architectural signature, we develop residential projects that convincingly combine aesthetics, durability and modern build quality."),
+  ],
+}
+
+export const DEFAULT_UPCOMING = {
+  line1: t("Bald beginnen wir mit dem Bau", "We will soon begin building"),
+  line2: t("weiterer Projekte!", "further projects!"),
+  subtitle: t("Neue Standorte, neue Entwicklungsphasen und weitere Projekte an sorgfältig ausgewählten Orten.", "New locations, new development phases and further projects in carefully selected places."),
+}
+
+export const DEFAULT_NEW_CITIES = {
+  heading: t("Wir bauen bald in weiteren Städten!", "We will soon be building in more cities!"),
+  subtitle: t("Wir erweitern unsere Tätigkeit auf neue Märkte", "We are expanding into new markets"),
+  noteTitle: t("Häuser in Kiew, Lwiw und Baku", "Houses in Kyiv, Lviv and Baku"),
+  noteText: t("In unserem Angebot finden Sie außerdem freistehende Häuser, Doppelhäuser und Reihenhäuser in Kiew, Lwiw und Baku!", "Our portfolio also includes detached houses, semi-detached houses and terraced houses in Kyiv, Lviv and Baku!"),
+}
+
+// Presentational brick colors for the value cards (index-aligned with cards).
+export const VALUE_BRICK_COLORS = ["#6E2E2A", "#5A2A1C", "#3E1718", "#120A0A"]

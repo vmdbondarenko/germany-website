@@ -37,6 +37,11 @@ import {
   DEFAULT_COMPANY_NAME,
   DEFAULT_ABOUT_DESCRIPTION,
   DEFAULT_ABOUT_PHOTOS,
+  DEFAULT_STATS,
+  DEFAULT_VALUES,
+  DEFAULT_BAUWEISE,
+  DEFAULT_UPCOMING,
+  DEFAULT_NEW_CITIES,
 } from '../lib/content-defaults'
 
 const APPLY = process.argv.includes('--apply')
@@ -68,6 +73,12 @@ const SECTIONS: SectionDef[] = [
   { id: 'buying', order: 5, heading: DEFAULT_BUYING.heading },
   { id: 'buying-help', order: 6, heading: DEFAULT_BUYING.helpHeading },
   { id: 'investor', order: 7, heading: DEFAULT_BUYING.investor.heading },
+  // Phase 2 Group A — About-page blocks (getAboutContent reads these ids).
+  { id: 'stats', order: 8, items: DEFAULT_STATS.map((s) => ({ icon: '', title: t(s.value, s.value), description: s.label })) },
+  { id: 'values', order: 9, eyebrow: DEFAULT_VALUES.eyebrow, heading: DEFAULT_VALUES.heading, items: DEFAULT_VALUES.cards.map((c) => ({ icon: '', title: c.title, description: c.description })) },
+  { id: 'bauweise', order: 10, heading: DEFAULT_BAUWEISE.heading, description: { de: DEFAULT_BAUWEISE.paragraphs.map((p) => p.de).join('\n\n'), en: DEFAULT_BAUWEISE.paragraphs.map((p) => p.en).join('\n\n') }, primaryCta: { label: DEFAULT_BAUWEISE.ctaLabel, href: DEFAULT_BAUWEISE.ctaHref } },
+  { id: 'upcoming', order: 11, heading: DEFAULT_UPCOMING.line1, eyebrow: DEFAULT_UPCOMING.line2, description: DEFAULT_UPCOMING.subtitle },
+  { id: 'new-cities', order: 12, heading: DEFAULT_NEW_CITIES.heading, description: DEFAULT_NEW_CITIES.subtitle, items: [{ icon: '', title: DEFAULT_NEW_CITIES.noteTitle, description: DEFAULT_NEW_CITIES.noteText }] },
 ]
 
 const ABOUT = { id: 'main', companyName: DEFAULT_COMPANY_NAME, description: DEFAULT_ABOUT_DESCRIPTION, photos: DEFAULT_ABOUT_PHOTOS }
