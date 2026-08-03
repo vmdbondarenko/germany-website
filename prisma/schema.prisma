@@ -446,6 +446,35 @@ model AboutSection {
   updatedAt     DateTime @updatedAt
 }
 
+// Singleton (id "main") holding the company contact + legal identity shown in
+// the header, footer, contact section, Impressum, Datenschutz, JSON-LD and PDFs.
+// Every field is nullable; when null the code fallback in lib/contact-info.ts is
+// used (see lib/site-settings.ts), so the public site never breaks if the row is
+// absent. Locale-neutral by nature (address/phone/register), so no DE/EN split.
+model SiteSettings {
+  id                 String   @id @default("main")
+  companyName        String?
+  managingDirector   String?
+  phone              String?
+  email              String?
+  street             String?
+  postalCode         String?
+  city               String?
+  country            String? // display form, e.g. "Deutschland"
+  registerCourt      String?
+  registrationNumber String?
+  vatId              String?
+  mapEmbedSrc        String?  @db.Text
+  mapHref            String?  @db.Text
+  instagramUrl       String?
+  youtubeUrl         String?
+  facebookUrl        String?
+  linkedinUrl        String?
+  logoUrl            String?
+  updatedAt          DateTime @updatedAt
+  createdAt          DateTime @default(now())
+}
+
 // Admin-managed, per-locale content for the homepage's otherwise-hardcoded
 // sections (hero, process, distinguishes, services, buying, interior, investor,
 // contact). `id` is the stable section key. All text fields have a DE + EN

@@ -8,11 +8,12 @@ import { Link } from "@/i18n/navigation"
 import { Button } from "@/components/ui/button"
 import { ContactModal } from "@/components/contact-modal"
 import { LanguageSwitcher } from "@/components/language-switcher"
-import { cityContacts } from "@/lib/contact-info"
+import { useSiteSettings } from "@/components/site-settings-provider"
 
 export function Header({ cities = [] }: { cities?: { name: string; slug: string }[] }) {
   const t = useTranslations("nav")
   const tc = useTranslations("common")
+  const settings = useSiteSettings()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
   const [showPhonePopup, setShowPhonePopup] = useState(false)
@@ -59,7 +60,7 @@ export function Header({ cities = [] }: { cities?: { name: string; slug: string 
             <div className="hidden lg:flex flex-col items-center justify-center">
               <Image
                 src="/images/logo-blocks.png"
-                alt={`${tc("companyName")} logo`}
+                alt={`${settings.companyName} logo`}
                 width={175}
                 height={40}
                 style={{ width: 175, height: 'auto' }}
@@ -70,14 +71,14 @@ export function Header({ cities = [] }: { cities?: { name: string; slug: string 
                 className="text-[12px] font-medium whitespace-nowrap w-full text-center mt-0.5"
                 style={{ color: 'rgba(74, 42, 42, 0.7)', letterSpacing: '0.08em' }}
               >
-                {tc("companyName")}
+                {settings.companyName}
               </span>
             </div>
             {/* Mobile: Compact version */}
             <div className="flex lg:hidden flex-col items-center">
               <Image
                 src="/images/logo-blocks.png"
-                alt={`${tc("companyName")} logo`}
+                alt={`${settings.companyName} logo`}
                 width={120}
                 height={28}
                 style={{ width: 120, height: 'auto' }}
@@ -88,7 +89,7 @@ export function Header({ cities = [] }: { cities?: { name: string; slug: string 
                 className="text-[9px] font-medium whitespace-nowrap mt-0.5 w-full text-center"
                 style={{ color: 'rgba(74, 42, 42, 0.7)', letterSpacing: '0.04em' }}
               >
-                {tc("companyName")}
+                {settings.companyName}
               </span>
             </div>
           </Link>
@@ -156,7 +157,7 @@ export function Header({ cities = [] }: { cities?: { name: string; slug: string 
                       className={`absolute right-0 top-full pt-2 z-50 ${showKontaktPopup ? "opacity-100" : "opacity-0 pointer-events-none"}`}
                     >
                       <div className="bg-background border border-border rounded-lg shadow-lg py-2 min-w-[200px]">
-                        {cityContacts.map((c) => (
+                        {settings.contacts.map((c) => (
                           <div key={c.city} className="px-4 py-1.5">
                             <p
                               className="text-[10px] font-semibold uppercase tracking-widest mb-0.5"
@@ -225,7 +226,7 @@ export function Header({ cities = [] }: { cities?: { name: string; slug: string 
                   className={`absolute right-0 top-full pt-2 z-50 ${showPhonePopup ? "opacity-100" : "opacity-0 pointer-events-none"}`}
                 >
                   <div className="bg-background border border-border rounded-lg shadow-lg py-2 min-w-[200px]">
-                    {cityContacts.map((c) => (
+                    {settings.contacts.map((c) => (
                       <div key={c.city} className="px-4 py-1.5">
                         <p
                           className="text-[10px] font-semibold uppercase tracking-widest mb-0.5"
@@ -302,7 +303,7 @@ export function Header({ cities = [] }: { cities?: { name: string; slug: string 
 
             {/* Phone numbers grouped by city — same source as the desktop dropdown */}
             <div className="mt-4 pt-4 border-t border-border/50 flex flex-col gap-3">
-              {cityContacts.map((c) => (
+              {settings.contacts.map((c) => (
                 <div key={c.city} className="flex items-center justify-between gap-4">
                   <span
                     className="text-xs font-semibold uppercase tracking-widest"

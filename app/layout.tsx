@@ -8,6 +8,8 @@ import { GoogleTagManager } from '@next/third-parties/google'
 import { CookieConsent } from '@/components/cookie-consent'
 import { Ringostat } from '@/components/ringostat'
 import { JsonLd, organizationSchema } from '@/lib/seo/json-ld'
+import { getSiteSettings } from '@/lib/site-settings'
+import { SiteSettingsProvider } from '@/components/site-settings-provider'
 import './globals.css'
 
 const gtmId = process.env.NEXT_PUBLIC_GTM_ID
@@ -42,6 +44,7 @@ export default async function RootLayout({
 }>) {
   const locale = await getLocale()
   const messages = await getMessages()
+  const siteSettings = await getSiteSettings()
   return (
     <html lang={locale} className={`${playfair.variable} ${inter.variable}`}>
       {/* Google Consent Mode v2 — defaults to denied BEFORE GTM loads.
@@ -74,11 +77,13 @@ export default async function RootLayout({
       {gtmId && <GoogleTagManager gtmId={gtmId} />}
       <body className="font-sans antialiased">
         <NextIntlClientProvider locale={locale} messages={messages}>
-          <JsonLd schema={organizationSchema()} />
-          {children}
-          <CookieConsent />
-          <Ringostat />
-          <Analytics />
+          <SiteSettingsProvider value={siteSettings}>
+            <JsonLd schema={organizationSchema(siteSettings)} />
+            {children}
+            <CookieConsent />
+            <Ringostat />
+            <Analytics />
+          </SiteSettingsProvider>
         </NextIntlClientProvider>
       </body>
     </html>

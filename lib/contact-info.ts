@@ -50,7 +50,8 @@ export const company = {
   street: "Pariser Platz 6a",
   postalCode: "10117",
   city: "Berlin",
-  country: "DE",
+  country: "DE", // ISO code (JSON-LD addressCountry)
+  countryName: "Deutschland", // display form (addresses / Impressum)
   phone: primaryContact.phone,
   phoneHref: primaryContact.phoneHref,
   email: primaryContact.email,

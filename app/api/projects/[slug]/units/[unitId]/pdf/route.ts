@@ -5,13 +5,7 @@ import sharp from 'sharp'
 import React from 'react'
 import { UnitPdfDocument, type UnitPdfData } from '@/lib/pdf/unit-pdf-template'
 import { typeArea, floorArea } from '@/lib/house-type-area'
-import { primaryContact, company } from '@/lib/contact-info'
-
-// Phone shown in the generated PDF. Comes from lib/contact-info.ts (single
-// source of truth — the German HQ number).
-function pdfPhoneForCity(_citySlug: string | null | undefined): string {
-  return primaryContact.phone
-}
+import { getSiteSettings } from '@/lib/site-settings'
 
 async function fetchImageAsDataUri(url: string): Promise<string | null> {
   try {
@@ -115,6 +109,8 @@ export async function GET(
       }
     }
 
+    const s = await getSiteSettings()
+
     // Pre-fetch all images as base64 data URIs for reliable PDF rendering
     const allImageUrls: string[] = []
     for (const fp of unit.houseType.floorPlans) {
@@ -160,12 +156,13 @@ export async function GET(
           label: img.label,
         }))
         .filter((img): img is { src: string; label: string } => img.src !== null),
-      // Fall back to the German HQ company data when a unit has no linked Company.
-      companyName: unit.company?.name ?? company.name,
+      // Fall back to the admin-managed SiteSettings (German HQ) when a unit has
+      // no linked Company.
+      companyName: unit.company?.name ?? s.companyName,
       companyWebsite: unit.company?.websiteUrl ?? null,
-      companyEmail: unit.company?.contactEmail ?? project.contactEmail ?? company.email,
-      companyPhone: pdfPhoneForCity(project.cityLocation?.slug),
-      companyAddress: companyAddress ?? company.addressOneLine,
+      companyEmail: unit.company?.contactEmail ?? project.contactEmail ?? s.email,
+      companyPhone: s.phone,
+      companyAddress: companyAddress ?? s.addressOneLine,
     }
 
     const buffer = await renderToBuffer(

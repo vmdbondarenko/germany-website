@@ -1,12 +1,15 @@
 import { getTranslations } from "next-intl/server"
+import { Instagram, Youtube, Facebook, Linkedin } from "lucide-react"
 import { Link } from "@/i18n/navigation"
-import { cityContacts, headquarters } from "@/lib/contact-info"
+import { getSiteSettings } from "@/lib/site-settings"
 import { CookieSettingsButton } from "@/components/cookie-settings-button"
+
+const SOCIAL_ICONS = { instagram: Instagram, youtube: Youtube, facebook: Facebook, linkedin: Linkedin } as const
 
 export async function Footer() {
   const t = await getTranslations("footer")
   const tn = await getTranslations("nav")
-  const tc = await getTranslations("common")
+  const s = await getSiteSettings()
 
   const navLinks = [
     { href: "#unternehmen", label: tn("about") },
@@ -15,8 +18,9 @@ export async function Footer() {
     { href: "#kontakt", label: tn("contact") },
   ]
 
-  // No German social profiles provided yet — add them here when available.
-  const socialLinks: { href: string; icon: React.ComponentType<{ className?: string }>; label: string }[] = []
+  // Social links come from SiteSettings (admin-managed). Empty by default.
+  const socialLinks = s.socials.map((soc) => ({ href: soc.url, icon: SOCIAL_ICONS[soc.platform], label: soc.platform }))
+  const footerAddressLines = [s.street, `${s.postalCode} ${s.city}`]
 
   return (
     <footer className="bg-foreground text-primary-foreground py-16 lg:py-20">
@@ -26,7 +30,7 @@ export async function Footer() {
           <div className="lg:col-span-2">
             <Link href="/" className="inline-block mb-4">
               <span className="font-serif text-2xl font-semibold text-primary-foreground">
-                {tc("companyName")}
+                {s.companyName}
               </span>
             </Link>
             <p className="text-primary-foreground/70 max-w-md leading-relaxed mb-6">
@@ -69,7 +73,7 @@ export async function Footer() {
           <div>
             <h4 className="font-semibold text-primary-foreground mb-4">{t("contactHeading")}</h4>
             <div className="space-y-5">
-              {cityContacts.map((c) => (
+              {s.contacts.map((c) => (
                 <div key={c.city}>
                   <p className="text-xs font-semibold uppercase tracking-widest text-primary-foreground/40 mb-2">{c.city}</p>
                   <ul className="space-y-1.5 text-primary-foreground/70">
@@ -90,10 +94,10 @@ export async function Footer() {
               <div className="pt-1 border-t border-primary-foreground/10">
                 <p className="text-xs font-semibold uppercase tracking-widest text-primary-foreground/40 mb-2">{t("hqLabel")}</p>
                 <p className="text-primary-foreground/70 text-sm leading-relaxed">
-                  {headquarters.addressLines.map((line, i) => (
+                  {footerAddressLines.map((line, i) => (
                     <span key={i}>
                       {line}
-                      {i < headquarters.addressLines.length - 1 && <br />}
+                      {i < footerAddressLines.length - 1 && <br />}
                     </span>
                   ))}
                 </p>
@@ -105,7 +109,7 @@ export async function Footer() {
         {/* Bottom */}
         <div className="pt-8 border-t border-primary-foreground/10 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-primary-foreground/50 text-sm">
-            © {new Date().getFullYear()} {tc("companyName")}. {t("rights")}
+            © {new Date().getFullYear()} {s.companyName}. {t("rights")}
           </p>
           <div className="flex flex-wrap gap-6 text-sm">
             <Link href="/datenschutz" className="text-primary-foreground/50 hover:text-primary-foreground transition-colors">

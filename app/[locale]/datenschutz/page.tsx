@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import { getTranslations } from "next-intl/server"
 import { HeaderServer } from "@/components/header-server"
 import { Footer } from "@/components/footer"
-import { company } from "@/lib/contact-info"
+import { getSiteSettings } from "@/lib/site-settings"
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("legal")
@@ -12,6 +12,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function DatenschutzPage() {
   const t = await getTranslations("legal")
   const tc = await getTranslations("common")
+  const s = await getSiteSettings()
 
   const Section = ({ heading, children }: { heading: string; children: React.ReactNode }) => (
     <section>
@@ -30,12 +31,12 @@ export default async function DatenschutzPage() {
           </h1>
           <div className="space-y-8">
             <Section heading={t("controllerHeading")}>
-              {[company.name, ...company.addressLines].join("\n")}
+              {[s.companyName, s.street, `${s.postalCode} ${s.city}`, s.country].join("\n")}
             </Section>
             <Section heading={t("dataHeading")}>{t("dataBody")}</Section>
             <Section heading={t("rightsHeading")}>{t("rightsBody")}</Section>
             <Section heading={t("contactHeading")}>
-              {`${tc("phone")}: ${company.phone}\n${tc("email")}: ${company.email}`}
+              {`${tc("phone")}: ${s.phone}\n${tc("email")}: ${s.email}`}
             </Section>
           </div>
         </article>

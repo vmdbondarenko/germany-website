@@ -6,6 +6,7 @@
 // <script type="application/ld+json"> block.
 
 import { primaryContact, company } from '@/lib/contact-info'
+import type { ResolvedSiteSettings } from '@/lib/site-settings'
 
 export const SITE_URL = (
   process.env.NEXT_PUBLIC_BASE_URL || 'https://germany-website-tau.vercel.app'
@@ -37,26 +38,27 @@ const publisherNode = {
   logo: { '@type': 'ImageObject', url: ORG_LOGO },
 }
 
-/** Site-wide Organization schema (rendered once in the root layout). */
-export function organizationSchema() {
+/** Site-wide Organization schema (rendered once in the root layout). Accepts the
+ *  resolved SiteSettings so admin edits flow through; falls back to code values. */
+export function organizationSchema(settings?: ResolvedSiteSettings) {
   return {
     '@context': 'https://schema.org',
     '@type': 'Organization',
-    name: ORG_NAME,
+    name: settings?.companyName || ORG_NAME,
     url: SITE_URL,
-    logo: ORG_LOGO,
+    logo: settings?.logoUrl ? absoluteUrl(settings.logoUrl) : ORG_LOGO,
     address: {
       '@type': 'PostalAddress',
-      streetAddress: company.street,
-      postalCode: company.postalCode,
-      addressLocality: company.city,
-      addressCountry: company.country,
+      streetAddress: settings?.street || company.street,
+      postalCode: settings?.postalCode || company.postalCode,
+      addressLocality: settings?.city || company.city,
+      addressCountry: company.country, // ISO 3166 (kept as "DE")
     },
     contactPoint: {
       '@type': 'ContactPoint',
       contactType: 'sales',
-      telephone: primaryContact.phone,
-      email: primaryContact.email,
+      telephone: settings?.phone || primaryContact.phone,
+      email: settings?.email || primaryContact.email,
     },
   }
 }

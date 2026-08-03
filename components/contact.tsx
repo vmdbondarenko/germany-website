@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Mail, Phone, MapPin, Send } from "lucide-react"
-import { cityContacts, primaryContact, headquarters } from "@/lib/contact-info"
+import { useSiteSettings } from "@/components/site-settings-provider"
 import { trackFormSubmit, pushToDataLayer } from "@/lib/gtm"
 import { isValidNationalNumber, PHONE_ERROR_MESSAGE } from "@/lib/validation/phone"
 import { isValidEmail, EMAIL_ERROR_MESSAGE } from "@/lib/validation/email"
@@ -16,6 +16,7 @@ import { DEFAULT_COUNTRY, type Country } from "@/lib/contact/countries"
 
 export function Contact() {
   const t = useTranslations("contact")
+  const s = useSiteSettings()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [country, setCountry] = useState<Country>(DEFAULT_COUNTRY)
   const [phoneNumber, setPhoneNumber] = useState("")
@@ -68,11 +69,11 @@ export function Contact() {
     {
       icon: Mail,
       label: t("email"),
-      value: primaryContact.email,
-      href: `mailto:${primaryContact.email}`,
+      value: s.email,
+      href: `mailto:${s.email}`,
     },
-    // One phone entry per city — same numbers as the top-bar dropdown.
-    ...cityContacts.map((c) => ({
+    // One phone entry per office — same numbers as the top-bar dropdown.
+    ...s.contacts.map((c) => ({
       icon: Phone,
       label: `${t("phone")} — ${c.city}`,
       value: c.phone,
@@ -81,8 +82,8 @@ export function Contact() {
     {
       icon: MapPin,
       label: t("addressLabel"),
-      value: headquarters.addressOneLine,
-      href: headquarters.mapHref,
+      value: s.addressOneLine,
+      href: s.mapHref,
     },
   ]
 
@@ -225,7 +226,7 @@ export function Contact() {
             {/* Google Map */}
             <div className="bg-card rounded-3xl border border-border shadow-lg overflow-hidden flex-1 min-h-[300px] relative">
               <a
-                href={headquarters.mapHref}
+                href={s.mapHref}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="absolute top-4 right-4 z-10 bg-white px-4 py-2 rounded-lg shadow-md hover:shadow-lg transition-shadow flex items-center gap-2 text-sm font-medium text-foreground"
@@ -234,7 +235,7 @@ export function Contact() {
                 {t("openInMaps")}
               </a>
               <iframe
-                src={headquarters.mapEmbedSrc}
+                src={s.mapEmbedSrc}
                 width="100%"
                 height="100%"
                 style={{ border: 0, minHeight: '300px' }}
