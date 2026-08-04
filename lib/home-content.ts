@@ -54,6 +54,8 @@ export type BuyingContent = {
     heading: string
     paragraphs: string[]
     ctaLabel: string
+    ctaHref: string
+    swatches: string[]
   }
 }
 export type InteriorContent = { heading: string; description: string }
@@ -158,13 +160,26 @@ export async function getHomeContent(locale: Locale): Promise<LocalizedHome> {
       steps: DEFAULT_BUYING.steps.map((s) => ({ title: pick(s, locale) })),
       helpHeading: heading("buying-help", DEFAULT_BUYING.helpHeading),
       help: DEFAULT_BUYING.help.map((h) => ({ icon: h.icon, text: pick(h.text, locale) })),
-      investor: {
-        eyebrow: pick(DEFAULT_BUYING.investor.eyebrow, locale),
-        experienceBadge: pick(DEFAULT_BUYING.investor.experienceBadge, locale),
-        heading: heading("investor", DEFAULT_BUYING.investor.heading),
-        paragraphs: DEFAULT_BUYING.investor.paragraphs.map((p) => pick(p, locale)),
-        ctaLabel: pick(DEFAULT_BUYING.investor.ctaLabel, locale),
-      },
+      investor: (() => {
+        const r = byId.get("investor")
+        const body = locale === "en" ? r?.descriptionEn : r?.descriptionDe
+        const badge = locale === "en" ? r?.secondaryCtaLabelEn : r?.secondaryCtaLabelDe
+        // Swatch colors are stored one-per-item in titleDe (locale-neutral).
+        const swatches =
+          r && r.items.length > 0
+            ? r.items.map((it) => it.titleDe || "").filter(Boolean)
+            : DEFAULT_BUYING.investor.swatches
+        const invCta = cta("investor", "primary", DEFAULT_BUYING.investor.ctaLabel, DEFAULT_BUYING.investor.ctaHref)
+        return {
+          eyebrow: eyebrow("investor", DEFAULT_BUYING.investor.eyebrow),
+          experienceBadge: badge || pick(DEFAULT_BUYING.investor.experienceBadge, locale),
+          heading: heading("investor", DEFAULT_BUYING.investor.heading),
+          paragraphs: body ? body.split("\n\n").filter(Boolean) : DEFAULT_BUYING.investor.paragraphs.map((p) => pick(p, locale)),
+          ctaLabel: invCta.label,
+          ctaHref: invCta.href,
+          swatches: swatches.length > 0 ? swatches : DEFAULT_BUYING.investor.swatches,
+        }
+      })(),
     },
   }
 }

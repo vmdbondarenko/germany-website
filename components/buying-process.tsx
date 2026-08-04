@@ -266,7 +266,7 @@ export function BuyingProcess({ content }: { content: BuyingContent }) {
                     ))}
 
                     <a
-                      href="#kontakt"
+                      href={content.investor.ctaHref}
                       className="inline-flex items-center gap-3 px-8 py-4 rounded-xl text-white text-base font-semibold transition-all duration-300 hover:shadow-xl hover:shadow-[#5A2A1C]/25 hover:-translate-y-0.5 group"
                       style={{ background: 'linear-gradient(135deg, #6E2E2A 0%, #5A2A1C 100%)' }}
                     >
@@ -278,15 +278,21 @@ export function BuyingProcess({ content }: { content: BuyingContent }) {
                   </div>
                 </div>
 
-                {/* Right Side - Logo */}
+                {/* Right Side - Brand swatches (editable colors, matching the
+                    former four-block brand logo). */}
                 <div className="flex-1 p-8 lg:p-12 xl:p-16 flex items-center justify-center">
-                  <img
-                    src="/images/logo.png"
-                    alt={content.investor.heading}
-                    width={896}
-                    height={91}
-                    className="w-56 lg:w-72 xl:w-80 h-auto object-contain"
-                  />
+                  <div className="w-56 lg:w-72 xl:w-80 flex gap-1.5 lg:gap-2" role="img" aria-label={content.investor.heading}>
+                    {content.investor.swatches.map((color, i) => (
+                      <div
+                        key={i}
+                        className="flex-1 rounded-md shadow-sm"
+                        style={{
+                          aspectRatio: '2.2 / 1',
+                          background: `linear-gradient(135deg, ${color} 0%, ${color} 55%, rgba(0,0,0,0.18) 100%)`,
+                        }}
+                      />
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
