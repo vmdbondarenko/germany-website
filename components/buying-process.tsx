@@ -2,7 +2,6 @@
 
 import { useRef, useState, useEffect } from "react"
 import { useTranslations } from "next-intl"
-import { DynamicIcon } from "@/components/dynamic-icon"
 import type { BuyingContent } from "@/lib/home-content"
 
 // Fixed decorative icons for the buying steps, indexed by step position. The
@@ -199,36 +198,6 @@ export function BuyingProcess({ content }: { content: BuyingContent }) {
                       </a>
                     )}
                   </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* How else can we help */}
-        <div className="mt-24 lg:mt-32">
-          <div className="text-center mb-12 lg:mb-16">
-            <h2
-              className="font-serif text-4xl lg:text-5xl xl:text-6xl font-semibold leading-tight tracking-tight"
-              style={{ color: '#3E1718' }}
-            >
-              {content.helpHeading}
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 max-w-5xl mx-auto">
-            {content.help.map((card, index) => (
-              <div key={index} className="group bg-white rounded-3xl p-8 lg:p-10 shadow-lg hover:shadow-2xl transition-all duration-500 border border-[#6E2E2A]/[0.07] hover:border-[#6E2E2A]/15 hover:-translate-y-1">
-                <div className="flex flex-col items-center text-center">
-                  <div
-                    className="w-20 h-20 lg:w-24 lg:h-24 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-[#5A2A1C]/25 group-hover:shadow-xl group-hover:shadow-[#5A2A1C]/30 transition-all duration-300 mb-6"
-                    style={{ background: 'linear-gradient(135deg, #5A2A1C 0%, #3E1718 100%)' }}
-                  >
-                    <DynamicIcon name={card.icon} className="w-10 h-10 lg:w-12 lg:h-12" />
-                  </div>
-                  <p className="text-lg lg:text-xl font-medium leading-relaxed" style={{ color: '#3E1718' }}>
-                    {card.text}
-                  </p>
                 </div>
               </div>
             ))}
