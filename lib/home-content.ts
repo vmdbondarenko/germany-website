@@ -34,6 +34,7 @@ export type HeroContent = {
   eyebrow: string
   title: string
   subtitle: string
+  image: string
   primaryCta: { label: string; href: string }
   secondaryCta: { label: string; href: string }
 }
@@ -131,6 +132,7 @@ export async function getHomeContent(locale: Locale): Promise<LocalizedHome> {
       eyebrow: eyebrow("hero", DEFAULT_HERO.eyebrow),
       title: heading("hero", DEFAULT_HERO.title),
       subtitle: description("hero", DEFAULT_HERO.subtitle),
+      image: byId.get("hero")?.imageUrl || DEFAULT_HERO.image,
       primaryCta: cta("hero", "primary", DEFAULT_HERO.primaryCta, HERO_PRIMARY_HREF),
       secondaryCta: cta("hero", "secondary", DEFAULT_HERO.secondaryCta, HERO_SECONDARY_HREF),
     },

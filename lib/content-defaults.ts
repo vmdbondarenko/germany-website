@@ -27,6 +27,8 @@ export const DEFAULT_HERO = {
   ),
   primaryCta: t("Projekte ansehen", "View projects"),
   secondaryCta: t("Über uns", "About us"),
+  // Background photo (shared DE/EN) — HomeSection.imageUrl overrides this.
+  image: "/images/hero-main.jpg",
 }
 
 export const DEFAULT_PROCESS = {

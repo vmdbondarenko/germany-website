@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Loader2, Plus, Trash2, Save, Upload, RotateCcw, ArrowUp, ArrowDown } from 'lucide-react'
-import { DEFAULT_BAUWEISE, DEFAULT_ERSTE_BAYERISCHE } from '@/lib/content-defaults'
+import { DEFAULT_BAUWEISE, DEFAULT_ERSTE_BAYERISCHE, DEFAULT_HERO } from '@/lib/content-defaults'
 
 // Which fields each homepage section exposes in admin. Mirrors what
 // lib/home-content.ts actually reads back per section id.
@@ -22,6 +22,9 @@ type SectionDef = {
   // restored by "reset".
   hasImages?: boolean
   imageFallbacks?: [string, string]
+  // Single image slot (saved to imageUrl). label/fallback drive the preview,
+  // placeholder and "reset". Shared DE/EN.
+  singleImage?: { label: string; fallback: string }
   // Small bilingual label field, saved to secondaryCtaLabelDe/En.
   badgeLabel?: string
   // Single primary button: bilingual label (primaryCtaLabelDe/En) + link (primaryCtaHref).
@@ -31,7 +34,7 @@ type SectionDef = {
 const SECTIONS: SectionDef[] = [
   // Order mirrors the public homepage (app/[locale]/page.tsx + the About
   // component). Erste Bayerische is rendered between 'bauweise' and 'process'.
-  { id: 'hero', label: 'Hero', fields: ['eyebrow', 'heading', 'description', 'cta'], hasItems: false },
+  { id: 'hero', label: 'Hero', fields: ['eyebrow', 'heading', 'description', 'cta'], hasItems: false, singleImage: { label: 'Hero-Bild', fallback: DEFAULT_HERO.image }, hint: 'Das Hero-Bild wird für DE und EN gemeinsam verwendet.' },
   { id: 'stats', label: 'Kennzahlen (Stats)', fields: [], hasItems: true, hint: 'Pro Kennzahl: Titel = Wert (z. B. „10+“), Beschreibung = Label (z. B. „Jahre Erfahrung“).' },
   { id: 'upcoming', label: 'Demnächst — Überschrift', fields: ['eyebrow', 'heading', 'description'], hasItems: false, hint: 'Überschrift = 1. Zeile, Eyebrow = 2. (hervorgehobene) Zeile, Beschreibung = Untertitel.' },
   { id: 'new-cities', label: 'Neue Städte — Überschrift', fields: ['heading', 'description'], hasItems: true, hint: 'Überschrift + Untertitel; ein Eintrag (Titel + Beschreibung) = die Fußnote.' },
@@ -599,6 +602,46 @@ export default function HomeAdminPage() {
                 </div>
               </div>
             )}
+
+            {def.singleImage && (() => {
+              const value = s.imageUrl
+              const fallback = def.singleImage.fallback
+              const preview = value || fallback
+              const usingFallback = !value
+              const key = `${def.id}:imageUrl`
+              return (
+                <div className="space-y-2 border-t pt-4">
+                  <p className="text-sm font-medium text-gray-700">{def.singleImage.label} <span className="font-normal text-gray-400">(DE &amp; EN gemeinsam)</span></p>
+                  <div className="grid grid-cols-1 sm:grid-cols-[12rem_1fr] gap-3 items-start">
+                    <div className="relative w-48 h-28 rounded-lg overflow-hidden bg-gray-100 border border-gray-200">
+                      {preview ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={preview} alt={`${def.singleImage.label} Vorschau`} className="w-full h-full object-cover" />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-xs text-gray-400">kein Bild</div>
+                      )}
+                    </div>
+                    <div className="space-y-2">
+                      {usingFallback && <span className="text-[11px] text-gray-400">Standardbild</span>}
+                      <Input value={value} placeholder={fallback} onChange={(e) => patch(def.id, { imageUrl: e.target.value })} />
+                      <div className="flex items-center gap-2">
+                        <label className="inline-flex items-center gap-1.5 text-sm px-3 py-1.5 rounded-md border border-gray-200 cursor-pointer hover:bg-gray-50">
+                          {uploading === key ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
+                          <span>{value ? 'Ersetzen' : 'Hochladen'}</span>
+                          <input type="file" accept="image/*" className="hidden" disabled={uploading === key}
+                            onChange={(e) => { const f = e.target.files?.[0]; if (f) uploadImage(def.id, 'imageUrl', f); e.target.value = '' }} />
+                        </label>
+                        <Button type="button" variant="ghost" size="sm" disabled={usingFallback}
+                          onClick={() => patch(def.id, { imageUrl: '' })}>
+                          <RotateCcw className="h-4 w-4 mr-1.5" /> Zurücksetzen
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                  <p className="text-xs text-gray-400">„Zurücksetzen“ stellt das im Code hinterlegte Standardbild wieder her. Änderungen erst nach „Speichern“ aktiv.</p>
+                </div>
+              )
+            })()}
 
             {def.hasImages && (
               <div className="space-y-4 border-t pt-4">

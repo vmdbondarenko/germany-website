@@ -10,7 +10,7 @@ export function Hero({ content }: { content: HeroContent }) {
       {/* Background Image */}
       <div className="absolute inset-0">
         <Image
-          src="/images/hero-main.jpg"
+          src={content.image}
           alt={content.title}
           fill
           className="object-cover"
