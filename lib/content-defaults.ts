@@ -109,9 +109,6 @@ export const DEFAULT_BUYING = {
     ],
     ctaLabel: t("Kontakt", "Contact"),
     ctaHref: "#kontakt",
-    // The four brand swatches shown on the right (previously the logo.png image).
-    // Shared across locales; overridable per HomeSection item.
-    swatches: ["#6E2E2A", "#5A2A1C", "#3E1718", "#120A0A"],
   },
 }
 

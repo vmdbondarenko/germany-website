@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Loader2, Plus, Trash2, Save, Upload, RotateCcw, ArrowUp, ArrowDown } from 'lucide-react'
-import { DEFAULT_BAUWEISE, DEFAULT_ERSTE_BAYERISCHE, DEFAULT_BUYING } from '@/lib/content-defaults'
+import { DEFAULT_BAUWEISE, DEFAULT_ERSTE_BAYERISCHE } from '@/lib/content-defaults'
 
 // Which fields each homepage section exposes in admin. Mirrors what
 // lib/home-content.ts actually reads back per section id.
@@ -26,8 +26,6 @@ type SectionDef = {
   badgeLabel?: string
   // Single primary button: bilingual label (primaryCtaLabelDe/En) + link (primaryCtaHref).
   singleButtonLabel?: string
-  // N editable colour swatches, stored one-per-item in titleDe (locale-neutral).
-  swatches?: { count: number; fallback: string[] }
 }
 
 const SECTIONS: SectionDef[] = [
@@ -45,7 +43,7 @@ const SECTIONS: SectionDef[] = [
   { id: 'services', label: 'Wie wir helfen (Services)', fields: ['heading', 'description'], hasItems: true },
   { id: 'interior', label: 'Innenräume', fields: ['heading', 'description'], hasItems: false },
   { id: 'buying', label: 'Kaufprozess — Überschrift', fields: ['heading'], hasItems: false },
-  { id: 'investor', label: 'Über das Unternehmen', fields: ['eyebrow', 'heading', 'description'], hasItems: false, badgeLabel: 'Kleines Label', singleButtonLabel: 'Button', swatches: { count: 4, fallback: DEFAULT_BUYING.investor.swatches }, hint: 'Beschreibung = Fließtext (Absätze durch Leerzeile trennen). „Kleines Label“ steht über dem Text. Die vier Farbfelder erscheinen rechts.' },
+  { id: 'investor', label: 'Über das Unternehmen', fields: ['eyebrow', 'heading', 'description'], hasItems: false, badgeLabel: 'Kleines Label', singleButtonLabel: 'Button', hint: 'Beschreibung = Fließtext (Absätze durch Leerzeile trennen). „Kleines Label“ steht über dem Text.' },
 ]
 
 type Item = {
@@ -256,11 +254,6 @@ export default function HomeAdminPage() {
                   })) ?? [],
                 }
               : {}),
-          }
-          // Swatch sections: ensure all N colours are present (fall back to the
-          // code defaults) so every swatch renders and is saved as an item.
-          if (def.swatches && next[def.id].items.length === 0) {
-            next[def.id].items = def.swatches.fallback.slice(0, def.swatches.count).map((c) => ({ ...EMPTY_ITEM, titleDe: c }))
           }
         }
         setState(next)
@@ -603,32 +596,6 @@ export default function HomeAdminPage() {
                 <div>
                   <Label className="text-xs text-gray-500">{def.singleButtonLabel} · Link</Label>
                   <Input value={s.primaryCtaHref} onChange={(e) => patch(def.id, { primaryCtaHref: e.target.value })} placeholder="#kontakt" />
-                </div>
-              </div>
-            )}
-
-            {def.swatches && (
-              <div className="space-y-3 border-t pt-3">
-                <p className="text-sm font-medium text-gray-700">Farbfelder <span className="font-normal text-gray-400">(rechts, DE &amp; EN gemeinsam)</span></p>
-                <div className="flex flex-wrap gap-4">
-                  {Array.from({ length: def.swatches.count }).map((_, i) => {
-                    const value = s.items[i]?.titleDe || def.swatches!.fallback[i] || '#000000'
-                    const setColor = (v: string) => {
-                      const items = Array.from({ length: def.swatches!.count }).map((_, k) => ({
-                        ...EMPTY_ITEM,
-                        ...(s.items[k] ?? {}),
-                        titleDe: k === i ? v : (s.items[k]?.titleDe || def.swatches!.fallback[k] || ''),
-                      }))
-                      patch(def.id, { items })
-                    }
-                    return (
-                      <div key={i} className="flex items-center gap-2">
-                        <input type="color" value={value} onChange={(e) => setColor(e.target.value)}
-                          className="h-9 w-12 rounded border border-gray-200 p-0.5 cursor-pointer" aria-label={`Farbe ${i + 1}`} />
-                        <Input className="w-28" value={value} onChange={(e) => setColor(e.target.value)} />
-                      </div>
-                    )
-                  })}
                 </div>
               </div>
             )}
