@@ -50,13 +50,17 @@ export async function POST(request: Request) {
       candidate = `${base}-${n}${ext}`
     }
 
+    // The connected store is private-only, so blobs must be uploaded with
+    // private access. Their canonical URL (…​.private.blob.vercel-storage.com)
+    // needs an auth header to read and isn't an allowed next/image host, so we
+    // hand back a same-origin proxy URL (/api/media) that streams the bytes.
     const blob = await put(candidate, file, {
-      access: 'public',
+      access: 'private',
       addRandomSuffix: false,
       allowOverwrite: false,
       ...auth,
     })
-    return NextResponse.json({ url: blob.url })
+    return NextResponse.json({ url: `/api/media?u=${encodeURIComponent(blob.url)}`, pathname: blob.pathname })
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err)
     console.error('Blob upload error:', message)
