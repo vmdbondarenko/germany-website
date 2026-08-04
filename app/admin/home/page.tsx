@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Fragment } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -31,20 +31,21 @@ type SectionDef = {
 }
 
 const SECTIONS: SectionDef[] = [
+  // Order mirrors the public homepage (app/[locale]/page.tsx + the About
+  // component). Erste Bayerische is rendered between 'bauweise' and 'process'.
   { id: 'hero', label: 'Hero', fields: ['eyebrow', 'heading', 'description', 'cta'], hasItems: false },
+  { id: 'stats', label: 'Kennzahlen (Stats)', fields: [], hasItems: true, hint: 'Pro Kennzahl: Titel = Wert (z. B. „10+“), Beschreibung = Label (z. B. „Jahre Erfahrung“).' },
+  { id: 'upcoming', label: 'Demnächst — Überschrift', fields: ['eyebrow', 'heading', 'description'], hasItems: false, hint: 'Überschrift = 1. Zeile, Eyebrow = 2. (hervorgehobene) Zeile, Beschreibung = Untertitel.' },
+  { id: 'new-cities', label: 'Neue Städte — Überschrift', fields: ['heading', 'description'], hasItems: true, hint: 'Überschrift + Untertitel; ein Eintrag (Titel + Beschreibung) = die Fußnote.' },
+  { id: 'since-founding', label: 'Seit unserer Gründung', fields: ['heading'], hasItems: true, hint: 'Ein Eintrag pro Zeitraum: Titel = Zeitraum; Text = Länderzeilen (z. B. „Ukraine: 820 Familien …“), je Land eine Zeile.' },
+  { id: 'values', label: 'Unsere Werte', fields: ['eyebrow', 'heading'], hasItems: true, hint: 'Pro Karte: Titel + Beschreibung. Reihenfolge = Anzeigereihenfolge (Farben sind fest).' },
+  { id: 'bauweise', label: 'Bauweise und Entwicklung', fields: ['heading', 'description', 'cta'], hasItems: false, hasImages: true, imageFallbacks: [DEFAULT_BAUWEISE.image1, DEFAULT_BAUWEISE.image2], hint: 'Absätze in der Beschreibung durch eine Leerzeile trennen. Nur der primäre CTA (Label + Link) wird verwendet. Bilder werden für DE und EN gemeinsam verwendet.' },
   { id: 'process', label: 'Warum wir (Process)', fields: ['heading', 'description'], hasItems: true },
   { id: 'distinguishes', label: 'Was uns auszeichnet', fields: ['eyebrow', 'heading', 'description'], hasItems: true },
   { id: 'services', label: 'Wie wir helfen (Services)', fields: ['heading', 'description'], hasItems: true },
   { id: 'interior', label: 'Innenräume', fields: ['heading', 'description'], hasItems: false },
   { id: 'buying', label: 'Kaufprozess — Überschrift', fields: ['heading'], hasItems: false },
   { id: 'investor', label: 'Über das Unternehmen', fields: ['eyebrow', 'heading', 'description'], hasItems: false, badgeLabel: 'Kleines Label', singleButtonLabel: 'Button', swatches: { count: 4, fallback: DEFAULT_BUYING.investor.swatches }, hint: 'Beschreibung = Fließtext (Absätze durch Leerzeile trennen). „Kleines Label“ steht über dem Text. Die vier Farbfelder erscheinen rechts.' },
-  // ── About-page blocks (Phase 2 Group A) ──
-  { id: 'stats', label: 'Kennzahlen (Stats)', fields: [], hasItems: true, hint: 'Pro Kennzahl: Titel = Wert (z. B. „10+“), Beschreibung = Label (z. B. „Jahre Erfahrung“).' },
-  { id: 'values', label: 'Unsere Werte', fields: ['eyebrow', 'heading'], hasItems: true, hint: 'Pro Karte: Titel + Beschreibung. Reihenfolge = Anzeigereihenfolge (Farben sind fest).' },
-  { id: 'bauweise', label: 'Bauweise und Entwicklung', fields: ['heading', 'description', 'cta'], hasItems: false, hasImages: true, imageFallbacks: [DEFAULT_BAUWEISE.image1, DEFAULT_BAUWEISE.image2], hint: 'Absätze in der Beschreibung durch eine Leerzeile trennen. Nur der primäre CTA (Label + Link) wird verwendet. Bilder werden für DE und EN gemeinsam verwendet.' },
-  { id: 'upcoming', label: 'Demnächst — Überschrift', fields: ['eyebrow', 'heading', 'description'], hasItems: false, hint: 'Überschrift = 1. Zeile, Eyebrow = 2. (hervorgehobene) Zeile, Beschreibung = Untertitel.' },
-  { id: 'new-cities', label: 'Neue Städte — Überschrift', fields: ['heading', 'description'], hasItems: true, hint: 'Überschrift + Untertitel; ein Eintrag (Titel + Beschreibung) = die Fußnote.' },
-  { id: 'since-founding', label: 'Seit unserer Gründung', fields: ['heading'], hasItems: true, hint: 'Ein Eintrag pro Zeitraum: Titel = Zeitraum; Text = Länderzeilen (z. B. „Ukraine: 820 Familien …“), je Land eine Zeile.' },
 ]
 
 type Item = {
@@ -398,6 +399,149 @@ export default function HomeAdminPage() {
     return <div className="p-8 flex items-center gap-2 text-gray-500"><Loader2 className="h-4 w-4 animate-spin" /> Laden…</div>
   }
 
+  const ersteBayerischeEditor = (
+      <section className="border-2 border-[#6E2E2A]/20 rounded-xl p-5 space-y-5 bg-white">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <h2 className="text-lg font-semibold text-gray-800">
+              Erste Bayerische <span className="text-sm font-normal text-gray-400">— Investitionsabschnitt</span>
+            </h2>
+            <p className="text-xs text-gray-400 mt-0.5">
+              Erscheint auf der Startseite direkt nach „Bauweise und Entwicklung“. Bilder werden für DE &amp; EN gemeinsam verwendet.
+            </p>
+          </div>
+          <Button onClick={saveEb} disabled={savingEb} size="sm" style={{ backgroundColor: '#6E2E2A' }}>
+            {savingEb ? <Loader2 className="h-4 w-4 mr-1.5 animate-spin" /> : <Save className="h-4 w-4 mr-1.5" />}
+            {savedEb ? 'Gespeichert ✓' : 'Speichern'}
+          </Button>
+        </div>
+
+        <BilingualInput label="Projektname" de={eb.projectNameDe} en={eb.projectNameEn}
+          onDe={(v) => ebPatch({ projectNameDe: v })} onEn={(v) => ebPatch({ projectNameEn: v })} />
+        <BilingualInput label="Hauptüberschrift" de={eb.headingDe} en={eb.headingEn}
+          onDe={(v) => ebPatch({ headingDe: v })} onEn={(v) => ebPatch({ headingEn: v })} />
+        <BilingualInput label="Einleitungstext" textarea de={eb.introDe} en={eb.introEn}
+          onDe={(v) => ebPatch({ introDe: v })} onEn={(v) => ebPatch({ introEn: v })} />
+
+        {/* Hero image */}
+        <div className="border-t pt-4 space-y-2">
+          <p className="text-sm font-medium text-gray-700">Hero-Bild</p>
+          <EbImageField label="Hero" value={eb.hero.imageUrl} fallback={EB_FB.hero}
+            altDe={eb.hero.altDe} altEn={eb.hero.altEn} busy={uploading === 'eb:hero'}
+            onFile={(f) => ebUploadImg('hero', f)} onUrl={(v) => ebPatchImg('hero', { imageUrl: v })}
+            onAltDe={(v) => ebPatchImg('hero', { altDe: v })} onAltEn={(v) => ebPatchImg('hero', { altEn: v })} />
+        </div>
+
+        {/* Text subsections with supporting images */}
+        {(['location', 'nature', 'see'] as const).map((slot) => {
+          const labels: Record<typeof slot, string> = {
+            location: 'Abschnitt 1 — Lage & Anbindung',
+            nature: 'Abschnitt 2 — Natur & Umgebung',
+            see: 'Abschnitt 3 — Zeuthener See & Marina',
+          }
+          const b = eb[slot]
+          return (
+            <div key={slot} className="border-t pt-4 space-y-3">
+              <p className="text-sm font-medium text-gray-700">{labels[slot]}</p>
+              <BilingualInput label="Zwischenüberschrift" de={b.titleDe} en={b.titleEn}
+                onDe={(v) => ebPatchBlock(slot, { titleDe: v })} onEn={(v) => ebPatchBlock(slot, { titleEn: v })} />
+              <BilingualInput label="Text" textarea de={b.bodyDe} en={b.bodyEn}
+                onDe={(v) => ebPatchBlock(slot, { bodyDe: v })} onEn={(v) => ebPatchBlock(slot, { bodyEn: v })} />
+              <EbImageField label="Begleitbild" value={b.imageUrl} fallback={EB_FB[slot]}
+                altDe={b.altDe} altEn={b.altEn} busy={uploading === `eb:${slot}`}
+                onFile={(f) => ebUploadBlock(slot, f)} onUrl={(v) => ebPatchBlock(slot, { imageUrl: v })}
+                onAltDe={(v) => ebPatchBlock(slot, { altDe: v })} onAltEn={(v) => ebPatchBlock(slot, { altEn: v })} />
+            </div>
+          )
+        })}
+
+        {/* Wide full-width image */}
+        <div className="border-t pt-4 space-y-2">
+          <p className="text-sm font-medium text-gray-700">Weites Naturbild (volle Breite)</p>
+          <EbImageField label="Weites Bild" value={eb.wide.imageUrl} fallback={EB_FB.wide}
+            altDe={eb.wide.altDe} altEn={eb.wide.altEn} busy={uploading === 'eb:wide'}
+            onFile={(f) => ebUploadImg('wide', f)} onUrl={(v) => ebPatchImg('wide', { imageUrl: v })}
+            onAltDe={(v) => ebPatchImg('wide', { altDe: v })} onAltEn={(v) => ebPatchImg('wide', { altEn: v })} />
+        </div>
+
+        {/* Closing paragraph */}
+        <div className="border-t pt-4 space-y-3">
+          <p className="text-sm font-medium text-gray-700">Abschlussabsatz</p>
+          <BilingualInput label="Text" textarea de={eb.closingBodyDe} en={eb.closingBodyEn}
+            onDe={(v) => ebPatch({ closingBodyDe: v })} onEn={(v) => ebPatch({ closingBodyEn: v })} />
+        </div>
+
+        {/* Travel entries */}
+        <div className="border-t pt-4 space-y-3">
+          <p className="text-sm font-medium text-gray-700">Reisezeiten &amp; Infrastruktur</p>
+          {eb.travel.map((t, idx) => (
+            <div key={idx} className="border border-gray-100 rounded-lg p-3 space-y-2 bg-gray-50">
+              <div className="flex items-center justify-between gap-2">
+                <Input className="max-w-[240px]" value={t.icon} placeholder="Icon (Train, Route, ShoppingCart, Plane)"
+                  onChange={(e) => ebPatchTravel(idx, { icon: e.target.value })} />
+                <div className="flex items-center gap-1">
+                  <Button variant="ghost" size="sm" disabled={idx === 0} onClick={() => ebPatch({ travel: ebMove(eb.travel, idx, -1) })}>
+                    <ArrowUp className="h-4 w-4" />
+                  </Button>
+                  <Button variant="ghost" size="sm" disabled={idx === eb.travel.length - 1} onClick={() => ebPatch({ travel: ebMove(eb.travel, idx, 1) })}>
+                    <ArrowDown className="h-4 w-4" />
+                  </Button>
+                  <Button variant="ghost" size="sm" onClick={() => ebPatch({ travel: eb.travel.filter((_, i) => i !== idx) })}>
+                    <Trash2 className="h-4 w-4 text-red-500" />
+                  </Button>
+                </div>
+              </div>
+              <BilingualInput label="Titel" de={t.titleDe} en={t.titleEn}
+                onDe={(v) => ebPatchTravel(idx, { titleDe: v })} onEn={(v) => ebPatchTravel(idx, { titleEn: v })} />
+              <BilingualInput label="Beschreibung (optional)" de={t.descDe} en={t.descEn}
+                onDe={(v) => ebPatchTravel(idx, { descDe: v })} onEn={(v) => ebPatchTravel(idx, { descEn: v })} />
+              <BilingualInput label="Zeit / Distanz" de={t.metaDe} en={t.metaEn}
+                onDe={(v) => ebPatchTravel(idx, { metaDe: v })} onEn={(v) => ebPatchTravel(idx, { metaEn: v })} />
+            </div>
+          ))}
+          <Button variant="outline" size="sm"
+            onClick={() => ebPatch({ travel: [...eb.travel, { icon: 'MapPin', titleDe: '', titleEn: '', descDe: '', descEn: '', metaDe: '', metaEn: '' }] })}>
+            <Plus className="h-4 w-4 mr-1.5" /> Eintrag hinzufügen
+          </Button>
+          <p className="text-xs text-gray-400">Icons: Train, Route, ShoppingCart, Plane, MapPin, Home, Trees …</p>
+        </div>
+
+        {/* Gallery */}
+        <div className="border-t pt-4 space-y-3">
+          <p className="text-sm font-medium text-gray-700">Galerie <span className="font-normal text-gray-400">(optional, 3–6 Bilder)</span></p>
+          {eb.gallery.map((g, idx) => (
+            <div key={idx} className="space-y-2">
+              <div className="flex items-center justify-between">
+                <Label className="text-xs text-gray-500">Galeriebild {idx + 1}</Label>
+                <div className="flex items-center gap-1">
+                  <Button variant="ghost" size="sm" disabled={idx === 0} onClick={() => ebPatch({ gallery: ebMove(eb.gallery, idx, -1) })}>
+                    <ArrowUp className="h-4 w-4" />
+                  </Button>
+                  <Button variant="ghost" size="sm" disabled={idx === eb.gallery.length - 1} onClick={() => ebPatch({ gallery: ebMove(eb.gallery, idx, 1) })}>
+                    <ArrowDown className="h-4 w-4" />
+                  </Button>
+                  <Button variant="ghost" size="sm" onClick={() => ebPatch({ gallery: eb.gallery.filter((_, i) => i !== idx) })}>
+                    <Trash2 className="h-4 w-4 text-red-500" />
+                  </Button>
+                </div>
+              </div>
+              <EbImageField label={`Galeriebild ${idx + 1}`} value={g.imageUrl} fallback=""
+                altDe={g.altDe} altEn={g.altEn} busy={uploading === `eb:gallery:${idx}`}
+                onFile={(f) => ebUploadGallery(idx, f)} onUrl={(v) => ebPatchGallery(idx, { imageUrl: v })}
+                onAltDe={(v) => ebPatchGallery(idx, { altDe: v })} onAltEn={(v) => ebPatchGallery(idx, { altEn: v })} />
+            </div>
+          ))}
+          <Button variant="outline" size="sm" onClick={() => ebPatch({ gallery: [...eb.gallery, { imageUrl: '', altDe: '', altEn: '' }] })}>
+            <Plus className="h-4 w-4 mr-1.5" /> Galeriebild hinzufügen
+          </Button>
+        </div>
+
+        <p className="text-xs text-gray-400">
+          Leere Text-/Bildfelder verwenden den im Code hinterlegten Standard. „Zurücksetzen“ stellt das Standardbild wieder her. Änderungen erst nach „Speichern“ aktiv.
+        </p>
+      </section>
+  )
+
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-8">
       <div>
@@ -409,7 +553,8 @@ export default function HomeAdminPage() {
         const s = state[def.id]
         if (!s) return null
         return (
-          <section key={def.id} className="border border-gray-200 rounded-xl p-5 space-y-4 bg-white">
+          <Fragment key={def.id}>
+            <section className="border border-gray-200 rounded-xl p-5 space-y-4 bg-white">
             <div className="flex items-center justify-between">
               <h2 className="text-lg font-semibold text-gray-800">{def.label}</h2>
               <Button onClick={() => save(def.id)} disabled={saving === def.id} size="sm" style={{ backgroundColor: '#6E2E2A' }}>
@@ -557,151 +702,11 @@ export default function HomeAdminPage() {
                 <p className="text-xs text-gray-400">Icon-Namen: MapPin, Home, Trees, Settings, Layers, PenLine, ArrowUpToLine, HandCoins, Hammer, KeyRound, ShieldCheck, Sparkles</p>
               </div>
             )}
-          </section>
+            </section>
+            {def.id === 'bauweise' && ersteBayerischeEditor}
+          </Fragment>
         )
       })}
-
-      {/* ── Erste Bayerische — dedicated investment editor ── */}
-      <section className="border-2 border-[#6E2E2A]/20 rounded-xl p-5 space-y-5 bg-white">
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <h2 className="text-lg font-semibold text-gray-800">
-              Erste Bayerische <span className="text-sm font-normal text-gray-400">— Investitionsabschnitt</span>
-            </h2>
-            <p className="text-xs text-gray-400 mt-0.5">
-              Erscheint auf der Startseite direkt nach „Bauweise und Entwicklung“. Bilder werden für DE &amp; EN gemeinsam verwendet.
-            </p>
-          </div>
-          <Button onClick={saveEb} disabled={savingEb} size="sm" style={{ backgroundColor: '#6E2E2A' }}>
-            {savingEb ? <Loader2 className="h-4 w-4 mr-1.5 animate-spin" /> : <Save className="h-4 w-4 mr-1.5" />}
-            {savedEb ? 'Gespeichert ✓' : 'Speichern'}
-          </Button>
-        </div>
-
-        <BilingualInput label="Projektname" de={eb.projectNameDe} en={eb.projectNameEn}
-          onDe={(v) => ebPatch({ projectNameDe: v })} onEn={(v) => ebPatch({ projectNameEn: v })} />
-        <BilingualInput label="Hauptüberschrift" de={eb.headingDe} en={eb.headingEn}
-          onDe={(v) => ebPatch({ headingDe: v })} onEn={(v) => ebPatch({ headingEn: v })} />
-        <BilingualInput label="Einleitungstext" textarea de={eb.introDe} en={eb.introEn}
-          onDe={(v) => ebPatch({ introDe: v })} onEn={(v) => ebPatch({ introEn: v })} />
-
-        {/* Hero image */}
-        <div className="border-t pt-4 space-y-2">
-          <p className="text-sm font-medium text-gray-700">Hero-Bild</p>
-          <EbImageField label="Hero" value={eb.hero.imageUrl} fallback={EB_FB.hero}
-            altDe={eb.hero.altDe} altEn={eb.hero.altEn} busy={uploading === 'eb:hero'}
-            onFile={(f) => ebUploadImg('hero', f)} onUrl={(v) => ebPatchImg('hero', { imageUrl: v })}
-            onAltDe={(v) => ebPatchImg('hero', { altDe: v })} onAltEn={(v) => ebPatchImg('hero', { altEn: v })} />
-        </div>
-
-        {/* Text subsections with supporting images */}
-        {(['location', 'nature', 'see'] as const).map((slot) => {
-          const labels: Record<typeof slot, string> = {
-            location: 'Abschnitt 1 — Lage & Anbindung',
-            nature: 'Abschnitt 2 — Natur & Umgebung',
-            see: 'Abschnitt 3 — Zeuthener See & Marina',
-          }
-          const b = eb[slot]
-          return (
-            <div key={slot} className="border-t pt-4 space-y-3">
-              <p className="text-sm font-medium text-gray-700">{labels[slot]}</p>
-              <BilingualInput label="Zwischenüberschrift" de={b.titleDe} en={b.titleEn}
-                onDe={(v) => ebPatchBlock(slot, { titleDe: v })} onEn={(v) => ebPatchBlock(slot, { titleEn: v })} />
-              <BilingualInput label="Text" textarea de={b.bodyDe} en={b.bodyEn}
-                onDe={(v) => ebPatchBlock(slot, { bodyDe: v })} onEn={(v) => ebPatchBlock(slot, { bodyEn: v })} />
-              <EbImageField label="Begleitbild" value={b.imageUrl} fallback={EB_FB[slot]}
-                altDe={b.altDe} altEn={b.altEn} busy={uploading === `eb:${slot}`}
-                onFile={(f) => ebUploadBlock(slot, f)} onUrl={(v) => ebPatchBlock(slot, { imageUrl: v })}
-                onAltDe={(v) => ebPatchBlock(slot, { altDe: v })} onAltEn={(v) => ebPatchBlock(slot, { altEn: v })} />
-            </div>
-          )
-        })}
-
-        {/* Wide full-width image */}
-        <div className="border-t pt-4 space-y-2">
-          <p className="text-sm font-medium text-gray-700">Weites Naturbild (volle Breite)</p>
-          <EbImageField label="Weites Bild" value={eb.wide.imageUrl} fallback={EB_FB.wide}
-            altDe={eb.wide.altDe} altEn={eb.wide.altEn} busy={uploading === 'eb:wide'}
-            onFile={(f) => ebUploadImg('wide', f)} onUrl={(v) => ebPatchImg('wide', { imageUrl: v })}
-            onAltDe={(v) => ebPatchImg('wide', { altDe: v })} onAltEn={(v) => ebPatchImg('wide', { altEn: v })} />
-        </div>
-
-        {/* Closing paragraph */}
-        <div className="border-t pt-4 space-y-3">
-          <p className="text-sm font-medium text-gray-700">Abschlussabsatz</p>
-          <BilingualInput label="Text" textarea de={eb.closingBodyDe} en={eb.closingBodyEn}
-            onDe={(v) => ebPatch({ closingBodyDe: v })} onEn={(v) => ebPatch({ closingBodyEn: v })} />
-        </div>
-
-        {/* Travel entries */}
-        <div className="border-t pt-4 space-y-3">
-          <p className="text-sm font-medium text-gray-700">Reisezeiten &amp; Infrastruktur</p>
-          {eb.travel.map((t, idx) => (
-            <div key={idx} className="border border-gray-100 rounded-lg p-3 space-y-2 bg-gray-50">
-              <div className="flex items-center justify-between gap-2">
-                <Input className="max-w-[240px]" value={t.icon} placeholder="Icon (Train, Route, ShoppingCart, Plane)"
-                  onChange={(e) => ebPatchTravel(idx, { icon: e.target.value })} />
-                <div className="flex items-center gap-1">
-                  <Button variant="ghost" size="sm" disabled={idx === 0} onClick={() => ebPatch({ travel: ebMove(eb.travel, idx, -1) })}>
-                    <ArrowUp className="h-4 w-4" />
-                  </Button>
-                  <Button variant="ghost" size="sm" disabled={idx === eb.travel.length - 1} onClick={() => ebPatch({ travel: ebMove(eb.travel, idx, 1) })}>
-                    <ArrowDown className="h-4 w-4" />
-                  </Button>
-                  <Button variant="ghost" size="sm" onClick={() => ebPatch({ travel: eb.travel.filter((_, i) => i !== idx) })}>
-                    <Trash2 className="h-4 w-4 text-red-500" />
-                  </Button>
-                </div>
-              </div>
-              <BilingualInput label="Titel" de={t.titleDe} en={t.titleEn}
-                onDe={(v) => ebPatchTravel(idx, { titleDe: v })} onEn={(v) => ebPatchTravel(idx, { titleEn: v })} />
-              <BilingualInput label="Beschreibung (optional)" de={t.descDe} en={t.descEn}
-                onDe={(v) => ebPatchTravel(idx, { descDe: v })} onEn={(v) => ebPatchTravel(idx, { descEn: v })} />
-              <BilingualInput label="Zeit / Distanz" de={t.metaDe} en={t.metaEn}
-                onDe={(v) => ebPatchTravel(idx, { metaDe: v })} onEn={(v) => ebPatchTravel(idx, { metaEn: v })} />
-            </div>
-          ))}
-          <Button variant="outline" size="sm"
-            onClick={() => ebPatch({ travel: [...eb.travel, { icon: 'MapPin', titleDe: '', titleEn: '', descDe: '', descEn: '', metaDe: '', metaEn: '' }] })}>
-            <Plus className="h-4 w-4 mr-1.5" /> Eintrag hinzufügen
-          </Button>
-          <p className="text-xs text-gray-400">Icons: Train, Route, ShoppingCart, Plane, MapPin, Home, Trees …</p>
-        </div>
-
-        {/* Gallery */}
-        <div className="border-t pt-4 space-y-3">
-          <p className="text-sm font-medium text-gray-700">Galerie <span className="font-normal text-gray-400">(optional, 3–6 Bilder)</span></p>
-          {eb.gallery.map((g, idx) => (
-            <div key={idx} className="space-y-2">
-              <div className="flex items-center justify-between">
-                <Label className="text-xs text-gray-500">Galeriebild {idx + 1}</Label>
-                <div className="flex items-center gap-1">
-                  <Button variant="ghost" size="sm" disabled={idx === 0} onClick={() => ebPatch({ gallery: ebMove(eb.gallery, idx, -1) })}>
-                    <ArrowUp className="h-4 w-4" />
-                  </Button>
-                  <Button variant="ghost" size="sm" disabled={idx === eb.gallery.length - 1} onClick={() => ebPatch({ gallery: ebMove(eb.gallery, idx, 1) })}>
-                    <ArrowDown className="h-4 w-4" />
-                  </Button>
-                  <Button variant="ghost" size="sm" onClick={() => ebPatch({ gallery: eb.gallery.filter((_, i) => i !== idx) })}>
-                    <Trash2 className="h-4 w-4 text-red-500" />
-                  </Button>
-                </div>
-              </div>
-              <EbImageField label={`Galeriebild ${idx + 1}`} value={g.imageUrl} fallback=""
-                altDe={g.altDe} altEn={g.altEn} busy={uploading === `eb:gallery:${idx}`}
-                onFile={(f) => ebUploadGallery(idx, f)} onUrl={(v) => ebPatchGallery(idx, { imageUrl: v })}
-                onAltDe={(v) => ebPatchGallery(idx, { altDe: v })} onAltEn={(v) => ebPatchGallery(idx, { altEn: v })} />
-            </div>
-          ))}
-          <Button variant="outline" size="sm" onClick={() => ebPatch({ gallery: [...eb.gallery, { imageUrl: '', altDe: '', altEn: '' }] })}>
-            <Plus className="h-4 w-4 mr-1.5" /> Galeriebild hinzufügen
-          </Button>
-        </div>
-
-        <p className="text-xs text-gray-400">
-          Leere Text-/Bildfelder verwenden den im Code hinterlegten Standard. „Zurücksetzen“ stellt das Standardbild wieder her. Änderungen erst nach „Speichern“ aktiv.
-        </p>
-      </section>
     </div>
   )
 }
