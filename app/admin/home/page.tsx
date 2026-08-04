@@ -269,11 +269,22 @@ export default function HomeAdminPage() {
       const fd = new FormData()
       fd.append('file', file)
       const res = await fetch('/api/admin/upload', { method: 'POST', body: fd })
-      if (!res.ok) throw new Error('upload failed')
+      if (!res.ok) {
+        // Surface the actual server error (e.g. missing blob token, 401, 413)
+        // instead of a generic message.
+        let detail = `HTTP ${res.status}`
+        try {
+          const body = await res.json()
+          if (body?.error) detail = body.error
+        } catch {
+          /* non-JSON body */
+        }
+        throw new Error(detail)
+      }
       const data = await res.json()
       return data.url as string
-    } catch {
-      alert('Upload fehlgeschlagen')
+    } catch (e) {
+      alert('Upload fehlgeschlagen: ' + (e instanceof Error ? e.message : String(e)))
       return null
     } finally {
       setUploading(null)
