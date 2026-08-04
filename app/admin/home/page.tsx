@@ -31,7 +31,6 @@ const SECTIONS: SectionDef[] = [
   { id: 'services', label: 'Wie wir helfen (Services)', fields: ['heading', 'description'], hasItems: true },
   { id: 'interior', label: 'Innenräume', fields: ['heading', 'description'], hasItems: false },
   { id: 'buying', label: 'Kaufprozess — Überschrift', fields: ['heading'], hasItems: false },
-  { id: 'buying-help', label: 'Zusätzliche Hilfe — Überschrift', fields: ['heading'], hasItems: false },
   { id: 'investor', label: 'Über das Unternehmen — Überschrift', fields: ['heading'], hasItems: false },
   // ── About-page blocks (Phase 2 Group A) ──
   { id: 'stats', label: 'Kennzahlen (Stats)', fields: [], hasItems: true, hint: 'Pro Kennzahl: Titel = Wert (z. B. „10+“), Beschreibung = Label (z. B. „Jahre Erfahrung“).' },
