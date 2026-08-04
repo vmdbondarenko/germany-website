@@ -1,7 +1,22 @@
 import { NextResponse } from 'next/server'
 import { put, list } from '@vercel/blob'
+import { getVercelOidcToken } from '@vercel/oidc'
 import { isAuthenticated } from '@/lib/auth'
 import { buildBlobKey, splitExt } from '@/lib/blob-filename'
+
+// Credentials for @vercel/blob. The store is connected to this project via OIDC
+// in production (BLOB_STORE_ID is injected, no BLOB_READ_WRITE_TOKEN), so we
+// authenticate with the deployment's OIDC token + store id. Locally a static
+// BLOB_READ_WRITE_TOKEN (from .env.local) takes priority. `access: 'public'` is
+// kept so returned URLs are on *.public.blob.vercel-storage.com — the only host
+// allowed by next.config's image remotePatterns.
+type BlobAuth = { token?: string; oidcToken?: string; storeId?: string }
+async function blobAuthOptions(): Promise<BlobAuth> {
+  if (process.env.BLOB_READ_WRITE_TOKEN) {
+    return { token: process.env.BLOB_READ_WRITE_TOKEN }
+  }
+  return { oidcToken: await getVercelOidcToken(), storeId: process.env.BLOB_STORE_ID }
+}
 
 export async function POST(request: Request) {
   if (!(await isAuthenticated())) {
@@ -21,10 +36,12 @@ export async function POST(request: Request) {
   const key = buildBlobKey(file.name, name)
 
   try {
+    const auth = await blobAuthOptions()
+
     // Drop the random hash suffix; keep clean names unique with -2, -3, … only
     // when the key already exists. Existing Blob objects are never overwritten.
     const [base, ext] = splitExt(key)
-    const { blobs } = await list({ prefix: base })
+    const { blobs } = await list({ prefix: base, ...auth })
     const taken = new Set(blobs.map((b) => b.pathname))
     let candidate = key
     let n = 1
@@ -37,6 +54,7 @@ export async function POST(request: Request) {
       access: 'public',
       addRandomSuffix: false,
       allowOverwrite: false,
+      ...auth,
     })
     return NextResponse.json({ url: blob.url })
   } catch (err) {
