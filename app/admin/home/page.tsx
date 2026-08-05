@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Loader2, Plus, Trash2, Save, Upload, RotateCcw, ArrowUp, ArrowDown } from 'lucide-react'
-import { DEFAULT_BAUWEISE, DEFAULT_ERSTE_BAYERISCHE, DEFAULT_HERO } from '@/lib/content-defaults'
+import { DEFAULT_BAUWEISE, DEFAULT_ERSTE_BAYERISCHE, DEFAULT_HERO, DEFAULT_GALLERY } from '@/lib/content-defaults'
 
 // Which fields each homepage section exposes in admin. Mirrors what
 // lib/home-content.ts actually reads back per section id.
@@ -220,6 +220,48 @@ function BilingualInput({
   )
 }
 
+// ── Completed-projects gallery (HomeSection "gallery") ──
+type GalleryCountry = 'poland' | 'ukraine'
+type GImg = { imageUrl: string; altDe: string; altEn: string; lead: boolean }
+type GalleryState = {
+  enabled: boolean
+  eyebrowDe: string; eyebrowEn: string
+  headingDe: string; headingEn: string
+  subtitleDe: string; subtitleEn: string
+  polandLabelDe: string; polandLabelEn: string
+  ukraineLabelDe: string; ukraineLabelEn: string
+  poland: GImg[]
+  ukraine: GImg[]
+}
+type GalleryRow = {
+  enabled?: boolean
+  eyebrowDe?: string; eyebrowEn?: string; headingDe?: string; headingEn?: string
+  descriptionDe?: string; descriptionEn?: string
+  primaryCtaLabelDe?: string; primaryCtaLabelEn?: string
+  secondaryCtaLabelDe?: string; secondaryCtaLabelEn?: string
+  items?: Array<{ kind?: string; imageUrl?: string; imageAltDe?: string; imageAltEn?: string; icon?: string }>
+}
+const GAL_D = DEFAULT_GALLERY
+function galleryFromRow(row: GalleryRow | undefined): GalleryState {
+  const items = row?.items ?? []
+  const map = (country: GalleryCountry): GImg[] =>
+    items.filter((i) => i.kind === country).map((it) => ({
+      imageUrl: it.imageUrl || '', altDe: it.imageAltDe || '', altEn: it.imageAltEn || '', lead: it.icon === 'lead',
+    }))
+  return {
+    enabled: row?.enabled ?? true,
+    eyebrowDe: row?.eyebrowDe || GAL_D.eyebrow.de, eyebrowEn: row?.eyebrowEn || GAL_D.eyebrow.en,
+    headingDe: row?.headingDe || GAL_D.heading.de, headingEn: row?.headingEn || GAL_D.heading.en,
+    // Subtitle is optional: keep the saved value (may be empty) once a row exists.
+    subtitleDe: row ? (row.descriptionDe || '') : GAL_D.subtitle.de,
+    subtitleEn: row ? (row.descriptionEn || '') : GAL_D.subtitle.en,
+    polandLabelDe: row?.primaryCtaLabelDe || GAL_D.polandLabel.de, polandLabelEn: row?.primaryCtaLabelEn || GAL_D.polandLabel.en,
+    ukraineLabelDe: row?.secondaryCtaLabelDe || GAL_D.ukraineLabel.de, ukraineLabelEn: row?.secondaryCtaLabelEn || GAL_D.ukraineLabel.en,
+    poland: map('poland'),
+    ukraine: map('ukraine'),
+  }
+}
+
 export default function HomeAdminPage() {
   const [state, setState] = useState<Record<string, SectionState>>({})
   const [loading, setLoading] = useState(true)
@@ -230,6 +272,9 @@ export default function HomeAdminPage() {
   const [eb, setEb] = useState<EbState>(() => ebFromRow(undefined))
   const [savingEb, setSavingEb] = useState(false)
   const [savedEb, setSavedEb] = useState(false)
+  const [gallery, setGallery] = useState<GalleryState>(() => galleryFromRow(undefined))
+  const [savingGallery, setSavingGallery] = useState(false)
+  const [savedGallery, setSavedGallery] = useState(false)
 
   useEffect(() => {
     fetch('/api/admin/home-sections')
@@ -261,6 +306,7 @@ export default function HomeAdminPage() {
         }
         setState(next)
         setEb(ebFromRow(byId.get('erste-bayerische') as EbRow | undefined))
+        setGallery(galleryFromRow(byId.get('gallery') as GalleryRow | undefined))
       })
       .finally(() => setLoading(false))
   }, [])
@@ -362,6 +408,68 @@ export default function HomeAdminPage() {
       alert('Speichern fehlgeschlagen')
     } finally {
       setSavingEb(false)
+    }
+  }
+
+  // ── Gallery handlers ──
+  const gPatch = (p: Partial<GalleryState>) => setGallery((s) => ({ ...s, ...p }))
+  const gImgPatch = (country: GalleryCountry, idx: number, p: Partial<GImg>) =>
+    setGallery((s) => { const arr = [...s[country]]; arr[idx] = { ...arr[idx], ...p }; return { ...s, [country]: arr } })
+  const gRemove = (country: GalleryCountry, idx: number) =>
+    setGallery((s) => ({ ...s, [country]: s[country].filter((_, i) => i !== idx) }))
+  const gMove = (country: GalleryCountry, idx: number, dir: -1 | 1) =>
+    setGallery((s) => {
+      const j = idx + dir
+      if (j < 0 || j >= s[country].length) return s
+      const arr = [...s[country]]; const [it] = arr.splice(idx, 1); arr.splice(j, 0, it)
+      return { ...s, [country]: arr }
+    })
+  const gSetLead = (country: GalleryCountry, idx: number) =>
+    setGallery((s) => ({ ...s, [country]: s[country].map((g, i) => ({ ...g, lead: i === idx })) }))
+  const gMoveCountry = (from: GalleryCountry, idx: number) =>
+    setGallery((s) => {
+      const to: GalleryCountry = from === 'poland' ? 'ukraine' : 'poland'
+      const src = [...s[from]]; const [it] = src.splice(idx, 1)
+      return { ...s, [from]: src, [to]: [...s[to], { ...it, lead: false }] }
+    })
+  const gUpload = async (country: GalleryCountry, file: File, idx: number | null) => {
+    const url = await uploadFile(`gallery:${country}:${idx ?? 'new'}`, file)
+    if (!url) return
+    setGallery((s) => {
+      const arr = [...s[country]]
+      if (idx === null) arr.push({ imageUrl: url, altDe: '', altEn: '', lead: false })
+      else arr[idx] = { ...arr[idx], imageUrl: url }
+      return { ...s, [country]: arr }
+    })
+  }
+
+  const saveGallery = async () => {
+    setSavingGallery(true); setSavedGallery(false)
+    const mk = (arr: GImg[], country: GalleryCountry) =>
+      arr.filter((g) => g.imageUrl.trim()).map((g) => ({
+        kind: country, imageUrl: g.imageUrl, imageAltDe: g.altDe, imageAltEn: g.altEn, icon: g.lead ? 'lead' : '',
+      }))
+    const items = [...mk(gallery.poland, 'poland'), ...mk(gallery.ukraine, 'ukraine')]
+    try {
+      const res = await fetch('/api/admin/home-sections', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: 'gallery', order: 16, enabled: gallery.enabled,
+          eyebrowDe: gallery.eyebrowDe, eyebrowEn: gallery.eyebrowEn,
+          headingDe: gallery.headingDe, headingEn: gallery.headingEn,
+          descriptionDe: gallery.subtitleDe, descriptionEn: gallery.subtitleEn,
+          primaryCtaLabelDe: gallery.polandLabelDe, primaryCtaLabelEn: gallery.polandLabelEn,
+          secondaryCtaLabelDe: gallery.ukraineLabelDe, secondaryCtaLabelEn: gallery.ukraineLabelEn,
+          items,
+        }),
+      })
+      if (!res.ok) throw new Error('save failed')
+      setSavedGallery(true); setTimeout(() => setSavedGallery(false), 2500)
+    } catch {
+      alert('Speichern fehlgeschlagen')
+    } finally {
+      setSavingGallery(false)
     }
   }
 
@@ -717,6 +825,105 @@ export default function HomeAdminPage() {
           </Fragment>
         )
       })}
+
+      {/* ── Completed-projects gallery (public: after „Über das Unternehmen“) ── */}
+      <section className="border-2 border-[#6E2E2A]/20 rounded-xl p-5 space-y-5 bg-white">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <h2 className="text-lg font-semibold text-gray-800">
+              Galerie <span className="text-sm font-normal text-gray-400">— Abgeschlossene Projekte</span>
+            </h2>
+            <p className="text-xs text-gray-400 mt-0.5">
+              Erscheint auf der Startseite direkt nach „Über das Unternehmen / Wer wir sind“. Bilder, Reihenfolge, Land und Lead-Auswahl gelten für DE &amp; EN gemeinsam; nur Texte/Alt-Texte sind pro Sprache.
+            </p>
+          </div>
+          <Button onClick={saveGallery} disabled={savingGallery} size="sm" style={{ backgroundColor: '#6E2E2A' }}>
+            {savingGallery ? <Loader2 className="h-4 w-4 mr-1.5 animate-spin" /> : <Save className="h-4 w-4 mr-1.5" />}
+            {savedGallery ? 'Gespeichert ✓' : 'Speichern'}
+          </Button>
+        </div>
+
+        {/* Visibility */}
+        <label className="flex items-center gap-2 cursor-pointer">
+          <input type="checkbox" checked={gallery.enabled} onChange={(e) => gPatch({ enabled: e.target.checked })} className="h-4 w-4" />
+          <span className="text-sm font-medium text-gray-800">Abschnitt anzeigen</span>
+          <span className="text-xs text-gray-400">(aus = Galerie auf DE &amp; EN ausgeblendet; Inhalte bleiben gespeichert)</span>
+        </label>
+
+        {/* Section texts */}
+        <BilingualInput label="Eyebrow" de={gallery.eyebrowDe} en={gallery.eyebrowEn}
+          onDe={(v) => gPatch({ eyebrowDe: v })} onEn={(v) => gPatch({ eyebrowEn: v })} />
+        <BilingualInput label="Überschrift" de={gallery.headingDe} en={gallery.headingEn}
+          onDe={(v) => gPatch({ headingDe: v })} onEn={(v) => gPatch({ headingEn: v })} />
+        <BilingualInput label="Untertitel (optional)" textarea de={gallery.subtitleDe} en={gallery.subtitleEn}
+          onDe={(v) => gPatch({ subtitleDe: v })} onEn={(v) => gPatch({ subtitleEn: v })} />
+        <BilingualInput label="Tab „Polen“" de={gallery.polandLabelDe} en={gallery.polandLabelEn}
+          onDe={(v) => gPatch({ polandLabelDe: v })} onEn={(v) => gPatch({ polandLabelEn: v })} />
+        <BilingualInput label="Tab „Ukraine“" de={gallery.ukraineLabelDe} en={gallery.ukraineLabelEn}
+          onDe={(v) => gPatch({ ukraineLabelDe: v })} onEn={(v) => gPatch({ ukraineLabelEn: v })} />
+
+        {/* Images per country */}
+        {(['poland', 'ukraine'] as const).map((country) => {
+          const label = country === 'poland' ? 'Polen' : 'Ukraine'
+          const other = country === 'poland' ? 'Ukraine' : 'Polen'
+          const arr = gallery[country]
+          const addKey = `gallery:${country}:new`
+          return (
+            <div key={country} className="border-t pt-4 space-y-3">
+              <div className="flex items-center justify-between">
+                <p className="text-sm font-medium text-gray-700">{label} <span className="font-normal text-gray-400">({arr.length} Bilder)</span></p>
+                <label className="inline-flex items-center gap-1.5 text-sm px-3 py-1.5 rounded-md border border-gray-200 cursor-pointer hover:bg-gray-50">
+                  {uploading === addKey ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
+                  <span>Bild hinzufügen</span>
+                  <input type="file" accept="image/*" className="hidden" disabled={uploading === addKey}
+                    onChange={(e) => { const f = e.target.files?.[0]; if (f) gUpload(country, f, null); e.target.value = '' }} />
+                </label>
+              </div>
+              {arr.length === 0 && <p className="text-xs text-gray-400">Noch keine Bilder. Mit „Bild hinzufügen“ hochladen.</p>}
+              {arr.map((g, idx) => {
+                const key = `gallery:${country}:${idx}`
+                return (
+                  <div key={idx} className="border border-gray-100 rounded-lg p-3 bg-gray-50 grid grid-cols-1 sm:grid-cols-[10rem_1fr] gap-3">
+                    <div className="relative w-40 h-28 rounded-lg overflow-hidden bg-gray-100 border border-gray-200">
+                      {g.imageUrl ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={g.imageUrl} alt="" className="w-full h-full object-cover" />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-xs text-gray-400">kein Bild</div>
+                      )}
+                    </div>
+                    <div className="space-y-2">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <label className="inline-flex items-center gap-1.5 text-xs cursor-pointer">
+                          <input type="radio" name={`lead-${country}`} checked={g.lead} onChange={() => gSetLead(country, idx)} />
+                          Lead-Bild
+                        </label>
+                        <span className="flex-1" />
+                        <Button variant="ghost" size="sm" disabled={idx === 0} onClick={() => gMove(country, idx, -1)} aria-label="Nach oben"><ArrowUp className="h-4 w-4" /></Button>
+                        <Button variant="ghost" size="sm" disabled={idx === arr.length - 1} onClick={() => gMove(country, idx, 1)} aria-label="Nach unten"><ArrowDown className="h-4 w-4" /></Button>
+                        <Button variant="ghost" size="sm" onClick={() => gMoveCountry(country, idx)}>→ {other}</Button>
+                        <Button variant="ghost" size="sm" onClick={() => gRemove(country, idx)} aria-label="Löschen"><Trash2 className="h-4 w-4 text-red-500" /></Button>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <label className="inline-flex items-center gap-1.5 text-sm px-3 py-1.5 rounded-md border border-gray-200 cursor-pointer hover:bg-gray-100">
+                          {uploading === key ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
+                          <span>Ersetzen</span>
+                          <input type="file" accept="image/*" className="hidden" disabled={uploading === key}
+                            onChange={(e) => { const f = e.target.files?.[0]; if (f) gUpload(country, f, idx); e.target.value = '' }} />
+                        </label>
+                        <Input value={g.imageUrl} placeholder="Bild-URL" onChange={(e) => gImgPatch(country, idx, { imageUrl: e.target.value })} />
+                      </div>
+                      <BilingualInput label="Alt-Text" de={g.altDe} en={g.altEn}
+                        onDe={(v) => gImgPatch(country, idx, { altDe: v })} onEn={(v) => gImgPatch(country, idx, { altEn: v })} />
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          )
+        })}
+        <p className="text-xs text-gray-400">Nur Fotos — keine Titel/Beschreibungen. „Lead-Bild“ = großes Bild oben je Land. Reihenfolge per ▲▼ getrennt je Land. Änderungen erst nach „Speichern“ aktiv.</p>
+      </section>
     </div>
   )
 }

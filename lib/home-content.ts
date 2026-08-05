@@ -19,6 +19,7 @@ import {
   DEFAULT_TEAM,
   DEFAULT_SINCE_FOUNDING,
   DEFAULT_ERSTE_BAYERISCHE,
+  DEFAULT_GALLERY,
 } from "@/lib/content-defaults"
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -372,5 +373,64 @@ export async function getErsteBayerischeContent(locale: Locale): Promise<ErsteBa
       galleryItems.length > 0
         ? galleryItems.map((it) => ({ image: it.imageUrl || "", alt: aDe(it) || "" })).filter((g) => g.image)
         : D.gallery.map((g) => ({ image: g.image, alt: L(g.alt) })),
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Completed-projects gallery (HomeSection "gallery"). Fully admin-managed and
+// bilingual: eyebrow/heading map to their columns, subtitle → description,
+// Poland/Ukraine tab labels → primary/secondary CTA labels, visibility →
+// HomeSection.enabled. Each image is a HomeSectionItem: kind = "poland"|"ukraine"
+// (shared across locales), imageUrl + imageAltDe/En, icon = "lead" for the lead
+// image of its country, order = per-country order. Images are shared DE/EN — only
+// the labels and alt text differ per locale.
+// ─────────────────────────────────────────────────────────────────────────────
+
+export type GalleryImage = { image: string; alt: string }
+export type GalleryContent = {
+  enabled: boolean
+  eyebrow: string
+  heading: string
+  subtitle: string
+  polandLabel: string
+  ukraineLabel: string
+  poland: GalleryImage[]
+  ukraine: GalleryImage[]
+}
+
+export async function getGalleryContent(locale: Locale): Promise<GalleryContent> {
+  const de = locale !== "en"
+  const L = (s: LocalizedText) => (de ? s.de : s.en)
+  const D = DEFAULT_GALLERY
+
+  const row = await prisma.homeSection.findUnique({
+    where: { id: "gallery" },
+    include: { items: { orderBy: { order: "asc" } } },
+  })
+  const items = row?.items ?? []
+
+  // Per country: keep stored order, but surface the lead image first so the
+  // public layout renders it as the large lead photo.
+  const byCountry = (country: string): GalleryImage[] => {
+    const list = items.filter((it) => it.kind === country && it.imageUrl)
+    const lead = list.filter((it) => it.icon === "lead")
+    const rest = list.filter((it) => it.icon !== "lead")
+    return [...lead, ...rest].map((it) => ({
+      image: it.imageUrl as string,
+      alt: (de ? it.imageAltDe : it.imageAltEn) || "",
+    }))
+  }
+
+  return {
+    enabled: row?.enabled ?? true,
+    eyebrow: (de ? row?.eyebrowDe : row?.eyebrowEn) || L(D.eyebrow),
+    heading: (de ? row?.headingDe : row?.headingEn) || L(D.heading),
+    // Subtitle is optional: once the row exists its value is authoritative (may
+    // be empty); only the very first, unsaved state shows the default text.
+    subtitle: row ? ((de ? row.descriptionDe : row.descriptionEn) || "") : L(D.subtitle),
+    polandLabel: (de ? row?.primaryCtaLabelDe : row?.primaryCtaLabelEn) || L(D.polandLabel),
+    ukraineLabel: (de ? row?.secondaryCtaLabelDe : row?.secondaryCtaLabelEn) || L(D.ukraineLabel),
+    poland: byCountry("poland"),
+    ukraine: byCountry("ukraine"),
   }
 }

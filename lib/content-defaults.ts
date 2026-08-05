@@ -262,6 +262,22 @@ export const DEFAULT_ERSTE_BAYERISCHE = {
   ],
 }
 
+// Completed-projects photo gallery shown after the investor section. Fully
+// admin-managed (HomeSection "gallery" + HomeSectionItem rows: kind = country
+// "poland"|"ukraine", imageUrl, imageAltDe/En, icon "lead" marks the lead image
+// per country, order = per-country order). Starts with no images; visibility is
+// HomeSection.enabled.
+export const DEFAULT_GALLERY = {
+  eyebrow: t("Abgeschlossene Projekte", "Completed projects"),
+  heading: t("Galerie", "Gallery"),
+  subtitle: t(
+    "Einige unserer abgeschlossenen Projekte in Polen und der Ukraine.",
+    "A selection of our completed projects in Poland and Ukraine.",
+  ),
+  polandLabel: t("Polen", "Poland"),
+  ukraineLabel: t("Ukraine", "Ukraine"),
+}
+
 export const DEFAULT_UPCOMING = {
   line1: t("Bald beginnen wir mit dem Bau", "We will soon begin building"),
   line2: t("weiterer Projekte!", "further projects!"),

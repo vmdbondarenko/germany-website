@@ -13,12 +13,13 @@ import { Team } from "@/components/team"
 import { Services } from "@/components/services"
 import { InteriorShowcase } from "@/components/interior-showcase"
 import { BuyingProcess } from "@/components/buying-process"
+import { CompletedGallery } from "@/components/completed-gallery"
 import { Contact } from "@/components/contact"
 import { Footer } from "@/components/footer"
 import { NewsScroll } from "@/components/news-scroll"
 import { prisma } from "@/lib/prisma"
 import { getLocale, getTranslations } from "next-intl/server"
-import { getHomeContent, getAboutContent, getErsteBayerischeContent } from "@/lib/home-content"
+import { getHomeContent, getAboutContent, getErsteBayerischeContent, getGalleryContent } from "@/lib/home-content"
 import { pick } from "@/lib/i18n-content"
 import type { Locale } from "@/i18n/routing"
 import type { Metadata } from "next"
@@ -43,6 +44,7 @@ export default async function HomePage() {
   const home = await getHomeContent(locale)
   const aboutContent = await getAboutContent(locale)
   const ersteBayerische = await getErsteBayerischeContent(locale)
+  const gallery = await getGalleryContent(locale)
   const th = await getTranslations("home")
   const mapCopy = { heading: th("mapHeading"), subtitle: th("mapSubtitle") }
 
@@ -204,6 +206,7 @@ export default async function HomePage() {
         <Services content={home.services} />
         <InteriorShowcase content={home.interior} />
         <BuyingProcess content={home.buying} />
+        <CompletedGallery content={gallery} />
         <NewsScroll posts={newsPosts.map((p) => ({ ...p, publishedAt: p.publishedAt?.toISOString() ?? null, createdAt: p.createdAt.toISOString() }))} />
         <Contact />
       </main>
