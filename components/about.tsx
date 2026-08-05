@@ -6,6 +6,7 @@ import { ChevronLeft, ChevronRight, X, Clock, Zap, Wrench, Hammer, Building, Bui
 import { numberedSectionAlt } from "@/lib/seo/image-alt"
 import { DEFAULT_COMPANY_NAME, DEFAULT_ABOUT_DESCRIPTION, DEFAULT_ABOUT_PHOTOS, VALUE_BRICK_COLORS } from "@/lib/content-defaults"
 import type { AboutContent } from "@/lib/home-content"
+import { PhotoLightbox } from "@/components/photo-lightbox"
 
 const INVESTMENT_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
   Clock, Zap, Wrench, Hammer, Building, Building2, Home, MapPin, Star, Check, Timer, HardHat, TrendingUp,
@@ -86,14 +87,6 @@ export function About({ content, upcomingInvestments, newCities, aboutSection, a
 
   const handleNextImage = () => {
     setSelectedImageIndex((prev) => (prev === companyImages.length - 1 ? 0 : prev + 1))
-  }
-
-  const handlePrevTechImage = () => {
-    setSelectedTechImageIndex((prev) => (prev === 0 ? techImages.length - 1 : prev - 1))
-  }
-
-  const handleNextTechImage = () => {
-    setSelectedTechImageIndex((prev) => (prev === techImages.length - 1 ? 0 : prev + 1))
   }
 
   const stats = content.stats
@@ -711,66 +704,13 @@ export function About({ content, upcomingInvestments, newCities, aboutSection, a
           </div>
         </div>
 
-        {/* Tech Lightbox Modal */}
-        {selectedTechImageIndex >= 0 && (
-          <div 
-            className="fixed inset-0 z-50 flex items-center justify-center bg-white/50 backdrop-blur-sm"
-            onClick={() => setSelectedTechImageIndex(-1)}
-          >
-            {/* Close Button */}
-            <button
-              onClick={() => setSelectedTechImageIndex(-1)}
-              className="absolute top-4 right-4 lg:top-8 lg:right-8 w-12 h-12 flex items-center justify-center rounded-full bg-[#3E1718]/10 hover:bg-[#3E1718]/20 transition-colors duration-300 z-50 border border-[#6E2E2A]/20"
-              aria-label="Schließen"
-            >
-              <X className="w-6 h-6 text-[#3E1718]" />
-            </button>
-
-            {/* Image Counter */}
-            <div className="absolute top-4 left-4 lg:top-8 lg:left-8 px-4 py-2 rounded-full bg-[#3E1718]/10 text-[#3E1718] text-sm font-medium border border-[#6E2E2A]/20">
-              {selectedTechImageIndex + 1} / {techImages.length}
-            </div>
-
-            {/* Previous Button */}
-            <button
-              onClick={(e) => {
-                e.stopPropagation()
-                handlePrevTechImage()
-              }}
-              className="absolute left-4 lg:left-8 top-1/2 -translate-y-1/2 w-14 h-14 lg:w-16 lg:h-16 flex items-center justify-center rounded-full bg-white/90 hover:bg-white shadow-lg hover:shadow-xl transition-all duration-300 z-50 border border-[#6E2E2A]/20"
-              aria-label="Vorheriges Bild"
-            >
-              <ChevronLeft className="w-7 h-7 lg:w-8 lg:h-8 text-[#3E1718]" />
-            </button>
-
-            {/* Next Button */}
-            <button
-              onClick={(e) => {
-                e.stopPropagation()
-                handleNextTechImage()
-              }}
-              className="absolute right-4 lg:right-8 top-1/2 -translate-y-1/2 w-14 h-14 lg:w-16 lg:h-16 flex items-center justify-center rounded-full bg-white/90 hover:bg-white shadow-lg hover:shadow-xl transition-all duration-300 z-50 border border-[#6E2E2A]/20"
-              aria-label="Nächstes Bild"
-            >
-              <ChevronRight className="w-7 h-7 lg:w-8 lg:h-8 text-[#3E1718]" />
-            </button>
-
-            {/* Main Image */}
-            <div 
-              className="relative w-[95vw] h-[90vh] lg:w-[90vw] lg:h-[90vh] flex items-center justify-center"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <Image
-                src={techImages[selectedTechImageIndex].src}
-                alt={numberedSectionAlt("Bauweise und Entwicklung", "", selectedTechImageIndex)}
-                width={1600}
-                height={1100}
-                className="max-w-full max-h-full object-contain rounded-2xl shadow-2xl"
-                priority
-              />
-            </div>
-          </div>
-        )}
+        {/* Bauweise photo lightbox (shared component) */}
+        <PhotoLightbox
+          images={techImages}
+          index={selectedTechImageIndex}
+          onClose={() => setSelectedTechImageIndex(-1)}
+          onNavigate={setSelectedTechImageIndex}
+        />
 
       </div>
     </section>
