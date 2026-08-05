@@ -34,7 +34,10 @@ export async function Footer() {
               </span>
             </Link>
             <p className="text-primary-foreground/70 max-w-md leading-relaxed mb-6">
-              {t("description")}
+              {t.rich("description", {
+                b: (chunks) => <strong className="font-semibold">{chunks}</strong>,
+                br: () => <br />,
+              })}
             </p>
             <div className="flex gap-4">
               {socialLinks.map((social) => (
