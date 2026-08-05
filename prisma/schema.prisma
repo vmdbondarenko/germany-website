@@ -471,6 +471,7 @@ model SiteSettings {
   facebookUrl        String?
   linkedinUrl        String?
   logoUrl            String?
+  showLanguageSwitcher Boolean @default(true)
   updatedAt          DateTime @updatedAt
   createdAt          DateTime @default(now())
 }

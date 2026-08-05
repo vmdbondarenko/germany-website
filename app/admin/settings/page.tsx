@@ -61,6 +61,7 @@ const GROUPS: { title: string; fields: { key: keyof Fields; label: string; texta
 
 export default function SiteSettingsPage() {
   const [form, setForm] = useState<Fields>(EMPTY)
+  const [showLanguageSwitcher, setShowLanguageSwitcher] = useState(true)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [status, setStatus] = useState<string>("")
@@ -69,7 +70,10 @@ export default function SiteSettingsPage() {
     fetch("/api/admin/site-settings")
       .then((r) => (r.ok ? r.json() : null))
       .then((row) => {
-        if (row) setForm({ ...EMPTY, ...Object.fromEntries(Object.keys(EMPTY).map((k) => [k, row[k] ?? ""])) as Fields })
+        if (row) {
+          setForm({ ...EMPTY, ...Object.fromEntries(Object.keys(EMPTY).map((k) => [k, row[k] ?? ""])) as Fields })
+          setShowLanguageSwitcher(row.showLanguageSwitcher ?? true)
+        }
       })
       .finally(() => setLoading(false))
   }, [])
@@ -83,7 +87,7 @@ export default function SiteSettingsPage() {
       const res = await fetch("/api/admin/site-settings", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ ...form, showLanguageSwitcher }),
       })
       setStatus(res.ok ? "Gespeichert." : "Fehler beim Speichern.")
     } catch {
@@ -131,6 +135,25 @@ export default function SiteSettingsPage() {
           </section>
         ))}
       </div>
+
+      <section className="mt-8">
+        <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-500 mb-3">Sprache</h2>
+        <label className="flex items-start gap-3 cursor-pointer">
+          <input
+            type="checkbox"
+            checked={showLanguageSwitcher}
+            onChange={(e) => setShowLanguageSwitcher(e.target.checked)}
+            className="mt-1 h-4 w-4"
+          />
+          <span className="text-sm">
+            <span className="font-medium text-gray-800">Sprachumschalter anzeigen</span>
+            <span className="block text-xs text-gray-400 mt-0.5">
+              Zeigt den DE/EN-Umschalter im Header (Desktop und Mobil). Wenn deaktiviert, ist die
+              Website standardmäßig auf Deutsch; die englische Version bleibt unter /en erreichbar.
+            </span>
+          </span>
+        </label>
+      </section>
 
       <div className="mt-8 flex items-center gap-4">
         <button

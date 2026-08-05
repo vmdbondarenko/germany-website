@@ -39,6 +39,7 @@ export async function PUT(request: Request) {
     facebookUrl: s(body.facebookUrl),
     linkedinUrl: s(body.linkedinUrl),
     logoUrl: s(body.logoUrl),
+    showLanguageSwitcher: typeof body.showLanguageSwitcher === 'boolean' ? body.showLanguageSwitcher : true,
   }
   const settings = await prisma.siteSettings.upsert({
     where: { id: 'main' },

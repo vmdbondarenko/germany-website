@@ -267,11 +267,15 @@ export function Header({ cities = [] }: { cities?: { name: string; slug: string 
                 })}
             </div>
 
-            {/* Vertical Divider */}
-            <div className="h-6 w-px bg-foreground/20" />
+            {settings.showLanguageSwitcher && (
+              <>
+                {/* Vertical Divider */}
+                <div className="h-6 w-px bg-foreground/20" />
 
-            {/* Language switcher */}
-            <LanguageSwitcher />
+                {/* Language switcher */}
+                <LanguageSwitcher />
+              </>
+            )}
           </div>
 
           {/* Mobile Menu Toggle */}
@@ -342,16 +346,18 @@ export function Header({ cities = [] }: { cities?: { name: string; slug: string 
               ))}
             </div>
 
-            {/* Language switcher (mobile) */}
-            <div className="mt-4 pt-4 border-t border-border/50 flex items-center justify-between">
-              <span
-                className="text-xs font-semibold uppercase tracking-widest"
-                style={{ color: 'rgba(74, 42, 42, 0.45)' }}
-              >
-                {tc("language")}
-              </span>
-              <LanguageSwitcher />
-            </div>
+            {/* Language switcher (mobile) — same admin setting as desktop */}
+            {settings.showLanguageSwitcher && (
+              <div className="mt-4 pt-4 border-t border-border/50 flex items-center justify-between">
+                <span
+                  className="text-xs font-semibold uppercase tracking-widest"
+                  style={{ color: 'rgba(74, 42, 42, 0.45)' }}
+                >
+                  {tc("language")}
+                </span>
+                <LanguageSwitcher />
+              </div>
+            )}
         </nav>
       </div>
       <ContactModal isOpen={showContactModal} onClose={() => setShowContactModal(false)} />
