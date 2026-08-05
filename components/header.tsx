@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react"
 import { useTranslations } from "next-intl"
 import Image from "next/image"
-import { Menu, X, Mail, Phone, ChevronDown } from "lucide-react"
+import { Menu, X, Mail, Phone, ChevronDown, Instagram, Youtube } from "lucide-react"
 import { Link } from "@/i18n/navigation"
 import { Button } from "@/components/ui/button"
 import { ContactModal } from "@/components/contact-modal"
@@ -246,6 +246,25 @@ export function Header({ cities = [] }: { cities?: { name: string; slug: string 
                   </div>
                 </div>
               </div>
+
+              {/* Social links — same icon group; only shown when a URL is set */}
+              {settings.socials
+                .filter((soc) => soc.platform === 'instagram' || soc.platform === 'youtube')
+                .map((soc) => {
+                  const Icon = soc.platform === 'instagram' ? Instagram : Youtube
+                  return (
+                    <a
+                      key={soc.platform}
+                      href={soc.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-2 rounded-full bg-foreground/5 hover:bg-foreground/10 backdrop-blur-sm transition-all duration-200"
+                      aria-label={soc.platform === 'instagram' ? 'Instagram' : 'YouTube'}
+                    >
+                      <Icon className="h-4 w-4" style={{ color: 'rgba(74, 42, 42, 0.7)' }} />
+                    </a>
+                  )
+                })}
             </div>
 
             {/* Vertical Divider */}
