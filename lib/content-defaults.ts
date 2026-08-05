@@ -105,8 +105,8 @@ export const DEFAULT_BUYING = {
     heading: t("Wer wir sind", "Who we are"),
     paragraphs: [
       t(
-        "Als Projektentwickler möchten wir unseren Kunden genau das bieten, was wir selbst von einem Bauträger erwarten würden: transparente und sichere Abläufe, hochwertige Baumaterialien sowie attraktive Preise.",
-        "As a property developer, we want to offer our customers exactly what we would expect from a developer ourselves: transparent and secure processes, high-quality building materials and attractive prices.",
+        "Als Projektentwickler möchten wir unseren Kunden genau das bieten, was wir selbst von einem Bauträger erwarten würden: **transparente und sichere Abläufe, hochwertige Baumaterialien sowie attraktive Preise.**",
+        "As a property developer, we want to offer our customers exactly what we would expect from a developer ourselves: **transparent and secure processes, high-quality building materials and attractive prices.**",
       ),
     ],
     ctaLabel: t("Kontakt", "Contact"),

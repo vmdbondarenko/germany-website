@@ -3,6 +3,7 @@
 import { useRef, useState, useEffect } from "react"
 import { useTranslations } from "next-intl"
 import type { BuyingContent } from "@/lib/home-content"
+import { renderBold } from "@/lib/render-bold"
 
 // Fixed decorative icons for the buying steps, indexed by step position. The
 // step copy itself is admin-managed and per-locale (see lib/home-content.ts).
@@ -230,7 +231,7 @@ export function BuyingProcess({ content }: { content: BuyingContent }) {
 
                     {content.investor.paragraphs.map((para, i) => (
                       <p key={i} className="text-lg lg:text-xl leading-relaxed mb-8" style={{ color: '#4A4A4A' }}>
-                        {para}
+                        {renderBold(para)}
                       </p>
                     ))}
 

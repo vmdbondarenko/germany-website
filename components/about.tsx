@@ -7,6 +7,7 @@ import { numberedSectionAlt } from "@/lib/seo/image-alt"
 import { DEFAULT_COMPANY_NAME, DEFAULT_ABOUT_DESCRIPTION, DEFAULT_ABOUT_PHOTOS, VALUE_BRICK_COLORS } from "@/lib/content-defaults"
 import type { AboutContent } from "@/lib/home-content"
 import { PhotoLightbox } from "@/components/photo-lightbox"
+import { renderBold } from "@/lib/render-bold"
 
 const INVESTMENT_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
   Clock, Zap, Wrench, Hammer, Building, Building2, Home, MapPin, Star, Check, Timer, HardHat, TrendingUp,
@@ -15,16 +16,6 @@ const INVESTMENT_ICONS: Record<string, React.ComponentType<{ className?: string 
 function InvestmentIcon({ name, className }: { name: string; className?: string }) {
   const Icon = INVESTMENT_ICONS[name] || Clock
   return <Icon className={className} />
-}
-
-// Render a lightweight `**bold**` marker as <strong> (everything else stays
-// regular). Used for admin-managed value-card text and the values footnote so a
-// single term (e.g. „Bayerischer Stil“ / „Bavarian Masonry“) can be emphasised
-// while the field remains a plain bilingual string in /admin/home.
-function renderBold(text: string): React.ReactNode[] {
-  return text.split("**").map((part, i) =>
-    i % 2 === 1 ? <strong key={i} className="font-semibold">{part}</strong> : part,
-  )
 }
 
 type UpcomingInvestment = { id: string; title: string; description: string; status: string; statusColor: string; icon: string }
