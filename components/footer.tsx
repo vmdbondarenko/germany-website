@@ -36,7 +36,6 @@ export async function Footer() {
             <p className="text-primary-foreground/70 max-w-md leading-relaxed mb-6">
               {t.rich("description", {
                 b: (chunks) => <strong className="font-semibold">{chunks}</strong>,
-                br: () => <br />,
               })}
             </p>
             <div className="flex gap-4">
