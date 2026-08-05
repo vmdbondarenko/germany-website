@@ -3,6 +3,7 @@ import type { NextRequest } from 'next/server'
 import createIntlMiddleware from 'next-intl/middleware'
 import { getSessionRole, SESSION_COOKIE_NAME, type Role } from '@/lib/auth'
 import { routing } from '@/i18n/routing'
+import { prisma } from '@/lib/prisma'
 
 // Handles locale detection + prefixing for the public site (de default, /en).
 const intlMiddleware = createIntlMiddleware(routing)
@@ -82,7 +83,31 @@ export async function proxy(request: NextRequest) {
   // ── Other API routes: not localized ──────────────────────────────────────
   if (pathname.startsWith('/api')) return NextResponse.next()
 
-  // ── Public site: locale detection + prefixing ─────────────────────────────
+  // ── English visibility gate ───────────────────────────────────────────────
+  // When the admin "show language switcher" setting is OFF, English is hidden
+  // from public access: /en and /en/* redirect to the German equivalent (sub-
+  // path + query preserved). English content, routes and data stay intact and
+  // return automatically when the setting is turned back ON. The redirect target
+  // never starts with /en, so no redirect loop is possible.
+  if (pathname === '/en' || pathname.startsWith('/en/')) {
+    let show = true
+    try {
+      const row = await prisma.siteSettings.findUnique({
+        where: { id: 'main' },
+        select: { showLanguageSwitcher: true },
+      })
+      show = row?.showLanguageSwitcher ?? true
+    } catch {
+      show = true // DB unavailable → don't hide anything
+    }
+    if (!show) {
+      const url = request.nextUrl.clone()
+      url.pathname = pathname === '/en' ? '/' : pathname.slice('/en'.length)
+      return NextResponse.redirect(url)
+    }
+  }
+
+  // ── Public site: locale prefixing ─────────────────────────────────────────
   return intlMiddleware(request)
 }
 
