@@ -178,7 +178,7 @@ export default async function HomePage() {
       <main>
         <Hero content={home.hero} />
         <ArchitectureSlideshow dbSlides={slideshowSlides} />
-        <About content={aboutContent} upcomingInvestments={upcomingInvestments} newCities={newCities} aboutSection={aboutSection} />
+        <About content={aboutContent} upcomingInvestments={upcomingInvestments} newCities={newCities} aboutSection={aboutSection} afterSinceFounding={<CompletedGallery content={gallery} />} />
         <ErsteBayerische content={ersteBayerische} />
         <Investments projects={activeProjects} />
         {lokalizacjaData.points.length > 0 && (
@@ -206,7 +206,6 @@ export default async function HomePage() {
         <Services content={home.services} />
         <InteriorShowcase content={home.interior} />
         <BuyingProcess content={home.buying} />
-        <CompletedGallery content={gallery} />
         <NewsScroll posts={newsPosts.map((p) => ({ ...p, publishedAt: p.publishedAt?.toISOString() ?? null, createdAt: p.createdAt.toISOString() }))} />
         <Contact />
       </main>

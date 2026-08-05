@@ -646,6 +646,108 @@ export default function HomeAdminPage() {
       </section>
   )
 
+  // Rendered in the map immediately after the „Seit unserer Gründung“ block
+  // (matches the public homepage order).
+  const galleryEditor = (
+      <section className="border-2 border-[#6E2E2A]/20 rounded-xl p-5 space-y-5 bg-white">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <h2 className="text-lg font-semibold text-gray-800">
+              Galerie <span className="text-sm font-normal text-gray-400">— Abgeschlossene Projekte</span>
+            </h2>
+            <p className="text-xs text-gray-400 mt-0.5">
+              Erscheint auf der Startseite direkt nach „Über das Unternehmen / Wer wir sind“. Bilder, Reihenfolge, Land und Lead-Auswahl gelten für DE &amp; EN gemeinsam; nur Texte/Alt-Texte sind pro Sprache.
+            </p>
+          </div>
+          <Button onClick={saveGallery} disabled={savingGallery} size="sm" style={{ backgroundColor: '#6E2E2A' }}>
+            {savingGallery ? <Loader2 className="h-4 w-4 mr-1.5 animate-spin" /> : <Save className="h-4 w-4 mr-1.5" />}
+            {savedGallery ? 'Gespeichert ✓' : 'Speichern'}
+          </Button>
+        </div>
+
+        {/* Visibility */}
+        <label className="flex items-center gap-2 cursor-pointer">
+          <input type="checkbox" checked={gallery.enabled} onChange={(e) => gPatch({ enabled: e.target.checked })} className="h-4 w-4" />
+          <span className="text-sm font-medium text-gray-800">Abschnitt anzeigen</span>
+          <span className="text-xs text-gray-400">(aus = Galerie auf DE &amp; EN ausgeblendet; Inhalte bleiben gespeichert)</span>
+        </label>
+
+        {/* Section texts */}
+        <BilingualInput label="Eyebrow" de={gallery.eyebrowDe} en={gallery.eyebrowEn}
+          onDe={(v) => gPatch({ eyebrowDe: v })} onEn={(v) => gPatch({ eyebrowEn: v })} />
+        <BilingualInput label="Überschrift" de={gallery.headingDe} en={gallery.headingEn}
+          onDe={(v) => gPatch({ headingDe: v })} onEn={(v) => gPatch({ headingEn: v })} />
+        <BilingualInput label="Untertitel (optional)" textarea de={gallery.subtitleDe} en={gallery.subtitleEn}
+          onDe={(v) => gPatch({ subtitleDe: v })} onEn={(v) => gPatch({ subtitleEn: v })} />
+        <BilingualInput label="Tab „Polen“" de={gallery.polandLabelDe} en={gallery.polandLabelEn}
+          onDe={(v) => gPatch({ polandLabelDe: v })} onEn={(v) => gPatch({ polandLabelEn: v })} />
+        <BilingualInput label="Tab „Ukraine“" de={gallery.ukraineLabelDe} en={gallery.ukraineLabelEn}
+          onDe={(v) => gPatch({ ukraineLabelDe: v })} onEn={(v) => gPatch({ ukraineLabelEn: v })} />
+
+        {/* Images per country */}
+        {(['poland', 'ukraine'] as const).map((country) => {
+          const label = country === 'poland' ? 'Polen' : 'Ukraine'
+          const other = country === 'poland' ? 'Ukraine' : 'Polen'
+          const arr = gallery[country]
+          const addKey = `gallery:${country}:new`
+          return (
+            <div key={country} className="border-t pt-4 space-y-3">
+              <div className="flex items-center justify-between">
+                <p className="text-sm font-medium text-gray-700">{label} <span className="font-normal text-gray-400">({arr.length} Bilder)</span></p>
+                <label className="inline-flex items-center gap-1.5 text-sm px-3 py-1.5 rounded-md border border-gray-200 cursor-pointer hover:bg-gray-50">
+                  {uploading === addKey ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
+                  <span>Bild hinzufügen</span>
+                  <input type="file" accept="image/*" className="hidden" disabled={uploading === addKey}
+                    onChange={(e) => { const f = e.target.files?.[0]; if (f) gUpload(country, f, null); e.target.value = '' }} />
+                </label>
+              </div>
+              {arr.length === 0 && <p className="text-xs text-gray-400">Noch keine Bilder. Mit „Bild hinzufügen“ hochladen.</p>}
+              {arr.map((g, idx) => {
+                const key = `gallery:${country}:${idx}`
+                return (
+                  <div key={idx} className="border border-gray-100 rounded-lg p-3 bg-gray-50 grid grid-cols-1 sm:grid-cols-[10rem_1fr] gap-3">
+                    <div className="relative w-40 h-28 rounded-lg overflow-hidden bg-gray-100 border border-gray-200">
+                      {g.imageUrl ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={g.imageUrl} alt="" className="w-full h-full object-cover" />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-xs text-gray-400">kein Bild</div>
+                      )}
+                    </div>
+                    <div className="space-y-2">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <label className="inline-flex items-center gap-1.5 text-xs cursor-pointer">
+                          <input type="radio" name={`lead-${country}`} checked={g.lead} onChange={() => gSetLead(country, idx)} />
+                          Lead-Bild
+                        </label>
+                        <span className="flex-1" />
+                        <Button variant="ghost" size="sm" disabled={idx === 0} onClick={() => gMove(country, idx, -1)} aria-label="Nach oben"><ArrowUp className="h-4 w-4" /></Button>
+                        <Button variant="ghost" size="sm" disabled={idx === arr.length - 1} onClick={() => gMove(country, idx, 1)} aria-label="Nach unten"><ArrowDown className="h-4 w-4" /></Button>
+                        <Button variant="ghost" size="sm" onClick={() => gMoveCountry(country, idx)}>→ {other}</Button>
+                        <Button variant="ghost" size="sm" onClick={() => gRemove(country, idx)} aria-label="Löschen"><Trash2 className="h-4 w-4 text-red-500" /></Button>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <label className="inline-flex items-center gap-1.5 text-sm px-3 py-1.5 rounded-md border border-gray-200 cursor-pointer hover:bg-gray-100">
+                          {uploading === key ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
+                          <span>Ersetzen</span>
+                          <input type="file" accept="image/*" className="hidden" disabled={uploading === key}
+                            onChange={(e) => { const f = e.target.files?.[0]; if (f) gUpload(country, f, idx); e.target.value = '' }} />
+                        </label>
+                        <Input value={g.imageUrl} placeholder="Bild-URL" onChange={(e) => gImgPatch(country, idx, { imageUrl: e.target.value })} />
+                      </div>
+                      <BilingualInput label="Alt-Text" de={g.altDe} en={g.altEn}
+                        onDe={(v) => gImgPatch(country, idx, { altDe: v })} onEn={(v) => gImgPatch(country, idx, { altEn: v })} />
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          )
+        })}
+        <p className="text-xs text-gray-400">Nur Fotos — keine Titel/Beschreibungen. „Lead-Bild“ = großes Bild oben je Land. Reihenfolge per ▲▼ getrennt je Land. Änderungen erst nach „Speichern“ aktiv.</p>
+      </section>
+  )
+
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-8">
       <div>
@@ -822,108 +924,10 @@ export default function HomeAdminPage() {
             )}
             </section>
             {def.id === 'bauweise' && ersteBayerischeEditor}
+            {def.id === 'since-founding' && galleryEditor}
           </Fragment>
         )
       })}
-
-      {/* ── Completed-projects gallery (public: after „Über das Unternehmen“) ── */}
-      <section className="border-2 border-[#6E2E2A]/20 rounded-xl p-5 space-y-5 bg-white">
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <h2 className="text-lg font-semibold text-gray-800">
-              Galerie <span className="text-sm font-normal text-gray-400">— Abgeschlossene Projekte</span>
-            </h2>
-            <p className="text-xs text-gray-400 mt-0.5">
-              Erscheint auf der Startseite direkt nach „Über das Unternehmen / Wer wir sind“. Bilder, Reihenfolge, Land und Lead-Auswahl gelten für DE &amp; EN gemeinsam; nur Texte/Alt-Texte sind pro Sprache.
-            </p>
-          </div>
-          <Button onClick={saveGallery} disabled={savingGallery} size="sm" style={{ backgroundColor: '#6E2E2A' }}>
-            {savingGallery ? <Loader2 className="h-4 w-4 mr-1.5 animate-spin" /> : <Save className="h-4 w-4 mr-1.5" />}
-            {savedGallery ? 'Gespeichert ✓' : 'Speichern'}
-          </Button>
-        </div>
-
-        {/* Visibility */}
-        <label className="flex items-center gap-2 cursor-pointer">
-          <input type="checkbox" checked={gallery.enabled} onChange={(e) => gPatch({ enabled: e.target.checked })} className="h-4 w-4" />
-          <span className="text-sm font-medium text-gray-800">Abschnitt anzeigen</span>
-          <span className="text-xs text-gray-400">(aus = Galerie auf DE &amp; EN ausgeblendet; Inhalte bleiben gespeichert)</span>
-        </label>
-
-        {/* Section texts */}
-        <BilingualInput label="Eyebrow" de={gallery.eyebrowDe} en={gallery.eyebrowEn}
-          onDe={(v) => gPatch({ eyebrowDe: v })} onEn={(v) => gPatch({ eyebrowEn: v })} />
-        <BilingualInput label="Überschrift" de={gallery.headingDe} en={gallery.headingEn}
-          onDe={(v) => gPatch({ headingDe: v })} onEn={(v) => gPatch({ headingEn: v })} />
-        <BilingualInput label="Untertitel (optional)" textarea de={gallery.subtitleDe} en={gallery.subtitleEn}
-          onDe={(v) => gPatch({ subtitleDe: v })} onEn={(v) => gPatch({ subtitleEn: v })} />
-        <BilingualInput label="Tab „Polen“" de={gallery.polandLabelDe} en={gallery.polandLabelEn}
-          onDe={(v) => gPatch({ polandLabelDe: v })} onEn={(v) => gPatch({ polandLabelEn: v })} />
-        <BilingualInput label="Tab „Ukraine“" de={gallery.ukraineLabelDe} en={gallery.ukraineLabelEn}
-          onDe={(v) => gPatch({ ukraineLabelDe: v })} onEn={(v) => gPatch({ ukraineLabelEn: v })} />
-
-        {/* Images per country */}
-        {(['poland', 'ukraine'] as const).map((country) => {
-          const label = country === 'poland' ? 'Polen' : 'Ukraine'
-          const other = country === 'poland' ? 'Ukraine' : 'Polen'
-          const arr = gallery[country]
-          const addKey = `gallery:${country}:new`
-          return (
-            <div key={country} className="border-t pt-4 space-y-3">
-              <div className="flex items-center justify-between">
-                <p className="text-sm font-medium text-gray-700">{label} <span className="font-normal text-gray-400">({arr.length} Bilder)</span></p>
-                <label className="inline-flex items-center gap-1.5 text-sm px-3 py-1.5 rounded-md border border-gray-200 cursor-pointer hover:bg-gray-50">
-                  {uploading === addKey ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
-                  <span>Bild hinzufügen</span>
-                  <input type="file" accept="image/*" className="hidden" disabled={uploading === addKey}
-                    onChange={(e) => { const f = e.target.files?.[0]; if (f) gUpload(country, f, null); e.target.value = '' }} />
-                </label>
-              </div>
-              {arr.length === 0 && <p className="text-xs text-gray-400">Noch keine Bilder. Mit „Bild hinzufügen“ hochladen.</p>}
-              {arr.map((g, idx) => {
-                const key = `gallery:${country}:${idx}`
-                return (
-                  <div key={idx} className="border border-gray-100 rounded-lg p-3 bg-gray-50 grid grid-cols-1 sm:grid-cols-[10rem_1fr] gap-3">
-                    <div className="relative w-40 h-28 rounded-lg overflow-hidden bg-gray-100 border border-gray-200">
-                      {g.imageUrl ? (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img src={g.imageUrl} alt="" className="w-full h-full object-cover" />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center text-xs text-gray-400">kein Bild</div>
-                      )}
-                    </div>
-                    <div className="space-y-2">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <label className="inline-flex items-center gap-1.5 text-xs cursor-pointer">
-                          <input type="radio" name={`lead-${country}`} checked={g.lead} onChange={() => gSetLead(country, idx)} />
-                          Lead-Bild
-                        </label>
-                        <span className="flex-1" />
-                        <Button variant="ghost" size="sm" disabled={idx === 0} onClick={() => gMove(country, idx, -1)} aria-label="Nach oben"><ArrowUp className="h-4 w-4" /></Button>
-                        <Button variant="ghost" size="sm" disabled={idx === arr.length - 1} onClick={() => gMove(country, idx, 1)} aria-label="Nach unten"><ArrowDown className="h-4 w-4" /></Button>
-                        <Button variant="ghost" size="sm" onClick={() => gMoveCountry(country, idx)}>→ {other}</Button>
-                        <Button variant="ghost" size="sm" onClick={() => gRemove(country, idx)} aria-label="Löschen"><Trash2 className="h-4 w-4 text-red-500" /></Button>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <label className="inline-flex items-center gap-1.5 text-sm px-3 py-1.5 rounded-md border border-gray-200 cursor-pointer hover:bg-gray-100">
-                          {uploading === key ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
-                          <span>Ersetzen</span>
-                          <input type="file" accept="image/*" className="hidden" disabled={uploading === key}
-                            onChange={(e) => { const f = e.target.files?.[0]; if (f) gUpload(country, f, idx); e.target.value = '' }} />
-                        </label>
-                        <Input value={g.imageUrl} placeholder="Bild-URL" onChange={(e) => gImgPatch(country, idx, { imageUrl: e.target.value })} />
-                      </div>
-                      <BilingualInput label="Alt-Text" de={g.altDe} en={g.altEn}
-                        onDe={(v) => gImgPatch(country, idx, { altDe: v })} onEn={(v) => gImgPatch(country, idx, { altEn: v })} />
-                    </div>
-                  </div>
-                )
-              })}
-            </div>
-          )
-        })}
-        <p className="text-xs text-gray-400">Nur Fotos — keine Titel/Beschreibungen. „Lead-Bild“ = großes Bild oben je Land. Reihenfolge per ▲▼ getrennt je Land. Änderungen erst nach „Speichern“ aktiv.</p>
-      </section>
     </div>
   )
 }

@@ -23,7 +23,7 @@ type AboutSectionData = { companyName: string; description: string; photos?: unk
 // Company name + history defaults live in lib/content-defaults.ts (shared with
 // the seed script so they can never drift).
 
-export function About({ content, upcomingInvestments, newCities, aboutSection }: { content: AboutContent; upcomingInvestments: UpcomingInvestment[]; newCities: NewCity[]; aboutSection: AboutSectionData }) {
+export function About({ content, upcomingInvestments, newCities, aboutSection, afterSinceFounding }: { content: AboutContent; upcomingInvestments: UpcomingInvestment[]; newCities: NewCity[]; aboutSection: AboutSectionData; afterSinceFounding?: React.ReactNode }) {
   const [isVisible, setIsVisible] = useState(false)
   const [expansionVisible, setExpansionVisible] = useState(false)
   const sectionRef = useRef<HTMLDivElement>(null)
@@ -547,6 +547,9 @@ export function About({ content, upcomingInvestments, newCities, aboutSection }:
             ))}
           </div>
         </div>
+
+        {/* Gallery slot — rendered directly after „Seit unserer Gründung“ */}
+        {afterSinceFounding}
 
         {/* Mission / Vision / Strategy / Prices - Premium Editorial Section */}
         <div className="mt-20 lg:mt-32">
