@@ -149,7 +149,7 @@ export function CompletedGallery({ content }: { content: GalleryContent }) {
       {/* Lightbox */}
       {isOpen && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-white/50 backdrop-blur-sm"
           onClick={close}
           onTouchStart={onTouchStart}
           onTouchEnd={onTouchEnd}
@@ -159,13 +159,13 @@ export function CompletedGallery({ content }: { content: GalleryContent }) {
         >
           <button
             onClick={(e) => { e.stopPropagation(); close() }}
-            className="absolute top-4 right-4 lg:top-8 lg:right-8 w-12 h-12 flex items-center justify-center rounded-full bg-white/90 hover:bg-white transition-colors duration-300 z-50"
+            className="absolute top-4 right-4 lg:top-8 lg:right-8 w-12 h-12 flex items-center justify-center rounded-full bg-[#3E1718]/10 hover:bg-[#3E1718]/20 transition-colors duration-300 z-50 border border-[#6E2E2A]/20"
             aria-label="Schließen"
           >
             <X className="w-6 h-6 text-[#3E1718]" />
           </button>
 
-          <div className="absolute top-4 left-4 lg:top-8 lg:left-8 px-4 py-2 rounded-full bg-white/90 text-[#3E1718] text-sm font-medium">
+          <div className="absolute top-4 left-4 lg:top-8 lg:left-8 px-4 py-2 rounded-full bg-[#3E1718]/10 text-[#3E1718] text-sm font-medium border border-[#6E2E2A]/20">
             {lightbox + 1} / {images.length}
           </div>
 
@@ -173,14 +173,14 @@ export function CompletedGallery({ content }: { content: GalleryContent }) {
             <>
               <button
                 onClick={(e) => { e.stopPropagation(); prev() }}
-                className="absolute left-4 lg:left-8 top-1/2 -translate-y-1/2 w-14 h-14 lg:w-16 lg:h-16 flex items-center justify-center rounded-full bg-white/90 hover:bg-white shadow-lg transition-all duration-300 z-50"
+                className="absolute left-4 lg:left-8 top-1/2 -translate-y-1/2 w-14 h-14 lg:w-16 lg:h-16 flex items-center justify-center rounded-full bg-white/90 hover:bg-white shadow-lg hover:shadow-xl transition-all duration-300 z-50 border border-[#6E2E2A]/20"
                 aria-label="Vorheriges Bild"
               >
                 <ChevronLeft className="w-7 h-7 lg:w-8 lg:h-8 text-[#3E1718]" />
               </button>
               <button
                 onClick={(e) => { e.stopPropagation(); next() }}
-                className="absolute right-4 lg:right-8 top-1/2 -translate-y-1/2 w-14 h-14 lg:w-16 lg:h-16 flex items-center justify-center rounded-full bg-white/90 hover:bg-white shadow-lg transition-all duration-300 z-50"
+                className="absolute right-4 lg:right-8 top-1/2 -translate-y-1/2 w-14 h-14 lg:w-16 lg:h-16 flex items-center justify-center rounded-full bg-white/90 hover:bg-white shadow-lg hover:shadow-xl transition-all duration-300 z-50 border border-[#6E2E2A]/20"
                 aria-label="Nächstes Bild"
               >
                 <ChevronRight className="w-7 h-7 lg:w-8 lg:h-8 text-[#3E1718]" />
@@ -188,7 +188,7 @@ export function CompletedGallery({ content }: { content: GalleryContent }) {
             </>
           )}
 
-          <div className="relative w-[95vw] h-[88vh] flex items-center justify-center" onClick={(e) => e.stopPropagation()}>
+          <div className="relative w-[95vw] h-[90vh] lg:w-[90vw] lg:h-[90vh] flex items-center justify-center" onClick={(e) => e.stopPropagation()}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={images[lightbox].image}
