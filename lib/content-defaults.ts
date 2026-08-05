@@ -15,7 +15,7 @@ export type LocalizedItem = { icon: string; title: LocalizedText; description: L
 export const t = (de: string, en: string): LocalizedText => ({ de, en })
 
 // Hero section anchor targets (kept here so the getter and the seed agree).
-export const HERO_PRIMARY_HREF = "#verkauf"
+export const HERO_PRIMARY_HREF = "#erste-bayerische"
 export const HERO_SECONDARY_HREF = "#unternehmen"
 
 export const DEFAULT_HERO = {

@@ -38,10 +38,20 @@ export function Hero({ content }: { content: HeroContent }) {
               size="lg"
               className="bg-primary-foreground text-foreground hover:bg-primary-foreground/90 font-medium text-base px-8"
             >
-              <Link href={content.primaryCta.href}>
-                {content.primaryCta.label}
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Link>
+              {content.primaryCta.href.startsWith("#") ? (
+                // Same-page anchor (e.g. #erste-bayerische): a plain <a> keeps the
+                // user on the current locale and smooth-scrolls (globals.css) —
+                // unlike the i18n Link, which rewrites "#x" to "/#x".
+                <a href={content.primaryCta.href}>
+                  {content.primaryCta.label}
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </a>
+              ) : (
+                <Link href={content.primaryCta.href}>
+                  {content.primaryCta.label}
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Link>
+              )}
             </Button>
             <Button
               asChild
