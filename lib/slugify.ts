@@ -1,5 +1,9 @@
 export function slugify(text: string): string {
   const map: Record<string, string> = {
+    // German transliteration
+    ä: 'ae', ö: 'oe', ü: 'ue', ß: 'ss',
+    Ä: 'Ae', Ö: 'Oe', Ü: 'Ue', ẞ: 'SS',
+    // Polish transliteration (kept from the source project)
     ą: 'a', ć: 'c', ę: 'e', ł: 'l', ń: 'n',
     ó: 'o', ś: 's', ź: 'z', ż: 'z',
     Ą: 'A', Ć: 'C', Ę: 'E', Ł: 'L', Ń: 'N',

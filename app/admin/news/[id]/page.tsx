@@ -195,6 +195,8 @@ export default function EditNewsPage({ params }: { params: Promise<{ id: string 
                 <Label htmlFor="slug">Slug URL *</Label>
                 <Input
                   id="slug"
+                  name="news-slug"
+                  autoComplete="off"
                   value={form.slug}
                   onChange={(e) => setForm((p) => ({ ...p, slug: e.target.value }))}
                   required

@@ -30,12 +30,16 @@ export default function NewNewsPage() {
     published: false,
   })
   const [blocks, setBlocks] = useState<NewsBlock[]>([])
+  // While false, the slug auto-tracks the German title (Titel · DE). Set to true
+  // as soon as the admin edits the slug by hand — after that it is never
+  // overwritten automatically.
+  const [slugEdited, setSlugEdited] = useState(false)
 
   const handleTitleChange = (title: string) => {
     setForm((prev) => ({
       ...prev,
       title,
-      slug: prev.slug || slugify(title),
+      slug: slugEdited ? prev.slug : slugify(title),
     }))
   }
 
@@ -127,9 +131,11 @@ export default function NewNewsPage() {
                   <Label htmlFor="slug">Slug URL *</Label>
                   <Input
                     id="slug"
+                    name="news-slug"
+                    autoComplete="off"
                     value={form.slug}
-                    onChange={(e) => setForm((p) => ({ ...p, slug: e.target.value }))}
-                    placeholder="nowe-mieszkania-dostepne"
+                    onChange={(e) => { setSlugEdited(true); setForm((p) => ({ ...p, slug: e.target.value })) }}
+                    placeholder="neue-wohnungen-verfuegbar"
                     required
                   />
                   <p className="text-xs text-gray-500">URL: /aktuelles/{form.slug || 'slug'}</p>
