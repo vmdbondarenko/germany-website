@@ -20,6 +20,7 @@ import {
   DEFAULT_SINCE_FOUNDING,
   DEFAULT_ERSTE_BAYERISCHE,
   DEFAULT_GALLERY,
+  DEFAULT_NEWS,
 } from "@/lib/content-defaults"
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -432,5 +433,34 @@ export async function getGalleryContent(locale: Locale): Promise<GalleryContent>
     ukraineLabel: (de ? row?.secondaryCtaLabelDe : row?.secondaryCtaLabelEn) || L(D.ukraineLabel),
     poland: byCountry("poland"),
     ukraine: byCountry("ukraine"),
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Homepage "Aktuelles" (news) section header — admin-managed and bilingual.
+// Reuses HomeSection "news": eyebrow/heading map to their columns, subtitle →
+// description, the "all news" button label → primaryCtaLabel. Every field falls
+// back per-locale to the shared defaults, so the section renders identically
+// before an admin edits it. The article list itself comes from NewsPost.
+// ─────────────────────────────────────────────────────────────────────────────
+
+export type NewsSectionContent = {
+  eyebrow: string
+  heading: string
+  subtitle: string
+  allNewsLabel: string
+}
+
+export async function getNewsContent(locale: Locale): Promise<NewsSectionContent> {
+  const de = locale !== "en"
+  const L = (s: LocalizedText) => (de ? s.de : s.en)
+  const D = DEFAULT_NEWS
+
+  const row = await prisma.homeSection.findUnique({ where: { id: "news" } })
+  return {
+    eyebrow: (de ? row?.eyebrowDe : row?.eyebrowEn) || L(D.eyebrow),
+    heading: (de ? row?.headingDe : row?.headingEn) || L(D.heading),
+    subtitle: (de ? row?.descriptionDe : row?.descriptionEn) || L(D.subtitle),
+    allNewsLabel: (de ? row?.primaryCtaLabelDe : row?.primaryCtaLabelEn) || L(D.allNewsLabel),
   }
 }

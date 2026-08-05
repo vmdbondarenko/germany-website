@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react"
 import Image from "next/image"
-import Link from "next/link"
+import { Link } from "@/i18n/navigation"
 import { Calendar, ChevronLeft, ChevronRight, ArrowRight } from "lucide-react"
 
 type NewsPostData = {
@@ -11,11 +11,29 @@ type NewsPostData = {
   title: string
   description: string | null
   coverImageUrl: string | null
+  coverImageAlt: string | null
   publishedAt: string | null
   createdAt: string
 }
 
-export function NewsScroll({ posts }: { posts: NewsPostData[] }) {
+export type NewsSectionContent = {
+  eyebrow: string
+  heading: string
+  subtitle: string
+  allNewsLabel: string
+}
+
+export function NewsScroll({
+  posts,
+  content,
+  dateLocale = "de-DE",
+  noImageLabel = "Kein Bild",
+}: {
+  posts: NewsPostData[]
+  content: NewsSectionContent
+  dateLocale?: string
+  noImageLabel?: string
+}) {
   const scrollContainerRef = useRef<HTMLDivElement>(null)
   const [showLeft, setShowLeft] = useState(false)
   const [showRight, setShowRight] = useState(true)
@@ -48,22 +66,32 @@ export function NewsScroll({ posts }: { posts: NewsPostData[] }) {
       <div className="container mx-auto px-4 lg:px-8">
         <div className="flex items-end justify-between mb-12">
           <div>
+            {content.eyebrow && (
+              <span
+                className="inline-block text-sm font-medium tracking-[0.2em] uppercase mb-3"
+                style={{ color: "#6E2E2A" }}
+              >
+                {content.eyebrow}
+              </span>
+            )}
             <h2
               className="font-serif text-3xl lg:text-4xl font-semibold mb-3"
               style={{ color: "#3E1718" }}
             >
-              Aktuelles
+              {content.heading}
             </h2>
-            <p className="text-muted-foreground text-base lg:text-lg max-w-xl">
-              Neuigkeiten aus unserem Unternehmen und unseren Projekten
-            </p>
+            {content.subtitle && (
+              <p className="text-muted-foreground text-base lg:text-lg max-w-xl">
+                {content.subtitle}
+              </p>
+            )}
           </div>
           <Link
             href="/aktuelles"
             className="hidden md:flex items-center gap-1.5 text-sm font-medium hover:opacity-80 transition-opacity"
             style={{ color: "#6E2E2A" }}
           >
-            Alle Neuigkeiten
+            {content.allNewsLabel}
             <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
@@ -72,7 +100,7 @@ export function NewsScroll({ posts }: { posts: NewsPostData[] }) {
           <button
             onClick={() => scroll("left")}
             className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-12 h-12 lg:w-14 lg:h-14 flex items-center justify-center rounded-full bg-white shadow-lg hover:shadow-xl transition-all duration-300 border border-border/20 disabled:opacity-30"
-            aria-label="Vorheriger Beitrag"
+            aria-label={content.allNewsLabel}
             disabled={!showLeft}
           >
             <ChevronLeft className="w-6 h-6 lg:w-7 lg:h-7 text-[#3E1718]" />
@@ -81,7 +109,7 @@ export function NewsScroll({ posts }: { posts: NewsPostData[] }) {
           <button
             onClick={() => scroll("right")}
             className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-12 h-12 lg:w-14 lg:h-14 flex items-center justify-center rounded-full bg-white shadow-lg hover:shadow-xl transition-all duration-300 border border-border/20 disabled:opacity-30"
-            aria-label="Nächster Beitrag"
+            aria-label={content.allNewsLabel}
             disabled={!showRight}
           >
             <ChevronRight className="w-6 h-6 lg:w-7 lg:h-7 text-[#3E1718]" />
@@ -104,20 +132,20 @@ export function NewsScroll({ posts }: { posts: NewsPostData[] }) {
                     <div className="relative aspect-[16/9] overflow-hidden">
                       <Image
                         src={post.coverImageUrl}
-                        alt={post.title}
+                        alt={post.coverImageAlt || post.title}
                         fill
                         className="object-cover transition-transform duration-700 group-hover:scale-105"
                       />
                     </div>
                   ) : (
                     <div className="aspect-[16/9] bg-muted flex items-center justify-center">
-                      <span className="text-muted-foreground text-xs">Kein Bild</span>
+                      <span className="text-muted-foreground text-xs">{noImageLabel}</span>
                     </div>
                   )}
                   <div className="p-5 flex flex-col flex-grow">
                     <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-2">
                       <Calendar className="h-3 w-3" />
-                      {new Date(date).toLocaleDateString("de-DE", {
+                      {new Date(date).toLocaleDateString(dateLocale, {
                         year: "numeric",
                         month: "long",
                         day: "numeric",
@@ -147,7 +175,7 @@ export function NewsScroll({ posts }: { posts: NewsPostData[] }) {
             className="inline-flex items-center gap-1.5 text-sm font-medium"
             style={{ color: "#6E2E2A" }}
           >
-            Alle Neuigkeiten
+            {content.allNewsLabel}
             <ArrowRight className="h-4 w-4" />
           </Link>
         </div>

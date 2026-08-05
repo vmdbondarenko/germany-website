@@ -28,6 +28,8 @@ type ApiPost = {
   description: string | null
   descriptionEn: string | null
   coverImageUrl: string | null
+  coverImageAlt: string | null
+  coverImageAltEn: string | null
   published: boolean
   publishedAt: string | null
   blocks: ApiBlock[]
@@ -47,6 +49,8 @@ export default function EditNewsPage({ params }: { params: Promise<{ id: string 
     description: '',
     descriptionEn: '',
     coverImageUrl: '',
+    coverImageAlt: '',
+    coverImageAltEn: '',
     publishedAt: '',
     published: false,
   })
@@ -68,6 +72,8 @@ export default function EditNewsPage({ params }: { params: Promise<{ id: string 
         description: post.description ?? '',
         descriptionEn: post.descriptionEn ?? '',
         coverImageUrl: post.coverImageUrl ?? '',
+        coverImageAlt: post.coverImageAlt ?? '',
+        coverImageAltEn: post.coverImageAltEn ?? '',
         publishedAt: post.publishedAt ? post.publishedAt.slice(0, 10) : '',
         published: post.published,
       })
@@ -250,6 +256,25 @@ export default function EditNewsPage({ params }: { params: Promise<{ id: string 
                   className="rounded-lg max-h-48 object-cover"
                 />
               )}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div className="space-y-2">
+                  <Label htmlFor="coverImageAlt">Bild-Alt-Text · DE</Label>
+                  <Input
+                    id="coverImageAlt"
+                    value={form.coverImageAlt}
+                    onChange={(e) => setForm((p) => ({ ...p, coverImageAlt: e.target.value }))}
+                    placeholder="Alternativtext (SEO / Barrierefreiheit)"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="coverImageAltEn">Bild-Alt-Text · EN</Label>
+                  <Input
+                    id="coverImageAltEn"
+                    value={form.coverImageAltEn}
+                    onChange={(e) => setForm((p) => ({ ...p, coverImageAltEn: e.target.value }))}
+                  />
+                </div>
+              </div>
             </CardContent>
           </Card>
 
@@ -266,11 +291,11 @@ export default function EditNewsPage({ params }: { params: Promise<{ id: string 
         <div className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Publikacja</CardTitle>
+              <CardTitle>Publication</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="publishedAt">Data publikacji</Label>
+                <Label htmlFor="publishedAt">Publication date</Label>
                 <Input
                   id="publishedAt"
                   type="date"
@@ -316,7 +341,7 @@ export default function EditNewsPage({ params }: { params: Promise<{ id: string 
             className="w-full text-red-600 border-red-200 hover:bg-red-50"
           >
             <Trash2 className="h-4 w-4 mr-2" />
-            Delete wpis
+            Delete post
           </Button>
         </div>
       </div>

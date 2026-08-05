@@ -19,7 +19,7 @@ import { Footer } from "@/components/footer"
 import { NewsScroll } from "@/components/news-scroll"
 import { prisma } from "@/lib/prisma"
 import { getLocale, getTranslations } from "next-intl/server"
-import { getHomeContent, getAboutContent, getErsteBayerischeContent, getGalleryContent } from "@/lib/home-content"
+import { getHomeContent, getAboutContent, getErsteBayerischeContent, getGalleryContent, getNewsContent } from "@/lib/home-content"
 import { pick } from "@/lib/i18n-content"
 import type { Locale } from "@/i18n/routing"
 import type { Metadata } from "next"
@@ -46,6 +46,7 @@ export default async function HomePage() {
   const ersteBayerische = await getErsteBayerischeContent(locale)
   const gallery = await getGalleryContent(locale)
   const th = await getTranslations("home")
+  const tn = await getTranslations("news")
   const mapCopy = { heading: th("mapHeading"), subtitle: th("mapSubtitle") }
 
   const STATUS_LABELS: Record<string, string> = {
@@ -150,6 +151,8 @@ export default async function HomePage() {
       keyFeatures: keyFeaturesOf(p),
     }))
 
+  const newsContent = await getNewsContent(locale)
+  const newsDateLocale = locale === "en" ? "en-US" : "de-DE"
   const newsPostsRaw = await prisma.newsPost.findMany({
     where: { published: true },
     orderBy: [{ publishedAt: "desc" }, { createdAt: "desc" }],
@@ -162,14 +165,21 @@ export default async function HomePage() {
       description: true,
       descriptionEn: true,
       coverImageUrl: true,
+      coverImageAlt: true,
+      coverImageAltEn: true,
       publishedAt: true,
       createdAt: true,
     },
   })
   const newsPosts = newsPostsRaw.map((p) => ({
-    ...p,
+    id: p.id,
+    slug: p.slug,
     title: L(p.title, p.titleEn),
     description: L(p.description, p.descriptionEn),
+    coverImageUrl: p.coverImageUrl,
+    coverImageAlt: L(p.coverImageAlt, p.coverImageAltEn),
+    publishedAt: p.publishedAt,
+    createdAt: p.createdAt,
   }))
 
   return (
@@ -179,6 +189,12 @@ export default async function HomePage() {
         <Hero content={home.hero} />
         <ArchitectureSlideshow dbSlides={slideshowSlides} />
         <About content={aboutContent} upcomingInvestments={upcomingInvestments} newCities={newCities} aboutSection={aboutSection} afterSinceFounding={<CompletedGallery content={gallery} />} />
+        <NewsScroll
+          content={newsContent}
+          dateLocale={newsDateLocale}
+          noImageLabel={tn("noImage")}
+          posts={newsPosts.map((p) => ({ ...p, publishedAt: p.publishedAt?.toISOString() ?? null, createdAt: p.createdAt.toISOString() }))}
+        />
         <ErsteBayerische content={ersteBayerische} />
         <Investments projects={activeProjects} />
         {lokalizacjaData.points.length > 0 && (
@@ -206,7 +222,6 @@ export default async function HomePage() {
         <Services content={home.services} />
         <InteriorShowcase content={home.interior} />
         <BuyingProcess content={home.buying} />
-        <NewsScroll posts={newsPosts.map((p) => ({ ...p, publishedAt: p.publishedAt?.toISOString() ?? null, createdAt: p.createdAt.toISOString() }))} />
         <Contact />
       </main>
       <Footer />

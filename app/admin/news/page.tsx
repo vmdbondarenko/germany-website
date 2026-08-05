@@ -69,8 +69,8 @@ export default async function NewsAdminPage() {
                     <p className="text-xs text-gray-400 mt-1">
                       /{post.slug} &middot;{' '}
                       {post.publishedAt
-                        ? post.publishedAt.toLocaleDateString('pl-PL')
-                        : post.createdAt.toLocaleDateString('pl-PL')}
+                        ? post.publishedAt.toLocaleDateString('de-DE')
+                        : post.createdAt.toLocaleDateString('de-DE')}
                     </p>
                   </div>
                   <div className="flex items-center gap-2">

@@ -39,6 +39,7 @@ export default async function AktualnosciPage() {
     ...p,
     title: pick(p.title, p.titleEn, locale),
     description: pick(p.description, p.descriptionEn, locale),
+    coverImageAlt: pick(p.coverImageAlt, p.coverImageAltEn, locale),
   }))
 
   const itemList =
@@ -89,7 +90,7 @@ export default async function AktualnosciPage() {
                         <div className="relative aspect-[16/9] overflow-hidden">
                           <Image
                             src={thumb}
-                            alt={post.title}
+                            alt={post.coverImageAlt || post.title}
                             fill
                             className="object-cover transition-transform duration-700 group-hover:scale-105"
                           />

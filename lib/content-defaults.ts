@@ -278,6 +278,19 @@ export const DEFAULT_GALLERY = {
   ukraineLabel: t("Ukraine", "Ukraine"),
 }
 
+// Homepage "Aktuelles" (news) section — the scroller shown after the company
+// section. Header copy is admin-editable per locale (HomeSection "news");
+// these are the code-default fallbacks.
+export const DEFAULT_NEWS = {
+  eyebrow: t("Aktuelles", "News"),
+  heading: t("Neuigkeiten aus unserem Unternehmen", "News from our company"),
+  subtitle: t(
+    "Neuigkeiten aus unserem Unternehmen und unseren Projekten",
+    "The latest from our company and our projects",
+  ),
+  allNewsLabel: t("Alle Neuigkeiten", "All news"),
+}
+
 export const DEFAULT_UPCOMING = {
   line1: t("Bald beginnen wir mit dem Bau", "We will soon begin building"),
   line2: t("weiterer Projekte!", "further projects!"),

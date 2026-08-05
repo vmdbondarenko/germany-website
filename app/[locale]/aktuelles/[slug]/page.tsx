@@ -71,6 +71,7 @@ export default async function NewsPostPage({
     ...raw,
     title: pick(raw.title, raw.titleEn, locale),
     description: pick(raw.description, raw.descriptionEn, locale),
+    coverImageAlt: pick(raw.coverImageAlt, raw.coverImageAltEn, locale),
     blocks: raw.blocks.map((b) => ({ ...b, content: pick(b.content, b.contentEn, locale) })),
   }
 
@@ -128,7 +129,7 @@ export default async function NewsPostPage({
               <div className="relative aspect-[16/9] rounded-2xl overflow-hidden mb-12 shadow-lg">
                 <Image
                   src={post.coverImageUrl}
-                  alt={post.title}
+                  alt={post.coverImageAlt || post.title}
                   fill
                   priority
                   className="object-cover"

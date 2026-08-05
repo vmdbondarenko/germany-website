@@ -24,6 +24,8 @@ export default function NewNewsPage() {
     description: '',
     descriptionEn: '',
     coverImageUrl: '',
+    coverImageAlt: '',
+    coverImageAltEn: '',
     publishedAt: new Date().toISOString().slice(0, 10),
     published: false,
   })
@@ -132,24 +134,26 @@ export default function NewNewsPage() {
                   />
                   <p className="text-xs text-gray-500">URL: /aktuelles/{form.slug || 'slug'}</p>
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="descriptionEn">Kurzbeschreibung · EN</Label>
-                  <Textarea
-                    id="descriptionEn"
-                    value={form.descriptionEn}
-                    onChange={(e) => setForm((p) => ({ ...p, descriptionEn: e.target.value }))}
-                    rows={3}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="description">Kurzbeschreibung · DE</Label>
-                  <Textarea
-                    id="description"
-                    value={form.description}
-                    onChange={(e) => setForm((p) => ({ ...p, description: e.target.value }))}
-                    placeholder="Kurzer Teaser für die Übersichtsseite …"
-                    rows={3}
-                  />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <div className="space-y-2">
+                    <Label htmlFor="description">Kurzbeschreibung · DE</Label>
+                    <Textarea
+                      id="description"
+                      value={form.description}
+                      onChange={(e) => setForm((p) => ({ ...p, description: e.target.value }))}
+                      placeholder="Kurzer Teaser für die Übersichtsseite …"
+                      rows={3}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="descriptionEn">Kurzbeschreibung · EN</Label>
+                    <Textarea
+                      id="descriptionEn"
+                      value={form.descriptionEn}
+                      onChange={(e) => setForm((p) => ({ ...p, descriptionEn: e.target.value }))}
+                      rows={3}
+                    />
+                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -185,6 +189,25 @@ export default function NewNewsPage() {
                     className="rounded-lg max-h-48 object-cover"
                   />
                 )}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <div className="space-y-2">
+                    <Label htmlFor="coverImageAlt">Bild-Alt-Text · DE</Label>
+                    <Input
+                      id="coverImageAlt"
+                      value={form.coverImageAlt}
+                      onChange={(e) => setForm((p) => ({ ...p, coverImageAlt: e.target.value }))}
+                      placeholder="Alternativtext (SEO / Barrierefreiheit)"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="coverImageAltEn">Bild-Alt-Text · EN</Label>
+                    <Input
+                      id="coverImageAltEn"
+                      value={form.coverImageAltEn}
+                      onChange={(e) => setForm((p) => ({ ...p, coverImageAltEn: e.target.value }))}
+                    />
+                  </div>
+                </div>
               </CardContent>
             </Card>
 
@@ -201,11 +224,11 @@ export default function NewNewsPage() {
           <div className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle>Publikacja</CardTitle>
+                <CardTitle>Publication</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="publishedAt">Data publikacji</Label>
+                  <Label htmlFor="publishedAt">Publication date</Label>
                   <Input
                     id="publishedAt"
                     type="date"
@@ -224,7 +247,7 @@ export default function NewNewsPage() {
                     onChange={(e) => setForm((p) => ({ ...p, published: e.target.checked }))}
                     className="w-4 h-4 rounded"
                   />
-                  <Label htmlFor="published">Opublikuj</Label>
+                  <Label htmlFor="published">Published</Label>
                 </div>
               </CardContent>
             </Card>

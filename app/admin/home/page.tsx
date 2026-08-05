@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Loader2, Plus, Trash2, Save, Upload, RotateCcw, ArrowUp, ArrowDown } from 'lucide-react'
-import { DEFAULT_BAUWEISE, DEFAULT_ERSTE_BAYERISCHE, DEFAULT_HERO, DEFAULT_GALLERY } from '@/lib/content-defaults'
+import { DEFAULT_BAUWEISE, DEFAULT_ERSTE_BAYERISCHE, DEFAULT_HERO, DEFAULT_GALLERY, DEFAULT_NEWS } from '@/lib/content-defaults'
 
 // Which fields each homepage section exposes in admin. Mirrors what
 // lib/home-content.ts actually reads back per section id.
@@ -262,6 +262,28 @@ function galleryFromRow(row: GalleryRow | undefined): GalleryState {
   }
 }
 
+// ── Homepage "Aktuelles" (news) section header ──
+type NewsState = {
+  eyebrowDe: string; eyebrowEn: string
+  headingDe: string; headingEn: string
+  subtitleDe: string; subtitleEn: string
+  allNewsDe: string; allNewsEn: string
+}
+type NewsRow = {
+  eyebrowDe?: string; eyebrowEn?: string; headingDe?: string; headingEn?: string
+  descriptionDe?: string; descriptionEn?: string
+  primaryCtaLabelDe?: string; primaryCtaLabelEn?: string
+}
+const NEWS_D = DEFAULT_NEWS
+function newsFromRow(row: NewsRow | undefined): NewsState {
+  return {
+    eyebrowDe: row?.eyebrowDe || NEWS_D.eyebrow.de, eyebrowEn: row?.eyebrowEn || NEWS_D.eyebrow.en,
+    headingDe: row?.headingDe || NEWS_D.heading.de, headingEn: row?.headingEn || NEWS_D.heading.en,
+    subtitleDe: row?.descriptionDe || NEWS_D.subtitle.de, subtitleEn: row?.descriptionEn || NEWS_D.subtitle.en,
+    allNewsDe: row?.primaryCtaLabelDe || NEWS_D.allNewsLabel.de, allNewsEn: row?.primaryCtaLabelEn || NEWS_D.allNewsLabel.en,
+  }
+}
+
 export default function HomeAdminPage() {
   const [state, setState] = useState<Record<string, SectionState>>({})
   const [loading, setLoading] = useState(true)
@@ -275,6 +297,9 @@ export default function HomeAdminPage() {
   const [gallery, setGallery] = useState<GalleryState>(() => galleryFromRow(undefined))
   const [savingGallery, setSavingGallery] = useState(false)
   const [savedGallery, setSavedGallery] = useState(false)
+  const [news, setNews] = useState<NewsState>(() => newsFromRow(undefined))
+  const [savingNews, setSavingNews] = useState(false)
+  const [savedNews, setSavedNews] = useState(false)
 
   useEffect(() => {
     fetch('/api/admin/home-sections')
@@ -307,6 +332,7 @@ export default function HomeAdminPage() {
         setState(next)
         setEb(ebFromRow(byId.get('erste-bayerische') as EbRow | undefined))
         setGallery(galleryFromRow(byId.get('gallery') as GalleryRow | undefined))
+        setNews(newsFromRow(byId.get('news') as NewsRow | undefined))
       })
       .finally(() => setLoading(false))
   }, [])
@@ -470,6 +496,31 @@ export default function HomeAdminPage() {
       alert('Speichern fehlgeschlagen')
     } finally {
       setSavingGallery(false)
+    }
+  }
+
+  // ── News section-header handlers ──
+  const nPatch = (p: Partial<NewsState>) => setNews((s) => ({ ...s, ...p }))
+  const saveNews = async () => {
+    setSavingNews(true); setSavedNews(false)
+    try {
+      const res = await fetch('/api/admin/home-sections', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: 'news', order: 17, enabled: true,
+          eyebrowDe: news.eyebrowDe, eyebrowEn: news.eyebrowEn,
+          headingDe: news.headingDe, headingEn: news.headingEn,
+          descriptionDe: news.subtitleDe, descriptionEn: news.subtitleEn,
+          primaryCtaLabelDe: news.allNewsDe, primaryCtaLabelEn: news.allNewsEn,
+        }),
+      })
+      if (!res.ok) throw new Error('save failed')
+      setSavedNews(true); setTimeout(() => setSavedNews(false), 2500)
+    } catch {
+      alert('Speichern fehlgeschlagen')
+    } finally {
+      setSavingNews(false)
     }
   }
 
@@ -748,6 +799,38 @@ export default function HomeAdminPage() {
       </section>
   )
 
+  // Rendered immediately after the „Über das Unternehmen" (investor) block —
+  // controls the header copy of the homepage "Aktuelles" scroller. The articles
+  // themselves are managed under /admin/news.
+  const newsSettingsEditor = (
+    <section className="border-2 border-[#6E2E2A]/20 rounded-xl p-5 space-y-5 bg-white">
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <h2 className="text-lg font-semibold text-gray-800">
+            Aktuelles <span className="text-sm font-normal text-gray-400">— Abschnittsüberschrift</span>
+          </h2>
+          <p className="text-xs text-gray-400 mt-0.5">
+            Erscheint auf der Startseite direkt nach „Über das Unternehmen". Nur die Kopfzeile; die Beiträge werden unter „News" verwaltet.
+          </p>
+        </div>
+        <Button onClick={saveNews} disabled={savingNews} size="sm" style={{ backgroundColor: '#6E2E2A' }}>
+          {savingNews ? <Loader2 className="h-4 w-4 mr-1.5 animate-spin" /> : <Save className="h-4 w-4 mr-1.5" />}
+          {savedNews ? 'Gespeichert ✓' : 'Speichern'}
+        </Button>
+      </div>
+
+      <BilingualInput label="Label (Eyebrow)" de={news.eyebrowDe} en={news.eyebrowEn}
+        onDe={(v) => nPatch({ eyebrowDe: v })} onEn={(v) => nPatch({ eyebrowEn: v })} />
+      <BilingualInput label="Überschrift" de={news.headingDe} en={news.headingEn}
+        onDe={(v) => nPatch({ headingDe: v })} onEn={(v) => nPatch({ headingEn: v })} />
+      <BilingualInput label="Untertitel" textarea de={news.subtitleDe} en={news.subtitleEn}
+        onDe={(v) => nPatch({ subtitleDe: v })} onEn={(v) => nPatch({ subtitleEn: v })} />
+      <BilingualInput label="Button-Text (Alle Neuigkeiten)" de={news.allNewsDe} en={news.allNewsEn}
+        onDe={(v) => nPatch({ allNewsDe: v })} onEn={(v) => nPatch({ allNewsEn: v })} />
+      <p className="text-xs text-gray-400">Leere Felder verwenden den Standardtext. Änderungen erst nach „Speichern" aktiv.</p>
+    </section>
+  )
+
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-8">
       <div>
@@ -925,6 +1008,7 @@ export default function HomeAdminPage() {
             </section>
             {def.id === 'bauweise' && ersteBayerischeEditor}
             {def.id === 'since-founding' && galleryEditor}
+            {def.id === 'investor' && newsSettingsEditor}
           </Fragment>
         )
       })}

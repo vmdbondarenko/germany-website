@@ -64,6 +64,8 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
         description: body.description ?? null,
         descriptionEn: body.descriptionEn ?? null,
         coverImageUrl: body.coverImageUrl ?? null,
+        coverImageAlt: body.coverImageAlt ?? null,
+        coverImageAltEn: body.coverImageAltEn ?? null,
         published: body.published ?? false,
         publishedAt,
       },

@@ -55,6 +55,8 @@ export async function POST(request: Request) {
       description: body.description ?? null,
       descriptionEn: body.descriptionEn ?? null,
       coverImageUrl: body.coverImageUrl ?? null,
+      coverImageAlt: body.coverImageAlt ?? null,
+      coverImageAltEn: body.coverImageAltEn ?? null,
       published: body.published ?? false,
       publishedAt,
       blocks: {
