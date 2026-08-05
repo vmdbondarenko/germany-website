@@ -17,6 +17,8 @@ type SectionDef = {
   fields: FieldKey[]
   hasItems: boolean
   hint?: string
+  // Overrides the label of the generic `description` field (default "Beschreibung").
+  descriptionLabel?: string
   // When set, exposes Image 1 / Image 2 management (saved to imageUrl / imageUrl2).
   // imageFallbacks are the code-default paths shown as preview/placeholder and
   // restored by "reset".
@@ -39,7 +41,7 @@ const SECTIONS: SectionDef[] = [
   { id: 'upcoming', label: 'Demnächst — Überschrift', fields: ['eyebrow', 'heading', 'description'], hasItems: false, hint: 'Überschrift = 1. Zeile, Eyebrow = 2. (hervorgehobene) Zeile, Beschreibung = Untertitel.' },
   { id: 'new-cities', label: 'Neue Städte — Überschrift', fields: ['heading', 'description'], hasItems: true, hint: 'Überschrift + Untertitel; ein Eintrag (Titel + Beschreibung) = die Fußnote.' },
   { id: 'since-founding', label: 'Seit unserer Gründung', fields: ['heading'], hasItems: true, hint: 'Ein Eintrag pro Zeitraum: Titel = Zeitraum; Text = Länderzeilen (z. B. „Ukraine: 820 Familien …“), je Land eine Zeile.' },
-  { id: 'values', label: 'Unsere Werte', fields: ['eyebrow', 'heading'], hasItems: true, hint: 'Pro Karte: Titel + Beschreibung. Reihenfolge = Anzeigereihenfolge (Farben sind fest).' },
+  { id: 'values', label: 'Unsere Werte', fields: ['eyebrow', 'heading', 'description'], hasItems: true, descriptionLabel: 'Fußnote (unter den Karten)', hint: 'Pro Karte: Titel + Beschreibung. Reihenfolge = Anzeigereihenfolge (Farben sind fest). Fußnote = Hinweistext unter den Karten. In Karten-Text und Fußnote wird **fett** als Fettdruck dargestellt (z. B. **Bayerischer Stil**).' },
   { id: 'bauweise', label: 'Bauweise und Entwicklung', fields: ['heading', 'description', 'cta'], hasItems: false, hasImages: true, imageFallbacks: [DEFAULT_BAUWEISE.image1, DEFAULT_BAUWEISE.image2], hint: 'Absätze in der Beschreibung durch eine Leerzeile trennen. Nur der primäre CTA (Label + Link) wird verwendet. Bilder werden für DE und EN gemeinsam verwendet.' },
   { id: 'process', label: 'Warum wir (Process)', fields: ['heading', 'description'], hasItems: true },
   { id: 'distinguishes', label: 'Was uns auszeichnet', fields: ['eyebrow', 'heading', 'description'], hasItems: true },
@@ -874,7 +876,7 @@ export default function HomeAdminPage() {
                 onDe={(v) => patch(def.id, { secondaryCtaLabelDe: v })} onEn={(v) => patch(def.id, { secondaryCtaLabelEn: v })} />
             )}
             {def.fields.includes('description') && (
-              <BilingualInput label="Beschreibung" textarea de={s.descriptionDe} en={s.descriptionEn}
+              <BilingualInput label={def.descriptionLabel || 'Beschreibung'} textarea de={s.descriptionDe} en={s.descriptionEn}
                 onDe={(v) => patch(def.id, { descriptionDe: v })} onEn={(v) => patch(def.id, { descriptionEn: v })} />
             )}
             {def.fields.includes('cta') && (

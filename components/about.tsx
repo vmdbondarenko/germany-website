@@ -17,6 +17,16 @@ function InvestmentIcon({ name, className }: { name: string; className?: string 
   return <Icon className={className} />
 }
 
+// Render a lightweight `**bold**` marker as <strong> (everything else stays
+// regular). Used for admin-managed value-card text and the values footnote so a
+// single term (e.g. „Bayerischer Stil“ / „Bavarian Masonry“) can be emphasised
+// while the field remains a plain bilingual string in /admin/home.
+function renderBold(text: string): React.ReactNode[] {
+  return text.split("**").map((part, i) =>
+    i % 2 === 1 ? <strong key={i} className="font-semibold">{part}</strong> : part,
+  )
+}
+
 type UpcomingInvestment = { id: string; title: string; description: string; status: string; statusColor: string; icon: string }
 type NewCity = { id: string; city: string; date: string }
 type AboutSectionData = { companyName: string; description: string; photos?: unknown } | null
@@ -594,12 +604,19 @@ export function About({ content, upcomingInvestments, newCities, aboutSection, a
 
                 {/* Description */}
                 <p className="text-muted-foreground text-xs lg:text-sm leading-relaxed text-center">
-                  {card.description}
+                  {renderBold(card.description)}
                 </p>
               </div>
               )
             })}
           </div>
+
+          {/* Footnote — directly below the four value cards (matches the PL layout) */}
+          {content.values.footnote && (
+            <p className="mt-6 text-muted-foreground/60 text-[11px] leading-relaxed max-w-3xl mx-auto px-2">
+              {renderBold(content.values.footnote)}
+            </p>
+          )}
         </div>
 
         {/* Bauweise und Entwicklung - Premium Section */}

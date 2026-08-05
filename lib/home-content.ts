@@ -191,7 +191,7 @@ export async function getHomeContent(locale: Locale): Promise<LocalizedHome> {
 
 export type AboutContent = {
   stats: { value: string; label: string }[]
-  values: { eyebrow: string; heading: string; cards: { title: string; description: string }[] }
+  values: { eyebrow: string; heading: string; footnote: string; cards: { title: string; description: string }[] }
   bauweise: { heading: string; paragraphs: string[]; ctaLabel: string; ctaHref: string; image1: string; image2: string }
   upcoming: { line1: string; line2: string; subtitle: string }
   newCities: { heading: string; subtitle: string; noteTitle: string; noteText: string }
@@ -221,6 +221,7 @@ export async function getAboutContent(locale: Locale): Promise<AboutContent> {
   const values = {
     eyebrow: (de ? valuesRow?.eyebrowDe : valuesRow?.eyebrowEn) || L(DEFAULT_VALUES.eyebrow),
     heading: (de ? valuesRow?.headingDe : valuesRow?.headingEn) || L(DEFAULT_VALUES.heading),
+    footnote: (de ? valuesRow?.descriptionDe : valuesRow?.descriptionEn) || L(DEFAULT_VALUES.footnote),
     cards:
       valuesRow && valuesRow.items.length > 0
         ? valuesRow.items.map((it) => ({
