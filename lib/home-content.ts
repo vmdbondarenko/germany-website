@@ -445,6 +445,7 @@ export async function getGalleryContent(locale: Locale): Promise<GalleryContent>
 // ─────────────────────────────────────────────────────────────────────────────
 
 export type NewsSectionContent = {
+  enabled: boolean
   eyebrow: string
   heading: string
   subtitle: string
@@ -458,6 +459,7 @@ export async function getNewsContent(locale: Locale): Promise<NewsSectionContent
 
   const row = await prisma.homeSection.findUnique({ where: { id: "news" } })
   return {
+    enabled: row?.enabled ?? true,
     eyebrow: (de ? row?.eyebrowDe : row?.eyebrowEn) || L(D.eyebrow),
     heading: (de ? row?.headingDe : row?.headingEn) || L(D.heading),
     subtitle: (de ? row?.descriptionDe : row?.descriptionEn) || L(D.subtitle),

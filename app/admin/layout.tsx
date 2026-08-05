@@ -51,7 +51,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
                 <>
                   <Link href="/admin/news" className="flex items-center gap-1.5 text-sm text-gray-600 hover:text-gray-900">
                     <Newspaper className="h-4 w-4" />
-                    News
+                    Aktuelles
                   </Link>
                   <Link href="/admin/locations" className="flex items-center gap-1.5 text-sm text-gray-600 hover:text-gray-900">
                     <MapPinned className="h-4 w-4" />

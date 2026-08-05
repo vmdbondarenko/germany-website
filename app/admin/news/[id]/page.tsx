@@ -127,7 +127,7 @@ export default function EditNewsPage({ params }: { params: Promise<{ id: string 
     })
     if (!res.ok) {
       const data = await res.json()
-      setError(data.error || 'An error occurred')
+      setError(data.error || 'Ein Fehler ist aufgetreten')
     } else {
       const post: ApiPost = await res.json()
       setForm((p) => ({ ...p, slug: post.slug }))
@@ -136,12 +136,12 @@ export default function EditNewsPage({ params }: { params: Promise<{ id: string 
   }
 
   const handleDelete = async () => {
-    if (!id || !confirm('Are you sure you want to delete this post?')) return
+    if (!id || !confirm('Möchten Sie diesen Beitrag wirklich löschen?')) return
     await fetch(`/api/admin/news/${id}`, { method: 'DELETE' })
     router.push('/admin/news')
   }
 
-  if (loading || !id) return <div className="py-20 text-center text-gray-400">Loading...</div>
+  if (loading || !id) return <div className="py-20 text-center text-gray-400">Wird geladen…</div>
 
   return (
     <div>
@@ -150,16 +150,16 @@ export default function EditNewsPage({ params }: { params: Promise<{ id: string 
           <Link href="/admin/news">
             <Button variant="ghost" size="sm">
               <ArrowLeft className="h-4 w-4 mr-1.5" />
-              Back
+              Zurück
             </Button>
           </Link>
-          <h1 className="text-3xl font-serif font-bold text-gray-900">Edit post</h1>
+          <h1 className="text-3xl font-serif font-bold text-gray-900">Beitrag bearbeiten</h1>
         </div>
         {form.published && form.slug && (
           <Link href={`/aktuelles/${form.slug}`} target="_blank">
             <Button variant="outline" size="sm">
               <ExternalLink className="h-4 w-4 mr-1.5" />
-              View
+              Ansehen
             </Button>
           </Link>
         )}
@@ -169,7 +169,7 @@ export default function EditNewsPage({ params }: { params: Promise<{ id: string 
         <div className="lg:col-span-2 space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Basic information</CardTitle>
+              <CardTitle>Grundinformationen</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -227,7 +227,7 @@ export default function EditNewsPage({ params }: { params: Promise<{ id: string 
 
           <Card>
             <CardHeader>
-              <CardTitle>Main image (cover)</CardTitle>
+              <CardTitle>Hauptbild (Cover)</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex items-center gap-3">
@@ -241,7 +241,7 @@ export default function EditNewsPage({ params }: { params: Promise<{ id: string 
                 <Upload className="h-4 w-4 text-gray-400 flex-shrink-0" />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="coverImageUrl">or image URL</Label>
+                <Label htmlFor="coverImageUrl">oder Bild-URL</Label>
                 <Input
                   id="coverImageUrl"
                   value={form.coverImageUrl}
@@ -252,7 +252,7 @@ export default function EditNewsPage({ params }: { params: Promise<{ id: string 
               {form.coverImageUrl && (
                 <img
                   src={form.coverImageUrl}
-                  alt="Preview"
+                  alt="Vorschau"
                   className="rounded-lg max-h-48 object-cover"
                 />
               )}
@@ -280,7 +280,7 @@ export default function EditNewsPage({ params }: { params: Promise<{ id: string 
 
           <Card>
             <CardHeader>
-              <CardTitle>Post content</CardTitle>
+              <CardTitle>Beitragsinhalt</CardTitle>
             </CardHeader>
             <CardContent>
               <NewsBlocksEditor blocks={blocks} onChange={setBlocks} postSlug={form.slug} />
@@ -291,11 +291,11 @@ export default function EditNewsPage({ params }: { params: Promise<{ id: string 
         <div className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Publication</CardTitle>
+              <CardTitle>Veröffentlichung</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="publishedAt">Publication date</Label>
+                <Label htmlFor="publishedAt">Veröffentlichungsdatum</Label>
                 <Input
                   id="publishedAt"
                   type="date"
@@ -303,7 +303,7 @@ export default function EditNewsPage({ params }: { params: Promise<{ id: string 
                   onChange={(e) => setForm((p) => ({ ...p, publishedAt: e.target.value }))}
                 />
                 <p className="text-xs text-gray-500">
-                  Useful when migrating older posts.
+                  Nützlich bei der Migration älterer Beiträge.
                 </p>
               </div>
               <div className="flex items-center gap-3">
@@ -314,7 +314,7 @@ export default function EditNewsPage({ params }: { params: Promise<{ id: string 
                   onChange={(e) => setForm((p) => ({ ...p, published: e.target.checked }))}
                   className="w-4 h-4 rounded"
                 />
-                <Label htmlFor="published">Published</Label>
+                <Label htmlFor="published">Veröffentlicht</Label>
               </div>
             </CardContent>
           </Card>
@@ -332,7 +332,7 @@ export default function EditNewsPage({ params }: { params: Promise<{ id: string 
             style={{ backgroundColor: '#6E2E2A' }}
           >
             <Save className="h-4 w-4 mr-2" />
-            {saving ? 'Saving...' : 'Save changes'}
+            {saving ? 'Wird gespeichert…' : 'Änderungen speichern'}
           </Button>
 
           <Button
@@ -341,7 +341,7 @@ export default function EditNewsPage({ params }: { params: Promise<{ id: string 
             className="w-full text-red-600 border-red-200 hover:bg-red-50"
           >
             <Trash2 className="h-4 w-4 mr-2" />
-            Delete post
+            Beitrag löschen
           </Button>
         </div>
       </div>

@@ -264,12 +264,14 @@ function galleryFromRow(row: GalleryRow | undefined): GalleryState {
 
 // ── Homepage "Aktuelles" (news) section header ──
 type NewsState = {
+  enabled: boolean
   eyebrowDe: string; eyebrowEn: string
   headingDe: string; headingEn: string
   subtitleDe: string; subtitleEn: string
   allNewsDe: string; allNewsEn: string
 }
 type NewsRow = {
+  enabled?: boolean
   eyebrowDe?: string; eyebrowEn?: string; headingDe?: string; headingEn?: string
   descriptionDe?: string; descriptionEn?: string
   primaryCtaLabelDe?: string; primaryCtaLabelEn?: string
@@ -277,6 +279,7 @@ type NewsRow = {
 const NEWS_D = DEFAULT_NEWS
 function newsFromRow(row: NewsRow | undefined): NewsState {
   return {
+    enabled: row?.enabled ?? true,
     eyebrowDe: row?.eyebrowDe || NEWS_D.eyebrow.de, eyebrowEn: row?.eyebrowEn || NEWS_D.eyebrow.en,
     headingDe: row?.headingDe || NEWS_D.heading.de, headingEn: row?.headingEn || NEWS_D.heading.en,
     subtitleDe: row?.descriptionDe || NEWS_D.subtitle.de, subtitleEn: row?.descriptionEn || NEWS_D.subtitle.en,
@@ -508,7 +511,7 @@ export default function HomeAdminPage() {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          id: 'news', order: 17, enabled: true,
+          id: 'news', order: 17, enabled: news.enabled,
           eyebrowDe: news.eyebrowDe, eyebrowEn: news.eyebrowEn,
           headingDe: news.headingDe, headingEn: news.headingEn,
           descriptionDe: news.subtitleDe, descriptionEn: news.subtitleEn,
@@ -818,6 +821,12 @@ export default function HomeAdminPage() {
           {savedNews ? 'Gespeichert ✓' : 'Speichern'}
         </Button>
       </div>
+
+      <label className="flex items-center gap-2 cursor-pointer">
+        <input type="checkbox" checked={news.enabled} onChange={(e) => nPatch({ enabled: e.target.checked })} className="h-4 w-4" />
+        <span className="text-sm font-medium text-gray-800">Abschnitt anzeigen</span>
+        <span className="text-xs text-gray-400">(aus = Aktuelles auf der Startseite ausgeblendet; Beiträge bleiben gespeichert)</span>
+      </label>
 
       <BilingualInput label="Label (Eyebrow)" de={news.eyebrowDe} en={news.eyebrowEn}
         onDe={(v) => nPatch({ eyebrowDe: v })} onEn={(v) => nPatch({ eyebrowEn: v })} />

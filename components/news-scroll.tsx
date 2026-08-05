@@ -17,6 +17,7 @@ type NewsPostData = {
 }
 
 export type NewsSectionContent = {
+  enabled: boolean
   eyebrow: string
   heading: string
   subtitle: string
@@ -59,7 +60,7 @@ export function NewsScroll({
     scrollContainerRef.current?.scrollBy({ left: dir === "left" ? -380 : 380, behavior: "smooth" })
   }
 
-  if (posts.length === 0) return null
+  if (!content.enabled || posts.length === 0) return null
 
   return (
     <section id="aktualnosci" className="py-20 lg:py-32 bg-muted/30">
