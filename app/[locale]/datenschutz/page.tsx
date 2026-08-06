@@ -61,10 +61,10 @@ export default function DatenschutzPage() {
             <Section heading="3. Rechtsgrundlagen der Verarbeitung">
               <p>Die Verarbeitung personenbezogener Daten erfolgt auf Grundlage der folgenden Vorschriften der DSGVO:</p>
               <ul className="list-disc pl-5 space-y-1">
-                <li>Art. 6 Abs. 1 lit. a DSGVO – Einwilligung (z. B. für das Laden von Google Maps);</li>
-                <li>Art. 6 Abs. 1 lit. b DSGVO – Vertragserfüllung oder vorvertragliche Maßnahmen;</li>
-                <li>Art. 6 Abs. 1 lit. c DSGVO – Erfüllung einer rechtlichen Verpflichtung;</li>
-                <li>Art. 6 Abs. 1 lit. f DSGVO – Wahrung berechtigter Interessen (z. B. sicherer Betrieb der Website und Beantwortung allgemeiner Anfragen).</li>
+                <li>Art. 6 Abs. 1 lit. a DSGVO - Einwilligung (z. B. für das Laden von Google Maps);</li>
+                <li>Art. 6 Abs. 1 lit. b DSGVO - Vertragserfüllung oder vorvertragliche Maßnahmen;</li>
+                <li>Art. 6 Abs. 1 lit. c DSGVO - Erfüllung einer rechtlichen Verpflichtung;</li>
+                <li>Art. 6 Abs. 1 lit. f DSGVO - Wahrung berechtigter Interessen (z. B. sicherer Betrieb der Website und Beantwortung allgemeiner Anfragen).</li>
               </ul>
             </Section>
 
@@ -104,11 +104,11 @@ export default function DatenschutzPage() {
               <p>
                 Diese Website verwendet technisch notwendige Cookies, die für die Grundfunktionen und den
                 Betrieb der Website erforderlich sind. Hierzu gehören insbesondere ein Cookie zur Speicherung
-                Ihrer Cookie-Auswahl sowie – soweit Sie die Sprache umstellen – ein Cookie zur Speicherung
+                Ihrer Cookie-Auswahl sowie - soweit Sie die Sprache umstellen - ein Cookie zur Speicherung
                 Ihrer Spracheinstellung.
               </p>
               <p>
-                Optionale Inhalte – insbesondere die Einbindung von Google Maps – werden ausschließlich nach
+                Optionale Inhalte - insbesondere die Einbindung von Google Maps - werden ausschließlich nach
                 Ihrer Einwilligung geladen. Beim Aufruf der Website können Sie wählen, ob Sie nur notwendige
                 Cookies zulassen oder optionale Dienste akzeptieren. Ihre Auswahl können Sie jederzeit mit
                 Wirkung für die Zukunft über den Button „Cookie-Einstellungen“ im Seitenfuß ändern und Ihre
@@ -169,11 +169,11 @@ export default function DatenschutzPage() {
                 Aufsichtsbehörde ist:
               </p>
               <p className="whitespace-pre-line font-medium text-foreground">
-                {`Berliner Beauftragte für Datenschutz und Informationsfreiheit\nAlt-Moabit 59–61\n10555 Berlin\nDeutschland`}
+                {`Berliner Beauftragte für Datenschutz und Informationsfreiheit\nAlt-Moabit 59-61\n10555 Berlin\nDeutschland`}
               </p>
             </Section>
 
-            <Section heading="11. Widerspruchsrecht – Besonderer Hinweis">
+            <Section heading="11. Widerspruchsrecht - Besonderer Hinweis">
               <p>
                 Sofern wir Ihre personenbezogenen Daten auf Grundlage eines berechtigten Interesses gemäß Art.
                 6 Abs. 1 lit. f DSGVO verarbeiten, haben Sie das Recht, aus Gründen, die sich aus Ihrer
