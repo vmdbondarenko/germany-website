@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Mail, Phone, MapPin, Send } from "lucide-react"
 import { useSiteSettings } from "@/components/site-settings-provider"
-import { trackFormSubmit, pushToDataLayer } from "@/lib/gtm"
+import { MapGate } from "@/components/map-gate"
 import { isValidNationalNumber, PHONE_ERROR_MESSAGE } from "@/lib/validation/phone"
 import { isValidEmail, EMAIL_ERROR_MESSAGE } from "@/lib/validation/email"
 import { PhoneField } from "@/components/forms/phone-field"
@@ -48,9 +48,6 @@ export function Contact() {
         body: JSON.stringify(data),
       })
       if (res.ok) {
-        trackFormSubmit("contact_section")
-        // Google Ads conversion event — fires only after the server confirms success.
-        pushToDataLayer({ event: "form_submit_success", form_location: "kontakt" })
         alert(t("successAlert"))
         form.reset()
         setPhoneNumber("")
@@ -223,28 +220,31 @@ export function Contact() {
               </div>
             </div>
 
-            {/* Google Map */}
+            {/* Google Map — loaded only after consent (banner "accept" or the
+                "Google Maps laden" button); a placeholder holds the same box. */}
             <div className="bg-card rounded-3xl border border-border shadow-lg overflow-hidden flex-1 min-h-[300px] relative">
-              <a
-                href={s.mapHref}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="absolute top-4 right-4 z-10 bg-white px-4 py-2 rounded-lg shadow-md hover:shadow-lg transition-shadow flex items-center gap-2 text-sm font-medium text-foreground"
-              >
-                <MapPin className="h-4 w-4 text-primary" />
-                {t("openInMaps")}
-              </a>
-              <iframe
-                src={s.mapEmbedSrc}
-                width="100%"
-                height="100%"
-                style={{ border: 0, minHeight: '300px' }}
-                allowFullScreen
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                title="Projektentwicklung Einstöckiges Berlin GmbH – Büro"
-                className="absolute inset-0"
-              />
+              <MapGate className="absolute inset-0">
+                <a
+                  href={s.mapHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="absolute top-4 right-4 z-10 bg-white px-4 py-2 rounded-lg shadow-md hover:shadow-lg transition-shadow flex items-center gap-2 text-sm font-medium text-foreground"
+                >
+                  <MapPin className="h-4 w-4 text-primary" />
+                  {t("openInMaps")}
+                </a>
+                <iframe
+                  src={s.mapEmbedSrc}
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0, minHeight: '300px' }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title="Projektentwicklung Einstöckiges Berlin GmbH – Büro"
+                  className="absolute inset-0"
+                />
+              </MapGate>
             </div>
           </div>
         </div>

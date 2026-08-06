@@ -40,11 +40,15 @@
   "cookies": {
     "ariaLabel": "Zustimmung zu Cookies",
     "title": "Cookies",
-    "body": "Wir verwenden Cookies für Analyse- und Marketingzwecke. Sie können alle akzeptieren oder optionale ablehnen.",
+    "body": "Diese Website verwendet notwendige Cookies für den technischen Betrieb. Externe Karten von Google Maps werden nur mit Ihrer Einwilligung geladen. Sie können optionale Dienste akzeptieren oder nur notwendige Cookies zulassen. Weitere Informationen finden Sie in der",
     "privacyLink": "Datenschutzerklärung",
-    "reject": "Ablehnen",
-    "accept": "Akzeptieren",
+    "reject": "Nur notwendige",
+    "accept": "Alle akzeptieren",
     "settings": "Cookie-Einstellungen"
+  },
+  "maps": {
+    "placeholder": "Google Maps wird erst nach Ihrer Einwilligung geladen. Dabei können Daten (insbesondere Ihre IP-Adresse) an Google übertragen werden.",
+    "loadButton": "Google Maps laden"
   },
   "legal": {
     "lastUpdated": "Stand",

@@ -5,6 +5,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { APIProvider, Map, AdvancedMarker, InfoWindow } from "@vis.gl/react-google-maps"
 import { MapPin, ChevronLeft, ChevronRight } from "lucide-react"
+import { MapGate } from "@/components/map-gate"
 
 export type CityConfig = {
   name: string
@@ -138,6 +139,7 @@ export function CityMap({
         style={{ height: "60vh", minHeight: 400 }}
       >
         {apiKey ? (
+          <MapGate className="absolute inset-0">
           <APIProvider apiKey={apiKey}>
             <Map
               key={activeCity}
@@ -185,6 +187,7 @@ export function CityMap({
               })()}
             </Map>
           </APIProvider>
+          </MapGate>
         ) : (
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="text-center p-8">

@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Checkbox } from "@/components/ui/checkbox"
-import { trackFormSubmit, pushToDataLayer } from "@/lib/gtm"
 import { isValidNationalNumber, PHONE_ERROR_MESSAGE } from "@/lib/validation/phone"
 import { isValidEmail, EMAIL_ERROR_MESSAGE } from "@/lib/validation/email"
 import { PhoneField } from "@/components/forms/phone-field"
@@ -73,9 +72,6 @@ export function ContactModal({ isOpen, onClose, subject }: ContactModalProps) {
         body: JSON.stringify(data),
       })
       if (res.ok) {
-        trackFormSubmit("contact_modal", subject ? { subject } : {})
-        // Google Ads conversion event — fires only after the server confirms success.
-        pushToDataLayer({ event: "form_submit_success", form_location: "modal" })
         setSubmitted(true)
         formRef.current?.reset()
         setPhoneNumber("")

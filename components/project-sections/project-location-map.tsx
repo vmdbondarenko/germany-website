@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react"
 import { APIProvider, Map, AdvancedMarker, InfoWindow, Pin } from "@vis.gl/react-google-maps"
 import { MapPin } from "lucide-react"
+import { MapGate } from "@/components/map-gate"
 import { SectionIcon } from "./icon-map"
 import { extractLatLng } from "./extract-lat-lng"
 
@@ -70,6 +71,7 @@ export function ProjectLocationMap({ apiKey, mapId, projectName, projectLat, pro
       className="relative w-full rounded-2xl overflow-hidden border border-border/60 shadow-sm bg-muted"
       style={{ minHeight: 360, height: "55vh" }}
     >
+      <MapGate className="absolute inset-0">
       <APIProvider apiKey={apiKey}>
         <Map
           mapId={mapId}
@@ -162,6 +164,7 @@ export function ProjectLocationMap({ apiKey, mapId, projectName, projectLat, pro
           )}
         </Map>
       </APIProvider>
+      </MapGate>
     </div>
   )
 }

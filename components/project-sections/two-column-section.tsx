@@ -2,6 +2,7 @@ import Image from "next/image"
 import { SectionIcon } from "./icon-map"
 import { MapPin } from "lucide-react"
 import { ProjectLocationMap } from "./project-location-map"
+import { MapGate } from "@/components/map-gate"
 import { extractLatLng } from "./extract-lat-lng"
 import { resolveAlt, sectionAlt } from "@/lib/seo/image-alt"
 
@@ -143,6 +144,7 @@ function MapContent({ section, projectMap, hideItems = false }: { section: Secti
         const mapHref = mapUrl.match(/^https?:\/\//) ? mapUrl : `https://${mapUrl}`
         return (
           <div className="bg-card rounded-2xl border border-border/60 shadow-sm overflow-hidden relative" style={{ minHeight: '300px' }}>
+            <MapGate className="absolute inset-0">
             <a
               href={mapHref}
               target="_blank"
@@ -164,6 +166,7 @@ function MapContent({ section, projectMap, hideItems = false }: { section: Secti
               title="Mapa lokalizacji"
               className="absolute inset-0"
             />
+            </MapGate>
           </div>
         )
       })() : null}
@@ -286,6 +289,7 @@ export function DynamicTwoColumnSection({
         return (
           <div className="mb-8">
             <div className="bg-card rounded-2xl border border-border/60 shadow-sm overflow-hidden relative" style={{ minHeight: '300px' }}>
+              <MapGate className="absolute inset-0">
               <a
                 href={mapHref}
                 target="_blank"
@@ -307,6 +311,7 @@ export function DynamicTwoColumnSection({
                 title="Mapa lokalizacji"
                 className="absolute inset-0"
               />
+              </MapGate>
             </div>
           </div>
         )

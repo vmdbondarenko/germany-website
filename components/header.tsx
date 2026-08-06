@@ -152,8 +152,8 @@ export function Header({ cities = [] }: { cities?: { name: string; slug: string 
                       {link.label}
                       <ChevronDown className="h-3 w-3" />
                     </Link>
-                    {/* Always mounted so Ringostat can detect/replace the tel: links; only visibility
-                        is toggled. `pt-2` bridges the gap to the trigger so hovering a number works. */}
+                    {/* Kept mounted; only visibility is toggled. `pt-2` bridges the gap to the
+                        trigger so hovering a number works. */}
                     <div
                       inert={!showKontaktPopup}
                       aria-hidden={!showKontaktPopup}
@@ -219,10 +219,9 @@ export function Header({ cities = [] }: { cities?: { name: string; slug: string 
                 >
                   <Phone className="h-4 w-4" style={{ color: 'rgba(74, 42, 42, 0.7)' }} />
                 </button>
-                {/* Always mounted so Ringostat can detect/replace the tel: links; only visibility is
-                    toggled (opacity, not display) so the nodes stay in the render tree. The `pt-2`
-                    padding (not a margin) bridges the gap to the button so moving the mouse onto a
-                    number doesn't cross empty space and trigger onMouseLeave. */}
+                {/* Only visibility is toggled (opacity, not display) so the nodes stay in the render
+                    tree. The `pt-2` padding (not a margin) bridges the gap to the button so moving
+                    the mouse onto a number doesn't cross empty space and trigger onMouseLeave. */}
                 <div
                   inert={!showPhonePopup}
                   aria-hidden={!showPhonePopup}
@@ -291,9 +290,9 @@ export function Header({ cities = [] }: { cities?: { name: string; slug: string 
           </button>
         </div>
 
-        {/* Mobile Navigation — always mounted so the phone tel: links stay in the DOM for Ringostat;
-            when closed it collapses to an invisible, non-interactive, out-of-flow layer (opacity, not
-            display) so the header layout is unchanged. */}
+        {/* Mobile Navigation — always mounted; when closed it collapses to an invisible,
+            non-interactive, out-of-flow layer (opacity, not display) so the header layout is
+            unchanged. */}
         <nav
           inert={!isMenuOpen}
           aria-hidden={!isMenuOpen}

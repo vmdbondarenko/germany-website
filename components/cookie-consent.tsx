@@ -3,37 +3,14 @@
 import { useEffect, useState } from "react"
 import { useTranslations } from "next-intl"
 import { Link } from "@/i18n/navigation"
+import { MAPS_CONSENT_EVENT, revokeMapsConsent } from "@/lib/maps-consent"
 
-// Custom event name the footer "Ustawienia cookies" link dispatches to reopen
-// the banner. Kept in sync with components/cookie-settings-button.tsx.
+// Custom event the footer "Cookie-Einstellungen" link dispatches to reopen the
+// banner. Kept in sync with components/cookie-settings-button.tsx.
 export const OPEN_COOKIE_SETTINGS_EVENT = "open-cookie-settings"
-
-// Dispatched the moment the user grants consent, so consent-gated integrations
-// (e.g. Ringostat in components/ringostat.tsx) can load without polling.
-export const CONSENT_GRANTED_EVENT = "cookie-consent-granted"
 
 const COOKIE_NAME = "cookie_consent"
 const COOKIE_MAX_AGE = 60 * 60 * 24 * 180 // 180 days
-
-const GRANTED = {
-  ad_storage: "granted",
-  analytics_storage: "granted",
-  ad_user_data: "granted",
-  ad_personalization: "granted",
-} as const
-
-const DENIED = {
-  ad_storage: "denied",
-  analytics_storage: "denied",
-  ad_user_data: "denied",
-  ad_personalization: "denied",
-} as const
-
-declare global {
-  interface Window {
-    gtag?: (...args: unknown[]) => void
-  }
-}
 
 function readConsentCookie(): string | null {
   if (typeof document === "undefined") return null
@@ -58,16 +35,18 @@ export function CookieConsent() {
     return () => window.removeEventListener(OPEN_COOKIE_SETTINGS_EVENT, reopen)
   }, [])
 
-  const accept = () => {
-    window.gtag?.("consent", "update", GRANTED)
+  // Accept optional services → Google Maps is allowed to load.
+  const acceptAll = () => {
     writeConsentCookie("granted")
-    window.dispatchEvent(new Event(CONSENT_GRANTED_EVENT))
+    window.dispatchEvent(new Event(MAPS_CONSENT_EVENT))
     setVisible(false)
   }
 
-  const reject = () => {
-    window.gtag?.("consent", "update", DENIED)
+  // Necessary only → keep Google Maps blocked until the visitor separately
+  // clicks "Google Maps laden" on a map placeholder.
+  const necessaryOnly = () => {
     writeConsentCookie("denied")
+    revokeMapsConsent()
     setVisible(false)
   }
 
@@ -93,17 +72,18 @@ export function CookieConsent() {
             {t("privacyLink")}
           </Link>
         </p>
+        {/* Both options share the same size and solid styling → equal prominence. */}
         <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:justify-end">
           <button
             type="button"
-            onClick={reject}
-            className="rounded-full border border-border bg-background px-6 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted"
+            onClick={necessaryOnly}
+            className="rounded-full bg-foreground px-6 py-2.5 text-sm font-medium text-background shadow-sm transition-colors hover:bg-foreground/90"
           >
             {t("reject")}
           </button>
           <button
             type="button"
-            onClick={accept}
+            onClick={acceptAll}
             className="rounded-full bg-primary px-6 py-2.5 text-sm font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary/90"
           >
             {t("accept")}

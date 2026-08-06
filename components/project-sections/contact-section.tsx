@@ -2,7 +2,6 @@
 
 import { useState } from "react"
 import { Mail, Phone, MapPin, Send } from "lucide-react"
-import { trackFormSubmit, pushToDataLayer } from "@/lib/gtm"
 import { isValidNationalNumber, PHONE_ERROR_MESSAGE } from "@/lib/validation/phone"
 import { isValidEmail, EMAIL_ERROR_MESSAGE } from "@/lib/validation/email"
 import { PhoneField } from "@/components/forms/phone-field"
@@ -51,9 +50,6 @@ export function DynamicContactSection({
         body: JSON.stringify(data),
       })
       if (res.ok) {
-        trackFormSubmit("project_contact")
-        // Google Ads conversion event — fires only after the server confirms success.
-        pushToDataLayer({ event: "form_submit_success", form_location: "projekt" })
         setSubmitted(true)
         setPhoneNumber("")
         setCountry(DEFAULT_COUNTRY)
