@@ -51,7 +51,7 @@ export default function ImpressumPage() {
               </p>
             </Section>
 
-            <Section heading="Registereintrag">
+            <Section heading="Handelsregister">
               <p>
                 Registergericht: {E.registerCourt}
                 <br />
