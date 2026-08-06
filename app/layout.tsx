@@ -21,11 +21,12 @@ const inter = Inter({
   display: 'swap',
 });
 
-// NOTE: Locale-specific titles/descriptions and the production metadataBase are
-// set per-page and finalized in the SEO localization phase. This is a neutral
-// default so nothing ships hardcoded Polish copy.
+// metadataBase resolves the relative canonical / Open Graph / hreflang URLs set
+// per page. It defaults to the German production domain so absolute URLs are
+// correct even when NEXT_PUBLIC_BASE_URL is not set in the environment; the env
+// var still overrides it (e.g. for preview deployments).
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'https://www.peberlin-gmbh.de'),
   icons: {
     icon: '/images/logo-blocks.png',
     apple: '/images/logo-blocks.png',
