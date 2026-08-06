@@ -50,27 +50,6 @@
     "placeholder": "Google Maps wird erst nach Ihrer Einwilligung geladen. Dabei können Daten (insbesondere Ihre IP-Adresse) an Google übertragen werden.",
     "loadButton": "Google Maps laden"
   },
-  "legal": {
-    "lastUpdated": "Stand",
-    "placeholder": "[Platzhalter – bitte durch rechtlich geprüfte Angaben ersetzen.]",
-    "impressumTitle": "Impressum",
-    "providerHeading": "Angaben gemäß § 5 DDG",
-    "managingDirectorHeading": "Vertreten durch",
-    "contactHeading": "Kontakt",
-    "registerHeading": "Registereintrag",
-    "registerCourtLabel": "Registergericht",
-    "registrationNumberLabel": "Registernummer",
-    "vatHeading": "Umsatzsteuer-Identifikationsnummer",
-    "pending": "Wird nachgereicht.",
-    "disclaimerHeading": "Haftung für Inhalte",
-    "disclaimerBody": "Als Diensteanbieter sind wir für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Wir sind jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen. [Bitte durch rechtlich geprüften Text ersetzen.]",
-    "datenschutzTitle": "Datenschutzerklärung",
-    "controllerHeading": "Verantwortlicher",
-    "dataHeading": "Erhebung und Verarbeitung personenbezogener Daten",
-    "dataBody": "Wir verarbeiten personenbezogene Daten (z. B. Name, E-Mail, Telefon), die Sie uns über das Kontaktformular mitteilen, ausschließlich zur Bearbeitung Ihrer Anfrage. [Bitte durch rechtlich geprüften Text ersetzen.]",
-    "rightsHeading": "Ihre Rechte nach DSGVO",
-    "rightsBody": "Sie haben das Recht auf Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung, Datenübertragbarkeit und Widerspruch. Zudem steht Ihnen ein Beschwerderecht bei einer Aufsichtsbehörde zu. [Bitte durch rechtlich geprüften Text ersetzen.]"
-  },
   "news": {
     "heading": "Aktuelles",
     "subtitle": "Neuigkeiten aus unserem Unternehmen und unseren Projekten",

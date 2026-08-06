@@ -50,27 +50,6 @@
     "placeholder": "Google Maps is loaded only after your consent. Data (in particular your IP address) may be transferred to Google.",
     "loadButton": "Load Google Maps"
   },
-  "legal": {
-    "lastUpdated": "Last updated",
-    "placeholder": "[Placeholder – replace with legally reviewed details.]",
-    "impressumTitle": "Legal notice (Impressum)",
-    "providerHeading": "Information pursuant to § 5 DDG",
-    "managingDirectorHeading": "Represented by",
-    "contactHeading": "Contact",
-    "registerHeading": "Register entry",
-    "registerCourtLabel": "Register court",
-    "registrationNumberLabel": "Registration number",
-    "vatHeading": "VAT identification number",
-    "pending": "To be provided.",
-    "disclaimerHeading": "Liability for content",
-    "disclaimerBody": "As a service provider we are responsible for our own content on these pages under general law. However, we are not obliged to monitor transmitted or stored third-party information. [Replace with legally reviewed text.]",
-    "datenschutzTitle": "Privacy policy",
-    "controllerHeading": "Controller",
-    "dataHeading": "Collection and processing of personal data",
-    "dataBody": "We process personal data (e.g. name, email, phone) that you provide via the contact form solely to handle your enquiry. [Replace with legally reviewed text.]",
-    "rightsHeading": "Your rights under the GDPR",
-    "rightsBody": "You have the right to access, rectification, erasure, restriction of processing, data portability and objection. You also have the right to lodge a complaint with a supervisory authority. [Replace with legally reviewed text.]"
-  },
   "news": {
     "heading": "News",
     "subtitle": "The latest from our company and our projects",
