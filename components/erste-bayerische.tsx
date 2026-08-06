@@ -1,6 +1,7 @@
 import Image from "next/image"
 import { DynamicIcon } from "@/components/dynamic-icon"
 import { ErsteBayerischeGallery } from "@/components/erste-bayerische-gallery"
+import { renderBold, RichText } from "@/lib/render-bold"
 import type { ErsteBayerischeContent, EbBlock } from "@/lib/home-content"
 
 // "Erste Bayerische" — the first investment, presented in full on the homepage
@@ -13,10 +14,14 @@ function TextImageBlock({ block, flip }: { block: EbBlock; flip?: boolean }) {
       <div className={flip ? "lg:order-2" : "lg:order-1"}>
         {block.title && (
           <h3 className="font-serif text-2xl lg:text-3xl font-semibold mb-4" style={{ color: "#3E1718" }}>
-            {block.title}
+            {renderBold(block.title)}
           </h3>
         )}
-        <p className="text-muted-foreground text-base lg:text-lg leading-relaxed">{block.body}</p>
+        <RichText
+          text={block.body}
+          containerClassName="space-y-4"
+          pClassName="text-muted-foreground text-base lg:text-lg leading-relaxed"
+        />
       </div>
       {block.image && (
         <div className={flip ? "lg:order-1" : "lg:order-2"}>
@@ -48,10 +53,10 @@ export function ErsteBayerische({ content }: { content: ErsteBayerischeContent }
             className="inline-block text-sm lg:text-base font-medium tracking-[0.2em] uppercase mb-4"
             style={{ color: "#6E2E2A" }}
           >
-            {c.projectName}
+            {renderBold(c.projectName)}
           </span>
           <h2 className="font-serif text-3xl lg:text-5xl font-semibold leading-tight" style={{ color: "#3E1718" }}>
-            {c.heading}
+            {renderBold(c.heading)}
           </h2>
         </div>
 
@@ -71,9 +76,11 @@ export function ErsteBayerische({ content }: { content: ErsteBayerischeContent }
         )}
 
         {/* Intro */}
-        <p className="max-w-3xl mx-auto text-center text-lg lg:text-xl text-muted-foreground leading-relaxed mb-16 lg:mb-24">
-          {c.intro}
-        </p>
+        <RichText
+          text={c.intro}
+          containerClassName="max-w-3xl mx-auto text-center mb-16 lg:mb-24 space-y-4"
+          pClassName="text-lg lg:text-xl text-muted-foreground leading-relaxed"
+        />
 
         <div className="max-w-7xl mx-auto space-y-16 lg:space-y-24">
           {/* Subsection A — green surroundings & connection */}
@@ -102,7 +109,7 @@ export function ErsteBayerische({ content }: { content: ErsteBayerischeContent }
           {c.travel.length > 0 && (
             <div>
               <h3 className="font-serif text-2xl lg:text-3xl font-semibold text-center mb-10 lg:mb-14" style={{ color: "#3E1718" }}>
-                {c.travelHeading}
+                {renderBold(c.travelHeading)}
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6">
                 {c.travel.map((tv, i) => (
@@ -116,13 +123,13 @@ export function ErsteBayerische({ content }: { content: ErsteBayerischeContent }
                     >
                       <DynamicIcon name={tv.icon} className="h-6 w-6 text-white" />
                     </div>
-                    <p className="font-medium text-foreground leading-snug">{tv.title}</p>
+                    <p className="font-medium text-foreground leading-snug whitespace-pre-line">{renderBold(tv.title)}</p>
                     {tv.description && (
-                      <p className="mt-1 text-sm text-muted-foreground leading-snug">{tv.description}</p>
+                      <p className="mt-1 text-sm text-muted-foreground leading-snug whitespace-pre-line">{renderBold(tv.description)}</p>
                     )}
                     {tv.meta && (
-                      <p className="mt-2 text-sm font-semibold" style={{ color: "#6E2E2A" }}>
-                        {tv.meta}
+                      <p className="mt-2 text-sm font-semibold whitespace-pre-line" style={{ color: "#6E2E2A" }}>
+                        {renderBold(tv.meta)}
                       </p>
                     )}
                   </div>
@@ -136,10 +143,14 @@ export function ErsteBayerische({ content }: { content: ErsteBayerischeContent }
             <div className="max-w-3xl mx-auto text-center">
               {c.blocks.closing.title && (
                 <h3 className="font-serif text-2xl lg:text-3xl font-semibold mb-4" style={{ color: "#3E1718" }}>
-                  {c.blocks.closing.title}
+                  {renderBold(c.blocks.closing.title)}
                 </h3>
               )}
-              <p className="text-lg lg:text-xl text-muted-foreground leading-relaxed">{c.blocks.closing.body}</p>
+              <RichText
+                text={c.blocks.closing.body}
+                containerClassName="space-y-4"
+                pClassName="text-lg lg:text-xl text-muted-foreground leading-relaxed"
+              />
             </div>
           )}
 

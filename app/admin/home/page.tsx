@@ -202,10 +202,10 @@ function EbImageField({
 
 // Two stacked inputs (DE над EN) for a translatable single-line field.
 function BilingualInput({
-  label, de, en, onDe, onEn, textarea,
+  label, de, en, onDe, onEn, textarea, hint,
 }: {
   label: string; de: string; en: string
-  onDe: (v: string) => void; onEn: (v: string) => void; textarea?: boolean
+  onDe: (v: string) => void; onEn: (v: string) => void; textarea?: boolean; hint?: string
 }) {
   const Cmp = textarea ? Textarea : Input
   return (
@@ -218,6 +218,7 @@ function BilingualInput({
         <Label className="text-xs text-gray-500">{label} · EN</Label>
         <Cmp value={en} onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => onEn(e.target.value)} />
       </div>
+      {hint && <p className="text-xs text-gray-400 md:col-span-2">{hint}</p>}
     </div>
   )
 }
@@ -527,7 +528,8 @@ export default function HomeAdminPage() {
         <BilingualInput label="Hauptüberschrift" de={eb.headingDe} en={eb.headingEn}
           onDe={(v) => ebPatch({ headingDe: v })} onEn={(v) => ebPatch({ headingEn: v })} />
         <BilingualInput label="Einleitungstext" textarea de={eb.introDe} en={eb.introEn}
-          onDe={(v) => ebPatch({ introDe: v })} onEn={(v) => ebPatch({ introEn: v })} />
+          onDe={(v) => ebPatch({ introDe: v })} onEn={(v) => ebPatch({ introEn: v })}
+          hint="Fettdruck: **Text** · Absätze/Leerzeilen und Zeilenumbrüche bleiben erhalten." />
 
         {/* Hero image */}
         <div className="border-t pt-4 space-y-2">
@@ -552,7 +554,8 @@ export default function HomeAdminPage() {
               <BilingualInput label="Zwischenüberschrift" de={b.titleDe} en={b.titleEn}
                 onDe={(v) => ebPatchBlock(slot, { titleDe: v })} onEn={(v) => ebPatchBlock(slot, { titleEn: v })} />
               <BilingualInput label="Text" textarea de={b.bodyDe} en={b.bodyEn}
-                onDe={(v) => ebPatchBlock(slot, { bodyDe: v })} onEn={(v) => ebPatchBlock(slot, { bodyEn: v })} />
+                onDe={(v) => ebPatchBlock(slot, { bodyDe: v })} onEn={(v) => ebPatchBlock(slot, { bodyEn: v })}
+                hint="Fettdruck: **Text** · Absätze/Leerzeilen und Zeilenumbrüche bleiben erhalten." />
               <EbImageField label="Begleitbild" value={b.imageUrl} fallback={EB_FB[slot]}
                 altDe={b.altDe} altEn={b.altEn} busy={uploading === `eb:${slot}`}
                 onFile={(f) => ebUploadBlock(slot, f)} onUrl={(v) => ebPatchBlock(slot, { imageUrl: v })}
@@ -574,7 +577,8 @@ export default function HomeAdminPage() {
         <div className="border-t pt-4 space-y-3">
           <p className="text-sm font-medium text-gray-700">Abschlussabsatz</p>
           <BilingualInput label="Text" textarea de={eb.closingBodyDe} en={eb.closingBodyEn}
-            onDe={(v) => ebPatch({ closingBodyDe: v })} onEn={(v) => ebPatch({ closingBodyEn: v })} />
+            onDe={(v) => ebPatch({ closingBodyDe: v })} onEn={(v) => ebPatch({ closingBodyEn: v })}
+            hint="Fettdruck: **Text** · Absätze/Leerzeilen und Zeilenumbrüche bleiben erhalten." />
         </div>
 
         {/* Travel entries */}
