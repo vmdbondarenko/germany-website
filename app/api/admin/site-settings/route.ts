@@ -40,6 +40,8 @@ export async function PUT(request: Request) {
     linkedinUrl: s(body.linkedinUrl),
     logoUrl: s(body.logoUrl),
     showLanguageSwitcher: typeof body.showLanguageSwitcher === 'boolean' ? body.showLanguageSwitcher : true,
+    showLocationsNav: typeof body.showLocationsNav === 'boolean' ? body.showLocationsNav : true,
+    showCompletedNav: typeof body.showCompletedNav === 'boolean' ? body.showCompletedNav : true,
   }
   const settings = await prisma.siteSettings.upsert({
     where: { id: 'main' },

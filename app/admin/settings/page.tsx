@@ -62,6 +62,8 @@ const GROUPS: { title: string; fields: { key: keyof Fields; label: string; texta
 export default function SiteSettingsPage() {
   const [form, setForm] = useState<Fields>(EMPTY)
   const [showLanguageSwitcher, setShowLanguageSwitcher] = useState(true)
+  const [showLocationsNav, setShowLocationsNav] = useState(true)
+  const [showCompletedNav, setShowCompletedNav] = useState(true)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [status, setStatus] = useState<string>("")
@@ -73,6 +75,8 @@ export default function SiteSettingsPage() {
         if (row) {
           setForm({ ...EMPTY, ...Object.fromEntries(Object.keys(EMPTY).map((k) => [k, row[k] ?? ""])) as Fields })
           setShowLanguageSwitcher(row.showLanguageSwitcher ?? true)
+          setShowLocationsNav(row.showLocationsNav ?? true)
+          setShowCompletedNav(row.showCompletedNav ?? true)
         }
       })
       .finally(() => setLoading(false))
@@ -87,7 +91,7 @@ export default function SiteSettingsPage() {
       const res = await fetch("/api/admin/site-settings", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...form, showLanguageSwitcher }),
+        body: JSON.stringify({ ...form, showLanguageSwitcher, showLocationsNav, showCompletedNav }),
       })
       setStatus(res.ok ? "Gespeichert." : "Fehler beim Speichern.")
     } catch {
@@ -153,6 +157,42 @@ export default function SiteSettingsPage() {
             </span>
           </span>
         </label>
+      </section>
+
+      <section className="mt-8">
+        <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-500 mb-3">Navigation</h2>
+        <div className="space-y-4">
+          <label className="flex items-start gap-3 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={showLocationsNav}
+              onChange={(e) => setShowLocationsNav(e.target.checked)}
+              className="mt-1 h-4 w-4"
+            />
+            <span className="text-sm">
+              <span className="font-medium text-gray-800">Standorte im Menü anzeigen</span>
+              <span className="block text-xs text-gray-400 mt-0.5">
+                Blendet den Menüpunkt „Standorte“ im Header ein/aus (Desktop und Mobil, DE und EN).
+                Der Bereich und die Seite /standort bleiben erreichbar.
+              </span>
+            </span>
+          </label>
+          <label className="flex items-start gap-3 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={showCompletedNav}
+              onChange={(e) => setShowCompletedNav(e.target.checked)}
+              className="mt-1 h-4 w-4"
+            />
+            <span className="text-sm">
+              <span className="font-medium text-gray-800">Abgeschlossen im Menü anzeigen</span>
+              <span className="block text-xs text-gray-400 mt-0.5">
+                Blendet den Menüpunkt „Abgeschlossen“ im Header ein/aus (Desktop und Mobil, DE und EN).
+                Der Abschnitt bleibt erhalten und über den Anker erreichbar.
+              </span>
+            </span>
+          </label>
+        </div>
       </section>
 
       <div className="mt-8 flex items-center gap-4">

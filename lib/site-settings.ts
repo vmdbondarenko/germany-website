@@ -30,6 +30,8 @@ export type ResolvedSiteSettings = {
   mapHref: string
   logoUrl: string | null
   showLanguageSwitcher: boolean
+  showLocationsNav: boolean
+  showCompletedNav: boolean
   socials: SocialLink[]
   contacts: SiteContact[]
 }
@@ -42,6 +44,8 @@ type SiteSettingsRow = {
   instagramUrl: string | null; youtubeUrl: string | null; facebookUrl: string | null; linkedinUrl: string | null
   logoUrl: string | null
   showLanguageSwitcher: boolean | null
+  showLocationsNav: boolean | null
+  showCompletedNav: boolean | null
 } | null
 
 function telHref(phone: string): string {
@@ -80,6 +84,8 @@ export function resolveSiteSettings(row: SiteSettingsRow): ResolvedSiteSettings 
     mapHref: row?.mapHref || headquarters.mapHref,
     logoUrl: row?.logoUrl || null,
     showLanguageSwitcher: row?.showLanguageSwitcher ?? true,
+    showLocationsNav: row?.showLocationsNav ?? true,
+    showCompletedNav: row?.showCompletedNav ?? true,
     socials,
     contacts: [{ city, phone, phoneHref, email }],
   }

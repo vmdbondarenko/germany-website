@@ -40,16 +40,19 @@ export function Header({ cities = [] }: { cities?: { name: string; slug: string 
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
+  // `show: false` hides the item (admin toggle) while keeping its original
+  // position when shown; items without `show` are always visible. Filtering the
+  // single source array covers both desktop and mobile — no empty gaps left.
   const navLinks = [
     { href: "/#unternehmen", label: t("about") },
-    { href: "/standort", label: t("locations") },
+    { href: "/standort", label: t("locations"), show: settings.showLocationsNav },
     { href: "/#verkauf", label: t("forSale") },
-    { href: "/#abgeschlossen", label: t("completed") },
+    { href: "/#abgeschlossen", label: t("completed"), show: settings.showCompletedNav },
     { href: "/#team", label: t("team") },
     { href: "/#so-helfen-wir", label: t("howWeHelp") },
     { href: "/#aktuelles", label: t("news") },
     { href: "/#kontakt", label: t("contact") },
-  ]
+  ].filter((link) => link.show !== false)
 
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? "bg-background/95 backdrop-blur-md border-b border-border/50" : "bg-background/40 backdrop-blur-sm"}`}>

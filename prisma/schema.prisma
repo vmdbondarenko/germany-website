@@ -474,6 +474,8 @@ model SiteSettings {
   linkedinUrl        String?
   logoUrl            String?
   showLanguageSwitcher Boolean @default(true)
+  showLocationsNav   Boolean  @default(true) // desktop+mobile nav "Standorte" visibility
+  showCompletedNav   Boolean  @default(true) // desktop+mobile nav "Abgeschlossen" visibility
   updatedAt          DateTime @updatedAt
   createdAt          DateTime @default(now())
 }
