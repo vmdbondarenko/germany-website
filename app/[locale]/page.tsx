@@ -189,12 +189,6 @@ export default async function HomePage() {
         <Hero content={home.hero} />
         <ArchitectureSlideshow dbSlides={slideshowSlides} />
         <About content={aboutContent} upcomingInvestments={upcomingInvestments} newCities={newCities} aboutSection={aboutSection} afterSinceFounding={<CompletedGallery content={gallery} />} />
-        <NewsScroll
-          content={newsContent}
-          dateLocale={newsDateLocale}
-          noImageLabel={tn("noImage")}
-          posts={newsPosts.map((p) => ({ ...p, publishedAt: p.publishedAt?.toISOString() ?? null, createdAt: p.createdAt.toISOString() }))}
-        />
         <ErsteBayerische content={ersteBayerische} />
         <Investments projects={activeProjects} />
         {lokalizacjaData.points.length > 0 && (
@@ -222,6 +216,12 @@ export default async function HomePage() {
         <Services content={home.services} />
         <InteriorShowcase content={home.interior} />
         <BuyingProcess content={home.buying} />
+        <NewsScroll
+          content={newsContent}
+          dateLocale={newsDateLocale}
+          noImageLabel={tn("noImage")}
+          posts={newsPosts.map((p) => ({ ...p, publishedAt: p.publishedAt?.toISOString() ?? null, createdAt: p.createdAt.toISOString() }))}
+        />
         <Contact />
       </main>
       <Footer />
