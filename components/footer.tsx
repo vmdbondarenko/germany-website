@@ -13,7 +13,7 @@ export async function Footer() {
 
   const navLinks = [
     { href: "#unternehmen", label: tn("about") },
-    { href: "#verkauf", label: t("navInvestments") },
+    { href: "/#erste-bayerische", label: t("navInvestments") },
     { href: "#ablauf", label: t("navWhyUs") },
     { href: "#kontakt", label: tn("contact") },
   ]
