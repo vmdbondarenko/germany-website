@@ -213,6 +213,7 @@ export default function EditNewsPage({ params }: { params: Promise<{ id: string 
                     placeholder="Kurzer Teaser für die Übersichtsseite …"
                     rows={3}
                   />
+                  <p className="text-xs text-gray-500">Fettdruck: **Text**</p>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="descriptionEn">Kurzbeschreibung · EN</Label>
@@ -222,6 +223,7 @@ export default function EditNewsPage({ params }: { params: Promise<{ id: string 
                     onChange={(e) => setForm((p) => ({ ...p, descriptionEn: e.target.value }))}
                     rows={3}
                   />
+                  <p className="text-xs text-gray-500">Fettdruck: **Text**</p>
                 </div>
               </div>
             </CardContent>

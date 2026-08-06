@@ -47,7 +47,7 @@ export function Header({ cities = [] }: { cities?: { name: string; slug: string 
     { href: "/#abgeschlossen", label: t("completed") },
     { href: "/#team", label: t("team") },
     { href: "/#so-helfen-wir", label: t("howWeHelp") },
-    { href: "/#aktualnosci", label: t("news") },
+    { href: "/#aktuelles", label: t("news") },
     { href: "/#kontakt", label: t("contact") },
   ]
 

@@ -3,6 +3,7 @@ import { getLocale, getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
 import { prisma } from '@/lib/prisma'
 import { pick } from '@/lib/i18n-content'
+import { renderBold } from '@/lib/render-bold'
 import type { Locale } from '@/i18n/routing'
 import { HeaderServer } from '@/components/header-server'
 import { Footer } from '@/components/footer'
@@ -118,7 +119,7 @@ export default async function AktualnosciPage() {
                         </h2>
                         {post.description && (
                           <p className="text-sm text-muted-foreground line-clamp-3 flex-grow">
-                            {post.description}
+                            {renderBold(post.description)}
                           </p>
                         )}
                         <span

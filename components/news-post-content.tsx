@@ -4,6 +4,7 @@ import { useState } from "react"
 import Image from "next/image"
 import { ChevronLeft, ChevronRight, X } from "lucide-react"
 import { resolveAlt, newsImageAlt } from "@/lib/seo/image-alt"
+import { renderBold } from "@/lib/render-bold"
 
 export type NewsBlockData = {
   id: string
@@ -41,7 +42,7 @@ export function NewsPostContent({
                 key={block.id}
                 className="text-base lg:text-lg text-foreground/90 leading-relaxed whitespace-pre-line"
               >
-                {block.content}
+                {renderBold(block.content)}
               </div>
             )
           }

@@ -4,6 +4,7 @@ import { getLocale, getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
 import { prisma } from '@/lib/prisma'
 import { pick } from '@/lib/i18n-content'
+import { renderBold } from '@/lib/render-bold'
 import type { Locale } from '@/i18n/routing'
 import { HeaderServer } from '@/components/header-server'
 import { Footer } from '@/components/footer'
@@ -26,7 +27,8 @@ export async function generateMetadata({
   if (!post || !post.published) return { title: 'News', alternates: { canonical } }
 
   const title = pick(post.title, post.titleEn, locale)
-  const description = pick(post.description, post.descriptionEn, locale) ?? undefined
+  // Strip the **bold** markers so they never leak into meta/OG/Twitter descriptions.
+  const description = pick(post.description, post.descriptionEn, locale)?.replace(/\*\*/g, '') ?? undefined
   const pageTitle = `${title} — News`
   const images = post.coverImageUrl ? [post.coverImageUrl] : undefined
 
@@ -120,7 +122,7 @@ export default async function NewsPostPage({
               </h1>
               {post.description && (
                 <p className="text-lg text-muted-foreground leading-relaxed">
-                  {post.description}
+                  {renderBold(post.description)}
                 </p>
               )}
             </header>

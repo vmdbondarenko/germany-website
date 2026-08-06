@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react"
 import Image from "next/image"
 import { Link } from "@/i18n/navigation"
 import { Calendar, ChevronLeft, ChevronRight, ArrowRight } from "lucide-react"
+import { renderBold } from "@/lib/render-bold"
 
 type NewsPostData = {
   id: string
@@ -63,7 +64,7 @@ export function NewsScroll({
   if (!content.enabled || posts.length === 0) return null
 
   return (
-    <section id="aktualnosci" className="py-20 lg:py-32 bg-muted/30">
+    <section id="aktuelles" className="py-20 lg:py-32 bg-muted/30">
       <div className="container mx-auto px-4 lg:px-8">
         <div className="flex items-end justify-between mb-12">
           <div>
@@ -160,7 +161,7 @@ export function NewsScroll({
                     </h3>
                     {post.description && (
                       <p className="text-sm text-muted-foreground line-clamp-3 flex-grow">
-                        {post.description}
+                        {renderBold(post.description)}
                       </p>
                     )}
                   </div>

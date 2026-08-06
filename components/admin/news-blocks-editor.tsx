@@ -143,6 +143,7 @@ export function NewsBlocksEditor({
                     placeholder="Absatztext …"
                     rows={5}
                   />
+                  <p className="text-xs text-gray-500">Fettdruck: **Text**</p>
                 </div>
                 <div className="space-y-1.5">
                   <Label className="text-xs">Absatz · EN</Label>
@@ -151,6 +152,7 @@ export function NewsBlocksEditor({
                     onChange={(e) => update(idx, { contentEn: e.target.value })}
                     rows={5}
                   />
+                  <p className="text-xs text-gray-500">Fettdruck: **Text**</p>
                 </div>
               </div>
             ) : (
