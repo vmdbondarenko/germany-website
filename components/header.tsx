@@ -70,11 +70,13 @@ export function Header({ cities = [] }: { cities?: { name: string; slug: string 
                 priority
                 unoptimized
               />
-              <span 
+              <span
                 className="text-[12px] font-medium whitespace-nowrap w-full text-center mt-0.5"
                 style={{ color: 'rgba(74, 42, 42, 0.7)', letterSpacing: '0.08em' }}
               >
-                {settings.companyName}
+                {/* Display-only brand mark under the desktop logo. The full legal name
+                    (settings.companyName / LEGAL_ENTITY) is kept everywhere else. */}
+                PEBerlin GmbH
               </span>
             </div>
             {/* Mobile: Compact version */}
