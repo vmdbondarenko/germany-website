@@ -72,7 +72,11 @@ export function Header({ cities = [] }: { cities?: { name: string; slug: string 
               />
               <span
                 className="text-[12px] font-medium whitespace-nowrap w-full text-center mt-0.5"
-                style={{ color: 'rgba(74, 42, 42, 0.7)', letterSpacing: '0.08em' }}
+                // Track the wordmark out so it spans ~the width of the four logo
+                // blocks above (Polish-header proportions). letter-spacing keeps the
+                // brand block height unchanged; the equal text-indent offsets the
+                // trailing letter-spacing so the text stays centred under the logo.
+                style={{ color: 'rgba(74, 42, 42, 0.7)', letterSpacing: '0.5em', textIndent: '0.5em' }}
               >
                 {/* Display-only brand mark under the desktop logo. The full legal name
                     (settings.companyName / LEGAL_ENTITY) is kept everywhere else. */}
