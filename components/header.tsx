@@ -94,11 +94,14 @@ export function Header({ cities = [] }: { cities?: { name: string; slug: string 
                 priority
                 unoptimized
               />
-              <span 
+              <span
                 className="text-[9px] font-medium whitespace-nowrap mt-0.5 w-full text-center"
-                style={{ color: 'rgba(74, 42, 42, 0.7)', letterSpacing: '0.04em' }}
+                // Mobile brand mark — mirrors the approved desktop treatment scaled to the
+                // 120px logo: tracked out so the text ≈ the four logo blocks' width, kept
+                // centred via the equal text-indent. Same display-only text as desktop.
+                style={{ color: 'rgba(74, 42, 42, 0.7)', letterSpacing: '0.42em', textIndent: '0.42em' }}
               >
-                {settings.companyName}
+                PEBerlin GmbH
               </span>
             </div>
           </Link>
