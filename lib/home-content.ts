@@ -303,6 +303,7 @@ export type ErsteBayerischeContent = {
     see: EbBlock
     closing: { title: string; body: string }
   }
+  objekt: { title: string; subtitle: string; body: string }
   travelHeading: string
   travel: { icon: string; title: string; description: string; meta: string }[]
   gallery: EbImage[]
@@ -343,6 +344,7 @@ export async function getErsteBayerischeContent(locale: Locale): Promise<ErsteBa
   }
 
   const closingIt = one("block:closing")
+  const objektIt = one("block:objekt")
   const travelItems = many("travel")
   const galleryItems = many("gallery")
 
@@ -360,6 +362,11 @@ export async function getErsteBayerischeContent(locale: Locale): Promise<ErsteBa
         title: txt(de ? closingIt?.titleDe : closingIt?.titleEn, L(D.blocks.closing.title)),
         body: txt(de ? closingIt?.descriptionDe : closingIt?.descriptionEn, L(D.blocks.closing.body)),
       },
+    },
+    objekt: {
+      title: txt(de ? objektIt?.titleDe : objektIt?.titleEn, L(D.objekt.title)),
+      subtitle: txt(de ? objektIt?.metaDe : objektIt?.metaEn, L(D.objekt.subtitle)),
+      body: txt(de ? objektIt?.descriptionDe : objektIt?.descriptionEn, L(D.objekt.body)),
     },
     travelHeading: L(D.travelHeading),
     travel:

@@ -90,6 +90,9 @@ type EbState = {
   hero: EbImg; wide: EbImg
   location: EbBlockS; nature: EbBlockS; see: EbBlockS
   closingTitleDe: string; closingTitleEn: string; closingBodyDe: string; closingBodyEn: string
+  objektTitleDe: string; objektTitleEn: string
+  objektSubtitleDe: string; objektSubtitleEn: string
+  objektBodyDe: string; objektBodyEn: string
   travel: EbTravel[]
   gallery: EbImg[]
 }
@@ -133,6 +136,7 @@ function ebFromRow(row: EbRow | undefined): EbState {
     }
   }
   const closing = one('block:closing')
+  const objekt = one('block:objekt')
   const travelItems = many('travel')
   const galleryItems = many('gallery')
   return {
@@ -145,6 +149,9 @@ function ebFromRow(row: EbRow | undefined): EbState {
     see: block('block:see', EB_D.blocks.see),
     closingTitleDe: closing?.titleDe || EB_D.blocks.closing.title.de, closingTitleEn: closing?.titleEn || EB_D.blocks.closing.title.en,
     closingBodyDe: closing?.descriptionDe || EB_D.blocks.closing.body.de, closingBodyEn: closing?.descriptionEn || EB_D.blocks.closing.body.en,
+    objektTitleDe: objekt?.titleDe || EB_D.objekt.title.de, objektTitleEn: objekt?.titleEn || EB_D.objekt.title.en,
+    objektSubtitleDe: objekt?.metaDe || EB_D.objekt.subtitle.de, objektSubtitleEn: objekt?.metaEn || EB_D.objekt.subtitle.en,
+    objektBodyDe: objekt?.descriptionDe || EB_D.objekt.body.de, objektBodyEn: objekt?.descriptionEn || EB_D.objekt.body.en,
     travel: travelItems.length
       ? travelItems.map((it) => ({ icon: it.icon || 'Sparkles', titleDe: it.titleDe || '', titleEn: it.titleEn || '', descDe: it.descriptionDe || '', descEn: it.descriptionEn || '', metaDe: it.metaDe || '', metaEn: it.metaEn || '' }))
       : EB_D.travel.map((t) => ({ icon: t.icon, titleDe: t.title.de, titleEn: t.title.en, descDe: '', descEn: '', metaDe: t.meta.de, metaEn: t.meta.en })),
@@ -389,6 +396,7 @@ export default function HomeAdminPage() {
       { kind: 'wide', imageUrl: eb.wide.imageUrl, imageAltDe: eb.wide.altDe, imageAltEn: eb.wide.altEn },
       blockItem('block:nature', eb.nature),
       blockItem('block:see', eb.see),
+      { kind: 'block:objekt', titleDe: eb.objektTitleDe, titleEn: eb.objektTitleEn, metaDe: eb.objektSubtitleDe, metaEn: eb.objektSubtitleEn, descriptionDe: eb.objektBodyDe, descriptionEn: eb.objektBodyEn },
       { kind: 'block:closing', titleDe: eb.closingTitleDe, titleEn: eb.closingTitleEn, descriptionDe: eb.closingBodyDe, descriptionEn: eb.closingBodyEn },
       ...eb.travel.map((t) => ({ kind: 'travel', icon: t.icon, titleDe: t.titleDe, titleEn: t.titleEn, descriptionDe: t.descDe, descriptionEn: t.descEn, metaDe: t.metaDe, metaEn: t.metaEn })),
       ...eb.gallery.filter((g) => g.imageUrl.trim()).map((g) => ({ kind: 'gallery', imageUrl: g.imageUrl, imageAltDe: g.altDe, imageAltEn: g.altEn })),
@@ -563,6 +571,19 @@ export default function HomeAdminPage() {
             </div>
           )
         })}
+
+        {/* Objektbeschreibung — mirrors the public order: directly after
+            "Abschnitt 3 — Zeuthener See & Marina" and before the travel section. */}
+        <div className="border-t pt-4 space-y-3">
+          <p className="text-sm font-medium text-gray-700">Objektbeschreibung</p>
+          <BilingualInput label="Titel" de={eb.objektTitleDe} en={eb.objektTitleEn}
+            onDe={(v) => ebPatch({ objektTitleDe: v })} onEn={(v) => ebPatch({ objektTitleEn: v })} />
+          <BilingualInput label="Untertitel" de={eb.objektSubtitleDe} en={eb.objektSubtitleEn}
+            onDe={(v) => ebPatch({ objektSubtitleDe: v })} onEn={(v) => ebPatch({ objektSubtitleEn: v })} />
+          <BilingualInput label="Text" textarea de={eb.objektBodyDe} en={eb.objektBodyEn}
+            onDe={(v) => ebPatch({ objektBodyDe: v })} onEn={(v) => ebPatch({ objektBodyEn: v })}
+            hint="Fettdruck: **Text** · Absätze/Leerzeilen und Zeilenumbrüche bleiben erhalten." />
+        </div>
 
         {/* Wide full-width image */}
         <div className="border-t pt-4 space-y-2">

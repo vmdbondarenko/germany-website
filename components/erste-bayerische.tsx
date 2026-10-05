@@ -110,30 +110,19 @@ export function ErsteBayerische({ content }: { content: ErsteBayerischeContent }
           <div>
             <div className="max-w-3xl mx-auto text-center mb-10 lg:mb-14">
               <h3 className="font-serif text-2xl lg:text-3xl font-semibold mb-3" style={{ color: "#3E1718" }}>
-                Objektbeschreibung
+                {renderBold(c.objekt.title)}
               </h3>
               <p className="text-muted-foreground text-base lg:text-lg">
-                Doppelhaus mit durchdachtem Grundriss
+                {renderBold(c.objekt.subtitle)}
               </p>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-start">
-              <div className="space-y-4 text-muted-foreground text-base lg:text-lg leading-relaxed">
-                <p>
-                  Das moderne Doppelhausprojekt „Erste Bayerische“ umfasst zwei spiegelbildlich geplante
-                  Haushälften mit jeweils eigenem Eingang und 73,50 m² Wohnfläche auf zwei Ebenen.
-                </p>
-                <p>
-                  Im Erdgeschoss erwartet Sie ein großzügiger Wohn- und Essbereich mit offener Küche, ein
-                  Gäste-WC sowie ein Hauswirtschaftsraum. Das Dachgeschoss verfügt über zwei Schlafzimmer und
-                  ein geräumiges Badezimmer mit Dachgaube.
-                </p>
-                <p>
-                  Die Häuser werden in Massivbauweise errichtet und mit Wärmepumpe und Fußbodenheizung
-                  ausgestattet. Eine hochwertige Fassade aus handgeformten Ziegeln sowie das klassische
-                  Satteldach verleihen dem Gebäude einen modernen und zugleich zeitlosen Charakter.
-                </p>
-              </div>
+              <RichText
+                text={c.objekt.body}
+                containerClassName="space-y-4"
+                pClassName="text-muted-foreground text-base lg:text-lg leading-relaxed"
+              />
 
               <div className="rounded-3xl border border-[#6E2E2A]/10 bg-card p-6 lg:p-8 shadow-sm">
                 <h4 className="font-serif text-xl lg:text-2xl font-semibold mb-5" style={{ color: "#3E1718" }}>

@@ -252,6 +252,20 @@ export const DEFAULT_ERSTE_BAYERISCHE = {
       ),
     },
   },
+  // Objektbeschreibung — project description shown after the "Zeuthener See &
+  // Marina" subsection (admin-editable title / subtitle / body; defaults here are
+  // the fallback and preserve the current public text).
+  objekt: {
+    title: t("Objektbeschreibung", "Property description"),
+    subtitle: t(
+      "Doppelhaus mit durchdachtem Grundriss",
+      "Semi-detached house with a well-thought-out floor plan",
+    ),
+    body: t(
+      "Das moderne Doppelhausprojekt „Erste Bayerische“ umfasst zwei spiegelbildlich geplante Haushälften mit jeweils eigenem Eingang und 73,50 m² Wohnfläche auf zwei Ebenen.\n\nIm Erdgeschoss erwartet Sie ein großzügiger Wohn- und Essbereich mit offener Küche, ein Gäste-WC sowie ein Hauswirtschaftsraum. Das Dachgeschoss verfügt über zwei Schlafzimmer und ein geräumiges Badezimmer mit Dachgaube.\n\nDie Häuser werden in Massivbauweise errichtet und mit Wärmepumpe und Fußbodenheizung ausgestattet. Eine hochwertige Fassade aus handgeformten Ziegeln sowie das klassische Satteldach verleihen dem Gebäude einen modernen und zugleich zeitlosen Charakter.",
+      "The modern semi-detached house project “Erste Bayerische” comprises two mirror-image halves, each with its own entrance and 73.50 m² of living space over two levels.\n\nOn the ground floor you will find a spacious living and dining area with an open kitchen, a guest WC and a utility room. The attic floor has two bedrooms and a spacious bathroom with a dormer.\n\nThe houses are built using solid construction and equipped with a heat pump and underfloor heating. A high-quality façade of hand-formed bricks and the classic gabled roof give the building a modern yet timeless character.",
+    ),
+  },
   travelHeading: t(
     "Auch im Alltag profitieren Sie von kurzen Wegen",
     "Short distances in everyday life, too",
