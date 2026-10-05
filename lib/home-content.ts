@@ -305,7 +305,10 @@ export type ErsteBayerischeContent = {
   }
   objekt: { title: string; subtitle: string; body: string }
   eckdaten: { label: string; value: string }[]
-  plans: { eg2d: EbImage; eg3d: EbImage; dg2d: EbImage; dg3d: EbImage }
+  plansHeading: string
+  plansLabel2d: string
+  plansLabel3d: string
+  plans: { floor: string; dimension: "2D" | "3D"; title: string; image: string; alt: string }[]
   travelHeading: string
   travel: { icon: string; title: string; description: string; meta: string }[]
   gallery: EbImage[]
@@ -348,6 +351,8 @@ export async function getErsteBayerischeContent(locale: Locale): Promise<ErsteBa
   const closingIt = one("block:closing")
   const objektIt = one("block:objekt")
   const eckItems = many("eckdaten")
+  const planCfg = one("plans-config")
+  const planItems = many("plan")
   const travelItems = many("travel")
   const galleryItems = many("gallery")
 
@@ -375,12 +380,19 @@ export async function getErsteBayerischeContent(locale: Locale): Promise<ErsteBa
       label: L(d.label),
       value: txt(eckItems[i] ? (de ? eckItems[i].descriptionDe : eckItems[i].descriptionEn) : null, L(d.value)),
     })),
-    plans: {
-      eg2d: img("plan:eg-2d", D.plans.eg2d),
-      eg3d: img("plan:eg-3d", D.plans.eg3d),
-      dg2d: img("plan:dg-2d", D.plans.dg2d),
-      dg3d: img("plan:dg-3d", D.plans.dg3d),
-    },
+    plansHeading: txt(de ? planCfg?.titleDe : planCfg?.titleEn, L(D.plansHeading)),
+    plansLabel2d: txt(de ? planCfg?.metaDe : planCfg?.metaEn, L(D.plansLabel2d)),
+    plansLabel3d: txt(de ? planCfg?.descriptionDe : planCfg?.descriptionEn, L(D.plansLabel3d)),
+    plans: (planItems.length
+      ? planItems.map((it) => ({
+          floor: (de ? it.metaDe : it.metaEn) || "",
+          dimension: (it.icon === "3D" ? "3D" : "2D") as "2D" | "3D",
+          title: (de ? it.titleDe : it.titleEn) || "",
+          image: it.imageUrl || "",
+          alt: (de ? it.imageAltDe : it.imageAltEn) || "",
+        }))
+      : D.plans.map((p) => ({ floor: L(p.floor), dimension: p.dimension, title: L(p.title), image: p.image, alt: L(p.alt) }))
+    ).filter((p) => p.image),
     travelHeading: L(D.travelHeading),
     travel:
       travelItems.length > 0

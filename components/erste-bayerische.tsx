@@ -2,7 +2,7 @@ import Image from "next/image"
 import { DynamicIcon } from "@/components/dynamic-icon"
 import { ErsteBayerischeGallery } from "@/components/erste-bayerische-gallery"
 import { renderBold, RichText } from "@/lib/render-bold"
-import type { ErsteBayerischeContent, EbBlock, EbImage } from "@/lib/home-content"
+import type { ErsteBayerischeContent, EbBlock } from "@/lib/home-content"
 
 // "Erste Bayerische" — the first investment, presented in full on the homepage
 // directly after the Bauweise section. Server component (no client JS) to keep
@@ -44,6 +44,14 @@ function TextImageBlock({ block, flip }: { block: EbBlock; flip?: boolean }) {
 
 export function ErsteBayerische({ content }: { content: ErsteBayerischeContent }) {
   const c = content
+  // Group the dynamic plan list by floor (preserving order) so the public design
+  // stays grouped-by-level (floor heading + responsive figure grid).
+  const planGroups: { floor: string; items: typeof c.plans }[] = []
+  for (const pl of c.plans) {
+    const g = planGroups.find((x) => x.floor === pl.floor)
+    if (g) g.items.push(pl)
+    else planGroups.push({ floor: pl.floor, items: [pl] })
+  }
   return (
     <section id="erste-bayerische" className="py-16 lg:py-28 bg-background">
       <div className="container mx-auto px-4 lg:px-8">
@@ -142,45 +150,45 @@ export function ErsteBayerische({ content }: { content: ErsteBayerischeContent }
               </div>
             </div>
 
-            {/* Floor plans — 2D plans + 3D visualizations per floor */}
-            <div className="mt-12 lg:mt-16">
-              <h4 className="font-serif text-xl lg:text-2xl font-semibold text-center mb-8 lg:mb-10" style={{ color: "#3E1718" }}>
-                Grundrisse
-              </h4>
-              <div className="space-y-10 lg:space-y-14">
-                {([
-                  { floor: "Erdgeschoss", plan2d: c.plans.eg2d, plan3d: c.plans.eg3d },
-                  { floor: "Dachgeschoss", plan2d: c.plans.dg2d, plan3d: c.plans.dg3d },
-                ] as { floor: string; plan2d: EbImage; plan3d: EbImage }[]).map((f) => (
-                  <div key={f.floor}>
-                    <h5 className="font-medium text-lg text-center mb-5" style={{ color: "#6E2E2A" }}>
-                      {f.floor}
-                    </h5>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5 lg:gap-8">
-                      {([
-                        { label: "2D-Grundriss", img: f.plan2d },
-                        { label: "3D-Visualisierung", img: f.plan3d },
-                      ] as { label: string; img: EbImage }[]).map((p) => (
-                        <figure key={p.label} className="space-y-3">
-                          <div className="relative aspect-[4/3] rounded-3xl overflow-hidden bg-white shadow-xl border border-border/50">
-                            <Image
-                              src={p.img.image}
-                              alt={p.img.alt || `${f.floor} – ${p.label}, Doppelhaus „Erste Bayerische“`}
-                              fill
-                              sizes="(max-width: 768px) 100vw, 50vw"
-                              className="object-contain p-3"
-                            />
-                          </div>
-                          <figcaption className="text-sm text-muted-foreground text-center">
-                            {f.floor} – {p.label}
-                          </figcaption>
-                        </figure>
-                      ))}
+            {/* Floor plans — dynamic list grouped by floor (2D/3D), responsive. */}
+            {planGroups.length > 0 && (
+              <div className="mt-12 lg:mt-16">
+                <h4 className="font-serif text-xl lg:text-2xl font-semibold text-center mb-8 lg:mb-10" style={{ color: "#3E1718" }}>
+                  {renderBold(c.plansHeading)}
+                </h4>
+                <div className="space-y-10 lg:space-y-14">
+                  {planGroups.map((g) => (
+                    <div key={g.floor}>
+                      <h5 className="font-medium text-lg text-center mb-5" style={{ color: "#6E2E2A" }}>
+                        {g.floor}
+                      </h5>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 lg:gap-8">
+                        {g.items.map((p, i) => {
+                          const typeLabel = p.dimension === "3D" ? c.plansLabel3d : c.plansLabel2d
+                          const caption = p.title || typeLabel
+                          return (
+                            <figure key={i} className="space-y-3">
+                              <div className="relative aspect-[4/3] rounded-3xl overflow-hidden bg-white shadow-xl border border-border/50">
+                                <Image
+                                  src={p.image}
+                                  alt={p.alt || `${g.floor} – ${caption}`}
+                                  fill
+                                  sizes="(max-width: 768px) 100vw, 50vw"
+                                  className="object-contain p-3"
+                                />
+                              </div>
+                              <figcaption className="text-sm text-muted-foreground text-center">
+                                {g.floor} – {caption}
+                              </figcaption>
+                            </figure>
+                          )
+                        })}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
           </div>
 
           {/* Travel times & everyday infrastructure */}
