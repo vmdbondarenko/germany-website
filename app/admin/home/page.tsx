@@ -83,7 +83,7 @@ const EMPTY_ITEM: Item = { icon: '', titleDe: '', titleEn: '', descriptionDe: ''
 type EbImg = { imageUrl: string; altDe: string; altEn: string }
 type EbBlockS = EbImg & { titleDe: string; titleEn: string; bodyDe: string; bodyEn: string }
 type EbTravel = { icon: string; titleDe: string; titleEn: string; descDe: string; descEn: string; metaDe: string; metaEn: string }
-type EbPlan = { floorDe: string; floorEn: string; image1Url: string; alt1De: string; alt1En: string; image2Url: string; alt2De: string; alt2En: string }
+type EbPlan = { floorDe: string; floorEn: string; image1Url: string; alt1De: string; alt1En: string; caption1De: string; caption1En: string; image2Url: string; alt2De: string; alt2En: string; caption2De: string; caption2En: string }
 type EbState = {
   projectNameDe: string; projectNameEn: string
   headingDe: string; headingEn: string
@@ -173,12 +173,16 @@ function ebFromRow(row: EbRow | undefined): EbState {
       ? planItems.map((it) => ({
           floorDe: it.metaDe || '', floorEn: it.metaEn || '',
           image1Url: it.imageUrl || '', alt1De: it.imageAltDe || '', alt1En: it.imageAltEn || '',
+          caption1De: it.titleDe || '', caption1En: it.titleEn || '',
           image2Url: it.imageUrl2 || '', alt2De: it.imageAlt2De || '', alt2En: it.imageAlt2En || '',
+          caption2De: it.descriptionDe || '', caption2En: it.descriptionEn || '',
         }))
       : EB_D.plans.map((p) => ({
           floorDe: p.floor.de, floorEn: p.floor.en,
           image1Url: p.image1, alt1De: p.alt1.de, alt1En: p.alt1.en,
+          caption1De: p.caption1.de, caption1En: p.caption1.en,
           image2Url: p.image2, alt2De: p.alt2.de, alt2En: p.alt2.en,
+          caption2De: p.caption2.de, caption2En: p.caption2.en,
         })),
     travel: travelItems.length
       ? travelItems.map((it) => ({ icon: it.icon || 'Sparkles', titleDe: it.titleDe || '', titleEn: it.titleEn || '', descDe: it.descriptionDe || '', descEn: it.descriptionEn || '', metaDe: it.metaDe || '', metaEn: it.metaEn || '' }))
@@ -437,6 +441,8 @@ export default function HomeAdminPage() {
       { kind: 'plans-config', titleDe: eb.plansHeadingDe, titleEn: eb.plansHeadingEn, metaDe: eb.plansLabel2dDe, metaEn: eb.plansLabel2dEn, descriptionDe: eb.plansLabel3dDe, descriptionEn: eb.plansLabel3dEn },
       ...eb.plans.filter((p) => p.image1Url.trim() || p.image2Url.trim()).map((p) => ({
         kind: 'plan', metaDe: p.floorDe, metaEn: p.floorEn,
+        titleDe: p.caption1De, titleEn: p.caption1En,
+        descriptionDe: p.caption2De, descriptionEn: p.caption2En,
         imageUrl: p.image1Url, imageAltDe: p.alt1De, imageAltEn: p.alt1En,
         imageUrl2: p.image2Url, imageAlt2De: p.alt2De, imageAlt2En: p.alt2En,
       })),
@@ -665,14 +671,18 @@ export default function HomeAdminPage() {
                 altDe={p.alt1De} altEn={p.alt1En} busy={uploading === `eb:plan:${idx}:1`}
                 onFile={(f) => ebUploadPlan(idx, 'image1Url', f)} onUrl={(v) => ebPatchPlan(idx, { image1Url: v })}
                 onAltDe={(v) => ebPatchPlan(idx, { alt1De: v })} onAltEn={(v) => ebPatchPlan(idx, { alt1En: v })} />
+              <BilingualInput label="Bildunterschrift links" de={p.caption1De} en={p.caption1En}
+                onDe={(v) => ebPatchPlan(idx, { caption1De: v })} onEn={(v) => ebPatchPlan(idx, { caption1En: v })} />
               <EbImageField label="Bild rechts" value={p.image2Url} fallback=""
                 altDe={p.alt2De} altEn={p.alt2En} busy={uploading === `eb:plan:${idx}:2`}
                 onFile={(f) => ebUploadPlan(idx, 'image2Url', f)} onUrl={(v) => ebPatchPlan(idx, { image2Url: v })}
                 onAltDe={(v) => ebPatchPlan(idx, { alt2De: v })} onAltEn={(v) => ebPatchPlan(idx, { alt2En: v })} />
+              <BilingualInput label="Bildunterschrift rechts" de={p.caption2De} en={p.caption2En}
+                onDe={(v) => ebPatchPlan(idx, { caption2De: v })} onEn={(v) => ebPatchPlan(idx, { caption2En: v })} />
             </div>
           ))}
           <Button variant="outline" size="sm"
-            onClick={() => ebPatch({ plans: [...eb.plans, { floorDe: '', floorEn: '', image1Url: '', alt1De: '', alt1En: '', image2Url: '', alt2De: '', alt2En: '' }] })}>
+            onClick={() => ebPatch({ plans: [...eb.plans, { floorDe: '', floorEn: '', image1Url: '', alt1De: '', alt1En: '', caption1De: '', caption1En: '', image2Url: '', alt2De: '', alt2En: '', caption2De: '', caption2En: '' }] })}>
             <Plus className="h-4 w-4 mr-1.5" /> Plan hinzufügen
           </Button>
         </div>

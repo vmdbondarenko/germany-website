@@ -152,8 +152,8 @@ export function ErsteBayerische({ content }: { content: ErsteBayerischeContent }
                 <div className="space-y-10 lg:space-y-14">
                   {c.plans.map((p, idx) => {
                     const figs = [
-                      { image: p.image1, alt: p.alt1 },
-                      { image: p.image2, alt: p.alt2 },
+                      { image: p.image1, alt: p.alt1, caption: p.caption1 },
+                      { image: p.image2, alt: p.alt2, caption: p.caption2 },
                     ].filter((f) => f.image)
                     if (figs.length === 0) return null
                     return (
@@ -166,7 +166,7 @@ export function ErsteBayerische({ content }: { content: ErsteBayerischeContent }
                         )}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-5 lg:gap-8">
                           {figs.map((f, i) => (
-                            <figure key={i}>
+                            <figure key={i} className="space-y-3">
                               <div className="relative aspect-[4/3] rounded-3xl overflow-hidden bg-white shadow-xl border border-border/50">
                                 <Image
                                   src={f.image}
@@ -176,6 +176,12 @@ export function ErsteBayerische({ content }: { content: ErsteBayerischeContent }
                                   className="object-contain p-3"
                                 />
                               </div>
+                              {/* Visible caption = exactly the admin-entered text (verbatim). */}
+                              {f.caption && (
+                                <figcaption className="text-sm text-muted-foreground text-center">
+                                  {f.caption}
+                                </figcaption>
+                              )}
                             </figure>
                           ))}
                         </div>
