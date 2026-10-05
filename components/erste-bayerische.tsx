@@ -2,7 +2,7 @@ import Image from "next/image"
 import { DynamicIcon } from "@/components/dynamic-icon"
 import { ErsteBayerischeGallery } from "@/components/erste-bayerische-gallery"
 import { renderBold, RichText } from "@/lib/render-bold"
-import type { ErsteBayerischeContent, EbBlock } from "@/lib/home-content"
+import type { ErsteBayerischeContent, EbBlock, EbImage } from "@/lib/home-content"
 
 // "Erste Bayerische" — the first investment, presented in full on the homepage
 // directly after the Bauweise section. Server component (no client JS) to keep
@@ -158,30 +158,30 @@ export function ErsteBayerische({ content }: { content: ErsteBayerischeContent }
               </h4>
               <div className="space-y-10 lg:space-y-14">
                 {([
-                  { floor: "Erdgeschoss", plan2d: "/images/typ-f-parter-2d.webp", plan3d: "/images/typ-f-parter-3d.webp" },
-                  { floor: "Dachgeschoss", plan2d: "/images/typ-f-poddasze-2d.webp", plan3d: "/images/typ-f-poddasze-3d.jpg" },
-                ] as { floor: string; plan2d: string; plan3d: string }[]).map((f) => (
+                  { floor: "Erdgeschoss", plan2d: c.plans.eg2d, plan3d: c.plans.eg3d },
+                  { floor: "Dachgeschoss", plan2d: c.plans.dg2d, plan3d: c.plans.dg3d },
+                ] as { floor: string; plan2d: EbImage; plan3d: EbImage }[]).map((f) => (
                   <div key={f.floor}>
                     <h5 className="font-medium text-lg text-center mb-5" style={{ color: "#6E2E2A" }}>
                       {f.floor}
                     </h5>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-5 lg:gap-8">
                       {([
-                        { label: "2D-Grundriss", src: f.plan2d },
-                        { label: "3D-Visualisierung", src: f.plan3d },
-                      ] as { label: string; src: string }[]).map((img) => (
-                        <figure key={img.label} className="space-y-3">
+                        { label: "2D-Grundriss", img: f.plan2d },
+                        { label: "3D-Visualisierung", img: f.plan3d },
+                      ] as { label: string; img: EbImage }[]).map((p) => (
+                        <figure key={p.label} className="space-y-3">
                           <div className="relative aspect-[4/3] rounded-3xl overflow-hidden bg-white shadow-xl border border-border/50">
                             <Image
-                              src={img.src}
-                              alt={`${f.floor} – ${img.label}, Doppelhaus „Erste Bayerische“`}
+                              src={p.img.image}
+                              alt={p.img.alt || `${f.floor} – ${p.label}, Doppelhaus „Erste Bayerische“`}
                               fill
                               sizes="(max-width: 768px) 100vw, 50vw"
                               className="object-contain p-3"
                             />
                           </div>
                           <figcaption className="text-sm text-muted-foreground text-center">
-                            {f.floor} – {img.label}
+                            {f.floor} – {p.label}
                           </figcaption>
                         </figure>
                       ))}

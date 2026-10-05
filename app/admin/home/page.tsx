@@ -93,6 +93,7 @@ type EbState = {
   objektTitleDe: string; objektTitleEn: string
   objektSubtitleDe: string; objektSubtitleEn: string
   objektBodyDe: string; objektBodyEn: string
+  planEg2d: EbImg; planEg3d: EbImg; planDg2d: EbImg; planDg3d: EbImg
   travel: EbTravel[]
   gallery: EbImg[]
 }
@@ -105,6 +106,10 @@ const EB_FB = {
   location: EB_D.blocks.location.image,
   nature: EB_D.blocks.nature.image,
   see: EB_D.blocks.see.image,
+  planEg2d: EB_D.plans.eg2d.image,
+  planEg3d: EB_D.plans.eg3d.image,
+  planDg2d: EB_D.plans.dg2d.image,
+  planDg3d: EB_D.plans.dg3d.image,
 }
 
 type EbRow = {
@@ -152,6 +157,10 @@ function ebFromRow(row: EbRow | undefined): EbState {
     objektTitleDe: objekt?.titleDe || EB_D.objekt.title.de, objektTitleEn: objekt?.titleEn || EB_D.objekt.title.en,
     objektSubtitleDe: objekt?.metaDe || EB_D.objekt.subtitle.de, objektSubtitleEn: objekt?.metaEn || EB_D.objekt.subtitle.en,
     objektBodyDe: objekt?.descriptionDe || EB_D.objekt.body.de, objektBodyEn: objekt?.descriptionEn || EB_D.objekt.body.en,
+    planEg2d: img('plan:eg-2d', EB_D.plans.eg2d.alt),
+    planEg3d: img('plan:eg-3d', EB_D.plans.eg3d.alt),
+    planDg2d: img('plan:dg-2d', EB_D.plans.dg2d.alt),
+    planDg3d: img('plan:dg-3d', EB_D.plans.dg3d.alt),
     travel: travelItems.length
       ? travelItems.map((it) => ({ icon: it.icon || 'Sparkles', titleDe: it.titleDe || '', titleEn: it.titleEn || '', descDe: it.descriptionDe || '', descEn: it.descriptionEn || '', metaDe: it.metaDe || '', metaEn: it.metaEn || '' }))
       : EB_D.travel.map((t) => ({ icon: t.icon, titleDe: t.title.de, titleEn: t.title.en, descDe: '', descEn: '', metaDe: t.meta.de, metaEn: t.meta.en })),
@@ -361,7 +370,7 @@ export default function HomeAdminPage() {
 
   // ── Erste Bayerische state helpers ──
   const ebPatch = (p: Partial<EbState>) => setEb((s) => ({ ...s, ...p }))
-  const ebPatchImg = (slot: 'hero' | 'wide', p: Partial<EbImg>) =>
+  const ebPatchImg = (slot: 'hero' | 'wide' | 'planEg2d' | 'planEg3d' | 'planDg2d' | 'planDg3d', p: Partial<EbImg>) =>
     setEb((s) => ({ ...s, [slot]: { ...s[slot], ...p } }))
   const ebPatchBlock = (slot: 'location' | 'nature' | 'see', p: Partial<EbBlockS>) =>
     setEb((s) => ({ ...s, [slot]: { ...s[slot], ...p } }))
@@ -374,7 +383,7 @@ export default function HomeAdminPage() {
     if (j < 0 || j >= arr.length) return arr
     const next = [...arr]; const [it] = next.splice(idx, 1); next.splice(j, 0, it); return next
   }
-  const ebUploadImg = async (slot: 'hero' | 'wide', file: File) => {
+  const ebUploadImg = async (slot: 'hero' | 'wide' | 'planEg2d' | 'planEg3d' | 'planDg2d' | 'planDg3d', file: File) => {
     const url = await uploadFile(`eb:${slot}`, file); if (url) ebPatchImg(slot, { imageUrl: url })
   }
   const ebUploadBlock = async (slot: 'location' | 'nature' | 'see', file: File) => {
@@ -397,6 +406,10 @@ export default function HomeAdminPage() {
       blockItem('block:nature', eb.nature),
       blockItem('block:see', eb.see),
       { kind: 'block:objekt', titleDe: eb.objektTitleDe, titleEn: eb.objektTitleEn, metaDe: eb.objektSubtitleDe, metaEn: eb.objektSubtitleEn, descriptionDe: eb.objektBodyDe, descriptionEn: eb.objektBodyEn },
+      { kind: 'plan:eg-2d', imageUrl: eb.planEg2d.imageUrl, imageAltDe: eb.planEg2d.altDe, imageAltEn: eb.planEg2d.altEn },
+      { kind: 'plan:eg-3d', imageUrl: eb.planEg3d.imageUrl, imageAltDe: eb.planEg3d.altDe, imageAltEn: eb.planEg3d.altEn },
+      { kind: 'plan:dg-2d', imageUrl: eb.planDg2d.imageUrl, imageAltDe: eb.planDg2d.altDe, imageAltEn: eb.planDg2d.altEn },
+      { kind: 'plan:dg-3d', imageUrl: eb.planDg3d.imageUrl, imageAltDe: eb.planDg3d.altDe, imageAltEn: eb.planDg3d.altEn },
       { kind: 'block:closing', titleDe: eb.closingTitleDe, titleEn: eb.closingTitleEn, descriptionDe: eb.closingBodyDe, descriptionEn: eb.closingBodyEn },
       ...eb.travel.map((t) => ({ kind: 'travel', icon: t.icon, titleDe: t.titleDe, titleEn: t.titleEn, descriptionDe: t.descDe, descriptionEn: t.descEn, metaDe: t.metaDe, metaEn: t.metaEn })),
       ...eb.gallery.filter((g) => g.imageUrl.trim()).map((g) => ({ kind: 'gallery', imageUrl: g.imageUrl, imageAltDe: g.altDe, imageAltEn: g.altEn })),
@@ -583,6 +596,30 @@ export default function HomeAdminPage() {
           <BilingualInput label="Text" textarea de={eb.objektBodyDe} en={eb.objektBodyEn}
             onDe={(v) => ebPatch({ objektBodyDe: v })} onEn={(v) => ebPatch({ objektBodyEn: v })}
             hint="Fettdruck: **Text** · Absätze/Leerzeilen und Zeilenumbrüche bleiben erhalten." />
+        </div>
+
+        {/* Grundrisse — floor-plan images (2D + 3D). Mirrors the public order:
+            directly after the Objektbeschreibung text, before the travel section. */}
+        <div className="border-t pt-4 space-y-3">
+          <p className="text-sm font-medium text-gray-700">Grundrisse</p>
+          <p className="text-xs font-medium text-gray-500">Erdgeschoss</p>
+          <EbImageField label="Erdgeschoss - 2D-Grundriss" value={eb.planEg2d.imageUrl} fallback={EB_FB.planEg2d}
+            altDe={eb.planEg2d.altDe} altEn={eb.planEg2d.altEn} busy={uploading === 'eb:planEg2d'}
+            onFile={(f) => ebUploadImg('planEg2d', f)} onUrl={(v) => ebPatchImg('planEg2d', { imageUrl: v })}
+            onAltDe={(v) => ebPatchImg('planEg2d', { altDe: v })} onAltEn={(v) => ebPatchImg('planEg2d', { altEn: v })} />
+          <EbImageField label="Erdgeschoss - 3D-Visualisierung" value={eb.planEg3d.imageUrl} fallback={EB_FB.planEg3d}
+            altDe={eb.planEg3d.altDe} altEn={eb.planEg3d.altEn} busy={uploading === 'eb:planEg3d'}
+            onFile={(f) => ebUploadImg('planEg3d', f)} onUrl={(v) => ebPatchImg('planEg3d', { imageUrl: v })}
+            onAltDe={(v) => ebPatchImg('planEg3d', { altDe: v })} onAltEn={(v) => ebPatchImg('planEg3d', { altEn: v })} />
+          <p className="text-xs font-medium text-gray-500 pt-2">Dachgeschoss</p>
+          <EbImageField label="Dachgeschoss - 2D-Grundriss" value={eb.planDg2d.imageUrl} fallback={EB_FB.planDg2d}
+            altDe={eb.planDg2d.altDe} altEn={eb.planDg2d.altEn} busy={uploading === 'eb:planDg2d'}
+            onFile={(f) => ebUploadImg('planDg2d', f)} onUrl={(v) => ebPatchImg('planDg2d', { imageUrl: v })}
+            onAltDe={(v) => ebPatchImg('planDg2d', { altDe: v })} onAltEn={(v) => ebPatchImg('planDg2d', { altEn: v })} />
+          <EbImageField label="Dachgeschoss - 3D-Visualisierung" value={eb.planDg3d.imageUrl} fallback={EB_FB.planDg3d}
+            altDe={eb.planDg3d.altDe} altEn={eb.planDg3d.altEn} busy={uploading === 'eb:planDg3d'}
+            onFile={(f) => ebUploadImg('planDg3d', f)} onUrl={(v) => ebPatchImg('planDg3d', { imageUrl: v })}
+            onAltDe={(v) => ebPatchImg('planDg3d', { altDe: v })} onAltEn={(v) => ebPatchImg('planDg3d', { altEn: v })} />
         </div>
 
         {/* Wide full-width image */}

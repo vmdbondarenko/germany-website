@@ -266,6 +266,27 @@ export const DEFAULT_ERSTE_BAYERISCHE = {
       "The modern semi-detached house project “Erste Bayerische” comprises two mirror-image halves, each with its own entrance and 73.50 m² of living space over two levels.\n\nOn the ground floor you will find a spacious living and dining area with an open kitchen, a guest WC and a utility room. The attic floor has two bedrooms and a spacious bathroom with a dormer.\n\nThe houses are built using solid construction and equipped with a heat pump and underfloor heating. A high-quality façade of hand-formed bricks and the classic gabled roof give the building a modern yet timeless character.",
     ),
   },
+  // Grundrisse — floor-plan images (2D + 3D for Erdgeschoss & Dachgeschoss).
+  // Admin-editable per image; these defaults are the fallback and preserve the
+  // current public images.
+  plans: {
+    eg2d: {
+      image: "/images/typ-f-parter-2d.webp",
+      alt: t("Erdgeschoss - 2D-Grundriss, Doppelhaus „Erste Bayerische“", "Ground floor - 2D floor plan, Erste Bayerische semi-detached house"),
+    },
+    eg3d: {
+      image: "/images/typ-f-parter-3d.webp",
+      alt: t("Erdgeschoss - 3D-Visualisierung, Doppelhaus „Erste Bayerische“", "Ground floor - 3D visualization, Erste Bayerische semi-detached house"),
+    },
+    dg2d: {
+      image: "/images/typ-f-poddasze-2d.webp",
+      alt: t("Dachgeschoss - 2D-Grundriss, Doppelhaus „Erste Bayerische“", "Attic floor - 2D floor plan, Erste Bayerische semi-detached house"),
+    },
+    dg3d: {
+      image: "/images/typ-f-poddasze-3d.jpg",
+      alt: t("Dachgeschoss - 3D-Visualisierung, Doppelhaus „Erste Bayerische“", "Attic floor - 3D visualization, Erste Bayerische semi-detached house"),
+    },
+  },
   travelHeading: t(
     "Auch im Alltag profitieren Sie von kurzen Wegen",
     "Short distances in everyday life, too",

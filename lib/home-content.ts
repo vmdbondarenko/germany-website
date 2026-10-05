@@ -304,6 +304,7 @@ export type ErsteBayerischeContent = {
     closing: { title: string; body: string }
   }
   objekt: { title: string; subtitle: string; body: string }
+  plans: { eg2d: EbImage; eg3d: EbImage; dg2d: EbImage; dg3d: EbImage }
   travelHeading: string
   travel: { icon: string; title: string; description: string; meta: string }[]
   gallery: EbImage[]
@@ -367,6 +368,12 @@ export async function getErsteBayerischeContent(locale: Locale): Promise<ErsteBa
       title: txt(de ? objektIt?.titleDe : objektIt?.titleEn, L(D.objekt.title)),
       subtitle: txt(de ? objektIt?.metaDe : objektIt?.metaEn, L(D.objekt.subtitle)),
       body: txt(de ? objektIt?.descriptionDe : objektIt?.descriptionEn, L(D.objekt.body)),
+    },
+    plans: {
+      eg2d: img("plan:eg-2d", D.plans.eg2d),
+      eg3d: img("plan:eg-3d", D.plans.eg3d),
+      dg2d: img("plan:dg-2d", D.plans.dg2d),
+      dg3d: img("plan:dg-3d", D.plans.dg3d),
     },
     travelHeading: L(D.travelHeading),
     travel:
