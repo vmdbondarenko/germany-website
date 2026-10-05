@@ -93,6 +93,7 @@ type EbState = {
   objektTitleDe: string; objektTitleEn: string
   objektSubtitleDe: string; objektSubtitleEn: string
   objektBodyDe: string; objektBodyEn: string
+  eckdaten: { valueDe: string; valueEn: string }[]
   planEg2d: EbImg; planEg3d: EbImg; planDg2d: EbImg; planDg3d: EbImg
   travel: EbTravel[]
   gallery: EbImg[]
@@ -142,6 +143,7 @@ function ebFromRow(row: EbRow | undefined): EbState {
   }
   const closing = one('block:closing')
   const objekt = one('block:objekt')
+  const eckItems = many('eckdaten')
   const travelItems = many('travel')
   const galleryItems = many('gallery')
   return {
@@ -157,6 +159,10 @@ function ebFromRow(row: EbRow | undefined): EbState {
     objektTitleDe: objekt?.titleDe || EB_D.objekt.title.de, objektTitleEn: objekt?.titleEn || EB_D.objekt.title.en,
     objektSubtitleDe: objekt?.metaDe || EB_D.objekt.subtitle.de, objektSubtitleEn: objekt?.metaEn || EB_D.objekt.subtitle.en,
     objektBodyDe: objekt?.descriptionDe || EB_D.objekt.body.de, objektBodyEn: objekt?.descriptionEn || EB_D.objekt.body.en,
+    eckdaten: EB_D.eckdaten.map((d, i) => ({
+      valueDe: eckItems[i]?.descriptionDe || d.value.de,
+      valueEn: eckItems[i]?.descriptionEn || d.value.en,
+    })),
     planEg2d: img('plan:eg-2d', EB_D.plans.eg2d.alt),
     planEg3d: img('plan:eg-3d', EB_D.plans.eg3d.alt),
     planDg2d: img('plan:dg-2d', EB_D.plans.dg2d.alt),
@@ -374,6 +380,8 @@ export default function HomeAdminPage() {
     setEb((s) => ({ ...s, [slot]: { ...s[slot], ...p } }))
   const ebPatchBlock = (slot: 'location' | 'nature' | 'see', p: Partial<EbBlockS>) =>
     setEb((s) => ({ ...s, [slot]: { ...s[slot], ...p } }))
+  const ebPatchEck = (idx: number, p: Partial<{ valueDe: string; valueEn: string }>) =>
+    setEb((s) => { const eckdaten = [...s.eckdaten]; eckdaten[idx] = { ...eckdaten[idx], ...p }; return { ...s, eckdaten } })
   const ebPatchTravel = (idx: number, p: Partial<EbTravel>) =>
     setEb((s) => { const travel = [...s.travel]; travel[idx] = { ...travel[idx], ...p }; return { ...s, travel } })
   const ebPatchGallery = (idx: number, p: Partial<EbImg>) =>
@@ -406,6 +414,7 @@ export default function HomeAdminPage() {
       blockItem('block:nature', eb.nature),
       blockItem('block:see', eb.see),
       { kind: 'block:objekt', titleDe: eb.objektTitleDe, titleEn: eb.objektTitleEn, metaDe: eb.objektSubtitleDe, metaEn: eb.objektSubtitleEn, descriptionDe: eb.objektBodyDe, descriptionEn: eb.objektBodyEn },
+      ...eb.eckdaten.map((row, i) => ({ kind: 'eckdaten', titleDe: EB_D.eckdaten[i].label.de, titleEn: EB_D.eckdaten[i].label.en, descriptionDe: row.valueDe, descriptionEn: row.valueEn })),
       { kind: 'plan:eg-2d', imageUrl: eb.planEg2d.imageUrl, imageAltDe: eb.planEg2d.altDe, imageAltEn: eb.planEg2d.altEn },
       { kind: 'plan:eg-3d', imageUrl: eb.planEg3d.imageUrl, imageAltDe: eb.planEg3d.altDe, imageAltEn: eb.planEg3d.altEn },
       { kind: 'plan:dg-2d', imageUrl: eb.planDg2d.imageUrl, imageAltDe: eb.planDg2d.altDe, imageAltEn: eb.planDg2d.altEn },
@@ -596,6 +605,11 @@ export default function HomeAdminPage() {
           <BilingualInput label="Text" textarea de={eb.objektBodyDe} en={eb.objektBodyEn}
             onDe={(v) => ebPatch({ objektBodyDe: v })} onEn={(v) => ebPatch({ objektBodyEn: v })}
             hint="Fettdruck: **Text** · Absätze/Leerzeilen und Zeilenumbrüche bleiben erhalten." />
+          <p className="text-xs font-medium text-gray-500 pt-1">Eckdaten (Werte)</p>
+          {eb.eckdaten.map((row, i) => (
+            <BilingualInput key={i} label={EB_D.eckdaten[i].label.de} de={row.valueDe} en={row.valueEn}
+              onDe={(v) => ebPatchEck(i, { valueDe: v })} onEn={(v) => ebPatchEck(i, { valueEn: v })} />
+          ))}
         </div>
 
         {/* Grundrisse — floor-plan images (2D + 3D). Mirrors the public order:

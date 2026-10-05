@@ -304,6 +304,7 @@ export type ErsteBayerischeContent = {
     closing: { title: string; body: string }
   }
   objekt: { title: string; subtitle: string; body: string }
+  eckdaten: { label: string; value: string }[]
   plans: { eg2d: EbImage; eg3d: EbImage; dg2d: EbImage; dg3d: EbImage }
   travelHeading: string
   travel: { icon: string; title: string; description: string; meta: string }[]
@@ -346,6 +347,7 @@ export async function getErsteBayerischeContent(locale: Locale): Promise<ErsteBa
 
   const closingIt = one("block:closing")
   const objektIt = one("block:objekt")
+  const eckItems = many("eckdaten")
   const travelItems = many("travel")
   const galleryItems = many("gallery")
 
@@ -369,6 +371,10 @@ export async function getErsteBayerischeContent(locale: Locale): Promise<ErsteBa
       subtitle: txt(de ? objektIt?.metaDe : objektIt?.metaEn, L(D.objekt.subtitle)),
       body: txt(de ? objektIt?.descriptionDe : objektIt?.descriptionEn, L(D.objekt.body)),
     },
+    eckdaten: D.eckdaten.map((d, i) => ({
+      label: L(d.label),
+      value: txt(eckItems[i] ? (de ? eckItems[i].descriptionDe : eckItems[i].descriptionEn) : null, L(d.value)),
+    })),
     plans: {
       eg2d: img("plan:eg-2d", D.plans.eg2d),
       eg3d: img("plan:eg-3d", D.plans.eg3d),

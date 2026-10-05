@@ -129,22 +129,13 @@ export function ErsteBayerische({ content }: { content: ErsteBayerischeContent }
                   Eckdaten
                 </h4>
                 <dl>
-                  {([
-                    ["Wohnfläche", "73,50 m² je Doppelhaushälfte"],
-                    ["Zimmer", "3 (2 Schlafzimmer + Wohn-/Essbereich)"],
-                    ["Geschosse", "2 (Erdgeschoss und Dachgeschoss)"],
-                    ["Badezimmer", "1"],
-                    ["Gäste-WC", "1"],
-                    ["Heizung", "Wärmepumpe + Fußbodenheizung"],
-                    ["Bauweise", "Massivbau"],
-                    ["Stellplatz", "1"],
-                  ] as [string, string][]).map(([k, v]) => (
+                  {c.eckdaten.map((row) => (
                     <div
-                      key={k}
+                      key={row.label}
                       className="flex items-start justify-between gap-4 border-b border-border/50 py-2.5 last:border-0"
                     >
-                      <dt className="text-muted-foreground">{k}</dt>
-                      <dd className="font-medium text-foreground text-right">{v}</dd>
+                      <dt className="text-muted-foreground">{row.label}</dt>
+                      <dd className="font-medium text-foreground text-right">{row.value}</dd>
                     </div>
                   ))}
                 </dl>

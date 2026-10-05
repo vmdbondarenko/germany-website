@@ -266,6 +266,19 @@ export const DEFAULT_ERSTE_BAYERISCHE = {
       "The modern semi-detached house project “Erste Bayerische” comprises two mirror-image halves, each with its own entrance and 73.50 m² of living space over two levels.\n\nOn the ground floor you will find a spacious living and dining area with an open kitchen, a guest WC and a utility room. The attic floor has two bedrooms and a spacious bathroom with a dormer.\n\nThe houses are built using solid construction and equipped with a heat pump and underfloor heating. A high-quality façade of hand-formed bricks and the classic gabled roof give the building a modern yet timeless character.",
     ),
   },
+  // Eckdaten — key-facts table in the Objektbeschreibung block. Labels are fixed;
+  // the values are admin-editable (these defaults are the fallback and preserve
+  // the current public values).
+  eckdaten: [
+    { label: t("Wohnfläche", "Living space"), value: t("73,50 m² je Doppelhaushälfte", "73.50 m² per semi-detached half") },
+    { label: t("Zimmer", "Rooms"), value: t("3 (2 Schlafzimmer + Wohn-/Essbereich)", "3 (2 bedrooms + living/dining area)") },
+    { label: t("Geschosse", "Floors"), value: t("2 (Erdgeschoss und Dachgeschoss)", "2 (ground floor and attic floor)") },
+    { label: t("Badezimmer", "Bathroom"), value: t("1", "1") },
+    { label: t("Gäste-WC", "Guest WC"), value: t("1", "1") },
+    { label: t("Heizung", "Heating"), value: t("Wärmepumpe + Fußbodenheizung", "Heat pump + underfloor heating") },
+    { label: t("Bauweise", "Construction"), value: t("Massivbau", "Solid construction") },
+    { label: t("Stellplatz", "Parking space"), value: t("1", "1") },
+  ],
   // Grundrisse — floor-plan images (2D + 3D for Erdgeschoss & Dachgeschoss).
   // Admin-editable per image; these defaults are the fallback and preserve the
   // current public images.
