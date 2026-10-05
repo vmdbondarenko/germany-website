@@ -528,6 +528,11 @@ model HomeSectionItem {
   imageUrl      String?
   imageAltDe    String?
   imageAltEn    String?
+  // Optional second per-item image + alt (e.g. a plan subsection showing two
+  // images side by side: imageUrl = left, imageUrl2 = right).
+  imageUrl2     String?
+  imageAlt2De   String?
+  imageAlt2En   String?
   // Small translatable label (e.g. a travel-time / distance badge).
   metaDe        String?
   metaEn        String?

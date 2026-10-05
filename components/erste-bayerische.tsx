@@ -44,14 +44,6 @@ function TextImageBlock({ block, flip }: { block: EbBlock; flip?: boolean }) {
 
 export function ErsteBayerische({ content }: { content: ErsteBayerischeContent }) {
   const c = content
-  // Group the dynamic plan list by floor (preserving order) so the public design
-  // stays grouped-by-level (floor heading + responsive figure grid).
-  const planGroups: { floor: string; items: typeof c.plans }[] = []
-  for (const pl of c.plans) {
-    const g = planGroups.find((x) => x.floor === pl.floor)
-    if (g) g.items.push(pl)
-    else planGroups.push({ floor: pl.floor, items: [pl] })
-  }
   return (
     <section id="erste-bayerische" className="py-16 lg:py-28 bg-background">
       <div className="container mx-auto px-4 lg:px-8">
@@ -150,42 +142,48 @@ export function ErsteBayerische({ content }: { content: ErsteBayerischeContent }
               </div>
             </div>
 
-            {/* Floor plans — dynamic list grouped by floor (2D/3D), responsive. */}
-            {planGroups.length > 0 && (
+            {/* Floor plans — dynamic subsections; each shows two images side by
+                side on desktop (left + right) and stacked on mobile. */}
+            {c.plans.length > 0 && (
               <div className="mt-12 lg:mt-16">
                 <h4 className="font-serif text-xl lg:text-2xl font-semibold text-center mb-8 lg:mb-10" style={{ color: "#3E1718" }}>
                   {renderBold(c.plansHeading)}
                 </h4>
                 <div className="space-y-10 lg:space-y-14">
-                  {planGroups.map((g) => (
-                    <div key={g.floor}>
-                      <h5 className="font-medium text-lg text-center mb-5" style={{ color: "#6E2E2A" }}>
-                        {g.floor}
-                      </h5>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 lg:gap-8">
-                        {g.items.map((p, i) => {
-                          const typeLabel = p.dimension === "3D" ? c.plansLabel3d : c.plansLabel2d
-                          const caption = p.title || typeLabel
-                          return (
+                  {c.plans.map((p, idx) => {
+                    const figs = [
+                      { image: p.image1, alt: p.alt1, label: c.plansLabel2d },
+                      { image: p.image2, alt: p.alt2, label: c.plansLabel3d },
+                    ].filter((f) => f.image)
+                    if (figs.length === 0) return null
+                    return (
+                      <div key={idx}>
+                        {p.floor && (
+                          <h5 className="font-medium text-lg text-center mb-5" style={{ color: "#6E2E2A" }}>
+                            {p.floor}
+                          </h5>
+                        )}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 lg:gap-8">
+                          {figs.map((f, i) => (
                             <figure key={i} className="space-y-3">
                               <div className="relative aspect-[4/3] rounded-3xl overflow-hidden bg-white shadow-xl border border-border/50">
                                 <Image
-                                  src={p.image}
-                                  alt={p.alt || `${g.floor} – ${caption}`}
+                                  src={f.image}
+                                  alt={f.alt || (p.floor ? `${p.floor} – ${f.label}` : f.label)}
                                   fill
                                   sizes="(max-width: 768px) 100vw, 50vw"
                                   className="object-contain p-3"
                                 />
                               </div>
                               <figcaption className="text-sm text-muted-foreground text-center">
-                                {g.floor} – {caption}
+                                {p.floor ? `${p.floor} – ${f.label}` : f.label}
                               </figcaption>
                             </figure>
-                          )
-                        })}
+                          ))}
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    )
+                  })}
                 </div>
               </div>
             )}

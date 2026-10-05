@@ -50,6 +50,9 @@ export async function PUT(request: Request) {
     imageUrl?: string
     imageAltDe?: string
     imageAltEn?: string
+    imageUrl2?: string
+    imageAlt2De?: string
+    imageAlt2En?: string
     metaDe?: string
     metaEn?: string
   }
@@ -76,6 +79,9 @@ export async function PUT(request: Request) {
               imageUrl: it.imageUrl || null,
               imageAltDe: it.imageAltDe || null,
               imageAltEn: it.imageAltEn || null,
+              imageUrl2: it.imageUrl2 || null,
+              imageAlt2De: it.imageAlt2De || null,
+              imageAlt2En: it.imageAlt2En || null,
               metaDe: it.metaDe || null,
               metaEn: it.metaEn || null,
               order: i,

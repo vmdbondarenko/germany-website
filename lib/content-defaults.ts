@@ -285,11 +285,21 @@ export const DEFAULT_ERSTE_BAYERISCHE = {
   plansLabel2d: t("2D-Grundriss", "2D floor plan"),
   plansLabel3d: t("3D-Visualisierung", "3D visualization"),
   plans: ([
-    { floor: t("Erdgeschoss", "Ground floor"), dimension: "2D", title: t("", ""), image: "/images/typ-f-parter-2d.webp", alt: t("Erdgeschoss - 2D-Grundriss, Doppelhaus „Erste Bayerische“", "Ground floor - 2D floor plan, Erste Bayerische semi-detached house") },
-    { floor: t("Erdgeschoss", "Ground floor"), dimension: "3D", title: t("", ""), image: "/images/typ-f-parter-3d.webp", alt: t("Erdgeschoss - 3D-Visualisierung, Doppelhaus „Erste Bayerische“", "Ground floor - 3D visualization, Erste Bayerische semi-detached house") },
-    { floor: t("Dachgeschoss", "Attic floor"), dimension: "2D", title: t("", ""), image: "/images/typ-f-poddasze-2d.webp", alt: t("Dachgeschoss - 2D-Grundriss, Doppelhaus „Erste Bayerische“", "Attic floor - 2D floor plan, Erste Bayerische semi-detached house") },
-    { floor: t("Dachgeschoss", "Attic floor"), dimension: "3D", title: t("", ""), image: "/images/typ-f-poddasze-3d.jpg", alt: t("Dachgeschoss - 3D-Visualisierung, Doppelhaus „Erste Bayerische“", "Attic floor - 3D visualization, Erste Bayerische semi-detached house") },
-  ] as { floor: LocalizedText; dimension: "2D" | "3D"; title: LocalizedText; image: string; alt: LocalizedText }[]),
+    {
+      floor: t("Erdgeschoss", "Ground floor"),
+      image1: "/images/typ-f-parter-2d.webp",
+      alt1: t("Erdgeschoss - 2D-Grundriss, Doppelhaus „Erste Bayerische“", "Ground floor - 2D floor plan, Erste Bayerische semi-detached house"),
+      image2: "/images/typ-f-parter-3d.webp",
+      alt2: t("Erdgeschoss - 3D-Visualisierung, Doppelhaus „Erste Bayerische“", "Ground floor - 3D visualization, Erste Bayerische semi-detached house"),
+    },
+    {
+      floor: t("Dachgeschoss", "Attic floor"),
+      image1: "/images/typ-f-poddasze-2d.webp",
+      alt1: t("Dachgeschoss - 2D-Grundriss, Doppelhaus „Erste Bayerische“", "Attic floor - 2D floor plan, Erste Bayerische semi-detached house"),
+      image2: "/images/typ-f-poddasze-3d.jpg",
+      alt2: t("Dachgeschoss - 3D-Visualisierung, Doppelhaus „Erste Bayerische“", "Attic floor - 3D visualization, Erste Bayerische semi-detached house"),
+    },
+  ] as { floor: LocalizedText; image1: string; alt1: LocalizedText; image2: string; alt2: LocalizedText }[]),
   travelHeading: t(
     "Auch im Alltag profitieren Sie von kurzen Wegen",
     "Short distances in everyday life, too",

@@ -308,7 +308,7 @@ export type ErsteBayerischeContent = {
   plansHeading: string
   plansLabel2d: string
   plansLabel3d: string
-  plans: { floor: string; dimension: "2D" | "3D"; title: string; image: string; alt: string }[]
+  plans: { floor: string; image1: string; alt1: string; image2: string; alt2: string }[]
   travelHeading: string
   travel: { icon: string; title: string; description: string; meta: string }[]
   gallery: EbImage[]
@@ -386,13 +386,13 @@ export async function getErsteBayerischeContent(locale: Locale): Promise<ErsteBa
     plans: (planItems.length
       ? planItems.map((it) => ({
           floor: (de ? it.metaDe : it.metaEn) || "",
-          dimension: (it.icon === "3D" ? "3D" : "2D") as "2D" | "3D",
-          title: (de ? it.titleDe : it.titleEn) || "",
-          image: it.imageUrl || "",
-          alt: (de ? it.imageAltDe : it.imageAltEn) || "",
+          image1: it.imageUrl || "",
+          alt1: (de ? it.imageAltDe : it.imageAltEn) || "",
+          image2: it.imageUrl2 || "",
+          alt2: (de ? it.imageAlt2De : it.imageAlt2En) || "",
         }))
-      : D.plans.map((p) => ({ floor: L(p.floor), dimension: p.dimension, title: L(p.title), image: p.image, alt: L(p.alt) }))
-    ).filter((p) => p.image),
+      : D.plans.map((p) => ({ floor: L(p.floor), image1: p.image1, alt1: L(p.alt1), image2: p.image2, alt2: L(p.alt2) }))
+    ).filter((p) => p.image1 || p.image2),
     travelHeading: L(D.travelHeading),
     travel:
       travelItems.length > 0
