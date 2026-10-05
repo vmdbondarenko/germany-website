@@ -152,12 +152,13 @@ export function ErsteBayerische({ content }: { content: ErsteBayerischeContent }
                 <div className="space-y-10 lg:space-y-14">
                   {c.plans.map((p, idx) => {
                     const figs = [
-                      { image: p.image1, alt: p.alt1, label: c.plansLabel2d },
-                      { image: p.image2, alt: p.alt2, label: c.plansLabel3d },
+                      { image: p.image1, alt: p.alt1 },
+                      { image: p.image2, alt: p.alt2 },
                     ].filter((f) => f.image)
                     if (figs.length === 0) return null
                     return (
                       <div key={idx}>
+                        {/* Public title = exactly the admin-entered title (no appended labels). */}
                         {p.floor && (
                           <h5 className="font-medium text-lg text-center mb-5" style={{ color: "#6E2E2A" }}>
                             {p.floor}
@@ -165,19 +166,16 @@ export function ErsteBayerische({ content }: { content: ErsteBayerischeContent }
                         )}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-5 lg:gap-8">
                           {figs.map((f, i) => (
-                            <figure key={i} className="space-y-3">
+                            <figure key={i}>
                               <div className="relative aspect-[4/3] rounded-3xl overflow-hidden bg-white shadow-xl border border-border/50">
                                 <Image
                                   src={f.image}
-                                  alt={f.alt || (p.floor ? `${p.floor} – ${f.label}` : f.label)}
+                                  alt={f.alt || p.floor}
                                   fill
                                   sizes="(max-width: 768px) 100vw, 50vw"
                                   className="object-contain p-3"
                                 />
                               </div>
-                              <figcaption className="text-sm text-muted-foreground text-center">
-                                {p.floor ? `${p.floor} – ${f.label}` : f.label}
-                              </figcaption>
                             </figure>
                           ))}
                         </div>
