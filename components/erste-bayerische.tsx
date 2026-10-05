@@ -105,6 +105,104 @@ export function ErsteBayerische({ content }: { content: ErsteBayerischeContent }
           {/* Subsection C — Zeuthener See & marina */}
           <TextImageBlock block={c.blocks.see} />
 
+          {/* Objektbeschreibung & Grundrisse — project description, key facts and
+              the 2D floor plans + 3D visualizations (Erdgeschoss & Dachgeschoss). */}
+          <div>
+            <div className="max-w-3xl mx-auto text-center mb-10 lg:mb-14">
+              <h3 className="font-serif text-2xl lg:text-3xl font-semibold mb-3" style={{ color: "#3E1718" }}>
+                Objektbeschreibung
+              </h3>
+              <p className="text-muted-foreground text-base lg:text-lg">
+                Doppelhaus mit durchdachtem Grundriss
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-start">
+              <div className="space-y-4 text-muted-foreground text-base lg:text-lg leading-relaxed">
+                <p>
+                  Das moderne Doppelhausprojekt „Erste Bayerische“ umfasst zwei spiegelbildlich geplante
+                  Haushälften mit jeweils eigenem Eingang und 73,50 m² Wohnfläche auf zwei Ebenen.
+                </p>
+                <p>
+                  Im Erdgeschoss erwartet Sie ein großzügiger Wohn- und Essbereich mit offener Küche, ein
+                  Gäste-WC sowie ein Hauswirtschaftsraum. Das Dachgeschoss verfügt über zwei Schlafzimmer und
+                  ein geräumiges Badezimmer mit Dachgaube.
+                </p>
+                <p>
+                  Die Häuser werden in Massivbauweise errichtet und mit Wärmepumpe und Fußbodenheizung
+                  ausgestattet. Eine hochwertige Fassade aus handgeformten Ziegeln sowie das klassische
+                  Satteldach verleihen dem Gebäude einen modernen und zugleich zeitlosen Charakter.
+                </p>
+              </div>
+
+              <div className="rounded-3xl border border-[#6E2E2A]/10 bg-card p-6 lg:p-8 shadow-sm">
+                <h4 className="font-serif text-xl lg:text-2xl font-semibold mb-5" style={{ color: "#3E1718" }}>
+                  Eckdaten
+                </h4>
+                <dl>
+                  {([
+                    ["Wohnfläche", "73,50 m² je Doppelhaushälfte"],
+                    ["Zimmer", "3 (2 Schlafzimmer + Wohn-/Essbereich)"],
+                    ["Geschosse", "2 (Erdgeschoss und Dachgeschoss)"],
+                    ["Badezimmer", "1"],
+                    ["Gäste-WC", "1"],
+                    ["Heizung", "Wärmepumpe + Fußbodenheizung"],
+                    ["Bauweise", "Massivbau"],
+                    ["Stellplatz", "1"],
+                  ] as [string, string][]).map(([k, v]) => (
+                    <div
+                      key={k}
+                      className="flex items-start justify-between gap-4 border-b border-border/50 py-2.5 last:border-0"
+                    >
+                      <dt className="text-muted-foreground">{k}</dt>
+                      <dd className="font-medium text-foreground text-right">{v}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </div>
+            </div>
+
+            {/* Floor plans — 2D plans + 3D visualizations per floor */}
+            <div className="mt-12 lg:mt-16">
+              <h4 className="font-serif text-xl lg:text-2xl font-semibold text-center mb-8 lg:mb-10" style={{ color: "#3E1718" }}>
+                Grundrisse
+              </h4>
+              <div className="space-y-10 lg:space-y-14">
+                {([
+                  { floor: "Erdgeschoss", plan2d: "/images/typ-f-parter-2d.webp", plan3d: "/images/typ-f-parter-3d.webp" },
+                  { floor: "Dachgeschoss", plan2d: "/images/typ-f-poddasze-2d.webp", plan3d: "/images/typ-f-poddasze-3d.jpg" },
+                ] as { floor: string; plan2d: string; plan3d: string }[]).map((f) => (
+                  <div key={f.floor}>
+                    <h5 className="font-medium text-lg text-center mb-5" style={{ color: "#6E2E2A" }}>
+                      {f.floor}
+                    </h5>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5 lg:gap-8">
+                      {([
+                        { label: "2D-Grundriss", src: f.plan2d },
+                        { label: "3D-Visualisierung", src: f.plan3d },
+                      ] as { label: string; src: string }[]).map((img) => (
+                        <figure key={img.label} className="space-y-3">
+                          <div className="relative aspect-[4/3] rounded-3xl overflow-hidden bg-white shadow-xl border border-border/50">
+                            <Image
+                              src={img.src}
+                              alt={`${f.floor} – ${img.label}, Doppelhaus „Erste Bayerische“`}
+                              fill
+                              sizes="(max-width: 768px) 100vw, 50vw"
+                              className="object-contain p-3"
+                            />
+                          </div>
+                          <figcaption className="text-sm text-muted-foreground text-center">
+                            {f.floor} – {img.label}
+                          </figcaption>
+                        </figure>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
           {/* Travel times & everyday infrastructure */}
           {c.travel.length > 0 && (
             <div>
