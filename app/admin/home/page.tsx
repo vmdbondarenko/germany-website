@@ -94,7 +94,7 @@ type EbState = {
   objektTitleDe: string; objektTitleEn: string
   objektSubtitleDe: string; objektSubtitleEn: string
   objektBodyDe: string; objektBodyEn: string
-  eckdaten: { valueDe: string; valueEn: string }[]
+  eckdaten: { labelDe: string; labelEn: string; valueDe: string; valueEn: string }[]
   plansHeadingDe: string; plansHeadingEn: string
   plansLabel2dDe: string; plansLabel2dEn: string
   plansLabel3dDe: string; plansLabel3dEn: string
@@ -162,10 +162,14 @@ function ebFromRow(row: EbRow | undefined): EbState {
     objektTitleDe: objekt?.titleDe || EB_D.objekt.title.de, objektTitleEn: objekt?.titleEn || EB_D.objekt.title.en,
     objektSubtitleDe: objekt?.metaDe || EB_D.objekt.subtitle.de, objektSubtitleEn: objekt?.metaEn || EB_D.objekt.subtitle.en,
     objektBodyDe: objekt?.descriptionDe || EB_D.objekt.body.de, objektBodyEn: objekt?.descriptionEn || EB_D.objekt.body.en,
-    eckdaten: EB_D.eckdaten.map((d, i) => ({
-      valueDe: eckItems[i]?.descriptionDe || d.value.de,
-      valueEn: eckItems[i]?.descriptionEn || d.value.en,
-    })),
+    eckdaten: eckItems.length
+      ? eckItems.map((it) => ({
+          labelDe: it.titleDe || '', labelEn: it.titleEn || '',
+          valueDe: it.descriptionDe || '', valueEn: it.descriptionEn || '',
+        }))
+      : EB_D.eckdaten.map((d) => ({
+          labelDe: d.label.de, labelEn: d.label.en, valueDe: d.value.de, valueEn: d.value.en,
+        })),
     plansHeadingDe: planCfg?.titleDe || EB_D.plansHeading.de, plansHeadingEn: planCfg?.titleEn || EB_D.plansHeading.en,
     plansLabel2dDe: planCfg?.metaDe || EB_D.plansLabel2d.de, plansLabel2dEn: planCfg?.metaEn || EB_D.plansLabel2d.en,
     plansLabel3dDe: planCfg?.descriptionDe || EB_D.plansLabel3d.de, plansLabel3dEn: planCfg?.descriptionEn || EB_D.plansLabel3d.en,
@@ -399,7 +403,7 @@ export default function HomeAdminPage() {
     setEb((s) => { const plans = [...s.plans]; plans[idx] = { ...plans[idx], ...p }; return { ...s, plans } })
   const ebPatchBlock = (slot: 'location' | 'nature' | 'see', p: Partial<EbBlockS>) =>
     setEb((s) => ({ ...s, [slot]: { ...s[slot], ...p } }))
-  const ebPatchEck = (idx: number, p: Partial<{ valueDe: string; valueEn: string }>) =>
+  const ebPatchEck = (idx: number, p: Partial<{ labelDe: string; labelEn: string; valueDe: string; valueEn: string }>) =>
     setEb((s) => { const eckdaten = [...s.eckdaten]; eckdaten[idx] = { ...eckdaten[idx], ...p }; return { ...s, eckdaten } })
   const ebPatchTravel = (idx: number, p: Partial<EbTravel>) =>
     setEb((s) => { const travel = [...s.travel]; travel[idx] = { ...travel[idx], ...p }; return { ...s, travel } })
@@ -437,7 +441,9 @@ export default function HomeAdminPage() {
       blockItem('block:nature', eb.nature),
       blockItem('block:see', eb.see),
       { kind: 'block:objekt', titleDe: eb.objektTitleDe, titleEn: eb.objektTitleEn, metaDe: eb.objektSubtitleDe, metaEn: eb.objektSubtitleEn, descriptionDe: eb.objektBodyDe, descriptionEn: eb.objektBodyEn },
-      ...eb.eckdaten.map((row, i) => ({ kind: 'eckdaten', titleDe: EB_D.eckdaten[i].label.de, titleEn: EB_D.eckdaten[i].label.en, descriptionDe: row.valueDe, descriptionEn: row.valueEn })),
+      ...eb.eckdaten
+        .filter((row) => row.labelDe.trim() || row.labelEn.trim() || row.valueDe.trim() || row.valueEn.trim())
+        .map((row) => ({ kind: 'eckdaten', titleDe: row.labelDe, titleEn: row.labelEn, descriptionDe: row.valueDe, descriptionEn: row.valueEn })),
       { kind: 'plans-config', titleDe: eb.plansHeadingDe, titleEn: eb.plansHeadingEn, metaDe: eb.plansLabel2dDe, metaEn: eb.plansLabel2dEn, descriptionDe: eb.plansLabel3dDe, descriptionEn: eb.plansLabel3dEn },
       ...eb.plans.filter((p) => p.image1Url.trim() || p.image2Url.trim()).map((p) => ({
         kind: 'plan', metaDe: p.floorDe, metaEn: p.floorEn,
@@ -632,11 +638,33 @@ export default function HomeAdminPage() {
           <BilingualInput label="Text" textarea de={eb.objektBodyDe} en={eb.objektBodyEn}
             onDe={(v) => ebPatch({ objektBodyDe: v })} onEn={(v) => ebPatch({ objektBodyEn: v })}
             hint="Fettdruck: **Text** · Absätze/Leerzeilen und Zeilenumbrüche bleiben erhalten." />
-          <p className="text-xs font-medium text-gray-500 pt-1">Eckdaten (Werte)</p>
-          {eb.eckdaten.map((row, i) => (
-            <BilingualInput key={i} label={EB_D.eckdaten[i].label.de} de={row.valueDe} en={row.valueEn}
-              onDe={(v) => ebPatchEck(i, { valueDe: v })} onEn={(v) => ebPatchEck(i, { valueEn: v })} />
+          <p className="text-xs font-medium text-gray-500 pt-1">Eckdaten</p>
+          {eb.eckdaten.map((row, idx) => (
+            <div key={idx} className="border border-gray-100 rounded-lg p-3 space-y-2 bg-gray-50">
+              <div className="flex items-center justify-between gap-2">
+                <span className="text-xs font-medium text-gray-600">Zeile #{idx + 1}</span>
+                <div className="flex items-center gap-1">
+                  <Button variant="ghost" size="sm" disabled={idx === 0} onClick={() => ebPatch({ eckdaten: ebMove(eb.eckdaten, idx, -1) })}>
+                    <ArrowUp className="h-4 w-4" />
+                  </Button>
+                  <Button variant="ghost" size="sm" disabled={idx === eb.eckdaten.length - 1} onClick={() => ebPatch({ eckdaten: ebMove(eb.eckdaten, idx, 1) })}>
+                    <ArrowDown className="h-4 w-4" />
+                  </Button>
+                  <Button variant="ghost" size="sm" onClick={() => ebPatch({ eckdaten: eb.eckdaten.filter((_, i) => i !== idx) })}>
+                    <Trash2 className="h-4 w-4 text-red-500" />
+                  </Button>
+                </div>
+              </div>
+              <BilingualInput label="Bezeichnung" de={row.labelDe} en={row.labelEn}
+                onDe={(v) => ebPatchEck(idx, { labelDe: v })} onEn={(v) => ebPatchEck(idx, { labelEn: v })} />
+              <BilingualInput label="Wert" de={row.valueDe} en={row.valueEn}
+                onDe={(v) => ebPatchEck(idx, { valueDe: v })} onEn={(v) => ebPatchEck(idx, { valueEn: v })} />
+            </div>
           ))}
+          <Button variant="outline" size="sm"
+            onClick={() => ebPatch({ eckdaten: [...eb.eckdaten, { labelDe: '', labelEn: '', valueDe: '', valueEn: '' }] })}>
+            <Plus className="h-4 w-4 mr-1.5" /> Zeile hinzufügen
+          </Button>
         </div>
 
         {/* Grundrisse — dynamic floor-plan list (add / reorder / delete). Mirrors

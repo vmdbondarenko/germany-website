@@ -376,10 +376,13 @@ export async function getErsteBayerischeContent(locale: Locale): Promise<ErsteBa
       subtitle: txt(de ? objektIt?.metaDe : objektIt?.metaEn, L(D.objekt.subtitle)),
       body: txt(de ? objektIt?.descriptionDe : objektIt?.descriptionEn, L(D.objekt.body)),
     },
-    eckdaten: D.eckdaten.map((d, i) => ({
-      label: L(d.label),
-      value: txt(eckItems[i] ? (de ? eckItems[i].descriptionDe : eckItems[i].descriptionEn) : null, L(d.value)),
-    })),
+    eckdaten: (eckItems.length
+      ? eckItems.map((it) => ({
+          label: (de ? it.titleDe : it.titleEn) || "",
+          value: (de ? it.descriptionDe : it.descriptionEn) || "",
+        }))
+      : D.eckdaten.map((d) => ({ label: L(d.label), value: L(d.value) }))
+    ).filter((r) => r.label || r.value),
     plansHeading: txt(de ? planCfg?.titleDe : planCfg?.titleEn, L(D.plansHeading)),
     plansLabel2d: txt(de ? planCfg?.metaDe : planCfg?.metaEn, L(D.plansLabel2d)),
     plansLabel3d: txt(de ? planCfg?.descriptionDe : planCfg?.descriptionEn, L(D.plansLabel3d)),
