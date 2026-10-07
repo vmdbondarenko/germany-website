@@ -39,7 +39,7 @@ const SECTIONS: SectionDef[] = [
   { id: 'hero', label: 'Hero', fields: ['eyebrow', 'heading', 'description', 'cta'], hasItems: false, singleImage: { label: 'Hero-Bild', fallback: DEFAULT_HERO.image }, hint: 'Das Hero-Bild wird für DE und EN gemeinsam verwendet.' },
   { id: 'stats', label: 'Kennzahlen (Stats)', fields: [], hasItems: true, hint: 'Pro Kennzahl: Titel = Wert (z. B. „10+“), Beschreibung = Label (z. B. „Jahre Erfahrung“).' },
   { id: 'upcoming', label: 'Demnächst — Überschrift', fields: ['eyebrow', 'heading', 'description'], hasItems: false, hint: 'Überschrift = 1. Zeile, Eyebrow = 2. (hervorgehobene) Zeile, Beschreibung = Untertitel.' },
-  { id: 'new-cities', label: 'Neue Städte — Überschrift', fields: ['heading', 'description'], hasItems: false, hint: 'Überschrift + Untertitel sowie die Fußnote (Titel + Text) unter den Städten.' },
+  { id: 'new-cities', label: 'Neue Städte — Überschrift', fields: ['heading', 'description'], hasItems: true, hint: 'Überschrift + Untertitel; ein Eintrag (Titel + Beschreibung) = die Fußnote.' },
   { id: 'since-founding', label: 'Seit unserer Gründung', fields: ['heading'], hasItems: true, hint: 'Ein Eintrag pro Zeitraum: Titel = Zeitraum; Text = Länderzeilen (z. B. „Ukraine: 820 Familien …“), je Land eine Zeile.' },
   { id: 'values', label: 'Unsere Werte', fields: ['eyebrow', 'heading', 'description'], hasItems: true, descriptionLabel: 'Fußnote (unter den Karten)', hint: 'Pro Karte: Titel + Beschreibung. Reihenfolge = Anzeigereihenfolge (Farben sind fest). Fußnote = Hinweistext unter den Karten. In Karten-Text und Fußnote wird **fett** als Fettdruck dargestellt (z. B. **Bayerischer Stil**).' },
   { id: 'bauweise', label: 'Bauweise und Entwicklung', fields: ['heading', 'description', 'cta'], hasItems: false, hasImages: true, imageFallbacks: [DEFAULT_BAUWEISE.image1, DEFAULT_BAUWEISE.image2], hint: 'Absätze in der Beschreibung durch eine Leerzeile trennen. Nur der primäre CTA (Label + Link) wird verwendet. Bilder werden für DE und EN gemeinsam verwendet.' },
@@ -1079,22 +1079,6 @@ export default function HomeAdminPage() {
                 <p className="text-xs text-gray-400">Icon-Namen: MapPin, Home, Trees, Settings, Layers, PenLine, ArrowUpToLine, HandCoins, Hammer, KeyRound, ShieldCheck, Sparkles</p>
               </div>
             )}
-
-            {/* Dedicated footnote fields (stored as the section's single item:
-                item[0].title = Titel, item[0].description = Text). */}
-            {def.id === 'new-cities' && (() => {
-              const note = s.items[0] ?? EMPTY_ITEM
-              const patchNote = (p: Partial<Item>) => patch('new-cities', { items: [{ ...note, ...p }] })
-              return (
-                <div className="space-y-3 border-t pt-4">
-                  <p className="text-sm font-medium text-gray-700">Fußnote (unter den Städten)</p>
-                  <BilingualInput label="Titel" de={note.titleDe} en={note.titleEn}
-                    onDe={(v) => patchNote({ titleDe: v })} onEn={(v) => patchNote({ titleEn: v })} />
-                  <BilingualInput label="Text" textarea de={note.descriptionDe} en={note.descriptionEn}
-                    onDe={(v) => patchNote({ descriptionDe: v })} onEn={(v) => patchNote({ descriptionEn: v })} />
-                </div>
-              )
-            })()}
             </section>
             {def.id === 'bauweise' && ersteBayerischeEditor}
             {def.id === 'since-founding' && galleryEditor}
