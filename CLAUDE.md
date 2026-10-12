@@ -75,10 +75,13 @@ verified Resend sender — falls back to `onboarding@resend.dev` for dev),
 - **Package manager: npm only.** `pnpm-lock.yaml` was deleted (it went stale and broke
   Vercel's frozen pnpm install). Keep `package-lock.json` in sync; don't reintroduce a
   pnpm lockfile.
-- **Git remote / SSH:** the machine's default GitHub key is another account
-  (`capevbondarenko`, no write access). The remote is set to `git@github:…` (the
-  `~/.ssh/config` alias `Host github` → key `~/.ssh/id_vmd` = `vmdbondarenko`). If a push
-  is denied, the remote got reset to `git@github.com:…` — put it back to the `github` alias.
+- **Git remote / SSH:** `origin` is `git@github.com:vmdbondarenko/germany-website.git`
+  (standard host). Auth uses the default `~/.ssh/id_ed25519` key, whose comment is
+  `vmdbondarenko@gmail.com` and which authenticates as `vmdbondarenko` (write access).
+  Verify with `ssh -T git@github.com`. (Historical note: an earlier setup used a
+  `~/.ssh/config` alias `Host github` → key `id_vmd`; that config file and the `id_vmd`
+  filename were lost when `~/.ssh` was rebuilt on 2026-03-19, but the working keypair
+  survived under the default name, so the alias is no longer needed.)
 - Commit messages end with `Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>`.
 
 ## i18n architecture (read this before touching routing)
