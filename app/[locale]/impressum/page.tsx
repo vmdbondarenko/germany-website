@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 }
 
 // Provisional Impressum from confirmed data only. Fields still awaiting
-// confirmation (USt-IdNr., § 34c GewO, authorities) are intentionally omitted
+// confirmation (§ 34c GewO, authorities) are intentionally omitted
 // rather than shown as "Wird nachgereicht".
 function Section({ heading, children }: { heading: string; children: React.ReactNode }) {
   return (
@@ -57,6 +57,10 @@ export default function ImpressumPage() {
                 <br />
                 Registernummer: {E.registrationNumber}
               </p>
+            </Section>
+
+            <Section heading="Umsatzsteuer-Identifikationsnummer">
+              <p>USt-IdNr. gemäß § 27a UStG: {E.vatId}</p>
             </Section>
 
             <Section heading="Verbraucherstreitbeilegung gemäß § 36 VSBG">

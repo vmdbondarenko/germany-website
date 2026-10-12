@@ -14,4 +14,5 @@ export const LEGAL_ENTITY = {
   email: "vitalina@jwdevelopment.net",
   registerCourt: "Amtsgericht Charlottenburg",
   registrationNumber: "HRB 288526 B",
+  vatId: "DE 465 501 131",
 } as const
