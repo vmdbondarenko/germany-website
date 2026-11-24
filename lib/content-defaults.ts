@@ -84,6 +84,46 @@ export const DEFAULT_INTERIOR = {
   ),
 }
 
+// New homepage section "Beispiel für den Innenausbau" (interior-finishing
+// example) — a running photo feed + lightbox, placed on the homepage directly
+// BEFORE the "Warum wir?" (Process) section. Fully admin-managed via
+// HomeSection "interior-example" + one HomeSectionItem per image (imageUrl +
+// imageAltDe/En, order). The public component NEVER hardcodes the gallery; it
+// renders `content.images` only. These defaults are the pre-seed fallback
+// (shown until an admin saves the section in /admin/home) and the starting set
+// an admin can replace / upload / delete / reorder / extend at will.
+//
+// The heading is fixed to the exact required string (not admin-editable) so the
+// visible German heading always reads exactly "Beispiel für den Innenausbau".
+// Per house style, visible German copy uses plain ASCII hyphens "-".
+export const DEFAULT_INTERIOR_EXAMPLE = {
+  heading: t("Beispiel für den Innenausbau", "Example of the interior finishing"),
+  description: t(
+    "Einblicke in unsere schlüsselfertig ausgebauten Innenräume - funktional, ästhetisch und bis ins Detail durchdacht.",
+    "A look at our turnkey, fully finished interiors - functional, elegant and considered down to the detail.",
+  ),
+  gallery: ([
+    { image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/10-1.jpg-JakdJk0xlSKqLQ3K8fZyKuvvXu6CO3.png", alt: t("Offener Wohnbereich mit Essbereich und Küche", "Open living area with dining area and kitchen") },
+    { image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/9-1.jpg-9RJlI6NAiWuYeJkx7mVmdHhN6bSb6o.png", alt: t("Moderne Küche", "Modern kitchen") },
+    { image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/8-2.jpg-z8jrfgleBqsV78lLib5OTfc5YMPk1u.png", alt: t("Großzügiges Wohnzimmer mit Treppe", "Spacious living room with staircase") },
+    { image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/3-5.jpg-crfYtjepayNCjnzX7DMeFqugKYZkfC.png", alt: t("Gemütliches Schlafzimmer im Dachgeschoss", "Cosy bedroom in the attic") },
+    { image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/4-4.jpg-ymJoRt6aGNLJFJ0e1XDIEzIaFAxr2l.png", alt: t("Elegantes Schlafzimmer mit Schminktisch", "Elegant bedroom with dressing table") },
+    { image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/3-4.jpg-W6DRzmkYhVYAUaFOCDSsBgSjOKBnr3.png", alt: t("Luxuriöses Badezimmer", "Luxurious bathroom") },
+    { image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/1-5.jpg-dxDapnUd5kiqzBZwMRvlQabJ0OBWY8.png", alt: t("Modernes Badezimmer im Dachgeschoss", "Modern bathroom in the attic") },
+    { image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/2-5.jpg-SVke9rt1z8lX0KkHP5QzI0SwbTdTAz.png", alt: t("Stilvolles Badezimmer", "Stylish bathroom") },
+    { image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/5-4.jpg-5kZsHK8GHwUsFmsuWHUuB1lyMxwQ5x.png", alt: t("Modernes Badezimmer mit Dusche", "Modern bathroom with shower") },
+    { image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/4-3.jpg-JSrb9ZKtM4WPQiyKdwDhf4GUTzyPiN.png", alt: t("Badezimmer mit Badewanne", "Bathroom with bathtub") },
+    { image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/6-3.jpg-mWrO2hyJpEIJo1lmAdPIaF2sW5UW0k.png", alt: t("Homeoffice", "Home office") },
+    { image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/7-2.jpg-VoUGVf4UKlKhAvEX4C5HesFFkDdprZ.png", alt: t("Gästezimmer", "Guest room") },
+    { image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/6-4.jpg-CHMKQhnpjzHVcXK7yDZzs0lTdsp2an.png", alt: t("Kinderzimmer im Dachgeschoss", "Children's room in the attic") },
+    { image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/7-3.jpg-hclO2HP0ZFr9Jus1IZh7NmvZdmEXIV.png", alt: t("Helles Kinderzimmer", "Bright children's room") },
+    { image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/2-4.jpg-WXPDN3LqMMSfGpalVYJpo6eIKu5jdr.png", alt: t("Moderner Flur", "Modern hallway") },
+    { image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/1-4.jpg-WzfLLkp2xUQMIHDjWdBckxngJsxmln.png", alt: t("Funktionaler Ankleideraum", "Functional dressing room") },
+    { image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/5-5.jpg-rlQ3Xgtmc2WC3f1xwyv0EbTaYs0Zdc.png", alt: t("Helles Wohnzimmer", "Bright living room") },
+    { image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/8-3.jpg-qDoqamGeF5u5ypsF2siVl9tuZZRQyw.png", alt: t("Familienzimmer", "Family room") },
+  ] as { image: string; alt: LocalizedText }[]),
+}
+
 export const DEFAULT_BUYING = {
   heading: t("Wie kaufen Sie Ihre Traumimmobilie?", "How to buy your dream home"),
   steps: [

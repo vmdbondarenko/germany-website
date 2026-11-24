@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Loader2, Plus, Trash2, Save, Upload, RotateCcw, ArrowUp, ArrowDown } from 'lucide-react'
-import { DEFAULT_BAUWEISE, DEFAULT_ERSTE_BAYERISCHE, DEFAULT_HERO, DEFAULT_GALLERY } from '@/lib/content-defaults'
+import { DEFAULT_BAUWEISE, DEFAULT_ERSTE_BAYERISCHE, DEFAULT_HERO, DEFAULT_GALLERY, DEFAULT_INTERIOR_EXAMPLE } from '@/lib/content-defaults'
 
 // Which fields each homepage section exposes in admin. Mirrors what
 // lib/home-content.ts actually reads back per section id.
@@ -308,6 +308,36 @@ function galleryFromRow(row: GalleryRow | undefined): GalleryState {
   }
 }
 
+// ── "Beispiel für den Innenausbau" (HomeSection "interior-example") ──
+// A flat, admin-managed image list (add / upload / replace / delete / reorder,
+// arbitrary count) for the running interior-photo feed shown directly before
+// "Warum wir?". The heading is fixed in code (always "Beispiel für den
+// Innenausbau") and therefore NOT edited here — only the description and the
+// images are admin-editable.
+type IeImg = { imageUrl: string; altDe: string; altEn: string }
+type InteriorExampleState = {
+  enabled: boolean
+  descriptionDe: string; descriptionEn: string
+  images: IeImg[]
+}
+type InteriorExampleRow = {
+  enabled?: boolean
+  descriptionDe?: string; descriptionEn?: string
+  items?: Array<{ imageUrl?: string; imageAltDe?: string; imageAltEn?: string }>
+}
+const IE_D = DEFAULT_INTERIOR_EXAMPLE
+function ieFromRow(row: InteriorExampleRow | undefined): InteriorExampleState {
+  return {
+    enabled: row?.enabled ?? true,
+    // Description is optional: keep the saved value (may be empty) once a row exists.
+    descriptionDe: row ? (row.descriptionDe || '') : IE_D.description.de,
+    descriptionEn: row ? (row.descriptionEn || '') : IE_D.description.en,
+    images: (row?.items ?? [])
+      .filter((it) => it.imageUrl)
+      .map((it) => ({ imageUrl: it.imageUrl || '', altDe: it.imageAltDe || '', altEn: it.imageAltEn || '' })),
+  }
+}
+
 export default function HomeAdminPage() {
   const [state, setState] = useState<Record<string, SectionState>>({})
   const [loading, setLoading] = useState(true)
@@ -321,6 +351,9 @@ export default function HomeAdminPage() {
   const [gallery, setGallery] = useState<GalleryState>(() => galleryFromRow(undefined))
   const [savingGallery, setSavingGallery] = useState(false)
   const [savedGallery, setSavedGallery] = useState(false)
+  const [ie, setIe] = useState<InteriorExampleState>(() => ieFromRow(undefined))
+  const [savingIe, setSavingIe] = useState(false)
+  const [savedIe, setSavedIe] = useState(false)
 
   useEffect(() => {
     fetch('/api/admin/home-sections')
@@ -353,6 +386,7 @@ export default function HomeAdminPage() {
         setState(next)
         setEb(ebFromRow(byId.get('erste-bayerische') as EbRow | undefined))
         setGallery(galleryFromRow(byId.get('gallery') as GalleryRow | undefined))
+        setIe(ieFromRow(byId.get('interior-example') as InteriorExampleRow | undefined))
       })
       .finally(() => setLoading(false))
   }, [])
@@ -536,6 +570,56 @@ export default function HomeAdminPage() {
       alert('Speichern fehlgeschlagen')
     } finally {
       setSavingGallery(false)
+    }
+  }
+
+  // ── Interior-example handlers ──
+  const iePatch = (p: Partial<InteriorExampleState>) => setIe((s) => ({ ...s, ...p }))
+  const ieImgPatch = (idx: number, p: Partial<IeImg>) =>
+    setIe((s) => { const images = [...s.images]; images[idx] = { ...images[idx], ...p }; return { ...s, images } })
+  const ieRemove = (idx: number) =>
+    setIe((s) => ({ ...s, images: s.images.filter((_, i) => i !== idx) }))
+  const ieMove = (idx: number, dir: -1 | 1) =>
+    setIe((s) => {
+      const j = idx + dir
+      if (j < 0 || j >= s.images.length) return s
+      const images = [...s.images]; const [it] = images.splice(idx, 1); images.splice(j, 0, it)
+      return { ...s, images }
+    })
+  const ieUpload = async (file: File, idx: number | null) => {
+    const url = await uploadFile(`interior-example:${idx ?? 'new'}`, file)
+    if (!url) return
+    setIe((s) => {
+      const images = [...s.images]
+      if (idx === null) images.push({ imageUrl: url, altDe: '', altEn: '' })
+      else images[idx] = { ...images[idx], imageUrl: url }
+      return { ...s, images }
+    })
+  }
+
+  const saveIe = async () => {
+    setSavingIe(true); setSavedIe(false)
+    const items = ie.images
+      .filter((g) => g.imageUrl.trim())
+      .map((g) => ({ kind: 'image', imageUrl: g.imageUrl, imageAltDe: g.altDe, imageAltEn: g.altEn }))
+    try {
+      const res = await fetch('/api/admin/home-sections', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        // headingDe/En intentionally omitted → the public heading stays the
+        // fixed code default ("Beispiel für den Innenausbau").
+        body: JSON.stringify({
+          id: 'interior-example', order: 14, enabled: ie.enabled,
+          descriptionDe: ie.descriptionDe, descriptionEn: ie.descriptionEn,
+          items,
+        }),
+      })
+      if (!res.ok) throw new Error('save failed')
+      setSavedIe(true); setTimeout(() => setSavedIe(false), 2500)
+    } catch {
+      alert('Speichern fehlgeschlagen')
+    } finally {
+      setSavingIe(false)
     }
   }
 
@@ -905,6 +989,94 @@ export default function HomeAdminPage() {
       </section>
   )
 
+  // Rendered directly before the „Warum wir (Process)“ section (matches the
+  // public homepage order).
+  const interiorExampleEditor = (
+      <section className="border-2 border-[#6E2E2A]/20 rounded-xl p-5 space-y-5 bg-white">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <h2 className="text-lg font-semibold text-gray-800">
+              Beispiel für den Innenausbau <span className="text-sm font-normal text-gray-400">— Innenraum-Galerie</span>
+            </h2>
+            <p className="text-xs text-gray-400 mt-0.5">
+              Erscheint auf der Startseite direkt vor „Warum wir?“. Laufendes Foto-Band mit Lightbox. Bilder &amp; Reihenfolge gelten für DE &amp; EN gemeinsam; nur die Beschreibung und die Alt-Texte sind pro Sprache.
+            </p>
+          </div>
+          <Button onClick={saveIe} disabled={savingIe} size="sm" style={{ backgroundColor: '#6E2E2A' }}>
+            {savingIe ? <Loader2 className="h-4 w-4 mr-1.5 animate-spin" /> : <Save className="h-4 w-4 mr-1.5" />}
+            {savedIe ? 'Gespeichert ✓' : 'Speichern'}
+          </Button>
+        </div>
+
+        {/* Visibility */}
+        <label className="flex items-center gap-2 cursor-pointer">
+          <input type="checkbox" checked={ie.enabled} onChange={(e) => iePatch({ enabled: e.target.checked })} className="h-4 w-4" />
+          <span className="text-sm font-medium text-gray-800">Abschnitt anzeigen</span>
+          <span className="text-xs text-gray-400">(aus = Abschnitt auf DE &amp; EN ausgeblendet; Bilder bleiben gespeichert)</span>
+        </label>
+
+        {/* Fixed heading (not editable) */}
+        <div>
+          <Label className="text-xs text-gray-500">Überschrift (fest)</Label>
+          <Input value={IE_D.heading.de} disabled readOnly />
+        </div>
+
+        {/* Description */}
+        <BilingualInput label="Beschreibung (optional)" textarea de={ie.descriptionDe} en={ie.descriptionEn}
+          onDe={(v) => iePatch({ descriptionDe: v })} onEn={(v) => iePatch({ descriptionEn: v })} />
+
+        {/* Images */}
+        <div className="border-t pt-4 space-y-3">
+          <div className="flex items-center justify-between">
+            <p className="text-sm font-medium text-gray-700">Bilder <span className="font-normal text-gray-400">({ie.images.length} Bilder)</span></p>
+            <label className="inline-flex items-center gap-1.5 text-sm px-3 py-1.5 rounded-md border border-gray-200 cursor-pointer hover:bg-gray-50">
+              {uploading === 'interior-example:new' ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
+              <span>Bild hinzufügen</span>
+              <input type="file" accept="image/*" className="hidden" disabled={uploading === 'interior-example:new'}
+                onChange={(e) => { const f = e.target.files?.[0]; if (f) ieUpload(f, null); e.target.value = '' }} />
+            </label>
+          </div>
+          {ie.images.length === 0 && <p className="text-xs text-gray-400">Noch keine Bilder. Mit „Bild hinzufügen“ hochladen.</p>}
+          {ie.images.map((g, idx) => {
+            const key = `interior-example:${idx}`
+            return (
+              <div key={idx} className="border border-gray-100 rounded-lg p-3 bg-gray-50 grid grid-cols-1 sm:grid-cols-[10rem_1fr] gap-3">
+                <div className="relative w-40 h-28 rounded-lg overflow-hidden bg-gray-100 border border-gray-200">
+                  {g.imageUrl ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={g.imageUrl} alt="" className="w-full h-full object-cover" />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-xs text-gray-400">kein Bild</div>
+                  )}
+                </div>
+                <div className="space-y-2">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="text-xs font-medium text-gray-600">Bild #{idx + 1}</span>
+                    <span className="flex-1" />
+                    <Button variant="ghost" size="sm" disabled={idx === 0} onClick={() => ieMove(idx, -1)} aria-label="Nach oben"><ArrowUp className="h-4 w-4" /></Button>
+                    <Button variant="ghost" size="sm" disabled={idx === ie.images.length - 1} onClick={() => ieMove(idx, 1)} aria-label="Nach unten"><ArrowDown className="h-4 w-4" /></Button>
+                    <Button variant="ghost" size="sm" onClick={() => ieRemove(idx)} aria-label="Löschen"><Trash2 className="h-4 w-4 text-red-500" /></Button>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <label className="inline-flex items-center gap-1.5 text-sm px-3 py-1.5 rounded-md border border-gray-200 cursor-pointer hover:bg-gray-100">
+                      {uploading === key ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
+                      <span>Ersetzen</span>
+                      <input type="file" accept="image/*" className="hidden" disabled={uploading === key}
+                        onChange={(e) => { const f = e.target.files?.[0]; if (f) ieUpload(f, idx); e.target.value = '' }} />
+                    </label>
+                    <Input value={g.imageUrl} placeholder="Bild-URL" onChange={(e) => ieImgPatch(idx, { imageUrl: e.target.value })} />
+                  </div>
+                  <BilingualInput label="Alt-Text" de={g.altDe} en={g.altEn}
+                    onDe={(v) => ieImgPatch(idx, { altDe: v })} onEn={(v) => ieImgPatch(idx, { altEn: v })} />
+                </div>
+              </div>
+            )
+          })}
+        </div>
+        <p className="text-xs text-gray-400">Beliebig viele Bilder — hinzufügen, ersetzen, löschen, per ▲▼ sortieren. Reihenfolge = Anzeigereihenfolge im Foto-Band. Änderungen erst nach „Speichern“ aktiv.</p>
+      </section>
+  )
+
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-8">
       <div>
@@ -1081,6 +1253,7 @@ export default function HomeAdminPage() {
             )}
             </section>
             {def.id === 'bauweise' && ersteBayerischeEditor}
+            {def.id === 'bauweise' && interiorExampleEditor}
             {def.id === 'since-founding' && galleryEditor}
           </Fragment>
         )

@@ -10,6 +10,7 @@ import {
   DEFAULT_DISTINGUISHES,
   DEFAULT_SERVICES,
   DEFAULT_INTERIOR,
+  DEFAULT_INTERIOR_EXAMPLE,
   DEFAULT_BUYING,
   DEFAULT_STATS,
   DEFAULT_VALUES,
@@ -471,6 +472,56 @@ export async function getGalleryContent(locale: Locale): Promise<GalleryContent>
     ukraineLabel: (de ? row?.secondaryCtaLabelDe : row?.secondaryCtaLabelEn) || L(D.ukraineLabel),
     poland: byCountry("poland"),
     ukraine: byCountry("ukraine"),
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// "Beispiel für den Innenausbau" — a running interior-photo feed + lightbox
+// shown on the homepage directly BEFORE the "Warum wir?" (Process) section.
+// Fully admin-managed via HomeSection "interior-example" + one HomeSectionItem
+// per image (imageUrl + imageAltDe/En, order). The heading is intentionally
+// NOT sourced from the DB so the visible German heading always reads exactly
+// "Beispiel für den Innenausbau"; only the description and the image list are
+// admin-editable. Images are shared DE/EN — only the alt text differs per
+// locale. Safe to call with an empty database.
+// ─────────────────────────────────────────────────────────────────────────────
+
+export type InteriorExampleImage = { image: string; alt: string }
+export type InteriorExampleContent = {
+  enabled: boolean
+  heading: string
+  description: string
+  images: InteriorExampleImage[]
+}
+
+export async function getInteriorExampleContent(locale: Locale): Promise<InteriorExampleContent> {
+  const de = locale !== "en"
+  const L = (s: LocalizedText) => (de ? s.de : s.en)
+  const D = DEFAULT_INTERIOR_EXAMPLE
+
+  const row = await prisma.homeSection.findUnique({
+    where: { id: "interior-example" },
+    include: { items: { orderBy: { order: "asc" } } },
+  })
+
+  // Once the section row exists, its images are authoritative — the admin fully
+  // manages them (add / upload / replace / delete / reorder, arbitrary count).
+  // Before the first admin save, fall back to the code-default gallery so the
+  // section renders out of the box.
+  const images: InteriorExampleImage[] = row
+    ? row.items
+        .filter((it) => it.imageUrl)
+        .map((it) => ({ image: it.imageUrl as string, alt: (de ? it.imageAltDe : it.imageAltEn) || "" }))
+    : D.gallery.map((g) => ({ image: g.image, alt: L(g.alt) }))
+
+  return {
+    enabled: row?.enabled ?? true,
+    // Heading is fixed (always the exact required string); not read from the DB.
+    heading: L(D.heading),
+    // Description is optional: once a row exists its value is authoritative (may
+    // be empty); only the very first, unsaved state shows the default text.
+    description: row ? ((de ? row.descriptionDe : row.descriptionEn) || "") : L(D.description),
+    images,
   }
 }
 

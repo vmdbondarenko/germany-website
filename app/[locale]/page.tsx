@@ -12,6 +12,7 @@ import { Distinguishes } from "@/components/distinguishes"
 import { Team } from "@/components/team"
 import { Services } from "@/components/services"
 import { InteriorShowcase } from "@/components/interior-showcase"
+import { InteriorExample } from "@/components/interior-example"
 import { BuyingProcess } from "@/components/buying-process"
 import { CompletedGallery } from "@/components/completed-gallery"
 import { Contact } from "@/components/contact"
@@ -19,7 +20,7 @@ import { Footer } from "@/components/footer"
 import { NewsScroll } from "@/components/news-scroll"
 import { prisma } from "@/lib/prisma"
 import { getLocale, getTranslations } from "next-intl/server"
-import { getHomeContent, getAboutContent, getErsteBayerischeContent, getGalleryContent, getNewsContent } from "@/lib/home-content"
+import { getHomeContent, getAboutContent, getErsteBayerischeContent, getGalleryContent, getInteriorExampleContent, getNewsContent } from "@/lib/home-content"
 import { pick } from "@/lib/i18n-content"
 import type { Locale } from "@/i18n/routing"
 import type { Metadata } from "next"
@@ -45,6 +46,7 @@ export default async function HomePage() {
   const aboutContent = await getAboutContent(locale)
   const ersteBayerische = await getErsteBayerischeContent(locale)
   const gallery = await getGalleryContent(locale)
+  const interiorExample = await getInteriorExampleContent(locale)
   const th = await getTranslations("home")
   const tn = await getTranslations("news")
   const mapCopy = { heading: th("mapHeading"), subtitle: th("mapSubtitle") }
@@ -210,6 +212,7 @@ export default async function HomePage() {
           </section>
         )}
         <CompletedInvestments projects={completedProjects} />
+        <InteriorExample content={interiorExample} />
         <Process content={home.process} />
         <Distinguishes content={home.distinguishes} />
         <Team members={teamMembers} content={aboutContent.team} />
